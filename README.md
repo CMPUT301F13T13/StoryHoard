@@ -1,14 +1,49 @@
 StoryHoard
 ==========
 
+Purpose: To create your own choose your own adventure stories
+
 University of Alberta CMPUT301 Fall2013 Team 13 Project.
 
 Refer to the Trello board for project lifecycle stuff: 
 https://trello.com/b/eulcxMKA
 
-==========
+AUTHORS
+=======
+
+Stephanie Gil
+
+
+LICENSE
+=======
+
+Copyright © 2013 Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+Third Party Libraries
+=====================
+
+
+Citing
+======
+
+
+
 
 Project Problem Description
+===========================
 
 You are to design and implement an attractive, usable, interactive Android application to help satisfy the following user's goals. Your design should be flexible enough to allow future developers to extend it to, for example, add new types of entries (see below).
 User's Problem Description

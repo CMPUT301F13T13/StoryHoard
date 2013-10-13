@@ -1,5 +1,6 @@
-package ca.ualberta.cmput301f13t13.storyhoard;
+package ca.ualberta.cs.c301f13t13.gui;
 
+import ca.ualberta.cmput301f13t13.storyhoard.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
