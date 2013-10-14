@@ -11,13 +11,13 @@ https://trello.com/b/eulcxMKA
 AUTHORS
 =======
 
-Stephanie Gil
+Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
 
 
 LICENSE
 =======
 
-Copyright © 2013 Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
+Copyright ï¿½ 2013 Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
