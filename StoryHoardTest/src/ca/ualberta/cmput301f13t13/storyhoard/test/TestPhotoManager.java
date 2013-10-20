@@ -13,16 +13,20 @@ import org.junit.Test;
  */
 public class TestPhotoManager {
 
+	
 	public TestPhotoManager() {
+		PhotoManager pm = new PhotoManager();
 	}
 	
 	/**
 	 * Tests saving and loading photo.
 	 */
-	public void testSaveLoadPhoto(Photo photo, Segment segment) {
+	public void testSaveLoadPhoto() {
+		Photo photo = new Photo();
+		int chapterId = 0;
 		PhotoManager pm = new PhotoManager();
-		pm.savePhoto(photo, segment);
-		ArrayList<Photo> photos = pm.loadPhotos(segment);
+		pm.savePhoto(photo, chapterId);
+		ArrayList<Photo> photos = pm.loadPhotos(chapterId);
 		assertEquals(photos.size(), 1);
 	}
 }
