@@ -37,7 +37,7 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 	/**
 	 * Tests displaying illustrations.
 	 */
-	public void testDisplayIllustration() {
+	public void testViewIllustration() {
 		// Add arguments to make chapter
 		Chapter chapter = new Chapter();
 		File illustration = new File();
