@@ -7,13 +7,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 /**
  * @author Owner
  *
  */
-public class TestChapterManager {
+public class TestChapterManager extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
 	
 	public TestChapterManager() {
+		super(StoryHoardActivity.class);
 	}
 	
 	/**

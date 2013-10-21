@@ -7,15 +7,17 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 /**
  * @author Owner
  *
  */
-public class TestPhotoManager {
+public class TestPhotoManager extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
 
 	
 	public TestPhotoManager() {
-		PhotoManager pm = new PhotoManager();
+		super(StoryHoardActivity.class);
 	}
 	
 	/**

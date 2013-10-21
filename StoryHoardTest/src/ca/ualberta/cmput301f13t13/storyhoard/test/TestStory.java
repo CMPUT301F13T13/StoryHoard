@@ -7,19 +7,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 /**
  * @author Owner
  *
  */
-public class TestStory {
+public class TestStory extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
 
 	/**
 	 * Tests creating a story.
 	 */
 	public TestStory() {
-		String author = "joe";
-		String title = "Sad Cow";
-		Story story = new Story(author, title);
+		super(StoryHoardActivity.class);
 	}
 	
 	
