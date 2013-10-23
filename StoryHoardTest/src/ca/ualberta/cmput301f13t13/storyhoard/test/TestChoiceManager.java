@@ -27,5 +27,25 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<StoryHoa
 	public void test() {
 		fail("Not yet implemented");
 	}
-
+	
+	/**
+	 * Tests adding a choice (saving to database)
+	 */
+	public void testAddChoice() {
+		ChoiceManager cm = new Choicemanager();
+		Choice mockChoice = new Choice();
+		cm.addChoice(mockChoice);
+	}
+	
+	/** 
+	 * Tests editing a choice.
+	 */
+	public void testEditChoice() {
+		ChoiceManager cm = new Choicemanager();
+		Choice choice = new Choice();
+		cm.addChoice(choice);
+		Choice newChoice = cm.loadChoice(choice.getId());
+		newChoice.setText("new choice text mrawr");
+		cm.updateChoice(newChoice);
+	}	
 }

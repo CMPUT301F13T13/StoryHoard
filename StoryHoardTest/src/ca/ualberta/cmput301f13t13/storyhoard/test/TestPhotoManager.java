@@ -45,4 +45,12 @@ public class TestPhotoManager extends ActivityInstrumentationTestCase2<StoryHoar
 			 fail("Could not post photo: " + e.getStackTrace());
 		 }
 	}
+	
+	/**
+	 * Tests taking a photo
+	 */
+	public void testTakePhoto(){
+		PhotoManager pm = new PhotoManager();
+		pm.takePhoto();
+	}
 }
