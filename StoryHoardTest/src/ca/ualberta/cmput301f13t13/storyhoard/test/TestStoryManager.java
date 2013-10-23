@@ -20,12 +20,29 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewStory
 	}
 
 	/**
-	 * Tests saving a story.
+	 * Tests caching a story locally on the device
 	 */
-	public void testSaveStory() {
-		
+	public void testCacheStory() {
+		Story astory = new Story();
+		Storymanager sm = new StoryManager(this.getActivity());
+		sm.cacheStory(astory);
+		ArrayList<Story> cachedStories = sm.getCachedStories();
+		assertTrue(cachedStories.contains(astory) );
 	}
 	
+	/**
+	 * Tests reading a story from the local storage
+	 */
+	public void testReadStory() {
+		Story astory = new Story();
+		Storymanager sm = new StoryManager(this.getActivity());
+		sm.cacheStory(astory);
+		try {
+			sm.readStory(astory.getID());
+		} catch(Exception e) {
+			fail("Could not read Story: " + e.getStackTrace());
+		}
+	}
 	
 	/**
 	 * Tests browsing cached stories
