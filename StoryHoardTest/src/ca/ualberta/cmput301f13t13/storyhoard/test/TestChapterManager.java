@@ -11,7 +11,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * @author Owner
- *
+ * 
  */
 public class TestChapterManager extends ActivityInstrumentationTestCase2<DisplayChapterActivity>{
 	
