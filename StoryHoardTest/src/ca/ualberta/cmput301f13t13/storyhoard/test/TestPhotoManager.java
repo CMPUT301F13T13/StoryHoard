@@ -22,7 +22,7 @@ public class TestPhotoManager extends ActivityInstrumentationTestCase2<StoryHoar
 	
 	/**
 	 * Tests saving and loading photo.
-	 */
+	 */ 
 	public void testSaveLoadPhoto() {
 		Photo photo = new Photo();
 		int chapterId = 0;
