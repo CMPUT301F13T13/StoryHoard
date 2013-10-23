@@ -49,13 +49,11 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<Display
 	 * Tests updating a chapters data (text, photo/illustration permissions) 
 	 * Use cases:
 	 * - allowIllustrations
-	 * - allowPhotos
 	 * - editChapterText
 	 */
 	public void testUpdateChapter() {
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		Chapter chapter = new Chapter();
-		chapter.allowPhotos(true);
 		chapter.allowIllustrations(true);
 		chapter.setText("cows taste gooood");
 		cm.updateItem(chapter);

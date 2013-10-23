@@ -19,6 +19,15 @@ public class TestChoice extends ActivityInstrumentationTestCase2<StoryHoardActiv
 		super(StoryHoardActivity.class);
 	}
 
+	/** 
+	 * Tests creating a choice.
+	 */
+	public void testCreateChoice() {
+		Chapter chap1 = new Chapter();
+		Chapter chap2 = new Chapter();
+		String text = "pick me";
+		Choice c = new Choice(chap1, chap2, text);
+	}
 	@Test
 	public void test() {
 		fail("Not yet implemented");

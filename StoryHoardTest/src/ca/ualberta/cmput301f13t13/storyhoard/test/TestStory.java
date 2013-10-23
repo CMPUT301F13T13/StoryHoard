@@ -15,13 +15,23 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestStory extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
 
-	/**
-	 * Tests creating a story.
-	 */
 	public TestStory() {
 		super(StoryHoardActivity.class);
 	}
 	
+	/**
+	 * Tests creating a story.
+	 */
+	public void testCreateStory() {
+		// Empty story
+		Story s = new Story();
+		
+		// With arguments
+		String title = "moo cow";
+		String author = "sheperd";
+		String description = "the cow's life";
+		Story story = new Story(title, author, description);
+	}
 	
 	
 	@Test
