@@ -47,7 +47,34 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 		
 		ViewChapterActivity act = new ViewChapterActivity(this.getActivity());
 		act.displayIllustration(Chapter chapter);		
-	}	
+	}
+	
+	/**
+	 * Tests adding an illustration
+	 */
+	public void testAddIllustration() {
+		//Create new chapter and illustration file
+		Chapter chapter = new Chapter();
+		File illustration = new File();
+		//Add illustration to chapter
+		chapter.setIllustration(illustration);
+	}
+	
+	/**
+	 * Tests edit illustration
+	 */
+	public void testEditIllustration() {
+		//Get existing chapter from ChapterManager
+		ChapterManager cm = new ChapterManager();
+		int id = 123;
+		Chapter chapter = cm.getChapter(id);
+		
+		//Create new illustration file
+		File illustration = new File();
+		
+		//Replace existing illustration with new one
+		chapter.setIllustration(illustration);
+	}
 	
 	@Test
 	public void test() {

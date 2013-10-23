@@ -33,6 +33,28 @@ public class TestStory extends ActivityInstrumentationTestCase2<StoryHoardActivi
 		Story story = new Story(title, author, description);
 	}
 	
+	/**
+	 * Tests editing story
+	 */
+	public void testEditStory() {
+		StoryManager sm = new StoryManager();
+		int id = 123;
+		Story story = sm.getStory(id);
+		String description = "new description";
+		story.editStory(description);
+		story.save();
+	}
+	
+	/**
+	 * Tests publishing story
+	 */
+	public void testPublishStory() {
+		StoryManager sm = new StoryManager();
+		ArrayList<Story> pubStories = sm.getPublishedStories();
+		Story story = new Story();
+		pubStories.add(story);
+	}
+	
 	
 	@Test
 	public void test() {

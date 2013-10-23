@@ -22,6 +22,7 @@ public class TestIllustrationManager extends
 	public TestIllustrationManager(String name) {
 		super(StoryHoardActivity.class);
 	}
+	
 
 	@Test
 	public void test() {
