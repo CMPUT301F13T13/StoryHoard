@@ -10,7 +10,7 @@ import org.junit.Test;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
- * @author Owner
+ * @author Owner 
  *
  */
 public class TestChoiceManager extends ActivityInstrumentationTestCase2<StoryHoardActivity> {
