@@ -23,16 +23,6 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 	public TestChapter() {
 		super(StoryHoardActivity.class);
 	}
-
-	/**
-	 * Tests viewing / reading a chapter.
-	 */
-	public void testReadChapter() {
-		// Add arguments to make chapter
-		Chapter chapter = new Chapter();
-		ViewChapterActivity act = new ViewChapterActivity(this.getActivity());
-		act.readChapter(chapter);
-	}
 	
 	/**
 	 * Tests displaying illustrations.

@@ -29,23 +29,28 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<StoryHoa
 	}
 	
 	/**
-	 * Tests adding a choice (saving to database)
+	 * Tests adding a choice (saving locally)
 	 */
 	public void testAddChoice() {
 		ChoiceManager cm = new Choicemanager();
+		Chapter chap = new Chapter();
 		Choice mockChoice = new Choice();
-		cm.addChoice(mockChoice);
+		cm.addChoice(chap, mockChoice);
 	}
 	
 	/** 
-	 * Tests editing a choice.
+	 * Tests loading and editing a choice.
 	 */
 	public void testEditChoice() {
 		ChoiceManager cm = new Choicemanager();
 		Choice choice = new Choice();
-		cm.addChoice(choice);
+		Chapter chap = new Chapter();
+		cm.addChoice(chap, choice);
 		Choice newChoice = cm.loadChoice(choice.getId());
 		newChoice.setText("new choice text mrawr");
 		cm.updateChoice(newChoice);
+		newChoice = cm.loadChoice(choice.getId);
+		
+		assert(newChoice.getText().equals("new choice text mrawr"));
 	}	
 }

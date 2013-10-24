@@ -24,11 +24,13 @@ public class TestPhotoManager extends ActivityInstrumentationTestCase2<StoryHoar
 	 * Tests saving and loading photo.
 	 */ 
 	public void testSaveLoadPhoto() {
-		Photo photo = new Photo();
-		int chapterId = 0;
+		Uri ImageFileUri = "./hereitis.jpg" 
+		Chapter chap = new Chapter();
 		PhotoManager pm = new PhotoManager();
-		pm.savePhoto(photo, chapterId);
-		ArrayList<Photo> photos = pm.loadPhotos(chapterId);
+		pm.savePhoto(ImageFileUri, chap);
+		
+		// loads all photos of a chapter
+		ArrayList<ImageFileUri> photos = pm.loadPhotos(chap.getId());
 		assertEquals(photos.size(), 1);
 	}
 	

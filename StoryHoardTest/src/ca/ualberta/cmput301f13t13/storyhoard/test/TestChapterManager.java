@@ -5,8 +5,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
+import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -20,37 +23,49 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<Display
 	}	
 	
 	/**
+	 * Test wrapper method for adding a choice to a chapter.
+	 */
+	public void testAddChoice() {
+		ChapterManager cm = new ChapterManager();
+		Choice choice = new Choice();
+		Chapter chap = new Chapter();
+		cm.addChoice(chap, choice); // calls addChoice from chocieManager
+		assertEquals(choice.getChoices().size(), 1);
+	}
+		
+	 /**
 	 * Tests saving and loading a chapter. Includes testing to get all
 	 * photos and illustrations, text, and choices for viewing.
 	 * 
-	 * Use cases:
-	 * - viewPhotos
-	 * - viewIllustrations
-	 * - readChapter
 	 */
 	public void testAddLoadChapter() {
 		ChapterManager cm = new ChapterManager();
-		Chapter chapter = new Chapter(); // Give it photos/illustrions
-		chapter.setPhoto(photo);
-		chapter.setIllustration(illustration);
+		Uri photoUri = "blahblah.jpg";
+		Uri illusUri = "nomnom.jpg";
+		Choice choice = new Choice();
+		Chapter chapter = new Chapter(); // Give it photos/illustrations
+		chapter.setPhoto(photoUri);
+		chapter.setIllustration(illusUri);
 		chapter.setText("I am so sleepy");
+		cm.addChoice(chapter, choice);
 		
 		cm.save(chapter);
 		Chapter newChap = cm.get(chapter.getId);
 		
-		File photo = newChap.getPhoto();
+		ArrayList<Uri> photoUris = newChap.getPhotos();
 		String text = newChap.getText();
-		File illus = newChap.getIllustration();
+		ArrayList<Uri> illusUris = newChap.getIllustrations();
 		ArrayList<Choice> choices = newChap.getChoices();
+
+		assert(photoUri.equals(photoUris.get(0)));
+		assert(illusUri.equals(illusUris.get(0)));
+		assertEquals(choices.size(),2);
 		
 	}
 	
 	/**
 	 * Tests updating a chapters data (text, photo/illustration permissions)
 	 * which includes loading a chapter. 
-	 * Use cases:
-	 * - allowIllustrations
-	 * - editChapter
 	 */
 	public void testUpdateChapter() {
 		ChapterManager cm = new ChapterManager();
@@ -62,16 +77,6 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<Display
 		chapter.setText("cows taste gooood");
 		cm.updateItem(chapter);
 		
-	}
-	
-	/**
-	 * Tests retrieving all chapters from a story
-	 * USe cases:
-	 * -browseChapters 
-	 */
-	public void testGetAllChapters() {
-		ChapterManager cm = new ChapterManager();
-		ArrayList<Chapter> chapters = cm.getAllChapters(storyId);
 	}
 	
 	@Test
