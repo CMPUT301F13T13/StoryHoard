@@ -31,8 +31,20 @@ public class Story {
 		this.description = description;
 	}
 	
+	/**
+	 * Returns the Id of the story.
+	 * @return
+	 */
 	public String getId() {
 		return this.id;
+	}
+	
+	/**
+	 * Returns the title of the story.
+	 * @return
+	 */
+	public String getTitle() {
+		return this.title;
 	}
 	
 	@Override

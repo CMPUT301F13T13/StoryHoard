@@ -1,5 +1,7 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.util.ArrayList;
+
 /**
  * Interface for storing objects locally or to the server
  * 
@@ -8,15 +10,15 @@ package ca.ualberta.cs.c301f13t13.backend;
  */
 public interface StoringManager {
 	
-	public void insert();
+	public void insert(Object object);
 	
-	public void getSingle();
+	public Object getSingle();
 	
-	public void getCollection();
+	public ArrayList<Object> getCollection();
 	
-	public void search();
+	public void search(Object object);
 	
-	public void update();
+	public void update(Object object);
 	
 	// public void delete();
 }
