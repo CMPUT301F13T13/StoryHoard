@@ -26,7 +26,8 @@ public class Story {
 	private String author;
 	private String title;
 	private String description;
-	//private ArrayList<Chapter> chapters;
+	private Chapter firstChapter;
+	private ArrayList<Chapter> chapters;
 	
 	/**
 	 * Initializes a new story object
@@ -36,11 +37,14 @@ public class Story {
 	 * @param title
 	 * @param description
 	 */
-	public Story(String id, String author, String title, String description) {
+	public Story(String id, String author, String title, String description, Chapter chapter) {
 		this.id = id;
 		this.author = author;
 		this.title = title;
 		this.description = description;
+		this.firstChapter = chapter;
+		chapters.add(firstChapter);
+		
 	}
 	
 	/**
@@ -57,6 +61,30 @@ public class Story {
 	 */
 	public String getTitle() {
 		return this.title;
+	}
+	
+	/**
+	 * Returns the author of the story.
+	 * @return
+	 */
+	public String getAuthor() {
+		return this.author;
+	}
+	
+	/**
+	 * Returns the description of the story.
+	 * @return
+	 */
+	public String getDescription() {
+		return this.description;
+	}
+	
+	
+	/**
+	 * Adds a chapter.
+	 */
+	public void addChapter(Chapter chapter) {
+		chapters.add(chapter);
 	}
 	
 	@Override

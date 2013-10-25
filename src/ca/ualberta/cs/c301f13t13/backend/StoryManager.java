@@ -5,6 +5,7 @@ package ca.ualberta.cs.c301f13t13.backend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
@@ -13,9 +14,6 @@ import com.google.gson.Gson;
  *
  */
 public class StoryManager implements StoringManager{
-	private static final String FILENAME = "Stories.sav";
-	FileOutputStream fop = null;
-	File file;
 	
 	/**
 	 * Initializes a new StoryManager object.
@@ -25,49 +23,36 @@ public class StoryManager implements StoringManager{
 
 	/**
 	 * Saves a new story either locally or to the server.
-	 */
+	 */	
 	@Override
-	public void insert() {
-		try {
-			file = new File(FILENAME);
-			fop = new FileOutputStream(file);
-		
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-		
-			// write to file
-			
-			
-			fop.close(); 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-
-	@Override
-	public void getSingle() {
+	public void insert(Object object) {
+		Story story = (Story) object;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void getCollection() {
+	public void search(Object object) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void search() {
+	public void update(Object object) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update() {
+	public Object getSingle() {
 		// TODO Auto-generated method stub
-		
+		return null;
+	}
+
+	@Override
+	public ArrayList<Object> getCollection() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
