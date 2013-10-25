@@ -47,7 +47,11 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 		Chapter chapter = new Chapter();
 		File illustration = new File();
 		//Add illustration to chapter
-		chapter.setIllustration(illustration);
+		try {
+			chapter.setIllustration(illustration);
+		} catch (Exception e) {
+			fail("Could not add illustration: "+e);
+		}
 	}
 	
 	/**
@@ -63,7 +67,11 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 		File illustration = new File();
 		
 		//Replace existing illustration with new one
-		chapter.setIllustration(illustration);
+		try {
+			chapter.setIllustration(illustration);
+		} catch (Exception e) {
+			fail("Could not add illustration "+e);
+		}
 	}
 	
 	@Test
