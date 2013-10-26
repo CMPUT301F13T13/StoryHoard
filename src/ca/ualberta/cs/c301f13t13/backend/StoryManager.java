@@ -106,12 +106,20 @@ public class StoryManager extends Model implements StoringManager{
 		String selection = null;
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
+		int counter = 1;
+		int maxSize = storyCrit.size();
+		
 		for (String key: storyCrit.keySet()) {
 			if (!key.equals("")) {
 				selection += key + " LIKE ?";
 				selectionArgs.add(storyCrit.get(key));
 			}
+			counter++;
+			if (counter < maxSize) {
+				selection += "AND ";
+			}			
 		}
+		
 		if (selectionArgs.size() > 0) {
 			sArgs = (String[]) selectionArgs.toArray();
 		}
@@ -150,7 +158,7 @@ public class StoryManager extends Model implements StoringManager{
 		}
 		cursor.close();		
 		
-		return null;
+		return results;
 	}
 
 	/**

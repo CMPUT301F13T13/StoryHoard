@@ -22,6 +22,17 @@ public class Chapter {
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
 	}
+	
+	/**
+	 * Initialize a new chapter from databse info.
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 */
+	public Chapter(String string, String string2, String string3) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Returns the Id of the chapter.
 	 * @return
@@ -36,5 +47,15 @@ public class Chapter {
 	
 	public void setStoryId(UUID id) {
 		this.storyId = id;
+	}
+
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getStoryId() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
