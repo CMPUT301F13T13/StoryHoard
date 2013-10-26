@@ -22,6 +22,7 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import android.app.Application;
+import android.content.Context;
 
 /**
  * @author Owner
@@ -35,9 +36,9 @@ public class StoryHoardApplication extends Application{
 //    transient private static StoryController storyController = null;
     transient private static DBHelper helper = null;
     
-    public static StoryManager getStoryManager() {
+    public static StoryManager getStoryManager(Context context) {
         if (stoMan == null) {
-        	stoMan = new StoryManager();
+        	stoMan = new StoryManager(context);
         }
         return stoMan;
     }
@@ -64,9 +65,9 @@ public class StoryHoardApplication extends Application{
 //        return storyController;
 //    }
     
-    public DBHelper getDBHelper() {
+    public DBHelper getDBHelper(Context context) {
     	if (helper == null) {
-    		helper = new DBHelper(this.getApplicationContext());
+    		helper = new DBHelper(context);
     	}
     	return helper;
     }

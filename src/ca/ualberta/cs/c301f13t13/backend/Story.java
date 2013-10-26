@@ -30,8 +30,8 @@ public class Story {
 	private String author;
 	private String title;
 	private String description;
-	private Chapter firstChapter;
-	private ArrayList<Chapter> chapters;
+	private UUID firstChapterId;
+	private HashMap<UUID, Chapter> chapters;
 	
 	/**
 	 * For creating an empty story and then setting specific parameters.
@@ -42,7 +42,7 @@ public class Story {
 		this.author = "";
 		this.title = "";
 		this.description = "";
-		this.firstChapter = null;
+		this.firstChapterId = null;
 		this.chapters = null;
 		
 	}
@@ -54,13 +54,14 @@ public class Story {
 	 * @param title
 	 * @param description
 	 */
-	public Story(String title, String author, String description, Chapter chapter) {
+	public Story(String title, String author, String description, 
+			UUID chapterId, Chapter firstChap) {
 		this.id = UUID.randomUUID();;
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.firstChapter = chapter;
-		chapters.add(firstChapter);
+		this.firstChapterId = chapterId;
+		chapters.put(chapterId, firstChap);
 	}
 	
 	/**
@@ -72,12 +73,12 @@ public class Story {
 	 * @param description
 	 */
 	public Story(String id, String title, String author, String description,
-			Chapter chapter, ArrayList<Chapter> chapters) {
+			String chapterId, HashMap<UUID, Chapter> chapters) {
 		this.id = UUID.fromString(id);;
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.firstChapter = chapter;
+		this.firstChapterId = UUID.fromString(chapterId);
 		this.chapters = chapters;
 	}	
 	
@@ -87,8 +88,8 @@ public class Story {
 	 * Returns the Id of the story.
 	 * @return
 	 */
-	public String getId() {
-		return this.id.toString();
+	public UUID getId() {
+		return this.id;
 	}
 	
 	/**
@@ -119,7 +120,7 @@ public class Story {
 	 * Returns the chapters of the story.
 	 * @return chapters
 	 */
-	public ArrayList<Chapter> getChapters() {
+	public HashMap<UUID, Chapter> getChapters() {
 		return this.chapters;
 	}
 	
@@ -128,7 +129,7 @@ public class Story {
 	 * @return firstChapter
 	 */
 	public Chapter getFirstChapter() {
-		return this.firstChapter;
+		return this.chapters.get(firstChapterId);
 	}
 	
 	// SETTERS
@@ -169,7 +170,7 @@ public class Story {
 	 * Set the chapters of the story.
 	 * @param chapters
 	 */
-	public void getChapters(ArrayList<Chapter> chapters) {
+	public void getChapters(HashMap<UUID, Chapter> chapters) {
 		this.chapters = chapters;
 	}
 	
@@ -178,7 +179,7 @@ public class Story {
 	 * Adds a chapter.
 	 */
 	public void addChapter(Chapter chapter) {
-		chapters.add(chapter);
+		chapters.put(chapter.getId(), chapter);
 	}
 	
 	public HashMap<String,String> getInfo() {
