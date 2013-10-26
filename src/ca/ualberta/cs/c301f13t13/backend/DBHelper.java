@@ -39,44 +39,18 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper{
 
-	private static DBHelper dbObject = null;
-
 	/**
 	 * 
-	 * Gets a new instance of DbHelper. If one already exists, returns that one. I.e. 
-	 * DbHelper is a singleton. 
-	 * 
-	 * @param context
-	 * @return DbHelper
-	 * 
-	 * Citing:
-	 * Idea to make this class a singleton as well as the code for the getInstance()
-	 * is from:
-	 * URL: http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html
-	 * When: September 17, 2013
-	 * Author: ALEX LOCKWOOD
-	 * License: Creative Commons Attribution 2.5
-	 */
-
-	public static DBHelper getInstance(Context context) {
-		if (dbObject == null) {
-			dbObject = new DBHelper(context);
-		}
-		return dbObject;
-	}
-
-	/**
-	 * 
-	 * Actually instantiates a new DbHelper object.
+	 * Instantiates a new DbHelper object.
 	 * 
 	 * @param context
 	 */
-	private DBHelper(Context context) {
+	public DBHelper(Context context) {
 		super(context, DBContract.DATABASE_NAME, null, DBContract.DATABASE_VERSION);
 	}
 
 	/**
-	 * Sets up the Log Entries table and the Word Counts table.
+	 * Sets up the tables.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {

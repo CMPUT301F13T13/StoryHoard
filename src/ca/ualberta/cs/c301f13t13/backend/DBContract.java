@@ -56,9 +56,11 @@ public final class DBContract {
 		private StoryTable() {}
 
 		public static final String TABLE_NAME = "story_table";
+		public static final String COLUMN_NAME_STORY_ID = "story_id";
 		public static final String COLUMN_NAME_TITLE = "title";
 		public static final String COLUMN_NAME_AUTHOR = "author";
 		public static final String COLUMN_NAME_DESCRIPTION = "description";
+		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
 		
 		/* Acts as a boolean; if author created the story, created = 1. If
 		  someone else created it, created = 0; */
@@ -68,10 +70,11 @@ public final class DBContract {
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE " + StoryTable.TABLE_NAME + " (" 
 				+ StoryTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
+				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT,"
 				+ StoryTable.COLUMN_NAME_TITLE + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, " 
-				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT "
-				+ StoryTable.COLUMN_NAME_CREATED + " INTEGER)";	
+				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT," 
+				+ StoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 				+ StoryTable.TABLE_NAME; 

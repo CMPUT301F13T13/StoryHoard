@@ -16,13 +16,17 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
+import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
  * @author Stephanie Gil
  *
  */
 public class Story {
-	private String id;
+	private UUID id;
 	private String author;
 	private String title;
 	private String description;
@@ -30,29 +34,61 @@ public class Story {
 	private ArrayList<Chapter> chapters;
 	
 	/**
-	 * Initializes a new story object
+	 * For creating an empty story and then setting specific parameters.
+	 * used for placing search criteria.
+	 */
+	protected Story() {
+		this.id = null;
+		this.author = "";
+		this.title = "";
+		this.description = "";
+		this.firstChapter = null;
+		this.chapters = null;
+		
+	}
+	/**
+	 * Initializes a new story object.
 	 * 
 	 * @param id
 	 * @param author
 	 * @param title
 	 * @param description
 	 */
-	public Story(String id, String author, String title, String description, Chapter chapter) {
-		this.id = id;
+	public Story(String title, String author, String description, Chapter chapter) {
+		this.id = UUID.randomUUID();;
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapter = chapter;
 		chapters.add(firstChapter);
-		
 	}
+	
+	/**
+	 * Initializes a new story object from a database entry.
+	 * 
+	 * @param id
+	 * @param author
+	 * @param title
+	 * @param description
+	 */
+	public Story(String id, String title, String author, String description,
+			Chapter chapter, ArrayList<Chapter> chapters) {
+		this.id = UUID.fromString(id);;
+		this.author = author;
+		this.title = title;
+		this.description = description;
+		this.firstChapter = chapter;
+		this.chapters = chapters;
+	}	
+	
+	// GETTERS
 	
 	/**
 	 * Returns the Id of the story.
 	 * @return
 	 */
 	public String getId() {
-		return this.id;
+		return this.id.toString();
 	}
 	
 	/**
@@ -79,6 +115,64 @@ public class Story {
 		return this.description;
 	}
 	
+	/**
+	 * Returns the chapters of the story.
+	 * @return chapters
+	 */
+	public ArrayList<Chapter> getChapters() {
+		return this.chapters;
+	}
+	
+	/**
+	 * Returns the first chapter of the story.
+	 * @return firstChapter
+	 */
+	public Chapter getFirstChapter() {
+		return this.firstChapter;
+	}
+	
+	// SETTERS
+	
+	/**
+	 * Set the Id of the story.
+	 * @param id
+	 */
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
+	}
+	
+	/**
+	 * Set the title of the story.
+	 * @param title
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	/**
+	 * Set the author of the story.
+	 * @param author
+	 */
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	/**
+	 * Set the description of the story.
+	 * @param description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	/**
+	 * Set the chapters of the story.
+	 * @param chapters
+	 */
+	public void getChapters(ArrayList<Chapter> chapters) {
+		this.chapters = chapters;
+	}
+	
 	
 	/**
 	 * Adds a chapter.
@@ -87,6 +181,20 @@ public class Story {
 		chapters.add(chapter);
 	}
 	
+	public HashMap<String,String> getInfo() {
+		HashMap<String,String> info = new HashMap<String,String>();
+		
+		if (id == null) {
+			info.put("", StoryTable.COLUMN_NAME_STORY_ID);
+		} else {
+			info.put(id.toString(), StoryTable.COLUMN_NAME_STORY_ID);
+		}
+		info.put(title, StoryTable.COLUMN_NAME_TITLE);
+		info.put(author, StoryTable.COLUMN_NAME_AUTHOR);
+		info.put(description, StoryTable.COLUMN_NAME_DESCRIPTION);
+		
+		return info;
+	}
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title 
