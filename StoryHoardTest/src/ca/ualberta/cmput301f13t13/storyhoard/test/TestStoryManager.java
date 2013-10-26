@@ -3,91 +3,108 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import static org.junit.Assert.*;
-
+import java.util.ArrayList;
 import org.junit.Test;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.DBHelper;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.StoryManager;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * @author Owner
  *
  */
-public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewStoryActivity>{
-
+public class TestStoryManager extends ActivityInstrumentationTestCase2<Activity>{
+	private Story mockStory;
+	private Chapter mockChapter;
+	
 	public TestStoryManager() {
-		super(ViewStoryActivity.class);
+		super(Activity.class);	
 	}
 
 	/**
-	 * Tests caching a story locally on the device
+	 * Create a new story.
 	 */
-	public void testCacheStory() {
-		Story astory = new Story();
-		Storymanager sm = new StoryManager(this.getActivity());
-		sm.cacheStory(astory);
+	public void newMockStory(String title, String author, String description) {
+		// story object
+		mockStory = new Story(title, author, description);
+		
+		// first chapter of story
+		mockChapter = new Chapter(mockStory.getId());
+		mockStory.addChapter(mockChapter);	
+	}
+	
+	/**
+	 * Tests caching a story locally on the device, and then 
+	 * loading cached stories.
+	 */
+	public void testCacheLoadStory() {
+		newMockStory("My Frog", "blueberry", "my cute frog");
+		StoryManager sm = new StoryManager(this.getActivity());
+		sm.cacheStory(mockStory);
 		ArrayList<Story> cachedStories = sm.getCachedStories();
-		assertTrue(cachedStories.contains(astory) );
+		assertEquals(cachedStories.size(), 1);
 	}
 	
 	/**
 	 * Tests reading a story from the local storage
 	 */
-	public void testReadStory() {
-		Story astory = new Story();
-		Storymanager sm = new StoryManager(this.getActivity());
-		sm.cacheStory(astory);
+	public void testAddLoadStory() {
+		newMockStory("My Cow", "Dr. Poe", "my chubby cow");
+		StoryManager sm = new StoryManager(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		sm.insert(mockStory, helper);
 		try {
-			sm.readStory(astory.getID());
+			// retrieving story in db that matches mockStory
+			ArrayList<Object> loadedStories = sm.retrieve(mockStory, helper);
+			assertEquals(loadedStories.size(), 1);
 		} catch(Exception e) {
 			fail("Could not read Story: " + e.getStackTrace());
 		}
-	}
-	
-	/**
-	 * Tests browsing cached stories
-	 */
-	public void testBrowseCachedStories() {
-		StoryManager sm = new StoryManager(this.getActivity());
-		ArrayList<Story> stories = sm.getCachedStories();
-	}
-
-	/**
-	 * Tests browsing published stories
-	 */	
-	public void testBrowsePublishedStories() {
-		StoryManager sm = new StoryManager(this.getActivity());
-		ArrayList<Story> stories = sm.getPublishedStories();
-	}
-
-	/**
-	 * Tests browsing author's own stories
-	 */	
-	public void testBrowseOwnStories() {
-		StoryManager sm = new StoryManager(this.getActivity());
-		ArrayList<Story> stories = sm.getOwnStories();
 	}
 
 	/**
 	 * Tests editing story
 	 */
 	public void testEditStory() {
-		StoryManager sm = new StoryManager();
-		int id = 123;
-		Story story = sm.getStory(id);
-		String description = "new description";
-		story.editStory(description);
-		story.save();
+		newMockStory("My Wizard Mouse", "JK ROlling", "before the edit...");
+		StoryManager sm = new StoryManager(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		ArrayList<Object> stories = sm.retrieve(mockStory, helper);
+		// assert retrieval worked
+		assertEquals(stories.size(), 1);
+		
+		Story newStory = (Story) stories.get(0);
+		
+		newStory.setTitle("My Wizard newt");
+		newStory.setAuthor("not jk rolling");
+		newStory.setDescription("after the edit...");
+		sm.update(mockStory, newStory, helper);
+		
+		// make sure you can find new story
+		stories = sm.retrieve(newStory, helper);
+		assertEquals(stories.size(), 1);
+		
+		// make sure old version no longer exists
+		stories = sm.retrieve(newStory, helper);
+		assertEquals(stories.size(), 0);
 	}
 	
 	/**
-	 * Tests publishing story
+	 * Tests publishing story, then loading it from server.
 	 */
-	public void testPublishStory() {
-		StoryManager sm = new StoryManager();
+	public void testPublishLoadStory() {
+		newMockStory("My Monkey", "TS ELLIOT", "monkey is in the server");
+		StoryManager sm = new StoryManager(this.getActivity());
+		sm.publish(mockStory);
+		
 		ArrayList<Story> pubStories = sm.getPublishedStories();
-		Story story = new Story();
-		pubStories.add(story);
+		assertEquals(pubStories.size(), 1);
 	}
 	
 	@Test

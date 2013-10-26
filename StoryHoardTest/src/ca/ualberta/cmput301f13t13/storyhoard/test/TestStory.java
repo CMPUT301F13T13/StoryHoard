@@ -4,8 +4,11 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.junit.Test;
+
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -13,35 +16,17 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestStory extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
-
+public class TestStory extends TestCase{
+	
 	public TestStory() {
-		super(StoryHoardActivity.class);
+		super();
 	}
 	
 	/**
-	 * Tests creating a story.
+	 * Tests creating a story without chapters.
 	 */
 	public void testCreateStory() {
-		//With author, title, and description
-		String title = "moo cow";
-		String author = "sheperd";
-		String description = "the cow's life";
-		Story story = new Story(title, author, description);
-		
-		//Without author, title, or description
-		Story story = new Story("","","");
-	}
-
-	/**
-	 * Tests retrieving all chapters from a story
-	 */
-	public void testGetAllChapters() {
-		String title = "moo cow";
-		String author = "sheperd";
-		String description = "the cow's life";
-		Story story = new Story(title, author, description);
-		ArrayList<Chapter> chapters = story.getAllChapters();
+		Story story = new Story("7 bugs", "Shamalan", "scary story");
 	}
 	
 	@Test
