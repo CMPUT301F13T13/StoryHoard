@@ -34,7 +34,6 @@ public class StoryHoardApplication extends Application{
 //    transient private static ChapterManager chapMan = null;
 //    transient private static ChoiceManager choMan = null;
 //    transient private static StoryController storyController = null;
-    transient private static DBHelper helper = null;
     
     public static StoryManager getStoryManager(Context context) {
         if (stoMan == null) {
@@ -63,13 +62,5 @@ public class StoryHoardApplication extends Application{
 //            storyController = new storyController(getStoryManager());
 //        }
 //        return storyController;
-//    }
-    
-    public DBHelper getDBHelper(Context context) {
-    	if (helper == null) {
-    		helper = new DBHelper(context);
-    	}
-    	return helper;
-    }
-    
+//    }   
 }

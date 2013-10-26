@@ -14,11 +14,11 @@ public class Chapter {
 	private UUID id;
 	private UUID storyId;
 	
-	Chapter() {
+	protected Chapter() {
 		id = null;
 	}
 	
-	Chapter(UUID storyId) {
+	public Chapter(UUID storyId) {
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
 	}

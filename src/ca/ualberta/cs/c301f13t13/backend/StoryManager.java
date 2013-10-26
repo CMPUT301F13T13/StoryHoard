@@ -32,7 +32,7 @@ import com.google.gson.Gson;
  * @author sgil
  *
  */
-public class StoryManager implements StoringManager{
+public class StoryManager extends Model implements StoringManager{
 	private Context context;
 	
 	/**
@@ -71,11 +71,19 @@ public class StoryManager implements StoringManager{
 	public void publish(Story story) {
 		
 	}
-	
 
+	/**
+	 * Saves a published story locally.
+	 * @param story
+	 */
+	public void cacheStory(Story story) {
+		
+	}
+	
 	@Override
-	public void update(Object object, DBHelper helper) {
-		Story story = (Story) object;
+	public void update(Object oldObject, Object newObject, DBHelper helper) {
+		Story oldS = (Story) oldObject;
+		Story newS = (Story) newObject;
 	}
 
 	@Override
@@ -142,6 +150,20 @@ public class StoryManager implements StoringManager{
 		}
 		cursor.close();		
 		
+		return null;
+	}
+
+	/**
+	 * Returns a list of all cached stories.
+	 * @return
+	 */
+	public ArrayList<Story> getCachedStories() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Story> getPublishedStories() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

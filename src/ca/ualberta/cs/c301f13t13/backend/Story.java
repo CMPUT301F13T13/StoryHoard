@@ -15,7 +15,6 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,20 +31,7 @@ public class Story {
 	private String description;
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
-	
-	/**
-	 * For creating an empty story and then setting specific parameters.
-	 * used for placing search criteria.
-	 */
-	protected Story() {
-		this.id = null;
-		this.author = "";
-		this.title = "";
-		this.description = "";
-		this.firstChapterId = null;
-		this.chapters = null;
-		
-	}
+
 	/**
 	 * Initializes a new story object.
 	 * 
@@ -54,25 +40,37 @@ public class Story {
 	 * @param title
 	 * @param description
 	 */
-	public Story(String title, String author, String description, 
-			UUID chapterId, Chapter firstChap) {
+	public Story(String title, String author, String description) {
 		this.id = UUID.randomUUID();;
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.firstChapterId = chapterId;
-		chapters.put(chapterId, firstChap);
-	}
+	}	
 	
 	/**
-	 * Initializes a new story object from a database entry.
+	 * For creating an empty story and then setting specific parameters.
+	 * used for placing search criteria.
+	 */
+	public Story() {
+		this.id = null;
+		this.author = "";
+		this.title = "";
+		this.description = "";
+		this.firstChapterId = null;
+		this.chapters = null;
+		
+	}
+
+	/**
+	 * Initializes a new story object from a database entry. Only to be used by
+	 * the story manager class.
 	 * 
 	 * @param id
 	 * @param author
 	 * @param title
 	 * @param description
 	 */
-	public Story(String id, String title, String author, String description,
+	protected Story(String id, String title, String author, String description,
 			String chapterId, HashMap<UUID, Chapter> chapters) {
 		this.id = UUID.fromString(id);;
 		this.author = author;
@@ -167,13 +165,23 @@ public class Story {
 	}
 	
 	/**
+	 * Sets the first chapter of the story.
+	 * @param chapter
+	 */
+	public void setFirstChapter(Chapter chapter) {
+		firstChapterId = chapter.getId();
+		chapters.put(chapter.getId(), chapter);
+	}
+	
+	/**
 	 * Set the chapters of the story.
 	 * @param chapters
 	 */
-	public void getChapters(HashMap<UUID, Chapter> chapters) {
+	public void setChapters(HashMap<UUID, Chapter> chapters) {
 		this.chapters = chapters;
 	}
 	
+	// Other methods
 	
 	/**
 	 * Adds a chapter.

@@ -30,7 +30,7 @@ public interface StoringManager {
 	
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper);
 	
-	public void update(Object object, DBHelper helper);
+	public void update(Object oldObject, Object newObject, DBHelper helper);
 	
 	// public void delete();
 }
