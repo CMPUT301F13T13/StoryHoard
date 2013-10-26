@@ -91,7 +91,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<Activity>
 		assertEquals(stories.size(), 1);
 		
 		// make sure old version no longer exists
-		stories = sm.retrieve(newStory, helper);
+		stories = sm.retrieve(mockStory, helper);
 		assertEquals(stories.size(), 0);
 	}
 	
