@@ -22,6 +22,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <activity 
+            android:name="ca.ualberta.cs.c301f13t13.gui.AddChapterActivity"
+            android:label="@string/add_chapter_title">
+        </activity>
+        
+        <activity
+            android:name="ca.ualberta.cs.c301f13t13.gui.AddChoiceActivity"
+            android:label="@string/add_choice" 
+            android:theme="@android:style/Theme.Dialog">
+            
+        </activity>
+        
+       
+        </application>
 
 </manifest>
