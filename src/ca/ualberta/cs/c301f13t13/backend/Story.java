@@ -31,6 +31,7 @@ public class Story {
 	private String description;
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
+	private Boolean authorsOwn;
 
 	/**
 	 * Initializes a new story object.
@@ -39,12 +40,15 @@ public class Story {
 	 * @param author
 	 * @param title
 	 * @param description
+	 * @param authorsOwn
 	 */
-	public Story(String title, String author, String description) {
+	public Story(String title, String author, String description, 
+			Boolean authorsOwn) {
 		this.id = UUID.randomUUID();;
 		this.author = author;
 		this.title = title;
 		this.description = description;
+		this.authorsOwn = authorsOwn;
 		chapters = new HashMap<UUID, Chapter>();
 	}	
 
@@ -58,13 +62,14 @@ public class Story {
 	 * @param description
 	 */
 	protected Story(String id, String title, String author, String description,
-			String chapterId, HashMap<UUID, Chapter> chapters) {
+			String chapterId, HashMap<UUID, Chapter> chapters, Boolean authorsOwn) {
 		this.id = UUID.fromString(id);;
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
 		this.chapters = new HashMap<UUID, Chapter>(chapters);
+		this.authorsOwn = authorsOwn;
 	}	
 	
 	// GETTERS
@@ -126,6 +131,15 @@ public class Story {
 		return chap;
 	}	
 	
+	/**
+	 * Returns boolean indicating whether or not the story was created
+	 * by the phone's author or not.
+	 * @return
+	 */
+	public Boolean getAuthorsOwn() {
+		return this.authorsOwn;
+	}
+	
 	// SETTERS
 	
 	/**
@@ -176,6 +190,10 @@ public class Story {
 		this.chapters = chapters;
 	}
 	
+	public void setAuthorsOwn(Boolean authorsOwn) {
+		this.authorsOwn = authorsOwn;
+	}
+	
 	// Other methods
 	
 	/**
@@ -191,6 +209,7 @@ public class Story {
 		info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
+		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		
 		return info;
 	}

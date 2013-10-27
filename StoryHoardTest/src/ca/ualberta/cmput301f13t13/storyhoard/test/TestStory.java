@@ -26,7 +26,7 @@ public class TestStory extends TestCase{
 	 * Tests creating a story without chapters.
 	 */
 	public void testCreateStory() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story");
+		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
 	}
 	
 	@Test

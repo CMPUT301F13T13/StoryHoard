@@ -60,10 +60,7 @@ public final class DBContract {
 		public static final String COLUMN_NAME_TITLE = "title";
 		public static final String COLUMN_NAME_AUTHOR = "author";
 		public static final String COLUMN_NAME_DESCRIPTION = "description";
-		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
-		
-		/* Acts as a boolean; if author created the story, created = 1. If
-		  someone else created it, created = 0; */
+		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";		
 		public static final String COLUMN_NAME_CREATED = "created";	
 		
 		// TO DO: Add column with phone id
@@ -73,8 +70,9 @@ public final class DBContract {
 				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT,"
 				+ StoryTable.COLUMN_NAME_TITLE + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, " 
-				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT," 
-				+ StoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT)";	
+				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, " 
+				+ StoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT, " 
+				+ StoryTable.COLUMN_NAME_CREATED + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 				+ StoryTable.TABLE_NAME; 
@@ -90,15 +88,15 @@ public final class DBContract {
 
 		public static final String TABLE_NAME = "chapter_table";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
+		public static final String COLUMN_NAME_STORY_ID = "story_id";
 		public static final String COLUMN_NAME_TEXT = "text";
-		public static final String COLUMN_NAME_STORY_ID = "story";
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChapterTable.TABLE_NAME + " (" 
 				+ ChapterTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " INTEGER, "
-		        + ChapterTable.COLUMN_NAME_TEXT + " TEXT, " 
-		        + ChapterTable.COLUMN_NAME_STORY_ID + " INTEGER)";	
+				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+		        + ChapterTable.COLUMN_NAME_STORY_ID + " TEXT, "
+                + ChapterTable.COLUMN_NAME_TEXT + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + ChapterTable.TABLE_NAME; 

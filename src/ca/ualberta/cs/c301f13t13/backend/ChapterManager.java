@@ -24,7 +24,7 @@ public class ChapterManager extends Model<View> implements StoringManager{
 	public ChapterManager(Context context) {
 		this.context = context;
 	}
-
+	
 	@Override
 	public void insert(Object object, DBHelper helper) {
 		Chapter chapter = (Chapter) object;
@@ -33,15 +33,16 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		// Insert chapter
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, (chapter.getId()).toString());		
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId());
+		
 		
 		db.insert(ChapterTable.TABLE_NAME, null, values);		
 	}
 
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
-		Chapter chapter= (Chapter) criteria;
+		Chapter chapter = (Chapter) criteria;
 		HashMap<String,String> chapCrit = chapter.getSearchCriteria();
 		ArrayList<Object> results = new ArrayList<Object>();
 		
@@ -49,17 +50,17 @@ public class ChapterManager extends Model<View> implements StoringManager{
 
 		String[] projection = {
 				ChapterTable.COLUMN_NAME_CHAPTER_ID,
-				ChapterTable.COLUMN_NAME_TEXT,
-				ChapterTable.COLUMN_NAME_STORY_ID,	
+				ChapterTable.COLUMN_NAME_STORY_ID,
+				ChapterTable.COLUMN_NAME_TEXT
 		};
 
 		String orderBy = ChapterTable._ID + " DESC";
 		
 		// Setting search criteria
-		String selection = null;
+		String selection = "";
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
-		int counter = 1;
+		int counter = 0;
 		int maxSize = chapCrit.size();
 		
 		for (String key: chapCrit.keySet()) {
@@ -74,7 +75,10 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		}
 		
 		if (selectionArgs.size() > 0) {
-			sArgs = (String[]) selectionArgs.toArray();
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			sArgs = null;
+			selection = null;
 		}
 		
 		// Querying the database
@@ -98,9 +102,9 @@ public class ChapterManager extends Model<View> implements StoringManager{
 			Chapter newChapter = new Chapter(
 					cursor.getString(0), // chapter id
 					cursor.getString(1), // text
-					cursor.getString(2) // story id
+					storyId // story id
 					);
-			// newChapter.add(Choices)
+			// newChapter.setChoices(Choices)
 			results.add(newChapter);
 			cursor.moveToNext();
 		}

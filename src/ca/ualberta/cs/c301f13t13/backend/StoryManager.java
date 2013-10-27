@@ -51,7 +51,6 @@ public class StoryManager extends Model implements StoringManager{
 		SQLiteDatabase db = helper.getWritableDatabase();
 			
 		UUID chapterId = story.getFirstChapterId();
-		
 				
 		// Insert story
 		ContentValues values = new ContentValues();
@@ -60,6 +59,7 @@ public class StoryManager extends Model implements StoringManager{
 		values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
 		values.put(StoryTable.COLUMN_NAME_DESCRIPTION, story.getDescription());
 		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, chapterId.toString());
+		values.put(StoryTable.COLUMN_NAME_CREATED, story.getAuthorsOwn().toString());
 		
 		db.insert(StoryTable.TABLE_NAME, null, values);		
 	}
@@ -80,12 +80,30 @@ public class StoryManager extends Model implements StoringManager{
 		
 	}
 	
+	/**
+	 * Updates a story already in the database.
+	 * 
+	 * @param oldObject
+	 * 			The object before update, used to find it in the database.
+	 * 
+	 * @param newObject
+	 * 			Contains the changes to the object, it is what the oldObject
+	 * 			info will be replaced with.
+	 */
 	@Override
 	public void update(Object oldObject, Object newObject, DBHelper helper) {
 		Story oldS = (Story) oldObject;
 		Story newS = (Story) newObject;
 	}
 
+	/**
+	 * Retrieves a story /stories from the database.
+	 * 
+	 * @param criteria 
+	 * 			Holds the search criteria.
+	 * @param helper
+	 * 			Used to open the database connection.
+	 */
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
 		HashMap<String,String> storyCrit = ((Story)criteria).getSearchCriteria();
@@ -98,7 +116,8 @@ public class StoryManager extends Model implements StoringManager{
 				StoryTable.COLUMN_NAME_TITLE,
 				StoryTable.COLUMN_NAME_AUTHOR,
 				StoryTable.COLUMN_NAME_DESCRIPTION,
-				StoryTable.COLUMN_NAME_FIRST_CHAPTER
+				StoryTable.COLUMN_NAME_FIRST_CHAPTER,
+				StoryTable.COLUMN_NAME_CREATED
 		};
 
 		String orderBy = StoryTable._ID + " DESC";
@@ -123,7 +142,6 @@ public class StoryManager extends Model implements StoringManager{
 		String[] sArgs;
 		
 		if (selectionArgs.size() > 0) {
-			//sArgs = new String[selectionArgs.size()];
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
 		} else {
 			sArgs = null;
@@ -156,7 +174,8 @@ public class StoryManager extends Model implements StoringManager{
 					cursor.getString(2), // author
 					cursor.getString(3), // description
 					cursor.getString(4), // first chapter id
-					chapters
+					chapters,
+					Boolean.valueOf(cursor.getString(5))
 					);
 			results.add(story);
 			cursor.moveToNext();
@@ -171,13 +190,13 @@ public class StoryManager extends Model implements StoringManager{
 	 * @return
 	 */
 	public ArrayList<Story> getCachedStories() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Story> cached = new ArrayList<Story>();
+		return cached;
 	}
 
 	public ArrayList<Story> getPublishedStories() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Story> published = new ArrayList<Story>();
+		return published;
 	}
 
 }
