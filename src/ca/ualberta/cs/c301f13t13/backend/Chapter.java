@@ -3,6 +3,7 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -13,10 +14,6 @@ public class Chapter {
 
 	private UUID id;
 	private UUID storyId;
-	
-	protected Chapter() {
-		id = null;
-	}
 	
 	public Chapter(UUID storyId) {
 		this.storyId = storyId;
@@ -41,8 +38,8 @@ public class Chapter {
 		return this.id;
 	}	
 	
-	public void setId(UUID id) {
-		this.id = id;
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
 	}
 	
 	public void setStoryId(UUID id) {
@@ -55,6 +52,11 @@ public class Chapter {
 	}
 
 	public String getStoryId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HashMap<String, String> getSearchCriteria() {
 		// TODO Auto-generated method stub
 		return null;
 	}	

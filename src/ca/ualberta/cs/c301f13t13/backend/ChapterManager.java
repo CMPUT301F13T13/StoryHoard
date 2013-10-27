@@ -42,7 +42,7 @@ public class ChapterManager extends Model<View> implements StoringManager{
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
 		Chapter chapter= (Chapter) criteria;
-		HashMap<String,String> chapCrit = chapter.getInfo();
+		HashMap<String,String> chapCrit = chapter.getSearchCriteria();
 		ArrayList<Object> results = new ArrayList<Object>();
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -89,17 +89,18 @@ public class ChapterManager extends Model<View> implements StoringManager{
 			/*
 			 * GET ALL CHOICES BELONGING TO THIS CHAPTER WITH THE
 			 * CHOICEMANAGER CLASS
-			 */
+			 *
 			ChoiceManager cm = new ChoiceManager(context);
 			Choice choice = new Choice(chapter.getId());
-			
 			ArrayList<Object> choiceObjs = cm.retrieve(choice, helper);
 
+*/
 			Chapter newChapter = new Chapter(
 					cursor.getString(0), // chapter id
 					cursor.getString(1), // text
 					cursor.getString(2) // story id
 					);
+			// newChapter.add(Choices)
 			results.add(newChapter);
 			cursor.moveToNext();
 		}

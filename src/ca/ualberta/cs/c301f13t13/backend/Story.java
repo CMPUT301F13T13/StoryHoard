@@ -45,21 +45,8 @@ public class Story {
 		this.author = author;
 		this.title = title;
 		this.description = description;
+		chapters = new HashMap<UUID, Chapter>();
 	}	
-	
-	/**
-	 * For creating an empty story and then setting specific parameters.
-	 * used for placing search criteria.
-	 */
-	public Story() {
-		this.id = null;
-		this.author = "";
-		this.title = "";
-		this.description = "";
-		this.firstChapterId = null;
-		this.chapters = null;
-		
-	}
 
 	/**
 	 * Initializes a new story object from a database entry. Only to be used by
@@ -77,7 +64,7 @@ public class Story {
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
-		this.chapters = chapters;
+		this.chapters = new HashMap<UUID, Chapter>(chapters);
 	}	
 	
 	// GETTERS
@@ -126,9 +113,18 @@ public class Story {
 	 * Returns the first chapter of the story.
 	 * @return firstChapter
 	 */
-	public Chapter getFirstChapter() {
-		return this.chapters.get(firstChapterId);
+	public UUID getFirstChapterId() {
+		return this.firstChapterId;
 	}
+	
+	/**
+	 * Returns the chapter matching the chapter id
+	 * @return chapter
+	 */
+	public Chapter getChapter(String id) {
+		Chapter chap = chapters.get(UUID.fromString(id));
+		return chap;
+	}	
 	
 	// SETTERS
 	
@@ -168,9 +164,8 @@ public class Story {
 	 * Sets the first chapter of the story.
 	 * @param chapter
 	 */
-	public void setFirstChapter(Chapter chapter) {
-		firstChapterId = chapter.getId();
-		chapters.put(chapter.getId(), chapter);
+	public void setFirstChapterId(UUID chapterId) {
+		firstChapterId = chapterId;
 	}
 	
 	/**
@@ -190,20 +185,16 @@ public class Story {
 		chapters.put(chapter.getId(), chapter);
 	}
 	
-	public HashMap<String,String> getInfo() {
+	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		if (id == null) {
-			info.put("", StoryTable.COLUMN_NAME_STORY_ID);
-		} else {
-			info.put(id.toString(), StoryTable.COLUMN_NAME_STORY_ID);
-		}
-		info.put(title, StoryTable.COLUMN_NAME_TITLE);
-		info.put(author, StoryTable.COLUMN_NAME_AUTHOR);
-		info.put(description, StoryTable.COLUMN_NAME_DESCRIPTION);
+		info.put(StoryTable.COLUMN_NAME_TITLE, title);
+		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
+		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
 		
 		return info;
 	}
+	
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title 

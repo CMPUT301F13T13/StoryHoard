@@ -50,7 +50,7 @@ public class StoryManager extends Model implements StoringManager{
 		Story story = (Story) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 			
-		Chapter chapter = story.getFirstChapter();
+		UUID chapterId = story.getFirstChapterId();
 		
 				
 		// Insert story
@@ -59,7 +59,7 @@ public class StoryManager extends Model implements StoringManager{
 		values.put(StoryTable.COLUMN_NAME_TITLE, story.getTitle());
 		values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
 		values.put(StoryTable.COLUMN_NAME_DESCRIPTION, story.getDescription());
-		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, (chapter.getId()).toString());
+		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, chapterId.toString());
 		
 		db.insert(StoryTable.TABLE_NAME, null, values);		
 	}
@@ -88,7 +88,7 @@ public class StoryManager extends Model implements StoringManager{
 
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
-		HashMap<String,String> storyCrit = ((Story)criteria).getInfo();
+		HashMap<String,String> storyCrit = ((Story)criteria).getSearchCriteria();
 		ArrayList<Object> results = new ArrayList<Object>();
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -97,16 +97,16 @@ public class StoryManager extends Model implements StoringManager{
 				StoryTable.COLUMN_NAME_STORY_ID,
 				StoryTable.COLUMN_NAME_TITLE,
 				StoryTable.COLUMN_NAME_AUTHOR,
-				StoryTable.COLUMN_NAME_DESCRIPTION		
+				StoryTable.COLUMN_NAME_DESCRIPTION,
+				StoryTable.COLUMN_NAME_FIRST_CHAPTER
 		};
 
 		String orderBy = StoryTable._ID + " DESC";
 		
 		// Setting search criteria
-		String selection = null;
-		String[] sArgs = null;
+		String selection = "";
 		ArrayList<String> selectionArgs = new ArrayList<String>();
-		int counter = 1;
+		int counter = 0;
 		int maxSize = storyCrit.size();
 		
 		for (String key: storyCrit.keySet()) {
@@ -116,12 +116,18 @@ public class StoryManager extends Model implements StoringManager{
 			}
 			counter++;
 			if (counter < maxSize) {
-				selection += "AND ";
+				selection += " AND ";
 			}			
 		}
 		
+		String[] sArgs;
+		
 		if (selectionArgs.size() > 0) {
-			sArgs = (String[]) selectionArgs.toArray();
+			//sArgs = new String[selectionArgs.size()];
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			sArgs = null;
+			selection = null;
 		}
 		
 		// Querying the database
@@ -135,16 +141,15 @@ public class StoryManager extends Model implements StoringManager{
 			
 			// Find all chapters of the story
 			ChapterManager cm = new ChapterManager(context);
-			Chapter chapter = new Chapter();
-			chapter.setStoryId(UUID.fromString(storyId));
-			ArrayList<Object> chapterObjs = cm.retrieve(chapter, helper);
+			Chapter chapter = new Chapter(UUID.fromString(storyId));
+//			ArrayList<Object> chapterObjs = cm.retrieve(chapter, helper);
 			HashMap<UUID, Chapter> chapters = new HashMap<UUID, Chapter>();
-			
+/*			
 			for (Object obj : chapterObjs) {
 				Chapter chap = (Chapter) obj;
 				chapters.put(chap.getId(), chap);
 			}
-			
+*/			
 			Story story = new Story(
 					storyId,
 					cursor.getString(1), // title
