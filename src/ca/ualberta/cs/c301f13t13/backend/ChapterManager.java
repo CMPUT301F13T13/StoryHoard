@@ -1,6 +1,19 @@
 /**
- * 
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.util.ArrayList;
@@ -21,10 +34,23 @@ import ca.ualberta.cs.c301f13t13.gui.View;
 public class ChapterManager extends Model<View> implements StoringManager{
 	private Context context;
 	
+	/**
+	 * Initializes a new ChapterManager object.
+	 * 
+	 * @param context
+	 */
 	public ChapterManager(Context context) {
 		this.context = context;
 	}
 	
+	/**
+	 * Inserts a new chapter into the database.
+	 * 
+	 * @param object 
+	 * 			Object to be stored in the database.
+	 * @param helper
+	 * 			Used to get the database.
+	 */			
 	@Override
 	public void insert(Object object, DBHelper helper) {
 		Chapter chapter = (Chapter) object;
@@ -39,6 +65,16 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		db.insert(ChapterTable.TABLE_NAME, null, values);		
 	}
 
+	/**
+	 * Retrieves a chapter / chapters from the database.
+	 * 
+	 * @param criteria 
+	 * 			Criteria for the object(s) to be retrieved from the database.
+	 * @param helper
+	 * 			Used to get the database.
+	 * @return ArrayList
+	 * 			Contains the objects that matched the search criteria.
+	 */	
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
 		ArrayList<Object> results = new ArrayList<Object>();
@@ -96,6 +132,16 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		return results;		
 	}
 
+	/**
+	 * Updates a chapter's data in the database.
+	 * 
+	 * @param oldObject
+	 * 			Object we want to update.
+	 * @param newObject
+	 * 			Holds the new data that will be used to update.
+	 * @param helper
+	 * 			DB Helper used to get the database.
+	 */
 	@Override
 	public void update(Object oldObject, Object newObject, DBHelper helper) {
 		Chapter newC = (Chapter) newObject;
@@ -120,6 +166,20 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		db.update(ChapterTable.TABLE_NAME, values, selection, sArgs);	
 	}
 	
+	/**
+	 * Creates the selection string (a prepared statement) to be used 
+	 * in the database query. Also creates an array holding the items
+	 * to be placed in the ? of the selection.
+	 *  
+	 * @param object
+	 * 			Holds the data needed to build the selection string 
+	 * 			and the selection arguments array.
+	 * @param sArgs
+	 * 			Holds the arguments to be passed into the selection string.
+	 * @return String
+	 * 			The selection string.
+	 */
+	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
 		Chapter chapter = (Chapter) object;
 		HashMap<String,String> chapCrit = chapter.getSearchCriteria();

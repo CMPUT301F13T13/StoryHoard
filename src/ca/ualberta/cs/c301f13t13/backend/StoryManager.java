@@ -43,7 +43,7 @@ public class StoryManager extends Model implements StoringManager{
 	}
 
 	/**
-	 * Saves a new story locally.
+	 * Saves a new story locally (in the database).
 	 */	
 	@Override
 	public void insert(Object object, DBHelper helper) {
@@ -188,8 +188,32 @@ public class StoryManager extends Model implements StoringManager{
 		
 		return results;
 	}
+	
+	/**
+	 * Retrieves all stories from the server, i.e. the published stories.
+	 * 
+	 * @return ArrayList
+	 */
+	public ArrayList<Story> getPublishedStories() {
+		ArrayList<Story> published = new ArrayList<Story>();
+		return published;
+	}	
 
-	private String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+	/**
+	 * Creates the selection string (a prepared statement) to be used 
+	 * in the database query. Also creates an array holding the items
+	 * to be placed in the ? of the selection.
+	 *  
+	 * @param object
+	 * 			Holds the data needed to build the selection string 
+	 * 			and the selection arguments array.
+	 * @param sArgs
+	 * 			Holds the arguments to be passed into the selection string.
+	 * @return String
+	 * 			The selection string.
+	 */
+	@Override
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
 		Story story = (Story) object;
 		HashMap<String,String> storyCrit = story.getSearchCriteria();		
 		
@@ -213,10 +237,4 @@ public class StoryManager extends Model implements StoringManager{
 		}
 		return selection;
 	}
-	
-	public ArrayList<Story> getPublishedStories() {
-		ArrayList<Story> published = new ArrayList<Story>();
-		return published;
-	}
-
 }

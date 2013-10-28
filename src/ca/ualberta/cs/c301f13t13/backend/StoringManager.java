@@ -26,11 +26,38 @@ import java.util.ArrayList;
  */
 public interface StoringManager {
 	
+	/** 
+	 * Inserts an object into a database.
+	 * @param object
+	 * @param helper
+	 */
 	public void insert(Object object, DBHelper helper);
 	
+	/**
+	 * Retrieves an object from the database.
+	 * @param criteria
+	 * @param helper
+	 * @return
+	 */
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper);
 	
+	/**
+	 * Updates an object in the database.
+	 * @param oldObject
+	 * @param newObject
+	 * @param helper
+	 */
 	public void update(Object oldObject, Object newObject, DBHelper helper);
+	
+	/**
+	 * Builds the selection string and the selection arguments to be
+	 * used in a retrieval query.
+	 * 
+	 * @param object
+	 * @param sArgs
+	 * @return
+	 */
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs);
 	
 	// public void delete();
 }

@@ -208,6 +208,11 @@ public class Story {
 		this.chapters = chapters;
 	}
 	
+	/**
+	 * Sets the Boolean indicating whether or not the story
+	 * was created by the phone's author.
+	 * @param authorsOwn
+	 */
 	public void setAuthorsOwn(Boolean authorsOwn) {
 		this.authorsOwn = authorsOwn;
 	}
@@ -215,12 +220,18 @@ public class Story {
 	// Other methods
 	
 	/**
-	 * Adds a chapter.
+	 * Adds a chapter onto the story object.
 	 */
 	public void addChapter(Chapter chapter) {
 		chapters.put(chapter.getId(), chapter);
 	}
 	
+	/**
+	 * Returns the information of the story (id, title, author, etc)
+	 * in a HashMap.
+	 * 
+	 * @return HashMap
+	 */
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
