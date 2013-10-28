@@ -3,25 +3,26 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.UUID;
+
+import ca.ualberta.cs.c301f13t13.backend.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import android.test.ActivityInstrumentationTestCase2;
-
-import ca.ualberta.cmput301f13t13.storyhoard.views.test.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.views.test.File;
-import ca.ualberta.cmput301f13t13.storyhoard.views.test.T;
-import ca.ualberta.cmput301f13t13.storyhoard.views.test.ViewChapterActivity;
+import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
 /**
  * @author Owner
  *
  */
-public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
+public class TestChapter extends ActivityInstrumentationTestCase2<MainActivity>{
 
 	public TestChapter() {
-		super(StoryHoardActivity.class);
+		super(MainActivity.class);
 	}
 	
 	/**
@@ -29,14 +30,14 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 	 */
 	public void testViewIllustration() {
 		// Add arguments to make chapter
-		Chapter chapter = new Chapter();
-		File illustration = new File();
+		Chapter chapter = new Chapter(UUID.randomUUID(), "bobby went home");
+		File illustration = new File(null);
 		
 		// Add an illustration to the chapter
 		chapter.setIllustration(illustration);
 		
 		ViewChapterActivity act = new ViewChapterActivity(this.getActivity());
-		act.displayIllustration(Chapter chapter);		
+		act.displayIllustration(chapter);		
 	}
 	
 	/**
@@ -44,7 +45,7 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 	 */
 	public void testAddIllustration() {
 		//Create new chapter and illustration file
-		Chapter chapter = new Chapter();
+		Chapter chapter = new Chapter(UUID.randomUUID(), "the cow mooed");
 		File illustration = new File();
 		//Add illustration to chapter
 		try {
@@ -61,7 +62,9 @@ public class TestChapter extends ActivityInstrumentationTestCase2<StoryHoardActi
 		//Get existing chapter from ChapterManager
 		ChapterManager cm = new ChapterManager();
 		int id = 123;
-		Chapter chapter = cm.getChapter(id);
+		Chapter chapter = new Chapter(UUID.randomUUID(), "the cow mooed");
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		ArrayList<Object> chapters = cm.retrieve(chapter, helper);
 		
 		//Create new illustration file
 		File illustration = new File();

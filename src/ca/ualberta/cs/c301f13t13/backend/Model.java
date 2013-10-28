@@ -29,7 +29,6 @@ import java.util.ArrayList;
  * @editor Stephanie Gil
  *
  */
-@SuppressWarnings("rawtypes")
 public class Model<V extends View> {
     private ArrayList<V> views;
 

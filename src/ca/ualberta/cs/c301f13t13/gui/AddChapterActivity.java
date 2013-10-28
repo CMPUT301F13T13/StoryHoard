@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
+import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
+
 /**
  * Add Chapter Activity
  * 
@@ -38,7 +40,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
-public class AddChapterActivity extends Activity implements View<M> {
+public class AddChapterActivity extends Activity 
+		implements ca.ualberta.cs.c301f13t13.gui.View<ChapterManager> {
 	private ImageButton imageButton;
 	private Button saveButton;
 	private Button allChaptersButton;
@@ -117,7 +120,11 @@ public class AddChapterActivity extends Activity implements View<M> {
 		
 	}
 	
-	public void update(M model) {};
+	@Override
+	public void update(ChapterManager model) {
+		// TODO Auto-generated method stub
+		
+	};
 	
 	/*  Not sure if needed
 	@Override
