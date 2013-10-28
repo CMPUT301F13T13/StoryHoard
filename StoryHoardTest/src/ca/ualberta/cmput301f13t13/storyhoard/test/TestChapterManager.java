@@ -90,12 +90,12 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
-//		newChapter.setText("My Wizard newt");
+		newChapter.setText("My Wizard newt");
 //		newChapter.setNextChapter(UUID.randomUUID());
 		cm.update(mockChapter, newChapter, helper);
 		
 		// make sure you can find new chapter
-		mockChapters = cm.retrieve(mockChapter, helper);
+		mockChapters = cm.retrieve(newChapter, helper);
 		assertTrue(mockChapters.size() != 0);
 		assertTrue(hasChapter(mockChapters, newChapter));
 		

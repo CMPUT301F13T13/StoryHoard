@@ -204,10 +204,11 @@ public class StoryManager extends Model implements StoringManager{
 			if (!value.equals("")) {
 				selection += key + " LIKE ?";
 				sArgs.add(value);
-			}
-			counter++;
-			if (counter < maxSize) {
-				selection += " AND ";
+				
+				counter++;
+				if (counter < maxSize) {
+					selection += " AND ";
+				}
 			}			
 		}
 		return selection;

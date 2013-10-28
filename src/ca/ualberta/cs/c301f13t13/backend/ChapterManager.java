@@ -104,8 +104,8 @@ public class ChapterManager extends Model<View> implements StoringManager{
 
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, newC.getId().toString());
-		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
+		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
 
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -132,10 +132,10 @@ public class ChapterManager extends Model<View> implements StoringManager{
 			if (!value.equals("")) {
 				selection += key + " LIKE ? ";
 				sArgs.add(value);
-			}
-			counter++;
-			if (counter < maxSize) {
-				selection += "AND ";
+				counter++;
+				if (counter < maxSize) {
+					selection += "AND ";
+				}
 			}
 		}
 		return selection;

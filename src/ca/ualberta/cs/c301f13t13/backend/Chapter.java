@@ -72,12 +72,20 @@ public class Chapter {
 		this.storyId = id;
 	}
 
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 	public String getText() {
 		// TODO Auto-generated method stub
 		return this.text;
 	}
 
-
+	@Override
+	public String toString() {
+		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + "]";
+		
+	}
 
 	public HashMap<String, String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
