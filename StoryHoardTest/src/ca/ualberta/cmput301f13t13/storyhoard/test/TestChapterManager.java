@@ -27,6 +27,8 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestChapterManager extends ActivityInstrumentationTestCase2<MainActivity>{
 	private Chapter mockChapter;
+	private ArrayList<Object> mockChapters;
+
 	
 	public TestChapterManager() {
 		super(MainActivity.class);
@@ -51,8 +53,9 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(mockChapter, helper);
-		ArrayList<Object> chapters = cm.retrieve(mockChapter, helper);
-		assertNotSame(chapters.size(), 0);
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 	
 	 /**
@@ -66,10 +69,9 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(mockChapter, helper);
-		ArrayList<Object> chapters = cm.retrieve(mockChapter, helper);
-		assertNotSame(chapters.size(), 0);
-		assertTrue(chapters.contains(mockChapter));
-		
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 	
 	/**
@@ -77,28 +79,29 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	 * which includes adding and loading a chapter. 
 	 */
 	public void testUpdateChapterNoMedia() {
-		Chapter chapter = new Chapter(UUID.randomUUID());
+		newMockChapter(UUID.randomUUID(), "hi there");
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		cm.insert(mockChapter, helper);
 		
-		ArrayList<Object> chapters = cm.retrieve(chapter, helper);
-		// assert retrieval worked
-		assertEquals(chapters.size(), 1);
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, mockChapter));
 		
-		Chapter newChapter = (Chapter) chapters.get(0);
+		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
 //		newChapter.setText("My Wizard newt");
 //		newChapter.setNextChapter(UUID.randomUUID());
-		cm.update(chapter, newChapter, helper);
+		cm.update(mockChapter, newChapter, helper);
 		
-		// make sure you can find new story
-		chapters = cm.retrieve(newChapter, helper);
-		assertNotSame(chapters.size(), 0);
-		assertTrue(chapters.contains(newChapter));
+		// make sure you can find new chapter
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, newChapter));
 		
 		// make sure old version no longer exists
-		chapters = cm.retrieve(chapter, helper);
-		assertFalse(chapters.contains(mockChapter));		
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertFalse(hasChapter(mockChapters, mockChapter));	
 	}
 	
 	/**
@@ -111,24 +114,27 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
-		ArrayList<Object> chapters = cm.retrieve(chapter, helper);
-		// assert retrieval worked
-		assertEquals(chapters.size(), 1);
+		newMockChapter(UUID.randomUUID(), "hi there");
+		cm.insert(mockChapter, helper);
 		
-		Chapter newChapter = (Chapter) chapters.get(0);
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, mockChapter));
+		
+		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
 //		newChapter.setText("My Wizard newt");
 //		newChapter.setNextChapter(UUID.randomUUID());
 		cm.update(chapter, newChapter, helper);
 		
 		// make sure you can find new story
-		chapters = cm.retrieve(newChapter, helper);
-		assertNotSame(chapters.size(), 0);
-		assertTrue(chapters.contains(newChapter));
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, newChapter));
 		
 		// make sure old version no longer exists
-		chapters = cm.retrieve(chapter, helper);
-		assertFalse(chapters.contains(mockChapter));		
+		mockChapters = cm.retrieve(mockChapter, helper);
+		assertTrue(mockChapters.size() == 0);	
 	}	
 	
 	@Test
@@ -136,4 +142,13 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		fail("Not yet implemented");
 	}
 
+	public Boolean hasChapter(ArrayList<Object> objs, Chapter chap) {
+		for (Object object : objs) {
+		    Chapter newChap = (Chapter) object;
+		    if (newChap.getId().equals(chap.getId())) {
+		    	return true;
+		    }
+		}		
+		return false;
+	}	
 }

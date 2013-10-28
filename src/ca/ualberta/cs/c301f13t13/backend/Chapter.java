@@ -18,6 +18,12 @@ public class Chapter {
 	private UUID id;
 	private UUID storyId;
 	private String text;
+
+	public Chapter(UUID id, UUID storyId, String text) {
+		this.text = text;
+		this.storyId = storyId;
+		this.id = id;
+	}
 	
 	public Chapter(UUID storyId, String text) {
 		this.text = text;
@@ -53,6 +59,11 @@ public class Chapter {
 		return this.id;
 	}	
 	
+	public UUID getStoryId() {
+		// TODO Auto-generated method stub
+		return this.storyId;
+	}	
+	
 	public void setId(UUID id) {
 		this.id = id;
 	}
@@ -66,17 +77,14 @@ public class Chapter {
 		return this.text;
 	}
 
-	public UUID getStoryId() {
-		// TODO Auto-generated method stub
-		return this.storyId;
-	}
+
 
 	public HashMap<String, String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
 		info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		info.put(ChapterTable.COLUMN_NAME_TEXT, text);
 		info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		info.put(ChapterTable.COLUMN_NAME_TEXT, text);
 		
 		return info;
 	}	

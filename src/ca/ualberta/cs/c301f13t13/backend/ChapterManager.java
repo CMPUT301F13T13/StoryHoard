@@ -36,15 +36,14 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		
-		
 		db.insert(ChapterTable.TABLE_NAME, null, values);		
 	}
 
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
-		Chapter chapter = (Chapter) criteria;
-		HashMap<String,String> chapCrit = chapter.getSearchCriteria();
 		ArrayList<Object> results = new ArrayList<Object>();
+		String[] sArgs = null;
+		ArrayList<String> selectionArgs = new ArrayList<String>();
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -57,22 +56,7 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		String orderBy = ChapterTable._ID + " DESC";
 		
 		// Setting search criteria
-		String selection = "";
-		String[] sArgs = null;
-		ArrayList<String> selectionArgs = new ArrayList<String>();
-		int counter = 0;
-		int maxSize = chapCrit.size();
-		
-		for (String key: chapCrit.keySet()) {
-			if (!key.equals("")) {
-				selection += key + " LIKE ? ";
-				selectionArgs.add(chapCrit.get(key));
-			}
-			counter++;
-			if (counter < maxSize) {
-				selection += "AND ";
-			}
-		}
+		String selection = setSearchCriteria(criteria, selectionArgs);
 		
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
@@ -88,7 +72,7 @@ public class ChapterManager extends Model<View> implements StoringManager{
 		// Retrieving all the entries
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			String storyId = cursor.getString(0);
+			String storyId = cursor.getString(1);
 			
 			/*
 			 * GET ALL CHOICES BELONGING TO THIS CHAPTER WITH THE
@@ -100,9 +84,9 @@ public class ChapterManager extends Model<View> implements StoringManager{
 
 */
 			Chapter newChapter = new Chapter(
-					cursor.getString(0), // chapter id
-					cursor.getString(1), // text
-					storyId // story id
+					UUID.fromString(cursor.getString(0)), // chapter id
+					UUID.fromString(storyId), // story id
+					cursor.getString(2) // text
 					);
 			// newChapter.setChoices(Choices)
 			results.add(newChapter);
@@ -113,8 +97,47 @@ public class ChapterManager extends Model<View> implements StoringManager{
 	}
 
 	@Override
-	public void update(Object oldObj, Object newObj, DBHelper helper) {
-		// TODO Auto-generated method stub
+	public void update(Object oldObject, Object newObject, DBHelper helper) {
+		Chapter newC = (Chapter) newObject;
+		String[] sArgs = null;
+		SQLiteDatabase db = helper.getReadableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, newC.getId().toString());
+		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
+
+		// Setting search criteria
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+		String selection = setSearchCriteria(oldObject, selectionArgs);
 		
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			selection = null;
+		}		
+		
+		db.update(ChapterTable.TABLE_NAME, values, selection, sArgs);	
+	}
+	
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+		Chapter chapter = (Chapter) object;
+		HashMap<String,String> chapCrit = chapter.getSearchCriteria();
+		String selection = "";
+		
+		int maxSize = chapCrit.size();
+		int counter = 0;
+		for (String key: chapCrit.keySet()) {
+			String value = chapCrit.get(key);
+			if (!value.equals("")) {
+				selection += key + " LIKE ? ";
+				sArgs.add(value);
+			}
+			counter++;
+			if (counter < maxSize) {
+				selection += "AND ";
+			}
+		}
+		return selection;
 	}
 }

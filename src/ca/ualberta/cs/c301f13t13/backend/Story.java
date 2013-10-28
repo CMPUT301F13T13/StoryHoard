@@ -34,7 +34,7 @@ public class Story {
 	private Boolean authorsOwn;
 
 	/**
-	 * Initializes a new story object.
+	 * Initializes a new story object with an id.
 	 * 
 	 * @param id
 	 * @param author
@@ -42,9 +42,9 @@ public class Story {
 	 * @param description
 	 * @param authorsOwn
 	 */
-	public Story(String title, String author, String description, 
+	public Story(UUID id, String title, String author, String description, 
 			Boolean authorsOwn) {
-		this.id = UUID.randomUUID();;
+		this.id = id;
 		this.author = author;
 		this.title = title;
 		this.description = description;
@@ -52,6 +52,24 @@ public class Story {
 		chapters = new HashMap<UUID, Chapter>();
 	}	
 
+	/**
+	 * Initializes a new story object with no id.
+	 * 
+	 * @param author
+	 * @param title
+	 * @param description
+	 * @param authorsOwn
+	 */
+	public Story(String title, String author, String description, 
+			Boolean authorsOwn) {
+		this.id = UUID.randomUUID();
+		this.author = author;
+		this.title = title;
+		this.description = description;
+		this.authorsOwn = authorsOwn;
+		chapters = new HashMap<UUID, Chapter>();
+	}	
+	
 	/**
 	 * Initializes a new story object from a database entry. Only to be used by
 	 * the story manager class.
@@ -63,7 +81,7 @@ public class Story {
 	 */
 	protected Story(String id, String title, String author, String description,
 			String chapterId, HashMap<UUID, Chapter> chapters, Boolean authorsOwn) {
-		this.id = UUID.fromString(id);;
+		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
@@ -206,9 +224,11 @@ public class Story {
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
+		info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
+		info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
 		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		
 		return info;

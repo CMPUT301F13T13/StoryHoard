@@ -21,6 +21,7 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActivity>{
 	private Story mockStory;
 	private Chapter mockChapter;
+	private ArrayList<Object> mockStories;
 	
 	public TestStoryManager() {
 		super(MainActivity.class);	
@@ -42,15 +43,17 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	
 	/**
 	 * Tests caching a story locally on the device, and then 
-	 * loading cached stories.
+	 * loading cached mockStories.
 	 */
 	public void testCacheLoadStory() {
 		newMockStory("My Frog", "blueberry", "my cute frog", false);
 		StoryManager sm = new StoryManager(this.getActivity());
 		sm.cacheStory(mockStory);
-		ArrayList<Story> cachedStories = sm.getCachedStories();
-		assertNotSame(cachedStories.size(), 0);
-		assertTrue(cachedStories.contains(mockStory));
+		
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		mockStories = sm.retrieve(mockStory, helper);
+		assertTrue(mockStories.size() != 0);
+		assertTrue(hasStory(mockStories, mockStory));
 	}
 	
 	/**
@@ -62,14 +65,12 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
 		sm.insert(mockStory, helper);
+		
 		try {
 			// retrieving story in db that matches mockStory
-			ArrayList<Object> loadedStories = sm.retrieve(mockStory, helper);
-			for (Object obj: loadedStories) {
-				System.out.println((Story) obj);
-			}
-			assertNotSame(loadedStories.size(), 0);
-			assertTrue(loadedStories.contains(mockStory));
+			mockStories = sm.retrieve(mockStory, helper);
+			assertTrue(mockStories.size() != 0);
+			assertTrue(hasStory(mockStories, mockStory));
 		} catch(Exception e) {
 			fail("Could not read Story: " + e.getStackTrace());
 		}
@@ -84,11 +85,13 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		StoryManager sm = new StoryManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
-		ArrayList<Object> stories = sm.retrieve(mockStory, helper);
-		// assert retrieval worked
-		assertEquals(stories.size(), 1);
+		sm.insert(mockStory, helper);
 		
-		Story newStory = (Story) stories.get(0);
+		mockStories = sm.retrieve(mockStory, helper);
+		assertTrue(mockStories.size() != 0);
+		assertTrue(hasStory(mockStories, mockStory));
+		
+		Story newStory = (Story) mockStories.get(0);
 		
 		newStory.setTitle("My Wizard newt");
 		newStory.setAuthor("not jk rolling");
@@ -96,13 +99,13 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		sm.update(mockStory, newStory, helper);
 		
 		// make sure you can find new story
-		stories = sm.retrieve(newStory, helper);
-		assertNotSame(stories.size(), 0);
-		assertTrue(stories.contains(newStory));
+		mockStories = sm.retrieve(newStory, helper);
+		assertTrue(mockStories.size() != 0);
+		assertTrue(hasStory(mockStories, newStory));
 		
 		// make sure old version no longer exists
-		stories = sm.retrieve(mockStory, helper);
-		assertFalse(stories.contains(mockStory));
+		mockStories = sm.retrieve(mockStory, helper);
+		assertTrue(mockStories.size() == 0);
 	}
 	
 	/**
@@ -115,7 +118,6 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		sm.publish(mockStory);
 		
 		ArrayList<Story> pubStories = sm.getPublishedStories();
-		assertNotSame(pubStories.size(), 0);
 		assertTrue(pubStories.contains(mockStory));
 	}
 	
@@ -123,5 +125,14 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	public void test() {
 		fail("Not yet implemented");
 	}
-
+	
+	public Boolean hasStory(ArrayList<Object> objs, Story story) {
+		for (Object object : objs) {
+		    Story newStory = (Story) object;
+		    if (newStory.getId().equals(story.getId())) {
+		    	return true;
+		    }
+		}		
+		return false;
+	}
 }

@@ -92,8 +92,30 @@ public class StoryManager extends Model implements StoringManager{
 	 */
 	@Override
 	public void update(Object oldObject, Object newObject, DBHelper helper) {
-		Story oldS = (Story) oldObject;
 		Story newS = (Story) newObject;
+		String[] sArgs = null;
+		SQLiteDatabase db = helper.getReadableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(StoryTable.COLUMN_NAME_STORY_ID, newS.getId().toString());
+		values.put(StoryTable.COLUMN_NAME_TITLE, newS.getTitle());
+		values.put(StoryTable.COLUMN_NAME_AUTHOR, newS.getAuthor());
+		values.put(StoryTable.COLUMN_NAME_DESCRIPTION, newS.getDescription());
+		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
+				newS.getFirstChapterId().toString());
+		values.put(StoryTable.COLUMN_NAME_CREATED, newS.getAuthorsOwn().toString());
+
+		// Setting search criteria
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+		String selection = setSearchCriteria(oldObject, selectionArgs);
+		
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			selection = null;
+		}		
+		
+		db.update(StoryTable.TABLE_NAME, values, selection, sArgs);	
 	}
 
 	/**
@@ -106,11 +128,9 @@ public class StoryManager extends Model implements StoringManager{
 	 */
 	@Override
 	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
-		HashMap<String,String> storyCrit = ((Story)criteria).getSearchCriteria();
 		ArrayList<Object> results = new ArrayList<Object>();
-		
 		SQLiteDatabase db = helper.getReadableDatabase();
-
+		String[] sArgs = null;
 		String[] projection = {
 				StoryTable.COLUMN_NAME_STORY_ID,
 				StoryTable.COLUMN_NAME_TITLE,
@@ -123,28 +143,12 @@ public class StoryManager extends Model implements StoringManager{
 		String orderBy = StoryTable._ID + " DESC";
 		
 		// Setting search criteria
-		String selection = "";
 		ArrayList<String> selectionArgs = new ArrayList<String>();
-		int counter = 0;
-		int maxSize = storyCrit.size();
-		
-		for (String key: storyCrit.keySet()) {
-			if (!key.equals("")) {
-				selection += key + " LIKE ?";
-				selectionArgs.add(storyCrit.get(key));
-			}
-			counter++;
-			if (counter < maxSize) {
-				selection += " AND ";
-			}			
-		}
-		
-		String[] sArgs;
+		String selection = setSearchCriteria(criteria, selectionArgs);
 		
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
 		} else {
-			sArgs = null;
 			selection = null;
 		}
 		
@@ -185,15 +189,30 @@ public class StoryManager extends Model implements StoringManager{
 		return results;
 	}
 
-	/**
-	 * Returns a list of all cached stories.
-	 * @return
-	 */
-	public ArrayList<Story> getCachedStories() {
-		ArrayList<Story> cached = new ArrayList<Story>();
-		return cached;
+	private String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+		Story story = (Story) object;
+		HashMap<String,String> storyCrit = story.getSearchCriteria();		
+		
+		// Setting search criteria
+		String selection = "";
+	
+		int counter = 0;
+		int maxSize = storyCrit.size();
+		
+		for (String key: storyCrit.keySet()) {
+			String value = storyCrit.get(key);
+			if (!value.equals("")) {
+				selection += key + " LIKE ?";
+				sArgs.add(value);
+			}
+			counter++;
+			if (counter < maxSize) {
+				selection += " AND ";
+			}			
+		}
+		return selection;
 	}
-
+	
 	public ArrayList<Story> getPublishedStories() {
 		ArrayList<Story> published = new ArrayList<Story>();
 		return published;
