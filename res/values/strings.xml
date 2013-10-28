@@ -15,5 +15,12 @@
     <string name="cancel">Cancel</string>
     <string name="max_limit">max: 20 words</string>
     <string name="connect_choice_to">Connect choice to:</string>
-
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="story_description">Story Description</string>
+    <string name="new_title">New Story Title</string>
+	<string name="new_author">New Story Author</string>
+    <string name="new_description">New Story Description</string>
+    <string name="add_first_chapter">Add First Chapter</string>
+	
 </resources>
