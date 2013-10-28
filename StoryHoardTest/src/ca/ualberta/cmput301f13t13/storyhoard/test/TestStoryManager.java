@@ -133,6 +133,20 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		assertTrue(pubStories.contains(mockStory));
 	}
 	
+	/**
+	 * Tests publishing story, caching it, then loading it from server.
+	 */
+	public void testPublishCacheLoadStory() {
+		newMockStory("My Monkey", "TS ELLIOT", 
+					"monkey is in the server", true);
+		StoryManager sm = new StoryManager(this.getActivity());
+		sm.publish(mockStory);
+		sm.cacheStory(mockStory);
+		
+		ArrayList<Story> pubStories = sm.getCachedStories();
+		assertTrue(pubStories.contains(mockStory));
+	}	
+	
 	@Test
 	public void test() {
 		fail("Not yet implemented");
