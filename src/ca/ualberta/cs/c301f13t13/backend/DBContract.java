@@ -141,15 +141,15 @@ public final class DBContract {
 
 		private MediaTable() {}
 
-		public static final String TABLE_NAME = "photos_table";
-		public static final String COLUMN_NAME_MEDIA = "blob";
+		public static final String TABLE_NAME = "media_table";
+		public static final String COLUMN_NAME_MEDIA_URI = "uri";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
 		public static final String COLUMN_NAME_TYPE = "type ";  // photo or illustration
 		
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + MediaTable.TABLE_NAME + " (" 
 				+ MediaTable._ID + " INTEGER PRIMARY KEY," 
-		        + MediaTable.COLUMN_NAME_MEDIA + " BLOB," 
+		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT," 
 		        + MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
 		        + MediaTable.COLUMN_NAME_TYPE + " TEXT)";	
 

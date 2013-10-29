@@ -163,7 +163,7 @@ public class StoryManager extends Model implements StoringManager{
 			
 			// Find all chapters of the story
 			ChapterManager cm = new ChapterManager(context);
-			Chapter chapter = new Chapter(UUID.fromString(storyId));
+			Chapter chapter = new Chapter(UUID.fromString(storyId), "");
 //			ArrayList<Object> chapterObjs = cm.retrieve(chapter, helper);
 			HashMap<UUID, Chapter> chapters = new HashMap<UUID, Chapter>();
 /*			

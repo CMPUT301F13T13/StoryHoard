@@ -15,6 +15,7 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @author Stephanie Gil
  *
  */
-public class Story {
+public class Story implements Serializable {
 	private UUID id;
 	private String author;
 	private String title;

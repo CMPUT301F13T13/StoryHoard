@@ -3,6 +3,8 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.Serializable;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -12,13 +14,15 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * @author Ashley Brown, Stephanie Gil
  *
  */
-//TODO must deal with illustration in chapter still
-public class Chapter {
+//TODO must deal with photos in chapter still
+public class Chapter implements Serializable {
 
 	private UUID id;
 	private UUID storyId;
 	private String text;
-	private HashMap<UUID, Choice> choice;
+	private HashMap<UUID, Choice> choices;
+	private HashMap<UUID, URI> illustrations;
+	private HashMap<UUID, URI> photos;
 	/**
 	 * Initializes a new chapter object with an UUid id.
 	 * 
@@ -31,8 +35,11 @@ public class Chapter {
 		this.text = text;
 		this.storyId = storyId;
 		this.id = id;
-		choice = new HashMap<UUID, Choice>();
+		choices = new HashMap<UUID, Choice>();
+		illustrations = new HashMap<UUID, URI>();
+		photos = new HashMap<UUID, URI>();
 	}
+	
 	/**
 	 * Initializes a new chapter object with no id.
 	 * 
@@ -44,18 +51,11 @@ public class Chapter {
 		this.text = text;
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
-		choice = new HashMap<UUID, Choice>();
+		choices = new HashMap<UUID, Choice>();
+		illustrations = new HashMap<UUID, URI>();
+		photos = new HashMap<UUID, URI>();
 	}
 	
-	/**
-	 * For setting search criteriaNew chapter without text
-	 * @param storyId
-	 */
-	public Chapter(UUID storyId) {
-		this.text = "";
-		this.storyId = storyId;
-		this.id = UUID.randomUUID();
-	}	
 	
 	/**
 	 * Initialize a new chapter from database info.
@@ -67,8 +67,8 @@ public class Chapter {
 		this.id=  UUID.fromString(id);
 		this.text= text;
 		this.storyId=UUID.fromString(storyId);
-		
-		// TODO Auto-generated constructor stub
+		illustrations = new HashMap<UUID, URI>();
+		photos = new HashMap<UUID, URI>();
 	}
 	//Getters
 	
@@ -85,7 +85,6 @@ public class Chapter {
 	 * @return
 	 */
 	public UUID getStoryId() {
-		// TODO Auto-generated method stub
 		return this.storyId;
 	}
 	/**
@@ -93,7 +92,7 @@ public class Chapter {
 	 * @return
 	 */
 	public String getText() {
-		// TODO Auto-generated method stub
+	
 		return this.text;
 	}
 	/**
@@ -101,7 +100,7 @@ public class Chapter {
 	 * @return
 	 */
 	public HashMap<UUID, Choice> getChoice() {
-		return this.choice;
+		return this.choices;
 	}
 	//Setters
 	/**
@@ -130,11 +129,11 @@ public class Chapter {
 	 * @param text
 	 */
 	public void  setChoice(HashMap<UUID, Choice> choice) {
-		this.choice = choice;
+		this.choices = choice;
 	}
 	
 	public void addChoice(Choice c) {
-		choice.put(c.getId(), c);
+		choices.put(c.getId(), c);
 	}
 
 	@Override
