@@ -45,9 +45,9 @@ public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapt
 	public void testPostPhoto() {
 		// Photo photo = new Photo();
 		 int chapterId = 0;
-		 MediaManager pm = new MediaManager();
+		 MediaManager mm = new MediaManager();
 		 try {
-			 pm.postPhoto(photo, chapterId);
+			 mm.postPhoto(photo, chapterId);
 		 } catch (Exception e) {
 			 fail("Could not post photo: " + e.getStackTrace());
 		 }
@@ -57,7 +57,7 @@ public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapt
 	 * Tests taking a photo
 	 */
 	public void testTakePhoto(){
-		MediaManager pm = new MediaManager();
-		pm.takePhoto();
+		MediaManager mm = new MediaManager();
+		mm.takePhoto();
 	}
 }

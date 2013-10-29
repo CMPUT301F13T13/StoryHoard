@@ -145,8 +145,8 @@ public class Story implements Serializable {
 	 * Returns the chapter matching the chapter id
 	 * @return chapter
 	 */
-	public Chapter getChapter(String id) {
-		Chapter chap = chapters.get(UUID.fromString(id));
+	public Chapter getChapter(UUID id) {
+		Chapter chap = chapters.get(id);
 		return chap;
 	}	
 	

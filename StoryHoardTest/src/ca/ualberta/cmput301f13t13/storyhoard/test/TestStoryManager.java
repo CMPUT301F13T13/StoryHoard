@@ -19,6 +19,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import org.junit.Test;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.DBContract;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.StoryManager;
@@ -39,6 +40,12 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		super(MainActivity.class);	
 	}
 
+	public void setup() {
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);		
+	}
+	
 	/**
 	 * Create a new story.
 	 */
@@ -48,7 +55,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		mockStory = new Story(title, author, description, authorsOwn);
 		
 		// first chapter of story
-		mockChapter = new Chapter(mockStory.getId(), "");
+		mockChapter = new Chapter(mockStory.getId(), "my first chapter");
 		mockStory.addChapter(mockChapter);	
 		mockStory.setFirstChapterId(mockChapter.getId());
 	}
