@@ -5,7 +5,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
+
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -13,11 +17,10 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestPhotoManager extends ActivityInstrumentationTestCase2<StoryHoardActivity>{
+public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapterActivity>{
 
-	
-	public TestPhotoManager() {
-		super(StoryHoardActivity.class);
+	public TestMediaManager() {
+		super(ViewChapterActivity.class);
 	}
 	
 	/**
