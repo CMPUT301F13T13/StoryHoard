@@ -23,7 +23,7 @@ import ca.ualberta.cs.c301f13t13.gui.View;
  * @author Owner
  *
  */
-public class IllustrationManager extends Model<View> implements StoringManager{
+public class MediaManager extends Model<View> implements StoringManager{
 
 	@Override
 	public void insert(Object object, DBHelper helper) {
