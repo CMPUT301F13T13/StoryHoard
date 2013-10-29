@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
@@ -17,6 +18,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 public class ViewBrowseStories extends Activity {
 
 	private Spinner storyViewType;
+	private GridView storyListGrid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class ViewBrowseStories extends Activity {
 		setContentView(R.layout.activity_view_browse_stories);
 		storyViewType = (Spinner) findViewById(R.id.storyViewType);
 		ArrayAdapter<CharSequence> viewTypeAdapter;
+		storyListGrid = (GridView) findViewById(R.id.viewAllTypeStories);
 
 		viewTypeAdapter = ArrayAdapter
 				.createFromResource(this, R.array.view_type_choices,
