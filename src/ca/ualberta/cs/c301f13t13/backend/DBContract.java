@@ -116,7 +116,6 @@ public final class DBContract {
 		public static final String COLUMN_NAME_TEXT = "text";
 		public static final String COLUMN_NAME_CURR_CHAPTER = "curr_chapter";
 		public static final String COLUMN_NAME_NEXT_CHAPTER = "next_chapter";
-		public static final String COLUMN_NAME_CHOICE_NUMBER = "choice_number";
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
@@ -126,7 +125,6 @@ public final class DBContract {
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
 		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT, "
-		        + ChoiceTable.COLUMN_NAME_CHOICE_NUMBER + " INTEGER"
 		        		+ ")";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
