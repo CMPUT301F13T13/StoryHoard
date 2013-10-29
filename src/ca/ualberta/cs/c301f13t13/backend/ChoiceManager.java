@@ -36,8 +36,8 @@ public class ChoiceManager extends Model implements StoringManager {
 			ContentValues values = new ContentValues();
 			values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 			values.put(ChoiceTable.COLUMN_NAME_STORY_ID, choice.getStoryId().toString());
-			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getChapterIdFrom().toString());
-			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getChapterIdTo().toString());
+			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
+			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getNextChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_TEXT, choice.getText());
 			values.put(ChoiceTable.COLUMN_NAME_CHOICE_NUMBER, Integer.toString(choice.getChoiceNum()));
 			db.insert(ChoiceTable.TABLE_NAME, null, values);		
@@ -61,8 +61,8 @@ public class ChoiceManager extends Model implements StoringManager {
 			ContentValues values = new ContentValues();
 			values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newC.getId().toString());		
 			values.put(ChoiceTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
-			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getChapterIdFrom().toString());
-			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getChapterIdTo().toString());
+			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getCurrentChapter().toString());
+			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getNextChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
 			values.put(ChoiceTable.COLUMN_NAME_CHOICE_NUMBER, Integer.toString(newC.getChoiceNum()));	
 			// Setting search criteria
