@@ -32,8 +32,8 @@ public class AddStoryActivity extends Activity {
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	private Button firstChapter;
-	private Button cancelStory;
+	private Button addfirstChapter;
+	private Button addStoryImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +43,10 @@ public class AddStoryActivity extends Activity {
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
-		firstChapter = (Button) findViewById(R.id.addFirstChapter);
-		cancelStory = (Button) findViewById(R.id.cancelStory);
+		addfirstChapter = (Button) findViewById(R.id.addFirstChapter);
+		addStoryImage = (Button) findViewById(R.id.addStoryImage);
 		
-		firstChapter.setOnClickListener(new OnClickListener() {
+		addfirstChapter.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -60,12 +60,10 @@ public class AddStoryActivity extends Activity {
 			}
 		});
 		
-		cancelStory.setOnClickListener(new OnClickListener() {
+		addStoryImage.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// Clear all fields, return to main activity
-				finish();
 			}
 		});
 	}
