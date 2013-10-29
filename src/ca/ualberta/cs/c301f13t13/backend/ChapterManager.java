@@ -28,7 +28,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 import ca.ualberta.cs.c301f13t13.gui.View;
 
 /**
- * @author Owner
+ * @author Steph 
  *
  */
 public class ChapterManager extends Model<View> implements StoringManager{

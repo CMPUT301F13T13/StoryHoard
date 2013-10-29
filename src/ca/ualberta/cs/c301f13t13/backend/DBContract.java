@@ -111,16 +111,23 @@ public final class DBContract {
 		private ChoiceTable() {}
 
 		public static final String TABLE_NAME = "choice_table";
+		public static final String COLUMN_NAME_CHOICE_ID="choice_id";
+		public static final String COLUMN_NAME_STORY_ID="story_id";
 		public static final String COLUMN_NAME_TEXT = "text";
 		public static final String COLUMN_NAME_CURR_CHAPTER = "curr_chapter";
 		public static final String COLUMN_NAME_NEXT_CHAPTER = "next_chapter";
+		public static final String COLUMN_NAME_CHOICE_NUMBER = "choice_number";
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
 				+ ChoiceTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
+				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT, "
+				+ ChoiceTable.COLUMN_NAME_STORY_ID + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
-		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " INTEGER, "
-		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " INTEGER)";	
+		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
+		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT, "
+		        + ChoiceTable.COLUMN_NAME_CHOICE_NUMBER + " INTEGER"
+		        		+ ")";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + ChoiceTable.TABLE_NAME; 
