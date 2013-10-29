@@ -6,10 +6,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.junit.Test;
 
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.*;
+import ca.ualberta.cs.c301f13t13.gui.*;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -27,9 +29,9 @@ public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapt
 	 * Tests saving and loading photo.
 	 */ 
 	public void testSaveLoadPhoto() {
-		Uri ImageFileUri = "./hereitis.jpg" 
-		Chapter chap = new Chapter();
-		PhotoManager pm = new PhotoManager();
+		Uri ImageFileUri = "./hereitis.jpg";
+		Chapter chap = new Chapter(UUID.randomUUID(), "empty chapter");
+		MediaManager pm = new MediaManager();
 		pm.savePhoto(ImageFileUri, chap);
 		
 		// loads all photos of a chapter
@@ -41,9 +43,9 @@ public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapt
 	 * Tests posting a photo to the current segment/chapter/page/whatever
 	 */
 	public void testPostPhoto() {
-		 Photo photo = new Photo();
+		// Photo photo = new Photo();
 		 int chapterId = 0;
-		 PhotoManager pm = new PhotoManager();
+		 MediaManager pm = new MediaManager();
 		 try {
 			 pm.postPhoto(photo, chapterId);
 		 } catch (Exception e) {
@@ -55,7 +57,7 @@ public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewChapt
 	 * Tests taking a photo
 	 */
 	public void testTakePhoto(){
-		PhotoManager pm = new PhotoManager();
+		MediaManager pm = new MediaManager();
 		pm.takePhoto();
 	}
 }
