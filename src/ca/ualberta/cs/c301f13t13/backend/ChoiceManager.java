@@ -39,7 +39,6 @@ public class ChoiceManager extends Model implements StoringManager {
 			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getNextChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_TEXT, choice.getText());
-			values.put(ChoiceTable.COLUMN_NAME_CHOICE_NUMBER, Integer.toString(choice.getChoiceNum()));
 			db.insert(ChoiceTable.TABLE_NAME, null, values);		
 		}
 
@@ -64,7 +63,6 @@ public class ChoiceManager extends Model implements StoringManager {
 			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getCurrentChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getNextChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
-			values.put(ChoiceTable.COLUMN_NAME_CHOICE_NUMBER, Integer.toString(newC.getChoiceNum()));	
 			// Setting search criteria
 			ArrayList<String> selectionArgs = new ArrayList<String>();
 			String selection = setSearchCriteria(oldObject, selectionArgs);
@@ -96,8 +94,7 @@ public class ChoiceManager extends Model implements StoringManager {
 					ChoiceTable.COLUMN_NAME_STORY_ID,
 					ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
 					ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
-					ChoiceTable.COLUMN_NAME_TEXT,
-					ChoiceTable.COLUMN_NAME_CHOICE_NUMBER
+					ChoiceTable.COLUMN_NAME_TEXT
 			};
 			String orderBy = ChoiceTable._ID + " DESC";
 			
@@ -125,8 +122,7 @@ public class ChoiceManager extends Model implements StoringManager {
 						UUID.fromString(cursor.getString(1)), // story id
 						UUID.fromString(cursor.getString(2)), // current chapter
 						UUID.fromString(cursor.getString(3)), // next chapter
-						cursor.getString(4), // text
-						cursor.getInt(5) // choice number
+						cursor.getString(4) // text
 						);
 				results.add(choice);
 				cursor.moveToNext();

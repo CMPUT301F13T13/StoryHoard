@@ -3,23 +3,30 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import org.junit.Test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
+import ca.ualberta.cs.c301f13t13.backend.DBHelper;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.gui.AddChoiceActivity;
 
 /**
  * @author Owner 
  *
  */
-public class TestChoiceManager extends ActivityInstrumentationTestCase2<StoryHoardActivity> {
-
+public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoiceActivity> {
+	
 	/**
 	 * @param name
 	 */
 	public TestChoiceManager(String name) {
-		super(StoryHoardActivity.class);
+		super(AddChoiceActivity.class);
 	}
 	
 
@@ -31,26 +38,57 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<StoryHoa
 	/**
 	 * Tests adding a choice (saving locally)
 	 */
-	public void testAddChoice() {
-		ChoiceManager cm = new Choicemanager();
-		Chapter chap = new Chapter();
-		Choice mockChoice = new Choice();
-		cm.addChoice(chap, mockChoice);
+	public void testSaveLoadChoice() {
+		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		UUID storyId= story.getId();
+		Chapter chap1 = new Chapter(storyId,"test");
+		Chapter chap2 = new Chapter(storyId, "test2");
+		String text = "pick me";
+		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
+		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		cm.insert(c, helper);
+		try {
+			// retrieving story in db that matches mockStory
+			ArrayList<Object> choice = cm.retrieve(c, helper);
+			assertTrue(choice.size() != 0);
+			assertTrue(hasChoice(choice, c));
+		} catch(Exception e) {
+			fail("Could not read choice: " + e.getStackTrace());
+		}
 	}
-	
+	public Boolean hasChoice(ArrayList<Object> objs, Choice  choice) {
+		for (Object object : objs) {
+		    Choice newChoice = (Choice) object;
+		    if (newChoice.getId().equals(choice.getId())) {
+		    	return true;
+		    }
+		}		
+		return false;
+	}
 	/** 
 	 * Tests loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		ChoiceManager cm = new Choicemanager();
-		Choice choice = new Choice();
-		Chapter chap = new Chapter();
-		cm.addChoice(chap, choice);
-		Choice newChoice = cm.loadChoice(choice.getId());
+		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		UUID storyId= story.getId();
+		Chapter chap1 = new Chapter(storyId,"test");
+		Chapter chap2 = new Chapter(storyId, "test2");
+		String text = "pick me";
+		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
+		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		cm.insert(c, helper);
+		Choice newChoice = c;
 		newChoice.setText("new choice text mrawr");
-		cm.updateChoice(newChoice);
-		newChoice = cm.loadChoice(choice.getId);
-		
-		assert(newChoice.getText().equals("new choice text mrawr"));
+		cm.update(newChoice,c,helper);
+		// make sure you can find new story
+		ArrayList<Object>	mockChoice = cm.retrieve(newChoice, helper);
+				assertTrue(mockChoice.size() != 0);
+				assertTrue(hasChoice(mockChoice, c));
+				
+				// make sure old version no longer exists
+				mockChoice = cm.retrieve(c, helper);
+				assertTrue(mockChoice.size() == 0);
 	}	
 }

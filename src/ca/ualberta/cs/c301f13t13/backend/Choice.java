@@ -11,7 +11,6 @@ public class Choice implements Serializable{
 	private UUID currentChapter;
 	private UUID nextChapter;
 	private String text;
-	private int choiceNum;
 	/**
 	 * Initializes a new choice object with an UUid id.
 	 * 
@@ -20,16 +19,14 @@ public class Choice implements Serializable{
 	 * @param chapterIdFrom
 	 * @param chapterIdTo
 	 * @param text
-	 * @param choiceNum
 	 */
 
-	public Choice(UUID id, UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text, int choiceNum) {
+	public Choice(UUID id, UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = id;
 		this.storyId = storyId;
 		this.currentChapter = chapterIdFrom;
 		this.nextChapter = chapterIdTo;
-		this.text = text;
-		this.choiceNum= choiceNum;		
+		this.text = text;	
 	}
 	/**
 	 * Initializes a new choice object with no id.
@@ -38,7 +35,7 @@ public class Choice implements Serializable{
 	 * @param text
 	 * @param storyid
 	 */
-	public Choice(UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text, int choiceNum) {
+	public Choice(UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = UUID.randomUUID();
 		this.storyId = storyId;
 		this.currentChapter = chapterIdFrom;
@@ -81,13 +78,7 @@ public class Choice implements Serializable{
 	public void setText(String text) {
 		this.text=text;
 	}
-	/**
-	 * Sets the choiceNum of the choice.
-	 * @param ChoiceNum
-	 */
-	public void setChoiceNum(int choiceNum) {
-		this.choiceNum=choiceNum;
-	}
+	
 	// GETTERS
 	/**
 	 * Returns the Id of the choice.
@@ -118,19 +109,13 @@ public class Choice implements Serializable{
 		return this.nextChapter;
 	}
 	/**
-	 * Returns the Id of the choice.
+	 * Returns the text of the choice.
 	 * @return
 	 */
 	public String getText() {
 		return this.text;
 	}
-	/**
-	 * Returns the Id of the choice.
-	 * @return
-	 */
-	public int getChoiceNum() {
-		return this.choiceNum;
-	}
+	
 	/**
 	 * Returns the information of the choice (id, storyId, chapterIdFrom, etc..)
 	 * in a HashMap.
@@ -145,7 +130,7 @@ public class Choice implements Serializable{
 		info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, currentChapter.toString());
 		info.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, nextChapter.toString());
 		info.put(ChoiceTable.COLUMN_NAME_TEXT, text);
-		info.put(ChoiceTable.COLUMN_NAME_CHOICE_NUMBER, Integer.toString(choiceNum));
+
 		
 		return info;
 	}
@@ -153,6 +138,6 @@ public class Choice implements Serializable{
 	@Override
 	public String toString() {
 		return "Choice [id=" + id + ", Story=" + storyId + ", Current Chapter=" + currentChapter 
-				+ ", Next Chapter=" + nextChapter + ", Text=" + text + ", Choice Number=" + choiceNum + "]";
+				+ ", Next Chapter=" + nextChapter + ", Text=" + text + "]";
 	}
 }
