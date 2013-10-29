@@ -128,65 +128,25 @@ public final class DBContract {
 
 	/** 
 	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the photos
+	 * for the table containing the photos and illustrations.
 	 */
-	protected static abstract class PhotoTable implements BaseColumns {
+	protected static abstract class MediaTable implements BaseColumns {
 
-		private PhotoTable() {}
+		private MediaTable() {}
 
 		public static final String TABLE_NAME = "photos_table";
-		public static final String COLUMN_NAME_PHOTO = "blob";
-
-		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + PhotoTable.TABLE_NAME + " (" 
-				+ PhotoTable._ID + " INTEGER PRIMARY KEY," 
-		        + PhotoTable.COLUMN_NAME_PHOTO + " BLOB)";	
-
-		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + PhotoTable.TABLE_NAME; 
-	}		
-	
-	/** 
-	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the illustrations
-	 */
-	protected static abstract class IllustrationTable implements BaseColumns {
-
-		private IllustrationTable() {}
-
-		public static final String TABLE_NAME = "illustration_table";
-		public static final String COLUMN_NAME_ILL = "blob";
+		public static final String COLUMN_NAME_MEDIA = "blob";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
-
+		public static final String COLUMN_NAME_TYPE = "type ";  // photo or illustration
+		
 		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + IllustrationTable.TABLE_NAME + " (" 
-				+ IllustrationTable._ID + " INTEGER PRIMARY KEY," 
-		        + IllustrationTable.COLUMN_NAME_ILL + " BLOB, "
-		        + IllustrationTable.COLUMN_NAME_CHAPTER_ID + " INTEGER)";	
+		        "CREATE TABLE " + MediaTable.TABLE_NAME + " (" 
+				+ MediaTable._ID + " INTEGER PRIMARY KEY," 
+		        + MediaTable.COLUMN_NAME_MEDIA + " BLOB," 
+		        + MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+		        + MediaTable.COLUMN_NAME_TYPE + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + IllustrationTable.TABLE_NAME; 
-	}		
-	
-	/** 
-	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the illustrations. Describes which 
-	 * photos belong to which chapters.
-	 */
-	protected static abstract class PhotoRelationTable implements BaseColumns {
-
-		private PhotoRelationTable() {}
-
-		public static final String TABLE_NAME = "photo_relation_table";
-		public static final String COLUMN_NAME_PHOTO_ID = "photo_id";
-		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
-
-		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + PhotoRelationTable.TABLE_NAME + " (" 
-				+ PhotoRelationTable.COLUMN_NAME_PHOTO_ID+ " INTEGER," 
-		        + PhotoRelationTable.COLUMN_NAME_CHAPTER_ID + " INTEGER)";	
-
-		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + PhotoRelationTable.TABLE_NAME; 
-	}			
+		        + MediaTable.TABLE_NAME; 
+	}				
 }
