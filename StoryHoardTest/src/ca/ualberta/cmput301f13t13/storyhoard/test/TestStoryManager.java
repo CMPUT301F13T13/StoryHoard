@@ -27,13 +27,13 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewStoryActivity>{
+public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActivity>{
 	private Story mockStory;
 	private Chapter mockChapter;
 	private ArrayList<Object> mockStories;
 	
 	public TestStoryManager() {
-		super(ViewStoryActivity.class);	
+		super(MainActivity.class);	
 	}
 
 	public void setup() {

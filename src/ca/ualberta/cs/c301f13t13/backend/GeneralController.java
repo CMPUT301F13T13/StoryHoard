@@ -3,22 +3,49 @@ package ca.ualberta.cs.c301f13t13.backend;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.content.Context;
+
 public class GeneralController {
-	private static final Integer CACHED = 0;
-	private static final Integer CREATED = 1;
-	private static final Integer STORY = 0;
-	private static final Integer CHAPTER = 1;
-	private static final Integer CHOICE = 2;
+	public static final int CACHED = 0;
+	public static final int CREATED = 1;
+	public static final int PUBLISHED = 2;
+	
+	public static final int STORY = 0;
+	public static final int CHAPTER = 1;
+	public static final int CHOICE = 2;
 
 	
-	/** gets all stories that are either cached or created by author
+	/** gets all stories that are either cached, created by the author, or published
 	 * 
 	 * @return
 	 */
-	public ArrayList <Object> getAllStories(int type){
-		//TODO everything
+	public ArrayList <Story> getAllStories(int type, Context context){
+		StoryManager sm = new StoryManager(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Story> stories = new ArrayList<Story>();
+		ArrayList<Object> objects;
+		Story criteria;
 		
-		return null;
+		switch(type) {
+		case CACHED:
+			criteria = new Story("", "", "", false);
+			objects = sm.retrieve(criteria, helper);
+			stories = Utilities.objectsToStories(objects);
+			break;
+		case CREATED:
+			criteria = new Story("", "", "", true);
+			objects = sm.retrieve(criteria, helper);
+			stories = Utilities.objectsToStories(objects);
+			break;
+		case PUBLISHED:
+			stories = sm.getPublishedStories();
+			break;
+		default:		
+			break;
+			
+		}
+		
+		return stories;
 	}
 	/** gets all chapters that are in story
 	 * 

@@ -124,8 +124,7 @@ public final class DBContract {
 				+ ChoiceTable.COLUMN_NAME_STORY_ID + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
 		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
-		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT, "
-		        		+ ")";	
+		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + ChoiceTable.TABLE_NAME; 
