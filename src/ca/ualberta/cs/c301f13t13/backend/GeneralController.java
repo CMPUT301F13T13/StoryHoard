@@ -6,6 +6,7 @@ import java.util.UUID;
 import android.content.Context;
 
 public class GeneralController {
+	public static final int ALL = -1;
 	public static final int CACHED = 0;
 	public static final int CREATED = 1;
 	public static final int PUBLISHED = 2;
@@ -15,7 +16,6 @@ public class GeneralController {
 	public static final int CHOICE = 2;
 
 	public GeneralController() {
-		
 	}
 	
 	/** 
@@ -35,12 +35,12 @@ public class GeneralController {
 		
 		switch(type) {
 		case CACHED:
-			criteria = new Story("", "", "", false);
+			criteria = new Story(null, "", "", false);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
-			criteria = new Story("", "", "", true);
+			criteria = new Story(null, "", "", true);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
