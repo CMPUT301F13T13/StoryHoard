@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,6 +45,7 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		/* Setup the content view */
 		setContentView(R.layout.activity_view_browse_stories);
 		storyViewType = (Spinner) findViewById(R.id.storyViewType);
 		storyListGrid = (GridView) findViewById(R.id.viewAllTypeStories);
@@ -80,9 +83,10 @@ public class ViewBrowseStories extends Activity {
 		GeneralController gc = new GeneralController();
 		storyAdapter = new GridStoriesAdapter(this, R.layout.item_browse_story,
 				null);
-		/*	Waiting on when Steph finishes this thing
-		 * storyAdapter = new GridStoriesAdapater(this,
-				R.layout.item_browse_story, gc.getAllStories(viewType, this));
+		/*
+		 * Waiting on when Steph finishes this thing storyAdapter = new
+		 * GridStoriesAdapater(this, R.layout.item_browse_story,
+		 * gc.getAllStories(viewType, this));
 		 */
 		storyListGrid.setAdapter(storyAdapter);
 		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -100,6 +104,29 @@ public class ViewBrowseStories extends Activity {
 
 			}
 		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.clear();
+		menu.add(0, 0, 0, R.string.add_new_story);
+		menu.add(0, 1, 1, R.string.search_stories);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			/* Add new story activity */
+			Intent intent = new Intent(this, AddStoryActivity.class);
+			startActivity(intent);
+			return true;
+		case 1:
+			/* Search Stories activity */
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
