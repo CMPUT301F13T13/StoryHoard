@@ -14,6 +14,9 @@ public class GeneralController {
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
 
+	public GeneralController() {
+		
+	}
 	
 	/** 
 	 * Gets all the stories that are either cached, created by the author, or published.
@@ -99,7 +102,9 @@ public class GeneralController {
 	 * 			Will either be STORY(0), CHAPTER(1), CHOICE(2).
 	 * @param context
 	 */
-	public void addObject(Object object, DBHelper helper, int type, Context context) {
+	public void addObject(Object object, int type, Context context) {
+		DBHelper helper = DBHelper.getInstance(context);
+		
 		switch (type) {
 		case STORY:
 			Story story = (Story) object;

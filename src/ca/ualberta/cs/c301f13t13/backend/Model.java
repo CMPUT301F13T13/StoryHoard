@@ -21,7 +21,7 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
-import ca.ualberta.cs.c301f13t13.gui.View;
+import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * @editor Stephanie Gil
  *
  */
-public class Model<V extends View> {
+public class Model<V extends SHView> {
     private ArrayList<V> views;
 
     public Model() {
