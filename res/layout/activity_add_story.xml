@@ -62,7 +62,7 @@
         android:layout_above="@+id/linearLayoutStory"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/newStoryDescription"
+        android:layout_below="@+id/description"
         android:ems="10"
         android:hint="@string/new_description"
         android:inputType="textMultiLine" />

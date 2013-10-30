@@ -37,10 +37,7 @@ public class ViewBrowseStories extends Activity {
 	private GridView storyListGrid;
 	private ArrayAdapter<Story> storyAdapter;
 	private ArrayAdapter<CharSequence> viewTypeAdapter;
-	private int viewType = GeneralController.CREATED; /*
-													 * Set it to User Stories by
-													 * default
-													 */
+	private int viewType = GeneralController.CREATED;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +78,14 @@ public class ViewBrowseStories extends Activity {
 
 		/* Setup the GridView Adapter */
 		GeneralController gc = new GeneralController();
+
 		storyAdapter = new GridStoriesAdapter(this, R.layout.item_browse_story,
 				null);
+
+		// THIS NEEDS TO BE FIXED
 		/*
-		 * Waiting on when Steph finishes this thing storyAdapter = new
-		 * GridStoriesAdapater(this, R.layout.item_browse_story,
-		 * gc.getAllStories(viewType, this));
+		 * storyAdapter = new GridStoriesAdapter(this,
+		 * R.layout.item_browse_story, gc.getAllStories(viewType, this));
 		 */
 		storyListGrid.setAdapter(storyAdapter);
 		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -133,7 +132,7 @@ public class ViewBrowseStories extends Activity {
 	 * This class is the subclasses ArrayAdapter<Story> and handles the custom
 	 * view type within the grid
 	 * 
-	 * @author alexanderwong
+	 * @author Alexander Wong
 	 * 
 	 */
 	private class GridStoriesAdapter extends ArrayAdapter<Story> {
