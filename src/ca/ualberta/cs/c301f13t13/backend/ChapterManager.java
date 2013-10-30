@@ -25,13 +25,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
-import ca.ualberta.cs.c301f13t13.gui.View;
+import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
  * @author Steph 
  *
  */
-public class ChapterManager extends Model<View> implements StoringManager{
+public class ChapterManager extends Model<SHView> implements StoringManager{
 	private Context context;
 	
 	/**

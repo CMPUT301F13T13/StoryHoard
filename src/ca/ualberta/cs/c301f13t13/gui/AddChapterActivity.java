@@ -41,7 +41,7 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 public class AddChapterActivity extends Activity 
-		implements ca.ualberta.cs.c301f13t13.gui.View<ChapterManager> {
+		implements ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
 	private ImageButton imageButton;
 	private Button saveButton;
 	private Button allChaptersButton;
