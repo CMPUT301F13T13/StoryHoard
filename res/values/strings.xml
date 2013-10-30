@@ -28,7 +28,7 @@
     <string name="edit_story">Edit Story</string>
     <string name="story_view_type">Story View Type</string>
     <string name="current_view_type">Current View: </string>
-
+	<string name="story_image_cover">Cover Image</string>
     <string-array name="view_type_choices">
         <item>My Stories</item>
         <item>Downloaded Stories</item>
