@@ -16,17 +16,19 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
  * 
  * @author Alexander Wong
- *
+ * 
  */
 public class AddStoryActivity extends Activity {
 	private EditText newTitle;
@@ -39,29 +41,34 @@ public class AddStoryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_story);
-	
+
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
 		addfirstChapter = (Button) findViewById(R.id.addFirstChapter);
 		addStoryImage = (Button) findViewById(R.id.addStoryImage);
-		
+
 		addfirstChapter.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				/*
-				 * Save all text forms to first story
-				 * Switch to first chapter creation activity
+				 * Save all text forms to first story Switch to first chapter
+				 * creation activity
 				 */
-				newTitle.getText();
-				newAuthor.getText();
-				newDescription.getText();
+				String title = newTitle.getText().toString();
+				String author = newAuthor.getText().toString();
+				String description = newDescription.getText().toString();
+				Story newStory = new Story(title, author, description, true);
+				
+				Intent intent = new Intent(getApplicationContext(), AddChapterActivity.class);
+				intent.putExtra("New Story", newStory);
+				startActivity(intent);
 			}
 		});
-		
+
 		addStoryImage.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 			}
