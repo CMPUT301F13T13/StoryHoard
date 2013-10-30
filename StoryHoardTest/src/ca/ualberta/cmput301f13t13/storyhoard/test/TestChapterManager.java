@@ -24,6 +24,8 @@ import org.junit.Test;
 
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.DBContract;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
@@ -34,7 +36,6 @@ import android.test.ActivityInstrumentationTestCase2;
  * 
  */
 public class TestChapterManager extends ActivityInstrumentationTestCase2<MainActivity>{
-	private Chapter mockChapter;
 	private ArrayList<Object> mockChapters;
 
 	
@@ -42,14 +43,25 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		super(MainActivity.class);
 	}	
 	
+	
+	public void setUp() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);			
+	}
+	
 	/**
 	 * Create a new mock chapter without choices.
 	 */
-	public void newMockChapter(UUID storyId, String text) {
+	public Chapter newMockChapter(UUID storyId, String text) {
 		// chapter object
-		mockChapter = new Chapter(storyId, text);
-//		Choice choice = new Choice();
-//		mockChapter.addChoice(choice);  // within this, choice manager add Choice should be called
+		Chapter mockChapter = new Chapter(storyId, text);
+		Choice choice = new Choice(storyId, mockChapter.getId(), 
+				UUID.randomUUID(), "pick me!");
+		mockChapter.addChoice(choice);  // within this, choice manager add Choice should be called
+		
+		return mockChapter;
 	}	
 		
 	 /**
@@ -57,7 +69,8 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	 */
 	public void testAddLoadChapterNoMedia() {
 		ChapterManager cm = new ChapterManager(this.getActivity());
-		newMockChapter(UUID.randomUUID(), "bob went away");
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
+				"bob went away");
 
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(mockChapter, helper);
@@ -67,29 +80,52 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	}
 	
 	 /**
-	 * Tests saving and loading a chapter that has media locally.
+	 * Tests retrieving all the chapters of a story
 	 */
-	public void testAddLoadChapterMedia() {
-		// TO DO: Add media
+	public void testGetAllChapters() {
 		ChapterManager cm = new ChapterManager(this.getActivity());
-		newMockChapter(UUID.randomUUID(), "it is raining");
-		// Give it photos/illustrations
-		
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
+				"bob went away");
 		cm.insert(mockChapter, helper);
-		mockChapters = cm.retrieve(mockChapter, helper);
+		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(), 
+				"Lily drove");
+		cm.insert(mockChapter2, helper);
+		
+		Chapter criteria = new Chapter(UUID.fromString(""), 
+				mockChapter.getStoryId(), "");
+		mockChapters = cm.retrieve(criteria, helper);
 		assertTrue(mockChapters.size() != 0);
+		assertTrue(hasChapter(mockChapters, mockChapter));
 		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 	
+//	 /**
+//	 * Tests saving and loading a chapter that has media locally.
+//	 */
+//	public void testAddLoadChapterMedia() {
+//		// TO DO: Add media
+//		ChapterManager cm = new ChapterManager(this.getActivity());
+//		newMockChapter(UUID.randomUUID(), "it is raining");
+//		// Give it photos/illustrations
+//		
+//		DBHelper helper = DBHelper.getInstance(this.getActivity());
+//		cm.insert(mockChapter, helper);
+//		mockChapters = cm.retrieve(mockChapter, helper);
+//		assertTrue(mockChapters.size() != 0);
+//		assertTrue(hasChapter(mockChapters, mockChapter));
+//	}
+	
 	/**
-	 * Tests updating a chapter's data except for media,
+	 * Tests updating a chapter's data (except media and choices,
 	 * which includes adding and loading a chapter. 
 	 */
 	public void testUpdateChapterNoMedia() {
-		newMockChapter(UUID.randomUUID(), "hi there");
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
 		cm.insert(mockChapter, helper);
 		
 		mockChapters = cm.retrieve(mockChapter, helper);
@@ -99,7 +135,6 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
 		newChapter.setText("My Wizard newt");
-//		newChapter.setNextChapter(UUID.randomUUID());
 		cm.update(mockChapter, newChapter, helper);
 		
 		// make sure you can find new chapter
@@ -118,11 +153,11 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	 */
 	public void testUpdateChapterMedia() {
 		// ADD MEDIA
-		Chapter chapter = new Chapter(UUID.randomUUID());
+		Chapter chapter = new Chapter(UUID.randomUUID(), "the blue cow mood");
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
-		newMockChapter(UUID.randomUUID(), "hi there");
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
 		cm.insert(mockChapter, helper);
 		
 		mockChapters = cm.retrieve(mockChapter, helper);
@@ -132,7 +167,6 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
 //		newChapter.setText("My Wizard newt");
-//		newChapter.setNextChapter(UUID.randomUUID());
 		cm.update(chapter, newChapter, helper);
 		
 		// make sure you can find new story

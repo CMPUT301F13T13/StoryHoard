@@ -12,7 +12,8 @@ public class Choice implements Serializable{
 	private UUID nextChapter;
 	private String text;
 	/**
-	 * Initializes a new choice object with an UUid id.
+	 * Initializes a new choice object with an UUid id (needed for making a
+	 * new choice after retrieving data from the database).
 	 * 
 	 * @param id
 	 * @param storyId

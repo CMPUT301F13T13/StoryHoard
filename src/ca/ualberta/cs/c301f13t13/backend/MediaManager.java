@@ -17,6 +17,8 @@ package ca.ualberta.cs.c301f13t13.backend;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+
 import ca.ualberta.cs.c301f13t13.gui.View;
 
 /**
@@ -24,7 +26,15 @@ import ca.ualberta.cs.c301f13t13.gui.View;
  *
  */
 public class MediaManager extends Model<View> implements StoringManager{
-
+	private Context context;
+	
+	/**
+	 * Initializes a new MediaManager object.
+	 */
+	public MediaManager(Context context) {
+		this.context = context;
+	}
+	
 	@Override
 	public void insert(Object object, DBHelper helper) {
 		// TODO Auto-generated method stub

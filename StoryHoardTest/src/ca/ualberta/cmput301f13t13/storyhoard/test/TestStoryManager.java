@@ -18,12 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
 import org.junit.Test;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.DBContract;
-import ca.ualberta.cs.c301f13t13.backend.DBHelper;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.StoryManager;
-import ca.ualberta.cs.c301f13t13.gui.MainActivity;
+import ca.ualberta.cs.c301f13t13.backend.*;
+import ca.ualberta.cs.c301f13t13.gui.*;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -31,16 +27,17 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActivity>{
+public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewStoryActivity>{
 	private Story mockStory;
 	private Chapter mockChapter;
 	private ArrayList<Object> mockStories;
 	
 	public TestStoryManager() {
-		super(MainActivity.class);	
+		super(ViewStoryActivity.class);	
 	}
 
 	public void setup() {
+		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);		
@@ -95,6 +92,33 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		}
 	}
 
+	/**
+	 * Tests loading all created stories, and makes sure the results
+	 * don't include any stories not created by author.
+	 */
+	public void testGetAuthorStories() {
+		StoryManager sm = new StoryManager(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		newMockStory("My Cow", "Dr. Poe", "my chubby cow", true);	
+		sm.insert(mockStory, helper);
+		newMockStory("My Frog", "Dr. Phil", "my chubby frog", true);	
+		sm.insert(mockStory, helper);
+		newMockStory("My Hen", "Dr. Farmer", "my chubby hen", false);	
+		sm.insert(mockStory, helper);
+		Story oldStory = mockStory;
+		
+		try {
+			// setting search criteria
+			newMockStory("", "", "", false);	
+			mockStories = sm.retrieve(mockStory, helper);
+			assertFalse(hasStory(mockStories, oldStory));
+			assertEquals(mockStories.size(), 2);
+		} catch(Exception e) {
+			fail("Could not read Story: " + e.getStackTrace());
+		}
+	}	
+	
 	/**
 	 * Tests editing story
 	 */
@@ -153,11 +177,6 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 //		ArrayList<Story> pubStories = sm.retrieve();
 //		assertTrue(pubStories.contains(mockStory));
 	}	
-	
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
 	
 	/**
 	 * Checks whether a story is contained in a story ArrayList.

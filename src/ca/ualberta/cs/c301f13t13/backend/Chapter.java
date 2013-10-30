@@ -24,7 +24,7 @@ public class Chapter implements Serializable {
 	private HashMap<UUID, URI> illustrations;
 	private HashMap<UUID, URI> photos;
 	/**
-	 * Initializes a new chapter object with an UUid id.
+	 * Initializes a new chapter object with a UUID id.
 	 * 
 	 * @param id
 	 * @param text
