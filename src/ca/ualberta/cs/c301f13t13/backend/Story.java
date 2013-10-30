@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.graphics.Bitmap;
+
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
@@ -33,6 +35,7 @@ public class Story implements Serializable {
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
 	private Boolean authorsOwn;
+	private Bitmap image;
 
 	/**
 	 * Initializes a new story object with an id.
@@ -123,6 +126,14 @@ public class Story implements Serializable {
 	 */
 	public String getDescription() {
 		return this.description;
+	}
+	
+	/**
+	 * Returns the story's cover image.
+	 * @return
+	 */
+	public Bitmap getImage() {
+		return this.image;
 	}
 	
 	/**
