@@ -79,14 +79,19 @@ public class ViewBrowseStories extends Activity {
 		/* Setup the GridView Adapter */
 		GeneralController gc = new GeneralController();
 
-		storyAdapter = new GridStoriesAdapter(this, R.layout.item_browse_story,
-				null);
-
-		// THIS NEEDS TO BE FIXED
 		/*
-		 * storyAdapter = new GridStoriesAdapter(this,
-		 * R.layout.item_browse_story, gc.getAllStories(viewType, this));
+		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION
+		 * HERE YOU GO STEPH. SET THIS TO FALSE WHEN YOU TEST 
 		 */
+		boolean normal = true;
+		if (normal) {
+			storyAdapter = new GridStoriesAdapter(this,
+					R.layout.item_browse_story, null);
+		} else {
+			storyAdapter = new GridStoriesAdapter(this,
+					R.layout.item_browse_story,
+					gc.getAllStories(viewType, this));
+		}
 		storyListGrid.setAdapter(storyAdapter);
 		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
 
