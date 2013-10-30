@@ -15,11 +15,15 @@ public class GeneralController {
 	public static final int CHOICE = 2;
 
 	
-	/** gets all stories that are either cached, created by the author, or published
+	/** 
+	 * Gets all the stories that are either cached, created by the author, or published.
 	 * 
-	 * @return
+	 * @param type
+	 * 			Will either be CACHED (0), CREATED (1), or PUBLISHED (2). 
+	 * @param context
+	 * @return ArrayList<Story>
 	 */
-	public ArrayList <Story> getAllStories(int type, Context context){
+	public ArrayList<Story> getAllStories(int type, Context context){
 		StoryManager sm = new StoryManager(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -47,24 +51,74 @@ public class GeneralController {
 		
 		return stories;
 	}
-	/** gets all chapters that are in story
+	
+	/**
+	 *  Gets all the chapters that are in story.
+	 * 
+	 * @param storyId
+	 * @param context
+	 * 
+	 * @return ArrayList<Chapter>
+	 */
+	public ArrayList<Chapter> getAllChapters(UUID storyId, Context context){
+		ChapterManager cm = new ChapterManager(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+		ArrayList<Object> objects;
+		Chapter criteria = new Chapter(storyId, "");
+		
+		objects = cm.retrieve(criteria, helper);
+		chapters = Utilities.objectsToChapters(objects);
+		
+		return chapters;
+	}
+	
+	/** 
+	 * Gets all the choices that are in a chapter.
 	 * 
 	 * @return
 	 */
-	public ArrayList <Object> getAllChapters(Story story){
-		//TODO everything
-		
-		return null;
+	public ArrayList <Choice> getAllChoices(UUID chapterId, Context context){
+		ChoiceManager cm = new ChoiceManager(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+		ArrayList<Object> objects;
+//		Choice criteria = new Choice(chapterId, "");
+//		
+//		objects = cm.retrieve(criteria, helper);
+//		choices = Utilities.objectsToChoices(objects);
+		return choices;
 	}
-	/** gets all choices that are in story
+	
+	/**
+	 * Adds either a story, chapter, or choice to the database.
 	 * 
-	 * @return
+	 * @param object
+	 * @param helper
+	 * @param type
+	 * 			Will either be STORY(0), CHAPTER(1), CHOICE(2).
+	 * @param context
 	 */
-	public ArrayList <Object> getAllChoices(Choice choice){
-		//TODO everything
-		
-		return null;
+	public void addObject(Object object, DBHelper helper, int type, Context context) {
+		switch (type) {
+		case STORY:
+			Story story = (Story) object;
+			StoryManager sm = new StoryManager(context);
+			sm.insert(story, helper);
+			break;
+		case CHAPTER:
+			Chapter chapter = (Chapter) object;
+			ChapterManager cm = new ChapterManager(context);
+			cm.insert(chapter, helper);
+			break;
+		case CHOICE:
+			Choice choice = (Choice) object;
+			ChoiceManager chm = new ChoiceManager(context);
+			chm.insert(choice, helper);
+			break;
+		}
 	}
+	
 	/** have to figure out.... this will be used to search by keyword
 	 * 
 	 * @return
