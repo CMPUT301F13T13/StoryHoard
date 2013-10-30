@@ -85,6 +85,7 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	public void testGetAllChapters() {
 		ChapterManager cm = new ChapterManager(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		UUID id = UUID.fromString("");
 		
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
 				"bob went away");
@@ -93,8 +94,8 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 				"Lily drove");
 		cm.insert(mockChapter2, helper);
 		
-		Chapter criteria = new Chapter(UUID.fromString(""), 
-				mockChapter.getStoryId(), "");
+		Chapter criteria = new Chapter(mockChapter.getStoryId(), "");
+		
 		mockChapters = cm.retrieve(criteria, helper);
 		assertTrue(mockChapters.size() != 0);
 		assertTrue(hasChapter(mockChapters, mockChapter));
