@@ -19,13 +19,13 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
-import ca.ualberta.cs.c301f13t13.gui.View;
+import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
  * @author Owner
  *
  */
-public class MediaManager extends Model<View> implements StoringManager{
+public class MediaManager extends Model<SHView> implements StoringManager{
 	private Context context;
 	
 	/**

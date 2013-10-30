@@ -11,6 +11,6 @@ package ca.ualberta.cs.c301f13t13.gui;
  */
 
 
-public interface View<M>{
+public interface SHView<M>{
 	public void update(M model);
 }

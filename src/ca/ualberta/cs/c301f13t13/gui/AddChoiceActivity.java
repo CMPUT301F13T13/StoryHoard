@@ -33,7 +33,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Model;
 
 public class AddChoiceActivity extends Activity 
-implements ca.ualberta.cs.c301f13t13.gui.View<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
+implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
 	private Button existingChapterButton;
 	private Button newChapterButton;
 	private Button cancelButton;
