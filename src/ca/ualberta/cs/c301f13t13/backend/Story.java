@@ -53,6 +53,7 @@ public class Story implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.authorsOwn = authorsOwn;
+		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
 	}	
 
@@ -71,6 +72,7 @@ public class Story implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.authorsOwn = authorsOwn;
+		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
 	}	
 	
@@ -252,10 +254,16 @@ public class Story implements Serializable {
 		} else {
 			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
+		
 		info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
-		info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
+		
+		if (firstChapterId == null) {
+			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, "");
+		} else {
+			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
+		}
 		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		
 		return info;
