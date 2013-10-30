@@ -247,7 +247,11 @@ public class Story implements Serializable {
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
+		if (id == null)  {
+			info.put(StoryTable.COLUMN_NAME_STORY_ID, "");
+		} else {
+			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
+		}
 		info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
