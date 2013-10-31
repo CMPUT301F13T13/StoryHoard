@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+
 
 /**
  * 
@@ -127,11 +129,10 @@ public class ViewBrowseAuthorStories extends ListActivity {
 	}
 
 	// MENU ITEMS
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.newmenu, menu);
+		inflater.inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
@@ -139,10 +140,19 @@ public class ViewBrowseAuthorStories extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.addStoryIcon:
-			// do something
+			Intent addStory = new Intent(this, AddStoryActivity.class);
+			finish();
+			startActivity(addStory);
 			return true;
 		case R.id.publishIcon:
-			// Ensure this device is discoverable by others
+			Intent viewPublished = new Intent(this, ViewBrowsePublishedStories.class);
+			finish();
+			startActivity(viewPublished);
+			return true;
+		case R.id.downloadIcon:
+			Intent viewDownloads = new Intent(this, ViewBrowseCachedStories.class);
+			finish();
+			startActivity(viewDownloads);
 			return true;
 		}
 		return false;

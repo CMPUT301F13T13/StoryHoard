@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/publishIcon"
+        android:icon="@drawable/publish"
+        android:showAsAction="always|withText"
+        android:title="@string/publish"/>
+    <item
+        android:id="@+id/downloadIcon"
+        android:icon="@drawable/download"
+        android:showAsAction="always|withText"
+        android:title="@string/download"/>
+    <item
+        android:id="@+id/addStoryIcon"
+        android:icon="@drawable/add"
+        android:showAsAction="always|withText"
+        android:title="@string/add_new_story"/>
+
+</menu>
