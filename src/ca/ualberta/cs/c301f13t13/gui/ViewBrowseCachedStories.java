@@ -19,12 +19,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,10 +28,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
-
 /**
  * 
- * ViewBrowseAuthorStories:
+ * ViewBrowseCachedStories:
  * 
  * The ViewBrowseAuthorStories activity displays a scrolling list of all stories
  * created by the user. Information displayed includes the Title of the story
@@ -50,12 +45,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class ViewBrowseAuthorStories extends ListActivity {
+public class ViewBrowseCachedStories extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_browse_author_stories);
+		setContentView(R.layout.activity_view_browse_cached_stories);
 
 		// Populates list with stories and displays author
 		String[] stories = new String[] { "Story1 \nby:asd", "Stor2\nby:mandy",
@@ -86,75 +81,29 @@ public class ViewBrowseAuthorStories extends ListActivity {
 	}
 
 	/**
-	 * userAction Choices: 3 possible actions can be taking from clicking a
-	 * story on the list. 1) Settings: Will take user to story settings 2) EDIT:
-	 * will allow user to edit/add chapters 3) Read : take users to read the
-	 * story
-	 * 
+	 * Asks user if they would like to read the chosen story
 	 */
 	private AlertDialog userAction(final int position, final long id) {
-		// Initialize the Alert Dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// Source of the data in the DIalog
-		CharSequence[] array = { "Settings", "Edit", "Read" };
-
-		// Set the dialog title
-		builder.setTitle("Story Action")
-				// Specify the list array, the items to be selected by default
-				.setSingleChoiceItems(array, 1,
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Story Title")
+				.setMessage("Do you want to read this story?")
+				.setCancelable(false)
+				// CANCEL DIALOG
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				})
+				// READ STORY
+				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
-
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
-							}
-						})
-
-				// Set the action buttons
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						// add method
-
-					}
-				})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
+								// READ STORY METHOD
 							}
 						});
-		return builder.create();
-	}
-
-	// MENU ITEMS
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.addIcon:
-			Intent addStory = new Intent(this, AddStoryActivity.class);
-			finish();
-			startActivity(addStory);
-			return true;
-		case R.id.publishIcon:
-			Intent viewPublished = new Intent(this, ViewBrowsePublishedStories.class);
-			finish();
-			startActivity(viewPublished);
-			return true;
-		case R.id.downloadIcon:
-			Intent viewDownloads = new Intent(this, ViewBrowseCachedStories.class);
-			finish();
-			startActivity(viewDownloads);
-			return true;
-		}
-		return false;
+		return alert.show();
 	}
 }

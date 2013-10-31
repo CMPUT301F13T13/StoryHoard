@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg1"
+    android:background="@drawable/bg2"
     android:orientation="vertical" >
 
     <TextView
@@ -11,14 +11,15 @@
         android:background="#73243d96"
         android:padding="5dp"
         android:textSize="20sp"
-        android:text="@string/my_story"
+        android:text="@string/download"
         android:textColor="#6b9fff" />
 
     <ListView
         android:id="@android:id/list"
-        android:textColor="#cf9c00" 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="374dp"
+        android:textColor="#cf9c00" >
+
     </ListView>
     
 </LinearLayout>
