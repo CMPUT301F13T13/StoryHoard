@@ -48,5 +48,7 @@
     <string name="title_activity_custom_adapter">CustomAdapter</string>
     <string name="title_activity_view_edit_story">ViewEditStoryActivity</string>
     <string name="title_activity_view_edit_chapter">ViewEditChapterActivity</string>
+    <string name="title_activity_view_story_settings">ViewStorySettingsActivity</string>
+    <string name="title_activity_view_browse_cached_stories">ViewBrowseCachedStories</string>
 
 </resources>

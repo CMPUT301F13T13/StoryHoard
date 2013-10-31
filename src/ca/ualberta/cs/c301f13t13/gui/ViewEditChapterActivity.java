@@ -1,11 +1,9 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
-import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.R.layout;
-import ca.ualberta.cmput301f13t13.storyhoard.R.menu;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 public class ViewEditChapterActivity extends Activity {
 
