@@ -279,16 +279,20 @@ public class GeneralController {
 	 * @param context
 	 */
 	public void updateObjectLocally(Object object, int type, Context context) {
-		
+		DBHelper helper = DBHelper.getInstance(context);
 		
 		switch(type) {
 		case STORY:
-			Story story = (Story) object;
 			StoryManager sm = StoryManager.getInstance(context);
+			sm.update(object, helper);
 			break;
 		case CHAPTER:
+			ChapterManager cm = ChapterManager.getInstance(context);
+			cm.update(object, helper);
 			break;
 		case CHOICE:
+			ChoiceManager chom = ChoiceManager.getInstance(context);
+			chom.update(object, helper);
 			break;
 		default:
 			// raise exception

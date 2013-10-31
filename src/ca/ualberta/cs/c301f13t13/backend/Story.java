@@ -79,8 +79,7 @@ public class Story implements Serializable {
 	}	
 	
 	/**
-	 * Initializes a new story object from a database entry. Only to be used by
-	 * the story manager class.
+	 * Initializes a new story object from a database entry. 
 	 * 
 	 * @param id
 	 * @param author
@@ -88,13 +87,13 @@ public class Story implements Serializable {
 	 * @param description
 	 */
 	protected Story(String id, String title, String author, String description,
-			String chapterId, HashMap<UUID, Chapter> chapters, Boolean authorsOwn) {
+			String chapterId, Boolean authorsOwn) {
 		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
-		this.chapters = new HashMap<UUID, Chapter>(chapters);
+		this.chapters = new HashMap<UUID, Chapter>();
 		this.authorsOwn = authorsOwn;
 	}	
 	
@@ -253,18 +252,19 @@ public class Story implements Serializable {
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		if (id == null)  {
-			info.put(StoryTable.COLUMN_NAME_STORY_ID, "");
-		} else {
+		if (id != null)  {
 			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
 		
-		info.put(StoryTable.COLUMN_NAME_TITLE, title);
-		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
+		if (!title.equals("")) {
+			info.put(StoryTable.COLUMN_NAME_TITLE, title);
+		}
 		
-		if (authorsOwn == null) {
-			info.put(StoryTable.COLUMN_NAME_CREATED, "");
-		} else {
+		if (!author.equals("")) {
+			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
+		}
+		
+		if (authorsOwn != null) {
 			info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		}
 		

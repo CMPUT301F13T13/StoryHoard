@@ -66,7 +66,7 @@ public final class DBContract {
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE " + StoryTable.TABLE_NAME + " (" 
-				+ StoryTable._ID + " INTEGER AUTOINCREMENT," 
+				+ StoryTable._ID + " INTEGER," 
 				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
 				+ StoryTable.COLUMN_NAME_TITLE + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, " 
@@ -93,7 +93,7 @@ public final class DBContract {
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChapterTable.TABLE_NAME + " (" 
-				+ ChapterTable._ID + " INTEGER AUTOINCREMENT, "
+				+ ChapterTable._ID + " INTEGER, "
 				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT PRIMARY KEY, "
 		        + ChapterTable.COLUMN_NAME_STORY_ID + " TEXT, "
                 + ChapterTable.COLUMN_NAME_TEXT + " TEXT)";	
@@ -119,7 +119,7 @@ public final class DBContract {
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
-				+ ChoiceTable._ID + " INTEGER AUTOINCREMENT," 
+				+ ChoiceTable._ID + " INTEGER," 
 				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT PRIMARY KEY, "
 				+ ChoiceTable.COLUMN_NAME_STORY_ID + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 

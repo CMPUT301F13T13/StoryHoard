@@ -166,21 +166,15 @@ public class Choice implements Serializable{
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		if (id == null) {
-			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, "");
-		} else {
+		if (id != null) {
 			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, id.toString());
 		}
 		
-		if (storyId == null) {
-			info.put(ChoiceTable.COLUMN_NAME_STORY_ID, "");
-		} else {
+		if (storyId != null) {
 			info.put(ChoiceTable.COLUMN_NAME_STORY_ID, storyId.toString());
 		}
 		
-		if (currentChapter == null) {
-			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, "");
-		} else {
+		if (currentChapter != null) {
 			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, currentChapter.toString());
 		}
 		

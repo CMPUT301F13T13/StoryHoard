@@ -162,13 +162,10 @@ public class Chapter implements Serializable {
 		
 		if (id != null) {
 			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		} else {
-			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, "");
 		} 
+		
 		if (storyId != null) {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		} else {
-			info.put(ChapterTable.COLUMN_NAME_STORY_ID, "");
 		}
 		
 		return info;

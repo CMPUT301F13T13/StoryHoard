@@ -17,6 +17,8 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
+
+import org.junit.Before;
 import org.junit.Test;
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
@@ -34,7 +36,9 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		super(MainActivity.class);	
 	}
 
-	public void setup() {
+	@Before
+	protected void setUp() throws Exception {
+		super.setUp();
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -114,15 +118,12 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 				"my chubby hen", false);	
 		sm.insert(mockStory3, helper);
 		
-		try {
-			// setting search criteria
-			Story mockCriteria = new Story(null, "", "", "", true);	
-			mockStories = sm.retrieve(mockCriteria, helper);
-			assertFalse(hasStory(mockStories, mockStory3));
-			assertEquals(mockStories.size(), 2);
-		} catch(Exception e) {
-			fail("Could not read Story: " + e.getStackTrace());
-		}
+		// setting search criteria
+		Story mockCriteria = new Story(null, "", "", "", true);	
+		mockStories = sm.retrieve(mockCriteria, helper);
+		assertFalse(hasStory(mockStories, mockStory3));
+		assertEquals(mockStories.size(), 2);
+
 	}	
 	
 	/**
@@ -142,15 +143,12 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 				"my chubby hen", false);	
 		sm.insert(mockStory3, helper);
 		
-		try {
-			// setting search criteria
-			Story mockCriteria = new Story(null, "", "", "", false);	
-			mockStories = sm.retrieve(mockCriteria, helper);
-			assertFalse(hasStory(mockStories, mockStory1));
-			assertEquals(mockStories.size(), 2);
-		} catch(Exception e) {
-			fail("Could not read Story: " + e.getStackTrace());
-		}
+		// setting search criteria
+		Story mockCriteria = new Story(null, "", "", "", false);	
+		mockStories = sm.retrieve(mockCriteria, helper);
+		assertFalse(hasStory(mockStories, mockStory1));
+		assertEquals(mockStories.size(), 2);
+
 	}	
 	
 	/**
@@ -171,14 +169,11 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 				"my chubby hen", false);	
 		sm.publish(mockStory3);
 		
-		try {
-			// setting search criteria
-			Story mockCriteria = new Story(null, "", "", "", false);	
-			ArrayList<Story> mockStories = sm.getPublishedStories();
-			assertEquals(mockStories.size(), 3);
-		} catch(Exception e) {
-			fail("Could not read Story: " + e.getStackTrace());
-		}
+		// setting search criteria
+		Story mockCriteria = new Story(null, "", "", "", false);	
+		ArrayList<Story> mockStories = sm.getPublishedStories();
+		assertEquals(mockStories.size(), 3);
+
 	}	
 	
 	/**

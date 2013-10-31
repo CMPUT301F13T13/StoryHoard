@@ -78,14 +78,6 @@ public class StoryManager extends Model implements StoringManager{
 		
 		db.insert(StoryTable.TABLE_NAME, null, values);		
 	}
-
-	/**
-	 * Saves a story to the server for other users to see.
-	 * @param story
-	 */
-	public void publish(Story story) {
-		
-	}
 	
 	/**
 	 * Updates a story already in the database.
@@ -136,8 +128,6 @@ public class StoryManager extends Model implements StoringManager{
 				StoryTable.COLUMN_NAME_FIRST_CHAPTER,
 				StoryTable.COLUMN_NAME_CREATED
 		};
-
-		String orderBy = StoryTable._ID + " DESC";
 		
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -151,31 +141,19 @@ public class StoryManager extends Model implements StoringManager{
 		
 		// Querying the database
 		Cursor cursor = db.query(StoryTable.TABLE_NAME, projection, selection, 
-	            sArgs, null, null, orderBy);
+	            sArgs, null, null, null);
 
 		// Retrieving all the entries
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			String storyId = cursor.getString(0);
-			
-			// Find all chapters of the story
-			ChapterManager cm = ChapterManager.getInstance(context);
-			Chapter chapter = new Chapter(UUID.fromString(storyId), "");
-//			ArrayList<Object> chapterObjs = cm.retrieve(chapter, helper);
-			HashMap<UUID, Chapter> chapters = new HashMap<UUID, Chapter>();
-/*			
-			for (Object obj : chapterObjs) {
-				Chapter chap = (Chapter) obj;
-				chapters.put(chap.getId(), chap);
-			}
-*/			
+						
 			Story story = new Story(
 					storyId,
 					cursor.getString(1), // title
 					cursor.getString(2), // author
 					cursor.getString(3), // description
 					cursor.getString(4), // first chapter id
-					chapters,
 					Boolean.valueOf(cursor.getString(5))
 					);
 			results.add(story);
@@ -187,6 +165,14 @@ public class StoryManager extends Model implements StoringManager{
 	}
 	
 	/**
+	 * Saves a story to the server for other users to see.
+	 * @param story
+	 */
+	public void publish(Story story) {
+		
+	}	
+	
+	/**
 	 * Retrieves all stories from the server, i.e. the published stories.
 	 * 
 	 * @return ArrayList
@@ -196,6 +182,15 @@ public class StoryManager extends Model implements StoringManager{
 		return published;
 	}	
 
+	/**
+	 * Updates a published story, i.e. republishes a story after
+	 * changes have been made to it.
+	 * @param story
+	 */
+	public void updatePublished(Story story) {
+		
+	}
+	
 	/**
 	 * Creates the selection string (a prepared statement) to be used 
 	 * in the database query. Also creates an array holding the items
@@ -223,14 +218,12 @@ public class StoryManager extends Model implements StoringManager{
 		
 		for (String key: storyCrit.keySet()) {
 			String value = storyCrit.get(key);
-			if (!value.equals("")) {
-				selection += key + " LIKE ?";
-				sArgs.add(value);
+			selection += key + " LIKE ?";
+			sArgs.add(value);
 				
-				counter++;
-				if (counter < maxSize) {
+			counter++;
+			if (counter < maxSize) {
 					selection += " AND ";
-				}
 			}			
 		}
 		return selection;
