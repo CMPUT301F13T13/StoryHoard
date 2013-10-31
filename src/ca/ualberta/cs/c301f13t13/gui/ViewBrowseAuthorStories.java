@@ -27,8 +27,17 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
  * 
- * View Author Stories handles displays a ListActivity of all the names of the
- * stories and their authors.
+ * ViewBrowseAuthorStories:
+ * 
+ * The ViewBrowseAuthorStories activity displays a scrolling list of all stories
+ * created by the user. Information displayed includes the Title of the story and
+ * the author(s) which wrote them.  
+ * 
+ * Upon clicking a story, the user has the option to gain access of the following:
+ * a) Settings: Update settings such as story information
+ * b) Edit: Add/Edit chapters in the story
+ * c) Read: Read the story.
+ * Cancel will take the user back to the ViewBrowseAuthorStories activity. 
  * 
  * @author Kim Wu
  * 
