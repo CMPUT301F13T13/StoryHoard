@@ -48,24 +48,28 @@ public class TestChoice extends TestCase{
 		String text = "pick me";
 		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 	}
+	
 	/**
-	 * Tests retrieving the search information places within the choice, i.e.
-	 * the id, chap1, chap2, and text
+	 * Tests retrieving the search information placed within the choice, i.e.
+	 * the choice id and the chapter id to which it belongs.
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Choice criteria = new Choice(null, null, null, null);
+		Choice criteria = new Choice(null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 		
 		assertTrue(info.size() == 0);
-		assertTrue(info.get("created").equals("false"));
 	
 		// not empty arguments
-		criteria = new Choice(null, null, null, "option 1");
+		UUID choiceId = UUID.randomUUID();
+		UUID chapId = UUID.randomUUID();
+		
+		criteria = new Choice(choiceId, chapId);
 		info = criteria.getSearchCriteria();
 		
-		assertTrue(info.size() == 1);
-		assertTrue(info.get("text").equals("option 1"));
+		assertTrue(info.size() == 2);
+		assertTrue(info.get("choice_id").equals(choiceId.toString()));
+		assertTrue(info.get("curr_chapter").equals(chapId.toString()));
 	}
 	
 	public void testSettersGetters() {

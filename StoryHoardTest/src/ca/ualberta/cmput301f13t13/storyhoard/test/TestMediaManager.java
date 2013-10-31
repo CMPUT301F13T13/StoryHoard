@@ -30,10 +30,10 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestMediaManager extends ActivityInstrumentationTestCase2<MainActivity>{
+public class TestMediaManager extends ActivityInstrumentationTestCase2<ViewBrowseAuthorStories>{
 
 	public TestMediaManager() {
-		super(MainActivity.class);
+		super(ViewBrowseAuthorStories.class);
 	}
 	
 	/**

@@ -80,7 +80,7 @@ public class Choice implements Serializable{
 	 * @param id
 	 */
 	public void setId(String id) {
-		 this.id =UUID.fromString(id);
+		 this.id = UUID.fromString(id);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class Choice implements Serializable{
 	 * @param chapterIdFrom
 	 */
 	public void setCurrentChapter(String chapterIdFrom) {
-		this.currentChapter =UUID.fromString(chapterIdFrom);
+		this.currentChapter = UUID.fromString(chapterIdFrom);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class Choice implements Serializable{
 	 * @param chapterIdTo
 	 */
 	public void setNextChapter(String chapterIdTo) {
-		this.nextChapter =UUID.fromString(chapterIdTo);
+		this.nextChapter = UUID.fromString(chapterIdTo);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class Choice implements Serializable{
 	 * @param text
 	 */
 	public void setText(String text) {
-		this.text=text;
+		this.text = text;
 	}
 	
 	// GETTERS

@@ -23,20 +23,19 @@ import java.util.UUID;
 import org.junit.Before;
 
 import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.MainActivity;
-
+import ca.ualberta.cs.c301f13t13.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * @author Stephanie
  * 
  */
-public class TestChapterManager extends ActivityInstrumentationTestCase2<MainActivity>{
+public class TestChapterManager extends ActivityInstrumentationTestCase2<ViewBrowseAuthorStories>{
 	private ArrayList<Object> mockChapters;
 
 	
 	public TestChapterManager() {
-		super(MainActivity.class);
+		super(ViewBrowseAuthorStories.class);
 	}	
 	
 	
@@ -95,10 +94,10 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 				"Lily drove");
 		cm.insert(mockChapter3, helper);
 		
-		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), "");
+		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), null);
 		
 		mockChapters = cm.retrieve(criteria, helper);
-		assertTrue(mockChapters.size() != 0);
+		assertTrue(mockChapters.size() == 2);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 		assertTrue(hasChapter(mockChapters, mockChapter2));
 		assertFalse(hasChapter(mockChapters, mockChapter3));

@@ -28,11 +28,11 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActivity>{
+public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewBrowseAuthorStories>{
 	private ArrayList<Object> mockStories;
 	
 	public TestStoryManager() {
-		super(MainActivity.class);	
+		super(ViewBrowseAuthorStories.class);	
 	}
 
 	@Before
@@ -224,6 +224,8 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests publishing story, caching it, then loading it from server.
 	 */
 	public void testPublishCacheLoadStory() {
+		fail("Not yet implemented");
+		
 		Story mockStory = newMockStory("My Monkey", "TS ELLIOT", 
 					"monkey is in the server", false);
 		StoryManager sm = StoryManager.getInstance(this.getActivity());
