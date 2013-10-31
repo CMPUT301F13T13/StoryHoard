@@ -1,6 +1,19 @@
 /**
- * 
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
@@ -36,7 +49,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 	}
 	
 	/**
-	 * Tests adding a choice (saving locally)
+	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
 		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
@@ -45,7 +58,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
-		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(c, helper);
 		try {
@@ -66,6 +79,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		}		
 		return false;
 	}
+	
 	/** 
 	 * Tests loading and editing a choice.
 	 */
@@ -76,12 +90,12 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
-		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(c, helper);
 		Choice newChoice = c;
 		newChoice.setText("new choice text mrawr");
-		cm.update(newChoice,c,helper);
+		cm.update(c,helper);
 		// make sure you can find new story
 		ArrayList<Object>	mockChoice = cm.retrieve(newChoice, helper);
 				assertTrue(mockChoice.size() != 0);

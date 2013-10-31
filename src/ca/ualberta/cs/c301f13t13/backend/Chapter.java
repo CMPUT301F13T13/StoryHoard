@@ -1,10 +1,24 @@
 /**
- *  this is git test
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -20,55 +34,41 @@ public class Chapter implements Serializable {
 	private UUID id;
 	private UUID storyId;
 	private String text;
-	private HashMap<UUID, Choice> choices;
-	private HashMap<UUID, URI> illustrations;
-	private HashMap<UUID, URI> photos;
-	/**
-	 * Initializes a new chapter object with a UUID id.
-	 * 
-	 * @param id
-	 * @param text
-	 * @param storyId
-	 */
-
-	public Chapter(UUID id, UUID storyId, String text) {
-		this.text = text;
-		this.storyId = storyId;
-		this.id = id;
-		choices = new HashMap<UUID, Choice>();
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
-	}
+	private ArrayList<Choice> choices;
+	private ArrayList<URI> illustrations;
+	private ArrayList<URI> photos;
 	
 	/**
 	 * Initializes a new chapter object with no id.
 	 * 
-	 * @param id
-	 * @param text
 	 * @param storyid
+	 * @param text
 	 */
 	public Chapter(UUID storyId, String text) {
 		this.text = text;
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
-		choices = new HashMap<UUID, Choice>();
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
+		choices = new ArrayList<Choice>();
+		illustrations = new ArrayList<URI>();
+		photos = new ArrayList<URI>();
 	}
 	
 	
 	/**
-	 * Initialize a new chapter from database info.
-	 * @param string
-	 * @param string2
-	 * @param string3
+	 * Initialize a new chapter with an id. Can also be used to make
+	 * a chapter from the chapter information retrieved from
+	 * the database.
+	 * 
+	 * @param id
+	 * @param storyId 
+	 * @param text
 	 */
-	public Chapter(String id, String text, String storyId) {
-		this.id=  UUID.fromString(id);
-		this.text= text;
-		this.storyId=UUID.fromString(storyId);
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
+	public Chapter(UUID id, UUID storyId, String text) {
+		this.id = id;
+		this.text = text;
+		this.storyId = storyId;
+		illustrations = new ArrayList<URI>();
+		photos = new ArrayList<URI>();
 	}
 	//Getters
 	
@@ -99,10 +99,12 @@ public class Chapter implements Serializable {
 	 * Returns the choices of the chapter.
 	 * @return
 	 */
-	public HashMap<UUID, Choice> getChoice() {
+	public ArrayList<Choice> getChoices() {
 		return this.choices;
 	}
+	
 	//Setters
+	
 	/**
 	 * Sets the Id of the chapter.
 	 * @param id
@@ -128,26 +130,43 @@ public class Chapter implements Serializable {
 	 * Sets the text of the chapter.
 	 * @param text
 	 */
-	public void  setChoice(HashMap<UUID, Choice> choice) {
-		this.choices = choice;
+	public void  setChoices(ArrayList<Choice> choices) {
+		this.choices = choices;
 	}
 	
 	public void addChoice(Choice c) {
-		choices.put(c.getId(), c);
+		choices.add(c);
 	}
 
+	/**
+	 * Converts a chapter object to a string.
+	 * 
+	 * @param String
+	 */
 	@Override
 	public String toString() {
 		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + "]";
 		
 	}
 
+	/**
+	 * Returns the information of the chapter (id, storyId) that
+	 * could be used in searching for a chapter in the database. 
+	 * This information is returned in a HashMap where the keys are 
+	 * the corresponding Chapter Table column names.
+	 * 
+	 * @return HashMap
+	 */	
 	public HashMap<String, String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		info.put(ChapterTable.COLUMN_NAME_TEXT, text);
+		if (id != null) {
+			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
+		} 
+		
+		if (storyId != null) {
+			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		}
 		
 		return info;
 	}	

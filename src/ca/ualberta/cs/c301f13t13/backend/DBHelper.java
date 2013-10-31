@@ -70,7 +70,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 
 	 * @param context
 	 */
-	private DBHelper(Context context) {
+	protected DBHelper(Context context) {
 		super(context, DBContract.DATABASE_NAME, null, DBContract.DATABASE_VERSION);
 	}
 
