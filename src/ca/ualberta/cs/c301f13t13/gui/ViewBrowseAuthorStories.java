@@ -139,7 +139,7 @@ public class ViewBrowseAuthorStories extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.addStoryIcon:
+		case R.id.addIcon:
 			Intent addStory = new Intent(this, AddStoryActivity.class);
 			finish();
 			startActivity(addStory);
