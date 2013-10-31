@@ -14,33 +14,69 @@
  * limitations under the License.
  */
 package ca.ualberta.cs.c301f13t13.gui;
-import ca.ualberta.cmput301f13t13.storyhoard.R;
-import android.os.Bundle;
+
 import android.app.ListActivity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
  * 
- * View Author Stories handles displays a ListActivity of all the names of the stories 
- * and their authors.
+ * View Author Stories handles displays a ListActivity of all the names of the
+ * stories and their authors.
  * 
  * @author Kim Wu
  * 
  */
 
 public class ViewBrowseAuthorStories extends ListActivity {
-	//private ArrayList<Story_names> Stories;
+
+	TextView content;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.browse_author_stories);
+		setContentView(R.layout.activity_browse_author_stories);
+
+		content = (TextView) findViewById(R.id.output);
+
+		// SHOULD DISPLAY STORY AND BY AUTHOR;
+		String[] values = new String[] { "Android Example ListActivity",
+				"Adapter implementation", "Simple List View With ListActivity",
+				"ListActivity Android", "Android Example",
+				"ListActivity Source Code",
+				"ListView ListActivity Array Adapter",
+				"Android Example ListActivity" };
+
+		// Define a new Adapter
+		// First parameter - Context
+		// Second parameter - Layout for the row
+		// Third - the Array of data
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, values);
+
+		// Assign adapter to List
+		setListAdapter(adapter);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+
+		super.onListItemClick(l, v, position, id);
+
+		// ListView Clicked item index
+		int itemPosition = position;
+
+		// ListView Clicked item value
+		String itemValue = (String) l.getItemAtPosition(position);
+
+		content.setText("Click : \n  Position :" + itemPosition
+				+ "  \n  ListItem : " + itemValue);
+
 	}
 }
