@@ -69,12 +69,11 @@ public class ViewBrowseAuthorStories extends ListActivity {
 
 	/**
 	 * userAction Choices: 3 possible actions can be taking from clicking a
-	 * story on the list. 1) DELETE: will remove the note from the database and
-	 * update the current list 2) EDIT: will take user to the note taking
-	 * display and edit the note 3) CANCEL: will take users back to the ViewList
-	 * display
+	 * story on the list. 
+	 * 1) Settings: Will take user to story settings
+	 * 2) EDIT: will allow user to edit/add chapters
+	 * 3) Read : take users to read the story
 	 * 
-	 * @return
 	 */
 	private AlertDialog userAction(final int position, final long id) {
 		// Initialize the Alert Dialog
