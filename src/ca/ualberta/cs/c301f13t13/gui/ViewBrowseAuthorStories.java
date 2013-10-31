@@ -44,7 +44,7 @@ public class ViewBrowseAuthorStories extends ListActivity {
 				"Story3 \nby:Tom", "Story4 \nby:Dan", "Story5 \nby:Sue" };
 
 		// Define a new Adapter, First parameter - Context, Second parameter -
-		// Layout for the row, Third - the Array of data
+		// Layout for the rowThird - the Array of data
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, values);

@@ -31,10 +31,9 @@
     <string name="story_view_type">Story View Type</string>
     <string name="current_view_type">Current View: </string>
     <string name="story_image_cover">Cover Image</string>
-    
     <string name="publish">Published Stories</string>
     <string name="download">Downloaded Stories</string>
-    
+    <string name="my_story">My Stories</string>
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
@@ -46,5 +45,6 @@
     <string name="title_activity_view_author_stories">ViewAuthorStoriesActivity</string>
     <string name="title_activity_browse_author_stories">BrowseAuthorStoriesActivity</string>
     <string name="title_activity_view_browse_author_stories">ViewBrowseAuthorStories</string>
+    <string name="title_activity_custom_adapter">CustomAdapter</string>
 
 </resources>
