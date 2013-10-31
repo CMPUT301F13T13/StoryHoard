@@ -80,6 +80,7 @@ public class ViewBrowseAuthorStories extends ListActivity {
 		dialog.show();
 	}
 
+	
 	/**
 	 * userAction Choices: 3 possible actions can be taking from clicking a
 	 * story on the list. 1) Settings: Will take user to story settings 2) EDIT:
