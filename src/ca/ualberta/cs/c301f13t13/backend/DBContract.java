@@ -140,15 +140,17 @@ public final class DBContract {
 
 		public static final String TABLE_NAME = "media_table";
 		public static final String COLUMN_NAME_MEDIA_URI = "uri";
+		public static final String COLUMN_NAME_MEDIA_ID = "media_id";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
 		public static final String COLUMN_NAME_TYPE = "type ";  // photo or illustration
 		
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + MediaTable.TABLE_NAME + " (" 
 				+ MediaTable._ID + " INTEGER," 
-		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT PRIMARY KEY," 
-		        + MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
-		        + MediaTable.COLUMN_NAME_TYPE + " TEXT)";	
+				+ MediaTable.COLUMN_NAME_MEDIA_ID + " TEXT PRIMARY KEY," 
+				+ MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT," 
+		        + MediaTable.COLUMN_NAME_TYPE + " INTEGER)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + MediaTable.TABLE_NAME; 
