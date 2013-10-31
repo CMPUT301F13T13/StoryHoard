@@ -20,19 +20,15 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.Before;
 
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.DBContract;
-import ca.ualberta.cs.c301f13t13.backend.DBHelper;
+import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
- * @author Owner
+ * @author Stephanie
  * 
  */
 public class TestChapterManager extends ActivityInstrumentationTestCase2<MainActivity>{
@@ -44,7 +40,9 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 	}	
 	
 	
-	public void setUp() {
+	@Before
+	protected void setUp() throws Exception {
+		super.setUp();
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -59,16 +57,17 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		Chapter mockChapter = new Chapter(storyId, text);
 		Choice choice = new Choice(storyId, mockChapter.getId(), 
 				UUID.randomUUID(), "pick me!");
-		mockChapter.addChoice(choice);  // within this, choice manager add Choice should be called
+		mockChapter.addChoice(choice); 
 		
 		return mockChapter;
 	}	
 		
-	 /**
-	 * Tests saving and loading a chapter that has no media locally.
+	/**
+	 * Tests saving and loading a chapter that has no media from 
+	 * the database.
 	 */
-	public void testAddLoadChapterNoMedia() {
-		ChapterManager cm = new ChapterManager(this.getActivity());
+	public void testAddLoadChapter() {
+		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
 				"bob went away");
 
@@ -79,13 +78,12 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 	
-	 /**
+	/**
 	 * Tests retrieving all the chapters of a story
 	 */
 	public void testGetAllChapters() {
-		ChapterManager cm = new ChapterManager(this.getActivity());
+		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		UUID id = UUID.fromString("");
 		
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
 				"bob went away");
@@ -93,37 +91,25 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(), 
 				"Lily drove");
 		cm.insert(mockChapter2, helper);
+		Chapter mockChapter3 = newMockChapter(UUID.randomUUID(), 
+				"Lily drove");
+		cm.insert(mockChapter3, helper);
 		
-		Chapter criteria = new Chapter(mockChapter.getStoryId(), "");
+		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), "");
 		
 		mockChapters = cm.retrieve(criteria, helper);
 		assertTrue(mockChapters.size() != 0);
 		assertTrue(hasChapter(mockChapters, mockChapter));
-		assertTrue(hasChapter(mockChapters, mockChapter));
+		assertTrue(hasChapter(mockChapters, mockChapter2));
+		assertFalse(hasChapter(mockChapters, mockChapter3));
 	}
-	
-//	 /**
-//	 * Tests saving and loading a chapter that has media locally.
-//	 */
-//	public void testAddLoadChapterMedia() {
-//		// TO DO: Add media
-//		ChapterManager cm = new ChapterManager(this.getActivity());
-//		newMockChapter(UUID.randomUUID(), "it is raining");
-//		// Give it photos/illustrations
-//		
-//		DBHelper helper = DBHelper.getInstance(this.getActivity());
-//		cm.insert(mockChapter, helper);
-//		mockChapters = cm.retrieve(mockChapter, helper);
-//		assertTrue(mockChapters.size() != 0);
-//		assertTrue(hasChapter(mockChapters, mockChapter));
-//	}
 	
 	/**
 	 * Tests updating a chapter's data (except media and choices,
 	 * which includes adding and loading a chapter. 
 	 */
-	public void testUpdateChapterNoMedia() {
-		ChapterManager cm = new ChapterManager(this.getActivity());
+	public void testUpdateChapter() {
+		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
@@ -136,7 +122,7 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 		
 		newChapter.setText("My Wizard newt");
-		cm.update(mockChapter, newChapter, helper);
+		cm.update(newChapter, helper);
 		
 		// make sure you can find new chapter
 		mockChapters = cm.retrieve(newChapter, helper);
@@ -144,45 +130,8 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		assertTrue(hasChapter(mockChapters, newChapter));
 		
 		// make sure old version no longer exists
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertFalse(hasChapter(mockChapters, mockChapter));	
-	}
-	
-	/**
-	 * Tests updating a chapter's data except for media,
-	 * which includes adding and loading a chapter. 
-	 */
-	public void testUpdateChapterMedia() {
-		// ADD MEDIA
-		Chapter chapter = new Chapter(UUID.randomUUID(), "the blue cow mood");
-		ChapterManager cm = new ChapterManager(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		
-		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
-		cm.insert(mockChapter, helper);
-		
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
-		assertTrue(hasChapter(mockChapters, mockChapter));
-		
-		Chapter newChapter = (Chapter) mockChapters.get(0);
-		
-//		newChapter.setText("My Wizard newt");
-		cm.update(chapter, newChapter, helper);
-		
-		// make sure you can find new story
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
-		assertTrue(hasChapter(mockChapters, newChapter));
-		
-		// make sure old version no longer exists
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() == 0);	
-	}	
-	
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+		Chapter compChap = (Chapter) mockChapters.get(0);
+		assertTrue(compChap.getText().equals(newChapter.getText()));
 	}
 
 	/**

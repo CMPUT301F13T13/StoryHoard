@@ -66,8 +66,8 @@ public final class DBContract {
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE " + StoryTable.TABLE_NAME + " (" 
-				+ StoryTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT,"
+				+ StoryTable._ID + " INTEGER," 
+				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
 				+ StoryTable.COLUMN_NAME_TITLE + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, " 
@@ -93,8 +93,8 @@ public final class DBContract {
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChapterTable.TABLE_NAME + " (" 
-				+ ChapterTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+				+ ChapterTable._ID + " INTEGER, "
+				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT PRIMARY KEY, "
 		        + ChapterTable.COLUMN_NAME_STORY_ID + " TEXT, "
                 + ChapterTable.COLUMN_NAME_TEXT + " TEXT)";	
 
@@ -119,8 +119,8 @@ public final class DBContract {
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
-				+ ChoiceTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT, "
+				+ ChoiceTable._ID + " INTEGER," 
+				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT PRIMARY KEY, "
 				+ ChoiceTable.COLUMN_NAME_STORY_ID + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
 		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
@@ -145,8 +145,8 @@ public final class DBContract {
 		
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + MediaTable.TABLE_NAME + " (" 
-				+ MediaTable._ID + " INTEGER PRIMARY KEY," 
-		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT," 
+				+ MediaTable._ID + " INTEGER," 
+		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT PRIMARY KEY," 
 		        + MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
 		        + MediaTable.COLUMN_NAME_TYPE + " TEXT)";	
 

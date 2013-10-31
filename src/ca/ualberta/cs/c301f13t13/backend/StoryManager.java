@@ -34,14 +34,29 @@ import com.google.gson.Gson;
  */
 public class StoryManager extends Model implements StoringManager{
 	private Context context;
+	private static StoryManager self = null;
 	
 	/**
 	 * Initializes a new StoryManager object.
 	 */
-	public StoryManager(Context context) {
+	protected StoryManager(Context context) {
 		this.context = context;
 	}
 
+	/**
+	 * Returns an instance of a StoryManager. Used to implement
+	 * the singleton design pattern.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static StoryManager getInstance(Context context) {
+		if (self == null) {
+			self = new StoryManager(context);
+		} 
+		return self;		
+	}
+	
 	/**
 	 * Saves a new story locally (in the database).
 	 */	
@@ -63,37 +78,17 @@ public class StoryManager extends Model implements StoringManager{
 		
 		db.insert(StoryTable.TABLE_NAME, null, values);		
 	}
-
-	/**
-	 * Saves a story to the server for other users to see.
-	 * @param story
-	 */
-	public void publish(Story story) {
-		
-	}
-
-	/**
-	 * Saves a published story locally.
-	 * @param story
-	 */
-	public void cacheStory(Story story) {
-		
-	}
 	
 	/**
 	 * Updates a story already in the database.
-	 * 
-	 * @param oldObject
-	 * 			The object before update, used to find it in the database.
 	 * 
 	 * @param newObject
 	 * 			Contains the changes to the object, it is what the oldObject
 	 * 			info will be replaced with.
 	 */
 	@Override
-	public void update(Object oldObject, Object newObject, DBHelper helper) {
+	public void update(Object newObject, DBHelper helper) {
 		Story newS = (Story) newObject;
-		String[] sArgs = null;
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -106,14 +101,8 @@ public class StoryManager extends Model implements StoringManager{
 		values.put(StoryTable.COLUMN_NAME_CREATED, newS.getAuthorsOwn().toString());
 
 		// Setting search criteria
-		ArrayList<String> selectionArgs = new ArrayList<String>();
-		String selection = setSearchCriteria(oldObject, selectionArgs);
-		
-		if (selectionArgs.size() > 0) {
-			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-		} else {
-			selection = null;
-		}		
+		String selection = StoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
+		String[] sArgs = { newS.getId().toString()};	
 		
 		db.update(StoryTable.TABLE_NAME, values, selection, sArgs);	
 	}
@@ -139,8 +128,6 @@ public class StoryManager extends Model implements StoringManager{
 				StoryTable.COLUMN_NAME_FIRST_CHAPTER,
 				StoryTable.COLUMN_NAME_CREATED
 		};
-
-		String orderBy = StoryTable._ID + " DESC";
 		
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -154,31 +141,19 @@ public class StoryManager extends Model implements StoringManager{
 		
 		// Querying the database
 		Cursor cursor = db.query(StoryTable.TABLE_NAME, projection, selection, 
-	            sArgs, null, null, orderBy);
+	            sArgs, null, null, null);
 
 		// Retrieving all the entries
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			String storyId = cursor.getString(0);
-			
-			// Find all chapters of the story
-			ChapterManager cm = new ChapterManager(context);
-			Chapter chapter = new Chapter(UUID.fromString(storyId), "");
-//			ArrayList<Object> chapterObjs = cm.retrieve(chapter, helper);
-			HashMap<UUID, Chapter> chapters = new HashMap<UUID, Chapter>();
-/*			
-			for (Object obj : chapterObjs) {
-				Chapter chap = (Chapter) obj;
-				chapters.put(chap.getId(), chap);
-			}
-*/			
+						
 			Story story = new Story(
 					storyId,
 					cursor.getString(1), // title
 					cursor.getString(2), // author
 					cursor.getString(3), // description
 					cursor.getString(4), // first chapter id
-					chapters,
 					Boolean.valueOf(cursor.getString(5))
 					);
 			results.add(story);
@@ -188,6 +163,14 @@ public class StoryManager extends Model implements StoringManager{
 		
 		return results;
 	}
+	
+	/**
+	 * Saves a story to the server for other users to see.
+	 * @param story
+	 */
+	public void publish(Story story) {
+		
+	}	
 	
 	/**
 	 * Retrieves all stories from the server, i.e. the published stories.
@@ -200,6 +183,15 @@ public class StoryManager extends Model implements StoringManager{
 	}	
 
 	/**
+	 * Updates a published story, i.e. republishes a story after
+	 * changes have been made to it.
+	 * @param story
+	 */
+	public void updatePublished(Story story) {
+		
+	}
+	
+	/**
 	 * Creates the selection string (a prepared statement) to be used 
 	 * in the database query. Also creates an array holding the items
 	 * to be placed in the ? of the selection.
@@ -210,7 +202,8 @@ public class StoryManager extends Model implements StoringManager{
 	 * @param sArgs
 	 * 			Holds the arguments to be passed into the selection string.
 	 * @return String
-	 * 			The selection string.
+	 * 			The selection string, i.e. the where clause that will be
+	 * 			used in the sql query.
 	 */
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
@@ -225,14 +218,12 @@ public class StoryManager extends Model implements StoringManager{
 		
 		for (String key: storyCrit.keySet()) {
 			String value = storyCrit.get(key);
-			if (!value.equals("")) {
-				selection += key + " LIKE ?";
-				sArgs.add(value);
+			selection += key + " LIKE ?";
+			sArgs.add(value);
 				
-				counter++;
-				if (counter < maxSize) {
+			counter++;
+			if (counter < maxSize) {
 					selection += " AND ";
-				}
 			}			
 		}
 		return selection;

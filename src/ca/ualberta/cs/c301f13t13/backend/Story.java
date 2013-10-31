@@ -28,6 +28,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  *
  */
 public class Story implements Serializable {
+
 	private UUID id;
 	private String author;
 	private String title;
@@ -38,7 +39,8 @@ public class Story implements Serializable {
 	private Bitmap image;
 
 	/**
-	 * Initializes a new story object with an id.
+	 * Initializes a new story object with an id. Usually used when making
+	 * a story object that will be holding search criteria.
 	 * 
 	 * @param id
 	 * @param author
@@ -77,8 +79,7 @@ public class Story implements Serializable {
 	}	
 	
 	/**
-	 * Initializes a new story object from a database entry. Only to be used by
-	 * the story manager class.
+	 * Initializes a new story object from a database entry. 
 	 * 
 	 * @param id
 	 * @param author
@@ -86,13 +87,13 @@ public class Story implements Serializable {
 	 * @param description
 	 */
 	protected Story(String id, String title, String author, String description,
-			String chapterId, HashMap<UUID, Chapter> chapters, Boolean authorsOwn) {
+			String chapterId, Boolean authorsOwn) {
 		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
-		this.chapters = new HashMap<UUID, Chapter>(chapters);
+		this.chapters = new HashMap<UUID, Chapter>();
 		this.authorsOwn = authorsOwn;
 	}	
 	
@@ -178,8 +179,8 @@ public class Story implements Serializable {
 	 * Set the Id of the story.
 	 * @param id
 	 */
-	public void setId(String id) {
-		this.id = UUID.fromString(id);
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	/**
@@ -241,30 +242,31 @@ public class Story implements Serializable {
 	}
 	
 	/**
-	 * Returns the information of the story (id, title, author, etc)
-	 * in a HashMap.
+	 * Returns the information of the story (id, title, author, authorsOwn) 
+	 * that could be used in searching for a story in the database. This 
+	 * information is returned in a HashMap where the keys are the 
+	 * corresponding Story Table column names.
 	 * 
 	 * @return HashMap
 	 */
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		if (id == null)  {
-			info.put(StoryTable.COLUMN_NAME_STORY_ID, "");
-		} else {
+		if (id != null)  {
 			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
 		
-		info.put(StoryTable.COLUMN_NAME_TITLE, title);
-		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
-		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
-		
-		if (firstChapterId == null) {
-			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, "");
-		} else {
-			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
+		if (!title.equals("")) {
+			info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		}
-		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
+		
+		if (!author.equals("")) {
+			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
+		}
+		
+		if (authorsOwn != null) {
+			info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
+		}
 		
 		return info;
 	}

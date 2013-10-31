@@ -27,12 +27,27 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  */
 public class MediaManager extends Model<SHView> implements StoringManager{
 	private Context context;
+	private static MediaManager self = null;
 	
 	/**
 	 * Initializes a new MediaManager object.
 	 */
-	public MediaManager(Context context) {
+	protected MediaManager(Context context) {
 		this.context = context;
+	}
+	
+	/**
+	 * Returns an instance of a StoryManager. Used to implement
+	 * the singleton design pattern.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static MediaManager getInstance(Context context) {
+		if (self == null) {
+			self = new MediaManager(context);
+		}
+		return self;
 	}
 	
 	@Override
@@ -48,7 +63,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	}
 
 	@Override
-	public void update(Object oldObject, Object newObject, DBHelper helper) {
+	public void update(Object newObject, DBHelper helper) {
 		// TODO Auto-generated method stub
 		
 	}
