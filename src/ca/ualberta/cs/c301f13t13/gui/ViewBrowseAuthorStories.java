@@ -82,11 +82,8 @@ public class ViewBrowseAuthorStories extends ListActivity {
 		CharSequence[] array = { "Settings", "Edit", "Read" };
 
 		// Set the dialog title
-		builder.setTitle("Select Priority")
+		builder.setTitle("Story Action")
 				// Specify the list array, the items to be selected by default
-				// (null for none),
-				// and the listener through which to receive callbacks when
-				// items are selected
 				.setSingleChoiceItems(array, 1,
 						new DialogInterface.OnClickListener() {
 
@@ -101,9 +98,7 @@ public class ViewBrowseAuthorStories extends ListActivity {
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						// User clicked OK, so save the result somewhere
-						// or return them to the component that opened the
-						// dialog
+						//add method
 
 					}
 				})
