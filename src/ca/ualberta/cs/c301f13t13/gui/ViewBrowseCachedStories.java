@@ -58,7 +58,7 @@ public class ViewBrowseCachedStories extends ListActivity {
 
 		//
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, stories) { 
+				android.R.layout.simple_list_item_1, stories) {
 			@Override
 			// Formats the listView
 			public View getView(int position, View convertView, ViewGroup parent) {
@@ -80,43 +80,30 @@ public class ViewBrowseCachedStories extends ListActivity {
 		dialog.show();
 	}
 
-	
 	/**
 	 * Asks user if they would like to read the chosen story
 	 */
 	private AlertDialog userAction(final int position, final long id) {
-		// Initialize the Alert Dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// Source of the data in the DIalog
-		CharSequence[] array = { "Settings", "Edit", "Read" };
-
-		// Set the dialog title
-		builder.setTitle("Story Action")
-				// Specify the list array, the items to be selected by default
-				.setSingleChoiceItems(array, 1,
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Story Title")
+				.setMessage("Do you want to read this story?")
+				.setCancelable(false)
+				// CANCEL DIALOG
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				})
+				// READ STORY
+				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
-
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
-							}
-						})
-
-				// Set the action buttons
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						// add method
-
-					}
-				})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
+								// READ STORY METHOD
 							}
 						});
-		return builder.create();
+		return alert.show();
 	}
 }
