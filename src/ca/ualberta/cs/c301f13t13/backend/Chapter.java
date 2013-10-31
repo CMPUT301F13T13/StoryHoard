@@ -138,12 +138,25 @@ public class Chapter implements Serializable {
 		choices.add(c);
 	}
 
+	/**
+	 * Converts a chapter object to a string.
+	 * 
+	 * @param String
+	 */
 	@Override
 	public String toString() {
 		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + "]";
 		
 	}
 
+	/**
+	 * Returns the information of the chapter (id, storyId) that
+	 * could be used in searching for a chapter in the database. 
+	 * This information is returned in a HashMap where the keys are 
+	 * the corresponding Chapter Table column names.
+	 * 
+	 * @return HashMap
+	 */	
 	public HashMap<String, String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
@@ -157,7 +170,6 @@ public class Chapter implements Serializable {
 		} else {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, "");
 		}
-		info.put(ChapterTable.COLUMN_NAME_TEXT, text);
 		
 		return info;
 	}	

@@ -243,8 +243,10 @@ public class Story implements Serializable {
 	}
 	
 	/**
-	 * Returns the information of the story (id, title, author, etc)
-	 * in a HashMap.
+	 * Returns the information of the story (id, title, author, authorsOwn) 
+	 * that could be used in searching for a story in the database. This 
+	 * information is returned in a HashMap where the keys are the 
+	 * corresponding Story Table column names.
 	 * 
 	 * @return HashMap
 	 */
@@ -259,14 +261,12 @@ public class Story implements Serializable {
 		
 		info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
-		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
 		
-		if (firstChapterId == null) {
-			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, "");
+		if (authorsOwn == null) {
+			info.put(StoryTable.COLUMN_NAME_CREATED, "");
 		} else {
-			info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
+			info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		}
-		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
 		
 		return info;
 	}

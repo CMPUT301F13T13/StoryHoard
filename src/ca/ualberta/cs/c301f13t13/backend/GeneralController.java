@@ -17,11 +17,13 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import android.content.Context;
 
 public class GeneralController {
+	// MACROS
 	public static final int ALL = -1;
 	public static final int CACHED = 0;
 	public static final int CREATED = 1;
@@ -30,8 +32,24 @@ public class GeneralController {
 	public static final int STORY = 0;
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
+	
+	// SELF
+	private static GeneralController self = null;
 
-	public GeneralController() {
+	protected GeneralController() {	
+	}
+	
+	/**
+	 * Returns an instance of the general controller as a singleton.
+	 * 
+	 * @return
+	 */
+	public static GeneralController getInstance() {
+		if (self == null) {
+			self = new GeneralController();
+		}
+		
+		return self;
 	}
 	
 	/** 
@@ -218,18 +236,77 @@ public class GeneralController {
 	 * Retrieves a complete story (including chapters, any photos, 
 	 * illustrations, and choices).
 	 * 
+	 * @param id
+	 * 			Story id
+	 * @param context
 	 * 
-	 * @return
+	 * @return Story
 	 */
 	public Story getCompleteStory(UUID id, Context context){
-		//TODO everything
+		StoryManager sm = StoryManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
 		
-		return null;
+		// Search criteria gets set
+		Story criteria = new Story(id, "", "", "", null);
+		ArrayList<Object> objects = sm.retrieve(criteria, helper);
+		Story story = (Story) objects.get(0);
+		
+		// Get all chapters 
+		ArrayList<Chapter> chapters = getAllChapters(id, context);
+		HashMap<UUID, Chapter> chaptersHash = new HashMap<UUID, Chapter>();
+		
+		// Get all choices
+		for (Chapter chap: chapters) {
+			Chapter fullChap = getCompleteChapter(chap.getId(), context);
+			chaptersHash.put(chap.getId(), fullChap);
+		}
+		
+		// add chapters to story
+		story.setChapters(chaptersHash);
+		
+		return story;
 	}
 	
-	public void updateObject(Object object, int type) {
-		// TODO SWITCH STATEMENT
-				
+	/**
+	 * Updates either a story, chapter, or choice object. Must specify
+	 * what type of object it getting updated. Also, updates are 
+	 * happening to the database of the phone, not the server.
+	 * 
+	 * @param object
+	 * 			Object to be updated.
+	 * @param type
+	 * 			Will either be STORY (0), CHAPTER (1), or CHOICE (2)
+	 * @param context
+	 */
+	public void updateObjectLocally(Object object, int type, Context context) {
+		
+		
+		switch(type) {
+		case STORY:
+			Story story = (Story) object;
+			StoryManager sm = StoryManager.getInstance(context);
+			break;
+		case CHAPTER:
+			break;
+		case CHOICE:
+			break;
+		default:
+			// raise exception
+			break;
+		}	
 	}
 
+	/**
+	 * Saves a story onto the server.
+	 */
+	public void publishStory(Story story, Context context) {
+		//TODO implement
+	}
+	
+	/**
+	 * Republishes a story an author has changed.
+	 */
+	public void updatePublished(Story story, Context context) {
+		// TODO implement
+	}
 }

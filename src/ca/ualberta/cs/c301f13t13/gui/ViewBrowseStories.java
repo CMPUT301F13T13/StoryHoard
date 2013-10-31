@@ -77,7 +77,7 @@ public class ViewBrowseStories extends Activity {
 		});
 
 		/* Setup the GridView Adapter */
-		GeneralController gc = new GeneralController();
+		GeneralController gc = GeneralController.getInstance();
 
 		/*
 		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION
