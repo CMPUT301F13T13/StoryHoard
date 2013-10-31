@@ -150,7 +150,7 @@ public final class DBContract {
 				+ MediaTable.COLUMN_NAME_MEDIA_ID + " TEXT PRIMARY KEY," 
 				+ MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
 		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT," 
-		        + MediaTable.COLUMN_NAME_TYPE + " INTEGER)";	
+		        + MediaTable.COLUMN_NAME_TYPE + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + MediaTable.TABLE_NAME; 
