@@ -49,14 +49,13 @@ public class GeneralController {
 			break;
 		default:		
 			break;
-			
 		}
 		
 		return stories;
 	}
 	
 	/**
-	 *  Gets all the chapters that are in story.
+	 *  Retrieves all the chapters that are in story.
 	 * 
 	 * @param storyId
 	 * @param context
@@ -77,11 +76,14 @@ public class GeneralController {
 	}
 	
 	/** 
-	 * Gets all the choices that are in a chapter.
+	 * Retrieves all the choices that are in a chapter.
 	 * 
-	 * @return
+	 * @param chapterId
+	 * @param context
+	 * 
+	 * @return ArrayList<Choice>
 	 */
-	public ArrayList <Choice> getAllChoices(UUID chapterId, Context context){
+	public ArrayList<Choice> getAllChoices(UUID chapterId, Context context){
 		ChoiceManager cm = ChoiceManager.getInstance(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -97,12 +99,13 @@ public class GeneralController {
 	 * Adds either a story, chapter, or choice to the database.
 	 * 
 	 * @param object
-	 * @param helper
+	 * 			Object to be inserted (must either be a Story, Chapter, or
+	 * 			Choice instance).
 	 * @param type
 	 * 			Will either be STORY(0), CHAPTER(1), CHOICE(2).
 	 * @param context
 	 */
-	public void addObject(Object object, int type, Context context) {
+	public void addObjectLocally(Object object, int type, Context context) {
 		DBHelper helper = DBHelper.getInstance(context);
 		
 		switch (type) {
@@ -124,33 +127,90 @@ public class GeneralController {
 		}
 	}
 	
-	/** have to figure out.... this will be used to search by keyword
+	/** 
+	 * Used to search for stories matching the given search criteria.
+	 * Users can either search by specifying the title or author of
+	 * the story. All stories that match will be retrieved.
+	 * 
+	 * @param title
+	 * 			Title of the story user is looking for.
+	 * @param author
+	 * 			Author of the story user is looking for.
+	 * @param type
+	 * 			Will either be CACHED (0), CREATED (1) , or PUBLISHED (2).
+	 * @param context
+	 * 
+	 * @return ArrayList<Story>
+	 */
+	public ArrayList<Story> searchStory(String title, String author,
+										int type, Context context){
+		Story criteria;
+		ArrayList<Object> objects;
+		ArrayList<Story> stories = new ArrayList<Story>();
+		StoryManager sm = StoryManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		
+		switch(type) {
+		case CACHED:
+			criteria = new Story(null, author, title, "", false);
+			objects = sm.retrieve(criteria, helper);
+			stories = Utilities.objectsToStories(objects);
+			break;
+		case CREATED:
+			criteria = new Story(null, author, title, "", true);
+			objects = sm.retrieve(criteria, helper);
+			stories = Utilities.objectsToStories(objects);			
+			break;
+		case PUBLISHED:
+			break;
+		}
+		
+		return stories;
+	}
+	
+	/** 
+	 * Retrieves a complete chapter (including any photos, illustrations,
+	 * and choices).
 	 * 
 	 * @return
 	 */
-	public ArrayList<Story> searchStory(String string){
+	public Chapter getCompleteChapter(UUID id, Context context){
+		ChapterManager cm = ChapterManager.getInstance(context);
+		ChoiceManager chom = ChoiceManager.getInstance(context);
+		MediaManager mm = MediaManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		
+		// Search criteria gets set
+		Chapter criteria = new Chapter(id, null, "");
+		
+		// Get chapter
+		ArrayList<Object> objects = cm.retrieve(criteria, helper);
+		Chapter chapter = (Chapter) objects.get(0);
+		
+		// Get chapter choices
+		Choice choiceCrit = new Choice(null, null, id);
+		objects = chom.retrieve(choiceCrit, helper);
+		chapter.setChoices(Utilities.objectsToChoices(objects));
+		
+		// Get media (photos/illustrations)
+		// TODO implement this
+		
+		return chapter;
+	}
+	
+	/** 
+	 * Retrieves a complete story (including chapters, any photos, 
+	 * illustrations, and choices).
+	 * 
+	 * 
+	 * @return
+	 */
+	public Story getCompleteStory(UUID id, Context context){
 		//TODO everything
 		
 		return null;
 	}
-	/** load all photo/illustration/choice as a chapter
-	 * 
-	 * @return
-	 */
-	public Chapter getCompleteChapter(UUID id){
-		//TODO everything
-		
-		return null;
-	}
-	/** load all photo/illustration/choice/chapters as a story
-	 * 
-	 * @return
-	 */
-	public Story getCompleteStory(UUID id){
-		//TODO everything
-		
-		return null;
-	}
+	
 	public void updateObject(Object object, int type) {
 		// TODO SWITCH STATEMENT
 				

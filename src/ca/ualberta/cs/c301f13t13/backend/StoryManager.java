@@ -86,14 +86,6 @@ public class StoryManager extends Model implements StoringManager{
 	public void publish(Story story) {
 		
 	}
-
-	/**
-	 * Saves a published story locally.
-	 * @param story
-	 */
-	public void cacheStory(Story story) {
-		
-	}
 	
 	/**
 	 * Updates a story already in the database.

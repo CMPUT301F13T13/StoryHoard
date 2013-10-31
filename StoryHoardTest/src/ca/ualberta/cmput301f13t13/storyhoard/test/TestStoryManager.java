@@ -59,15 +59,17 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	/**
-	 * Tests caching a story locally on the device, and then 
-	 * loading cached mockStories.
+	 * Tests caching a story locally on the device database, and then 
+	 * loading it again to make sure it was properly saved.
 	 */
 	public void testCacheLoadStory() {
-		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog", false);
-		StoryManager sm = StoryManager.getInstance(this.getActivity());
-		sm.cacheStory(mockStory);
-		
+		Story mockStory = newMockStory("My Frog", "blueberry", 
+				"my cute frog", false);
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
+		
+		sm.insert(mockStory, helper);
+		
 		mockStories = sm.retrieve(mockStory, helper);
 		assertTrue(mockStories.size() != 0);
 		assertTrue(hasStory(mockStories, mockStory));
@@ -233,7 +235,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
 		sm.publish(mockStory);
-		sm.cacheStory(mockStory);
+		sm.insert(mockStory, helper);
 		
 		ArrayList<Object> pubStories = sm.retrieve(mockStory, helper);
 		assertTrue(hasStory(pubStories, mockStory));

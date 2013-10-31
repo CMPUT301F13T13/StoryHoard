@@ -5,6 +5,7 @@ package ca.ualberta.cs.c301f13t13.backend;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -20,9 +21,9 @@ public class Chapter implements Serializable {
 	private UUID id;
 	private UUID storyId;
 	private String text;
-	private HashMap<UUID, Choice> choices;
-	private HashMap<UUID, URI> illustrations;
-	private HashMap<UUID, URI> photos;
+	private ArrayList<Choice> choices;
+	private ArrayList<URI> illustrations;
+	private ArrayList<URI> photos;
 	
 	/**
 	 * Initializes a new chapter object with no id.
@@ -34,9 +35,9 @@ public class Chapter implements Serializable {
 		this.text = text;
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
-		choices = new HashMap<UUID, Choice>();
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
+		choices = new ArrayList<Choice>();
+		illustrations = new ArrayList<URI>();
+		photos = new ArrayList<URI>();
 	}
 	
 	
@@ -46,15 +47,15 @@ public class Chapter implements Serializable {
 	 * the database.
 	 * 
 	 * @param id
+	 * @param storyId 
 	 * @param text
-	 * @param storyId
 	 */
 	public Chapter(UUID id, UUID storyId, String text) {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
+		illustrations = new ArrayList<URI>();
+		photos = new ArrayList<URI>();
 	}
 	//Getters
 	
@@ -85,10 +86,12 @@ public class Chapter implements Serializable {
 	 * Returns the choices of the chapter.
 	 * @return
 	 */
-	public HashMap<UUID, Choice> getChoice() {
+	public ArrayList<Choice> getChoices() {
 		return this.choices;
 	}
+	
 	//Setters
+	
 	/**
 	 * Sets the Id of the chapter.
 	 * @param id
@@ -114,12 +117,12 @@ public class Chapter implements Serializable {
 	 * Sets the text of the chapter.
 	 * @param text
 	 */
-	public void  setChoice(HashMap<UUID, Choice> choice) {
-		this.choices = choice;
+	public void  setChoices(ArrayList<Choice> choices) {
+		this.choices = choices;
 	}
 	
 	public void addChoice(Choice c) {
-		choices.put(c.getId(), c);
+		choices.add(c);
 	}
 
 	@Override

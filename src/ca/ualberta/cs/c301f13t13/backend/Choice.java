@@ -11,8 +11,9 @@ public class Choice implements Serializable{
 	private UUID currentChapter;
 	private UUID nextChapter;
 	private String text;
+	
 	/**
-	 * Initializes a new choice object with an UUid id (needed for making a
+	 * Initializes a new choice object with a UUID id (needed for making a
 	 * new choice after retrieving data from the database).
 	 * 
 	 * @param id
@@ -29,12 +30,15 @@ public class Choice implements Serializable{
 		this.nextChapter = chapterIdTo;
 		this.text = text;	
 	}
+	
 	/**
 	 * Initializes a new choice object with no id.
 	 * 
-	 * @param id
-	 * @param text
 	 * @param storyid
+	 * @param chapterIdFrom
+	 * @param chapterIdTo
+	 * @param text
+
 	 */
 	public Choice(UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = UUID.randomUUID();
@@ -43,6 +47,24 @@ public class Choice implements Serializable{
 		this.nextChapter = chapterIdTo;
 		this.text = text;
 	}
+	
+	/**
+	 * Initializes a new choice object that will hold search criteria.
+	 * For this reason, only the id, story id, and the id of the chapter
+	 * the choice belongs to are needed.
+	 * 
+	 * @param id
+	 * @param storyId
+	 * @param chapterIdFrom
+	 */
+	public Choice(UUID id, UUID storyId, UUID chapterIdFrom) {
+		this.id = id;
+		this.storyId = storyId;
+		this.currentChapter = chapterIdFrom;
+		this.nextChapter = null;
+		this.text = "";
+	}	
+	
 	// SETTERS
 	/**
 	 * Set the Id of the choice.
@@ -118,20 +140,33 @@ public class Choice implements Serializable{
 	}
 	
 	/**
-	 * Returns the information of the choice (id, storyId, chapterIdFrom, etc..)
-	 * in a HashMap.
+	 * Returns the information of the choice (id, storyId, chapterIdFrom) that
+	 * could be used in searching for a choice in the database. This information
+	 * is returned in a HashMap where the keys are the corresponding Choice 
+	 * Table column names.
 	 * 
 	 * @return HashMap
 	 */
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, id.toString());
-		info.put(ChoiceTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, currentChapter.toString());
-		info.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, nextChapter.toString());
-		info.put(ChoiceTable.COLUMN_NAME_TEXT, text);
-
+		if (id == null) {
+			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, "");
+		} else {
+			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, id.toString());
+		}
+		
+		if (storyId == null) {
+			info.put(ChoiceTable.COLUMN_NAME_STORY_ID, "");
+		} else {
+			info.put(ChoiceTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		}
+		
+		if (currentChapter == null) {
+			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, "");
+		} else {
+			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, currentChapter.toString());
+		}
 		
 		return info;
 	}
