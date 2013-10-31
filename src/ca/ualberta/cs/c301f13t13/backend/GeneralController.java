@@ -129,6 +129,45 @@ public class GeneralController {
 		return choices;
 	}
 	
+	/** 
+	 * Retrieves all the illustrations that are in a chapter.
+	 * 
+	 * @param chapterId
+	 * @param context
+	 * 
+	 * @return illustrations
+	 */
+	public ArrayList<Media> getAllIllustrations(UUID chapterId, Context context){
+		MediaManager cm = MediaManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Media> illustrations = new ArrayList<Media>();
+		ArrayList<Object> objects;
+		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
+		
+		objects = cm.retrieve(criteria, helper);
+		illustrations = Utilities.objectsToMedia(objects);
+		return illustrations;
+	}
+	
+	/** 
+	 * Retrieves all the photos that are in a chapter.
+	 * 
+	 * @param chapterId
+	 * @param context
+	 * 
+	 * @return photos
+	 */
+	public ArrayList<Media> getAllPhotos(UUID chapterId, Context context){
+		MediaManager mm = MediaManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Media> photos = new ArrayList<Media>();
+		ArrayList<Object> objects;
+		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
+		objects = mm.retrieve(criteria, helper);
+		photos = Utilities.objectsToMedia(objects);
+		return photos;
+	}
+	
 	/**
 	 * Adds either a story, chapter, or choice to the database.
 	 * 
@@ -196,6 +235,9 @@ public class GeneralController {
 			stories = Utilities.objectsToStories(objects);			
 			break;
 		case PUBLISHED:
+			break;
+		default:
+			// raise exception
 			break;
 		}
 		
