@@ -130,8 +130,8 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<MainAct
 		assertTrue(hasChapter(mockChapters, newChapter));
 		
 		// make sure old version no longer exists
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertFalse(hasChapter(mockChapters, mockChapter));	
+		Chapter compChap = (Chapter) mockChapters.get(0);
+		assertTrue(compChap.getText().equals(newChapter.getText()));
 	}
 
 	/**
