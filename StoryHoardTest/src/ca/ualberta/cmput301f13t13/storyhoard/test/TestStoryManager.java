@@ -19,7 +19,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.Test;
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
 
@@ -39,6 +38,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -119,7 +119,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		sm.insert(mockStory3, helper);
 		
 		// setting search criteria
-		Story mockCriteria = new Story(null, "", "", "", true);	
+		Story mockCriteria = new Story(null, null, null, null, true);	
 		mockStories = sm.retrieve(mockCriteria, helper);
 		assertFalse(hasStory(mockStories, mockStory3));
 		assertEquals(mockStories.size(), 2);
@@ -144,7 +144,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		sm.insert(mockStory3, helper);
 		
 		// setting search criteria
-		Story mockCriteria = new Story(null, "", "", "", false);	
+		Story mockCriteria = new Story(null, null, null, null, false);	
 		mockStories = sm.retrieve(mockCriteria, helper);
 		assertFalse(hasStory(mockStories, mockStory1));
 		assertEquals(mockStories.size(), 2);
@@ -170,7 +170,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		sm.publish(mockStory3);
 		
 		// setting search criteria
-		Story mockCriteria = new Story(null, "", "", "", false);	
+		Story mockCriteria = new Story(null, null, null, null, false);	
 		ArrayList<Story> mockStories = sm.getPublishedStories();
 		assertEquals(mockStories.size(), 3);
 

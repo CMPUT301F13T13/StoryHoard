@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.ualberta.cs.c301f13t13.gui.ViewStoryActivity;
+import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
@@ -30,13 +30,13 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author Owner
  *
  */
-public class TestGeneralController extends ActivityInstrumentationTestCase2<Activity> {
+public class TestGeneralController extends ActivityInstrumentationTestCase2<MainActivity> {
 
 	/**
 	 * @param name
 	 */
 	public TestGeneralController() {
-		super(Activity.class);
+		super(MainActivity.class);
 	}
 
 	/* (non-Javadoc)

@@ -28,18 +28,19 @@ import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.gui.AddChoiceActivity;
+import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
 /**
  * @author Owner 
  *
  */
-public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoiceActivity> {
+public class TestChoiceManager extends ActivityInstrumentationTestCase2<MainActivity> {
 	
 	/**
 	 * @param name
 	 */
 	public TestChoiceManager(String name) {
-		super(AddChoiceActivity.class);
+		super(MainActivity.class);
 	}
 	
 
