@@ -19,21 +19,31 @@ package ca.ualberta.cs.c301f13t13.gui;
 /**
  * Add Choice Activity
  * 
+ * Purpose:
+ * 	- To add a choice to an existing chapter
+ * 	- The author can:
+ * 
+ *
+ * 
  * author: Josh Tate
  */
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Model;
 
 public class AddChoiceActivity extends Activity 
 implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
+	
+	private Chapter chapt;
 	private Button existingChapterButton;
 	private Button newChapterButton;
 	private Button cancelButton;
@@ -42,6 +52,13 @@ implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOI
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//Get the chapter that choice is being added to
+		Bundle bundle = this.getIntent().getExtras();
+		if (bundle != null) {
+			chapt = (Chapter) bundle.getSerializable(Constants._ID);
+		}
+		
 		setContentView(R.layout.activity_add_choice);
 
 		existingChapterButton = (Button)findViewById(R.id.existing_chapter_button);

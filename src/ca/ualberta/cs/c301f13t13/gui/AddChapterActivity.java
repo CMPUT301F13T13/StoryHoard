@@ -16,32 +16,44 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
-import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
-
-/**
- * Add Chapter Activity
- * 
- * author: Josh Tate
- */
-
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.text.Editable;
 import android.text.TextWatcher;
 //import android.view.Menu; *Not sure if needed
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+/**
+ * Add Chapter Activity
+ * 
+ * Purpose:
+ * 	- To add a chapter to an existing story.
+ * 	- The author can:
+ * 		- Add images through the use of the image button
+ * 		- Set the text of the chapter through the Edit text space
+ * 		- View all chapters in the story upon pressing the 'View All Chapters'
+ * 		  button
+ * 		- Add a choice by pressing the 'Add Choice' button.
+ * 		- This activity will also display the choices that exist or have been
+ * 		  added.
+ * 
+ * author: Josh Tate
+ */
 
 public class AddChapterActivity extends Activity 
 		implements ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
+	
+	private Chapter chapt;
+	private Story story;
 	private ImageButton imageButton;
 	private Button saveButton;
 	private Button allChaptersButton;
@@ -54,6 +66,13 @@ public class AddChapterActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_chapter);
 		
+		//Get the story that chapter is being added to
+		Bundle bundle = this.getIntent().getExtras();
+		if (bundle != null) {
+			story = (Story) bundle.getSerializable(Constants._ID);
+			chapt = new Chapter(story.getId()," ");
+		}
+		
 		imageButton = (ImageButton)findViewById(R.id.imageButton1);
 		imageButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -64,11 +83,13 @@ public class AddChapterActivity extends Activity
 			}
 		});
 		
+		//Set the chapters text
 		chapterContent = (EditText)findViewById(R.id.editText1);
+		chapterContent.setText(chapt.getText());
 		chapterContent.addTextChangedListener(new TextWatcher() {
 			public void onTextChanged(
 					CharSequence c, int start, int end, int count) {
-				//Set chapter text
+				chapt.setText(c.toString());
 			}
 			public void beforeTextChanged(
 					CharSequence c, int start, int end, int count) {}
@@ -110,12 +131,12 @@ public class AddChapterActivity extends Activity
 		
 		//Use choices to display choices
 		choices = (ListView)findViewById(R.id.listView1);
-		ArrayList<String> testArray = new ArrayList<String>();
+		/* ArrayList<String> testArray = new ArrayList<String>();
 		for (int i = 0; i < 3; i++) {
 			testArray.add("Test Choice "+(i+1));
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,testArray);
-		choices.setAdapter(adapter);
+		choices.setAdapter(adapter); */
 		
 		
 	}
