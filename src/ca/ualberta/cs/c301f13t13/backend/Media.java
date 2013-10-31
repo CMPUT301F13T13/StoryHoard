@@ -69,8 +69,8 @@ public class Media {
 		return id;
 	}
 	
-	public void getChapterId(UUID chapter_id) {
-		this.chapterId = chapter_id;
+	public UUID getChapterId() {
+		return this.chapterId;
 	}
 	
 	public Uri getUri() {
@@ -99,8 +99,8 @@ public class Media {
 		this.id = id;
 	}
 	
-	public UUID setChapterId() {
-		return chapterId;
+	public void setChapterId(UUID chapterId) {
+		this.chapterId = chapterId;
 	}
 	
 	public void setUri(Uri uri) {
