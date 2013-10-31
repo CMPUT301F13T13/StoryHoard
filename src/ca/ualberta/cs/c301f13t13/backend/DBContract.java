@@ -112,7 +112,6 @@ public final class DBContract {
 
 		public static final String TABLE_NAME = "choice_table";
 		public static final String COLUMN_NAME_CHOICE_ID="choice_id";
-		public static final String COLUMN_NAME_STORY_ID="story_id";
 		public static final String COLUMN_NAME_TEXT = "text";
 		public static final String COLUMN_NAME_CURR_CHAPTER = "curr_chapter";
 		public static final String COLUMN_NAME_NEXT_CHAPTER = "next_chapter";
@@ -121,7 +120,6 @@ public final class DBContract {
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
 				+ ChoiceTable._ID + " INTEGER," 
 				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT PRIMARY KEY, "
-				+ ChoiceTable.COLUMN_NAME_STORY_ID + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
 		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
 		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT)";	
