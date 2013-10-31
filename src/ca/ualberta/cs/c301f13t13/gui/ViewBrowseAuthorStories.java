@@ -21,6 +21,9 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -58,7 +61,7 @@ public class ViewBrowseAuthorStories extends ListActivity {
 
 		//
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, stories) { 
+				android.R.layout.simple_list_item_1, stories) {
 			@Override
 			// Formats the listView
 			public View getView(int position, View convertView, ViewGroup parent) {
@@ -80,7 +83,6 @@ public class ViewBrowseAuthorStories extends ListActivity {
 		dialog.show();
 	}
 
-	
 	/**
 	 * userAction Choices: 3 possible actions can be taking from clicking a
 	 * story on the list. 1) Settings: Will take user to story settings 2) EDIT:
@@ -122,5 +124,27 @@ public class ViewBrowseAuthorStories extends ListActivity {
 							}
 						});
 		return builder.create();
+	}
+
+	// MENU ITEMS
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.newmenu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.addStoryIcon:
+			// do something
+			return true;
+		case R.id.publishIcon:
+			// Ensure this device is discoverable by others
+			return true;
+		}
+		return false;
 	}
 }
