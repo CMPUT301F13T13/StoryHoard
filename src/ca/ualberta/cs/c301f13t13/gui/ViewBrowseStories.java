@@ -83,7 +83,7 @@ public class ViewBrowseStories extends Activity {
 		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION
 		 * HERE YOU GO STEPH. SET THIS TO FALSE WHEN YOU TEST 
 		 */
-		boolean normal = true;
+		boolean normal = false;
 		if (normal) {
 			storyAdapter = new GridStoriesAdapter(this,
 					R.layout.item_browse_story, null);
