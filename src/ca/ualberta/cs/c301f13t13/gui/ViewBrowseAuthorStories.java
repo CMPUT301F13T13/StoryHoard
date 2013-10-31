@@ -15,12 +15,14 @@
  */
 package ca.ualberta.cs.c301f13t13.gui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -39,29 +41,70 @@ public class ViewBrowseAuthorStories extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browse_author_stories);
 
-		// SHOULD DISPLAY STORY AND BY AUTHOR;
-		String[] values = new String[] { "Story1 \nby:asd", "Stor2\nby:mandy",
+		// Populates list with stories and displays author
+		String[] stories = new String[] { "Story1 \nby:asd", "Stor2\nby:mandy",
 				"Story3 \nby:Tom", "Story4 \nby:Dan", "Story5 \nby:Sue" };
 
-		// Define a new Adapter, First parameter - Context, Second parameter -
-		// Layout for the rowThird - the Array of data
-
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, values);
-
-		// Assign adapter to List
+				android.R.layout.simple_list_item_1, stories);
 		setListAdapter(adapter);
 	}
 
+	// When user clicks a story from the list:
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		Dialog dialog = userAction(position, id);
+		dialog.show();
+	}
 
-		// ListView Clicked item index
-		int itemPosition = position;
+	/**
+	 * userAction Choices: 3 possible actions can be taking from clicking a
+	 * story on the list. 1) DELETE: will remove the note from the database and
+	 * update the current list 2) EDIT: will take user to the note taking
+	 * display and edit the note 3) CANCEL: will take users back to the ViewList
+	 * display
+	 * 
+	 * @return
+	 */
+	private AlertDialog userAction(final int position, final long id) {
+		// Initialize the Alert Dialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		// Source of the data in the DIalog
+		CharSequence[] array = { "Settings", "Edit", "Read" };
 
-		// ListView Clicked item value
-		String itemValue = (String) l.getItemAtPosition(position);
+		// Set the dialog title
+		builder.setTitle("Select Priority")
+				// Specify the list array, the items to be selected by default
+				// (null for none),
+				// and the listener through which to receive callbacks when
+				// items are selected
+				.setSingleChoiceItems(array, 1,
+						new DialogInterface.OnClickListener() {
 
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+							}
+						})
+
+				// Set the action buttons
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						// User clicked OK, so save the result somewhere
+						// or return them to the component that opened the
+						// dialog
+
+					}
+				})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+		return builder.create();
 	}
 }
