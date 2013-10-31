@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:background="#73243d96"
         android:padding="5dp"
+        android:textSize="20sp"
         android:text="@string/my_story"
         android:textColor="#6b9fff" />
 
