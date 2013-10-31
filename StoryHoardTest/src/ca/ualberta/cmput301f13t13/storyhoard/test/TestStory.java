@@ -70,7 +70,7 @@ public class TestStory extends TestCase{
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Story criteria = new Story(null, "", "", "", false);
+		Story criteria = new Story(null, null, null, null, false);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 		
 		assertTrue(info.size() == 1);

@@ -256,11 +256,11 @@ public class Story implements Serializable {
 			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
 		
-		if (!title.equals("")) {
+		if (title !=null) {
 			info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		}
 		
-		if (!author.equals("")) {
+		if (author !=null) {
 			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		}
 		
