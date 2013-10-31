@@ -46,5 +46,6 @@
     <string name="title_activity_browse_author_stories">BrowseAuthorStoriesActivity</string>
     <string name="title_activity_view_browse_author_stories">ViewBrowseAuthorStories</string>
     <string name="title_activity_custom_adapter">CustomAdapter</string>
+    <string name="title_activity_view_edit_story">ViewEditStoryActivity</string>
 
 </resources>

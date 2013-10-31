@@ -36,9 +36,8 @@
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name="ca.ualberta.cmput301f13t13.storyhoard.ViewBrowseAuthorStories"
-            android:label="@string/title_activity_view_browse_author_stories"
-            android:uiOptions="splitActionBarWhenNarrow" >
+            android:name="ca.ualberta.cs.c301f13t13.gui.ViewEditStoryActivity"
+            android:label="@string/title_activity_view_edit_story" >
         </activity>
     </application>
 
