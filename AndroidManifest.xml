@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name="ca.ualberta.cs.c301f13t13.gui.AddStoryActivity"
-            android:label="@string/add_new_story">
+            android:label="@string/add_new_story" >
         </activity>
         <activity
             android:name="ca.ualberta.cs.c301f13t13.gui.AddChapterActivity"
@@ -34,6 +34,14 @@
             android:name="ca.ualberta.cs.c301f13t13.gui.AddChoiceActivity"
             android:label="@string/add_choice"
             android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="ca.ualberta.cmput301f13t13.storyhoard.ViewbrowseAuthorStories"
+            android:label="@string/title_activity_viewbrowse_author_stories" >
+        </activity>
+        <activity
+            android:name="ca.ualberta.cmput301f13t13.storyhoard.ViewBrowseAuthorStories"
+            android:label="@string/title_activity_view_browse_author_stories" >
         </activity>
     </application>
 

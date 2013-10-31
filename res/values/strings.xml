@@ -30,11 +30,17 @@
     <string name="edit_story">Edit Story</string>
     <string name="story_view_type">Story View Type</string>
     <string name="current_view_type">Current View: </string>
-	<string name="story_image_cover">Cover Image</string>
+    <string name="story_image_cover">Cover Image</string>
+
     <string-array name="view_type_choices">
         <item>My Stories</item>
         <item>Downloaded Stories</item>
         <item>Published Stories</item>
     </string-array>
+
+    <string name="title_activity_viewbrowse_author_stories">ViewbrowseAuthorStories</string>
+    <string name="title_activity_view_author_stories">ViewAuthorStoriesActivity</string>
+    <string name="title_activity_browse_author_stories">BrowseAuthorStoriesActivity</string>
+    <string name="title_activity_view_browse_author_stories">ViewBrowseAuthorStories</string>
 
 </resources>
