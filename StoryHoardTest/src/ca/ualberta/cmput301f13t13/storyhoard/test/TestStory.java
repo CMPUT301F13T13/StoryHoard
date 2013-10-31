@@ -73,22 +73,16 @@ public class TestStory extends TestCase{
 		Story criteria = new Story(null, "", "", "", false);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 		
-		assertTrue(info.get("story_id").equals(""));
-		assertTrue(info.get("title").equals(""));
-		assertTrue(info.get("author").equals(""));
-		assertTrue(info.get("description").equals(""));
-		assertTrue(info.get("first_chapter").equals(""));
-		assertTrue(info.get("created").equals(""));
+		assertTrue(info.size() == 1);
+		assertTrue(info.get("created").equals("false"));
 	
 		// not empty arguments
 		criteria = new Story(null, "john", "the cow", "went home", true);
 		info = criteria.getSearchCriteria();
 		
-		assertTrue(info.get("story_id").equals(""));
+		assertTrue(info.size() == 3);
 		assertTrue(info.get("title").equals("john"));
 		assertTrue(info.get("author").equals("the cow"));
-		assertTrue(info.get("description").equals("went home"));
-		assertTrue(info.get("first_chapter").equals(""));
 		assertTrue(info.get("created").equals("true"));
 	}
 	
@@ -116,7 +110,7 @@ public class TestStory extends TestCase{
 		assertNotSame("pinkie", author);
 		assertNotSame("new desc", desc);
 		assertNotSame(created, mockStory.getAuthorsOwn());
-		assertTrue(mockStory.getChapters() != null);
+		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);		
 	}
 }
