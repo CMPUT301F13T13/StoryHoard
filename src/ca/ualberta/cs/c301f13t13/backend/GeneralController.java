@@ -122,10 +122,10 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		ArrayList<Object> objects;
-//		Choice criteria = new Choice(chapterId, "");
-//		
-//		objects = cm.retrieve(criteria, helper);
-//		choices = Utilities.objectsToChoices(objects);
+		Choice criteria = new Choice(null, chapterId);
+		
+		objects = cm.retrieve(criteria, helper);
+		choices = Utilities.objectsToChoices(objects);
 		return choices;
 	}
 	
@@ -206,6 +206,9 @@ public class GeneralController {
 	 * Retrieves a complete chapter (including any photos, illustrations,
 	 * and choices).
 	 * 
+	 * @param id
+	 * @param context
+	 * 
 	 * @return
 	 */
 	public Chapter getCompleteChapter(UUID id, Context context){
@@ -227,7 +230,13 @@ public class GeneralController {
 		chapter.setChoices(Utilities.objectsToChoices(objects));
 		
 		// Get media (photos/illustrations)
-		// TODO implement this
+		Media mediaCrit = new Media(null, id, null, Media.PHOTO);
+		objects = mm.retrieve(mediaCrit, helper);
+		chapter.setPhotos(Utilities.objectsToMedia(objects));
+		
+		mediaCrit = new Media(null, id, null, Media.ILLUSTRATION);
+		objects = mm.retrieve(mediaCrit, helper);
+		chapter.setIllustrations(Utilities.objectsToMedia(objects));		
 		
 		return chapter;
 	}
