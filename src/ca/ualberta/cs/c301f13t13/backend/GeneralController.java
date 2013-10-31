@@ -27,7 +27,7 @@ public class GeneralController {
 	 * @return ArrayList<Story>
 	 */
 	public ArrayList<Story> getAllStories(int type, Context context){
-		StoryManager sm = new StoryManager(context);
+		StoryManager sm = StoryManager.getInstance(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Story> stories = new ArrayList<Story>();
 		ArrayList<Object> objects;
@@ -35,12 +35,12 @@ public class GeneralController {
 		
 		switch(type) {
 		case CACHED:
-			criteria = new Story(null, "", "", false);
+			criteria = new Story(null, "", "", "", false);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
-			criteria = new Story(null, "", "", true);
+			criteria = new Story(null, "", "", "", true);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
@@ -64,7 +64,7 @@ public class GeneralController {
 	 * @return ArrayList<Chapter>
 	 */
 	public ArrayList<Chapter> getAllChapters(UUID storyId, Context context){
-		ChapterManager cm = new ChapterManager(context);
+		ChapterManager cm = ChapterManager.getInstance(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		ArrayList<Object> objects;
@@ -82,7 +82,7 @@ public class GeneralController {
 	 * @return
 	 */
 	public ArrayList <Choice> getAllChoices(UUID chapterId, Context context){
-		ChoiceManager cm = new ChoiceManager(context);
+		ChoiceManager cm = ChoiceManager.getInstance(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		ArrayList<Object> objects;

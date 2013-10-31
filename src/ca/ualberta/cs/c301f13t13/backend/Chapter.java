@@ -23,29 +23,12 @@ public class Chapter implements Serializable {
 	private HashMap<UUID, Choice> choices;
 	private HashMap<UUID, URI> illustrations;
 	private HashMap<UUID, URI> photos;
-	/**
-	 * Initializes a new chapter object with a UUID id.
-	 * 
-	 * @param id
-	 * @param text
-	 * @param storyId
-	 */
-
-	public Chapter(UUID id, UUID storyId, String text) {
-		this.text = text;
-		this.storyId = storyId;
-		this.id = id;
-		choices = new HashMap<UUID, Choice>();
-		illustrations = new HashMap<UUID, URI>();
-		photos = new HashMap<UUID, URI>();
-	}
 	
 	/**
 	 * Initializes a new chapter object with no id.
 	 * 
-	 * @param id
-	 * @param text
 	 * @param storyid
+	 * @param text
 	 */
 	public Chapter(UUID storyId, String text) {
 		this.text = text;
@@ -58,15 +41,18 @@ public class Chapter implements Serializable {
 	
 	
 	/**
-	 * Initialize a new chapter from database info.
-	 * @param string
-	 * @param string2
-	 * @param string3
+	 * Initialize a new chapter with an id. Can also be used to make
+	 * a chapter from the chapter information retrieved from
+	 * the database.
+	 * 
+	 * @param id
+	 * @param text
+	 * @param storyId
 	 */
-	public Chapter(String id, String text, String storyId) {
-		this.id=  UUID.fromString(id);
-		this.text= text;
-		this.storyId=UUID.fromString(storyId);
+	public Chapter(UUID id, UUID storyId, String text) {
+		this.id = id;
+		this.text = text;
+		this.storyId = storyId;
 		illustrations = new HashMap<UUID, URI>();
 		photos = new HashMap<UUID, URI>();
 	}
@@ -145,8 +131,16 @@ public class Chapter implements Serializable {
 	public HashMap<String, String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		if (id != null) {
+			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
+		} else {
+			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, "");
+		} 
+		if (storyId != null) {
+			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		} else {
+			info.put(ChapterTable.COLUMN_NAME_STORY_ID, "");
+		}
 		info.put(ChapterTable.COLUMN_NAME_TEXT, text);
 		
 		return info;

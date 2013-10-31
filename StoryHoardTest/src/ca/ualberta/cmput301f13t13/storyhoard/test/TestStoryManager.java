@@ -28,8 +28,6 @@ import android.test.ActivityInstrumentationTestCase2;
  *
  */
 public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActivity>{
-	private Story mockStory;
-	private Chapter mockChapter;
 	private ArrayList<Object> mockStories;
 	
 	public TestStoryManager() {
@@ -46,15 +44,18 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	/**
 	 * Create a new story.
 	 */
-	public void newMockStory(String title, String author, String description, 
+	public Story newMockStory(String title, String author, String description, 
 			Boolean authorsOwn) {
 		// story object
-		mockStory = new Story(title, author, description, authorsOwn);
+		Story mockStory = new Story(title, author, description, authorsOwn);
 		
 		// first chapter of story
-		mockChapter = new Chapter(mockStory.getId(), "my first chapter");
+		Chapter mockChapter = new Chapter(mockStory.getId(), 
+				"my first chapter");
 		mockStory.addChapter(mockChapter);	
 		mockStory.setFirstChapterId(mockChapter.getId());
+		
+		return mockStory;
 	}
 	
 	/**
@@ -62,8 +63,8 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * loading cached mockStories.
 	 */
 	public void testCacheLoadStory() {
-		newMockStory("My Frog", "blueberry", "my cute frog", false);
-		StoryManager sm = new StoryManager(this.getActivity());
+		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog", false);
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		sm.cacheStory(mockStory);
 		
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
@@ -76,8 +77,9 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests adding and loading a story from the local storage
 	 */
 	public void testAddLoadStory() {
-		newMockStory("My Cow", "Dr. Poe", "my chubby cow", true);
-		StoryManager sm = new StoryManager(this.getActivity());
+		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow", 
+				true);
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
 		sm.insert(mockStory, helper);
@@ -96,24 +98,82 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests loading all created stories, and makes sure the results
 	 * don't include any stories not created by author.
 	 */
-	public void testGetAuthorStories() {
-		StoryManager sm = new StoryManager(this.getActivity());
+	public void testGetAllAuthorStories() {
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		
-		newMockStory("My Cow", "Dr. Poe", "my chubby cow", true);	
-		sm.insert(mockStory, helper);
-		newMockStory("My Frog", "Dr. Phil", "my chubby frog", true);	
-		sm.insert(mockStory, helper);
-		newMockStory("My Hen", "Dr. Farmer", "my chubby hen", false);	
-		sm.insert(mockStory, helper);
-		Story oldStory = mockStory;
+		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", 
+				"my chubby cow", true);	
+		sm.insert(mockStory1, helper);
+		Story mockStory2 = newMockStory("My Frog", "Dr. Phil", 
+				"my chubby frog", true);	
+		sm.insert(mockStory2, helper);
+		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer", 
+				"my chubby hen", false);	
+		sm.insert(mockStory3, helper);
 		
 		try {
 			// setting search criteria
-			newMockStory("", "", "", false);	
-			mockStories = sm.retrieve(mockStory, helper);
-			assertFalse(hasStory(mockStories, oldStory));
+			Story mockCriteria = new Story(null, "", "", "", true);	
+			mockStories = sm.retrieve(mockCriteria, helper);
+			assertFalse(hasStory(mockStories, mockStory3));
 			assertEquals(mockStories.size(), 2);
+		} catch(Exception e) {
+			fail("Could not read Story: " + e.getStackTrace());
+		}
+	}	
+	
+	/**
+	 * Tests loading all cached stories.
+	 */
+	public void testGetAllCachedStories() {
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", 
+				"my chubby cow", true);	
+		sm.insert(mockStory1, helper);
+		Story mockStory2 = newMockStory("My Frog", "Dr. Phil", 
+				"my chubby frog", false);	
+		sm.insert(mockStory2, helper);
+		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer", 
+				"my chubby hen", false);	
+		sm.insert(mockStory3, helper);
+		
+		try {
+			// setting search criteria
+			Story mockCriteria = new Story(null, "", "", "", false);	
+			mockStories = sm.retrieve(mockCriteria, helper);
+			assertFalse(hasStory(mockStories, mockStory1));
+			assertEquals(mockStories.size(), 2);
+		} catch(Exception e) {
+			fail("Could not read Story: " + e.getStackTrace());
+		}
+	}	
+	
+	/**
+	 * Tests loading all created stories, and makes sure the results
+	 * don't include any stories not created by author.
+	 */
+	public void testGetAllPublishedStories() {
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", 
+				"my chubby cow", true);	
+		sm.publish(mockStory1);
+		Story mockStory2 = newMockStory("My Frog", "Dr. Phil", 
+				"my chubby frog", false);	
+		sm.publish(mockStory2);
+		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer", 
+				"my chubby hen", false);	
+		sm.publish(mockStory3);
+		
+		try {
+			// setting search criteria
+			Story mockCriteria = new Story(null, "", "", "", false);	
+			ArrayList<Story> mockStories = sm.getPublishedStories();
+			assertEquals(mockStories.size(), 3);
 		} catch(Exception e) {
 			fail("Could not read Story: " + e.getStackTrace());
 		}
@@ -123,11 +183,10 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests editing story
 	 */
 	public void testEditStory() {
-		newMockStory("My Wizard Mouse", "JK ROlling", "before the edit...",
-				    true);
-		StoryManager sm = new StoryManager(this.getActivity());
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		
+		Story mockStory = newMockStory("My Wizard Mouse", "JK ROlling", 
+				"before the edit...", true);
 		sm.insert(mockStory, helper);
 		
 		mockStories = sm.retrieve(mockStory, helper);
@@ -139,7 +198,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 		newStory.setTitle("My Wizard newt");
 		newStory.setAuthor("not jk rolling");
 		newStory.setDescription("after the edit...");
-		sm.update(mockStory, newStory, helper);
+		sm.update(newStory, helper);
 		
 		// make sure you can find new story
 		mockStories = sm.retrieve(newStory, helper);
@@ -155,9 +214,9 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests publishing story, then loading it from server.
 	 */
 	public void testPublishLoadStory() {
-		newMockStory("My Monkey", "TS ELLIOT", 
-					"monkey is in the server", true);
-		StoryManager sm = new StoryManager(this.getActivity());
+		Story mockStory = newMockStory("My Monkey", "TS ELLIOT", 
+					"monkey is in the server", false);
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		sm.publish(mockStory);
 		
 		ArrayList<Story> pubStories = sm.getPublishedStories();
@@ -168,14 +227,16 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<MainActiv
 	 * Tests publishing story, caching it, then loading it from server.
 	 */
 	public void testPublishCacheLoadStory() {
-		newMockStory("My Monkey", "TS ELLIOT", 
-					"monkey is in the server", true);
-		StoryManager sm = new StoryManager(this.getActivity());
+		Story mockStory = newMockStory("My Monkey", "TS ELLIOT", 
+					"monkey is in the server", false);
+		StoryManager sm = StoryManager.getInstance(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
 		sm.publish(mockStory);
 		sm.cacheStory(mockStory);
 		
-//		ArrayList<Story> pubStories = sm.retrieve();
-//		assertTrue(pubStories.contains(mockStory));
+		ArrayList<Object> pubStories = sm.retrieve(mockStory, helper);
+		assertTrue(hasStory(pubStories, mockStory));
 	}	
 	
 	/**

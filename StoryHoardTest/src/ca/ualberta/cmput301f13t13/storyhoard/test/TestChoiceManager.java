@@ -36,7 +36,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 	}
 	
 	/**
-	 * Tests adding a choice (saving locally)
+	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
 		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
@@ -45,7 +45,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
-		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(c, helper);
 		try {
@@ -66,6 +66,7 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		}		
 		return false;
 	}
+	
 	/** 
 	 * Tests loading and editing a choice.
 	 */
@@ -76,12 +77,12 @@ public class TestChoiceManager extends ActivityInstrumentationTestCase2<AddChoic
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
-		ChoiceManager cm = new ChoiceManager(this.getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(c, helper);
 		Choice newChoice = c;
 		newChoice.setText("new choice text mrawr");
-		cm.update(newChoice,c,helper);
+		cm.update(c,helper);
 		// make sure you can find new story
 		ArrayList<Object>	mockChoice = cm.retrieve(newChoice, helper);
 				assertTrue(mockChoice.size() != 0);

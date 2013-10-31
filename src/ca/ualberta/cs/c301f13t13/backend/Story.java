@@ -28,6 +28,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  *
  */
 public class Story implements Serializable {
+
 	private UUID id;
 	private String author;
 	private String title;
@@ -38,7 +39,8 @@ public class Story implements Serializable {
 	private Bitmap image;
 
 	/**
-	 * Initializes a new story object with an id.
+	 * Initializes a new story object with an id. Usually used when making
+	 * a story object that will be holding search criteria.
 	 * 
 	 * @param id
 	 * @param author
@@ -178,8 +180,8 @@ public class Story implements Serializable {
 	 * Set the Id of the story.
 	 * @param id
 	 */
-	public void setId(String id) {
-		this.id = UUID.fromString(id);
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	/**

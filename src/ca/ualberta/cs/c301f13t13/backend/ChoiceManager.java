@@ -9,21 +9,37 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
+
+
 /**
  * @author adbrown
  *
  */
-
 public class ChoiceManager extends Model implements StoringManager {
 		private Context context;
+		private static ChoiceManager self = null;
 		
 		/**
 		 * Initializes a new ChoiceManager object.
 		 */
-		public ChoiceManager(Context context) {
+		protected ChoiceManager(Context context) {
 			this.context = context;
 		}
 
+		/**
+		 * Returns an instance of itself. Used to accomplish the
+		 * singleton design pattern. 
+		 *  
+		 * @param context
+		 * @return
+		 */
+		public static ChoiceManager getInstance(Context context) {
+			if (self == null) {
+				self = new ChoiceManager(context);
+			} 
+			return self;			
+		}
+		
 		/**
 		 * Saves a new choice locally (in the database).
 		 */	
@@ -53,25 +69,20 @@ public class ChoiceManager extends Model implements StoringManager {
 		 * 			info will be replaced with.
 		 */
 		@Override
-		public void update(Object oldObject, Object newObject, DBHelper helper) {
+		public void update(Object newObject, DBHelper helper) {
 			Choice newC = (Choice) newObject;
-			String[] sArgs = null;
 			SQLiteDatabase db = helper.getReadableDatabase();
+			
 			ContentValues values = new ContentValues();
 			values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newC.getId().toString());		
 			values.put(ChoiceTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
 			values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getCurrentChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getNextChapter().toString());
 			values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
-			// Setting search criteria
-			ArrayList<String> selectionArgs = new ArrayList<String>();
-			String selection = setSearchCriteria(oldObject, selectionArgs);
 			
-			if (selectionArgs.size() > 0) {
-				sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-			} else {
-				selection = null;
-			}		
+			// Setting search criteria
+			String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
+			String[] sArgs = { newC.getId().toString()};	
 			
 			db.update(ChoiceTable.TABLE_NAME, values, selection, sArgs);	
 		}

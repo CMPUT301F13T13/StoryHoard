@@ -25,22 +25,40 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
+import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
+ * Design Pattern: Singleton
+ * 
  * @author Steph 
  *
  */
 public class ChapterManager extends Model<SHView> implements StoringManager{
 	private Context context;
+	private static ChapterManager self = null;
 	
 	/**
 	 * Initializes a new ChapterManager object.
 	 * 
 	 * @param context
 	 */
-	public ChapterManager(Context context) {
+	protected ChapterManager(Context context) {
 		this.context = context;
+	}
+
+	/**
+	 * Returns an instance of itself. Used to accomplish the
+	 * singleton design pattern.
+	 * 
+	 * @param context
+	 * @return ChapterManager
+	 */
+	public static ChapterManager getInstance(Context context) {
+		if (self == null) {
+			self = new ChapterManager(context);
+		} 
+		return self;
 	}
 	
 	/**
@@ -143,25 +161,17 @@ public class ChapterManager extends Model<SHView> implements StoringManager{
 	 * 			DB Helper used to get the database.
 	 */
 	@Override
-	public void update(Object oldObject, Object newObject, DBHelper helper) {
+	public void update(Object newObject, DBHelper helper) {
 		Chapter newC = (Chapter) newObject;
-		String[] sArgs = null;
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, newC.getId().toString());
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
-
-		// Setting search criteria
-		ArrayList<String> selectionArgs = new ArrayList<String>();
-		String selection = setSearchCriteria(oldObject, selectionArgs);
 		
-		if (selectionArgs.size() > 0) {
-			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-		} else {
-			selection = null;
-		}		
+		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
+		String[] sArgs = { newC.getId().toString()};	
 		
 		db.update(ChapterTable.TABLE_NAME, values, selection, sArgs);	
 	}
@@ -169,7 +179,7 @@ public class ChapterManager extends Model<SHView> implements StoringManager{
 	/**
 	 * Creates the selection string (a prepared statement) to be used 
 	 * in the database query. Also creates an array holding the items
-	 * to be placed in the ? of the selection.
+	 * to be placed in the ? of the selection (the where clause).
 	 *  
 	 * @param object
 	 * 			Holds the data needed to build the selection string 

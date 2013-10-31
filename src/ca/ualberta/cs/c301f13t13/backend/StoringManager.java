@@ -47,7 +47,7 @@ public interface StoringManager {
 	 * @param newObject
 	 * @param helper
 	 */
-	public void update(Object oldObject, Object newObject, DBHelper helper);
+	public void update(Object newObject, DBHelper helper);
 	
 	/**
 	 * Builds the selection string and the selection arguments to be

@@ -16,11 +16,13 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import junit.framework.TestCase;
 
-import org.junit.Test;
-
 import ca.ualberta.cs.c301f13t13.backend.*;
+
 /**
  * @author Owner
  *
@@ -61,9 +63,60 @@ public class TestStory extends TestCase{
 		assertSame(result, chapter1);
 	}
 	
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	/**
+	 * Tests retrieving the search information places within the story, i.e.
+	 * the id, title, author, description, and whether or not it was created
+	 * by the author.
+	 */
+	public void testSetSearchCriteria() {
+		// empty everything
+		Story criteria = new Story(null, "", "", "", false);
+		HashMap<String, String> info = criteria.getSearchCriteria();
+		
+		assertTrue(info.get("story_id").equals(""));
+		assertTrue(info.get("title").equals(""));
+		assertTrue(info.get("author").equals(""));
+		assertTrue(info.get("description").equals(""));
+		assertTrue(info.get("first_chapter").equals(""));
+		assertTrue(info.get("created").equals(""));
+	
+		// not empty arguments
+		criteria = new Story(null, "john", "the cow", "went home", true);
+		info = criteria.getSearchCriteria();
+		
+		assertTrue(info.get("story_id").equals(""));
+		assertTrue(info.get("title").equals("john"));
+		assertTrue(info.get("author").equals("the cow"));
+		assertTrue(info.get("description").equals("went home"));
+		assertTrue(info.get("first_chapter").equals(""));
+		assertTrue(info.get("created").equals("true"));
 	}
-
+	
+	public void testSettersGetters() {
+		Story mockStory = new Story("title1", "author1", "desc1", true);
+		
+		UUID storyId = mockStory.getId();
+		String title = mockStory.getTitle();
+		String author = mockStory.getAuthor();
+		String desc = mockStory.getDescription();
+		Boolean created = mockStory.getAuthorsOwn();
+		HashMap<UUID, Chapter> chapters = mockStory.getChapters();
+		UUID firstChapId = mockStory.getFirstChapterId();
+		
+		mockStory.setId(UUID.randomUUID());
+		mockStory.setTitle("new title");
+		mockStory.setAuthor("pinkie");
+		mockStory.setDescription("new desc");
+		mockStory.setAuthorsOwn(false);
+		mockStory.setChapters(null);
+		mockStory.setFirstChapterId(UUID.randomUUID());
+		
+		assertNotSame(storyId, mockStory.getId());
+		assertNotSame("new title", title);
+		assertNotSame("pinkie", author);
+		assertNotSame("new desc", desc);
+		assertNotSame(created, mockStory.getAuthorsOwn());
+		assertTrue(mockStory.getChapters() != null);
+		assertNotSame(mockStory.getFirstChapterId(), firstChapId);		
+	}
 }
