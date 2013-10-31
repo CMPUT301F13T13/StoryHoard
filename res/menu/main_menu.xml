@@ -4,13 +4,17 @@
     <item
         android:id="@+id/publishIcon"
         android:icon="@drawable/publish"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="View Published Stories"/>
     <item
         android:id="@+id/downloadIcon"
         android:icon="@drawable/download"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="View Downloaded Stories"/>
     <item
         android:id="@+id/addIcon"
         android:icon="@drawable/add"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="Create a story"/>
+
 </menu>
