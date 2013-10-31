@@ -33,29 +33,18 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  */
 
 public class ViewBrowseAuthorStories extends ListActivity {
-
-	TextView content;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browse_author_stories);
 
-		content = (TextView) findViewById(R.id.output);
-
 		// SHOULD DISPLAY STORY AND BY AUTHOR;
-		String[] values = new String[] { "Android Example ListActivity",
-				"Adapter implementation", "Simple List View With ListActivity",
-				"ListActivity Android", "Android Example",
-				"ListActivity Source Code",
-				"ListView ListActivity Array Adapter",
-				"Android Example ListActivity" };
+		String[] values = new String[] { "Story1 \nby:asd", "Stor2\nby:mandy",
+				"Story3 \nby:Tom", "Story4 \nby:Dan", "Story5 \nby:Sue" };
 
-		// Define a new Adapter
-		// First parameter - Context
-		// Second parameter - Layout for the row
-		// Third - the Array of data
+		// Define a new Adapter, First parameter - Context, Second parameter -
+		// Layout for the row, Third - the Array of data
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, values);
@@ -66,7 +55,6 @@ public class ViewBrowseAuthorStories extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-
 		super.onListItemClick(l, v, position, id);
 
 		// ListView Clicked item index
@@ -74,9 +62,6 @@ public class ViewBrowseAuthorStories extends ListActivity {
 
 		// ListView Clicked item value
 		String itemValue = (String) l.getItemAtPosition(position);
-
-		content.setText("Click : \n  Position :" + itemPosition
-				+ "  \n  ListItem : " + itemValue);
 
 	}
 }
