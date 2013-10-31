@@ -23,7 +23,6 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
 
 public class Choice implements Serializable{
 	private UUID id;
-	private UUID storyId;
 	private UUID currentChapter;
 	private UUID nextChapter;
 	private String text;
@@ -33,15 +32,13 @@ public class Choice implements Serializable{
 	 * new choice after retrieving data from the database).
 	 * 
 	 * @param id
-	 * @param storyId
 	 * @param chapterIdFrom
 	 * @param chapterIdTo
 	 * @param text
 	 */
 
-	public Choice(UUID id, UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text) {
+	public Choice(UUID id, UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = id;
-		this.storyId = storyId;
 		this.currentChapter = chapterIdFrom;
 		this.nextChapter = chapterIdTo;
 		this.text = text;	
@@ -50,15 +47,13 @@ public class Choice implements Serializable{
 	/**
 	 * Initializes a new choice object with no id.
 	 * 
-	 * @param storyid
 	 * @param chapterIdFrom
 	 * @param chapterIdTo
 	 * @param text
 
 	 */
-	public Choice(UUID storyId, UUID chapterIdFrom, UUID chapterIdTo, String text) {
+	public Choice(UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = UUID.randomUUID();
-		this.storyId = storyId;
 		this.currentChapter = chapterIdFrom;
 		this.nextChapter = chapterIdTo;
 		this.text = text;
@@ -70,12 +65,10 @@ public class Choice implements Serializable{
 	 * the choice belongs to are needed.
 	 * 
 	 * @param id
-	 * @param storyId
 	 * @param chapterIdFrom
 	 */
-	public Choice(UUID id, UUID storyId, UUID chapterIdFrom) {
+	public Choice(UUID id, UUID chapterIdFrom) {
 		this.id = id;
-		this.storyId = storyId;
 		this.currentChapter = chapterIdFrom;
 		this.nextChapter = null;
 		this.text = "";
@@ -89,13 +82,7 @@ public class Choice implements Serializable{
 	public void setId(String id) {
 		 this.id =UUID.fromString(id);
 	}
-	/**
-	 * Sets the storyId of the choice.
-	 * @param storyId
-	 */
-	public void setStoryId(String storyId) {
-		 this.storyId =UUID.fromString(storyId);
-	}
+
 	/**
 	 * Sets the chapterIdFrom of the choice.
 	 * @param chapterIdFrom
@@ -103,6 +90,7 @@ public class Choice implements Serializable{
 	public void setCurrentChapter(String chapterIdFrom) {
 		this.currentChapter =UUID.fromString(chapterIdFrom);
 	}
+	
 	/**
 	 * Sets the chapterIdTo of the choice.
 	 * @param chapterIdTo
@@ -110,6 +98,7 @@ public class Choice implements Serializable{
 	public void setNextChapter(String chapterIdTo) {
 		this.nextChapter =UUID.fromString(chapterIdTo);
 	}
+	
 	/**
 	 * Sets the text of the choice.
 	 * @param text
@@ -126,13 +115,7 @@ public class Choice implements Serializable{
 	public UUID getId() {
 		return this.id;
 	}
-	/**
-	 * Returns the storyId of the choice.
-	 * @return
-	 */
-	public UUID getStoryId() {
-		return this.storyId;
-	}
+
 	/**
 	 * Returns the chapterIdFrom of the choice.
 	 * @return
@@ -140,6 +123,7 @@ public class Choice implements Serializable{
 	public UUID getCurrentChapter() {
 		return this.currentChapter;
 	}
+	
 	/**
 	 * Returns the chapterIdTo of the choice.
 	 * @return
@@ -147,6 +131,7 @@ public class Choice implements Serializable{
 	public UUID getNextChapter() {
 		return this.nextChapter;
 	}
+	
 	/**
 	 * Returns the text of the choice.
 	 * @return
@@ -170,10 +155,6 @@ public class Choice implements Serializable{
 			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, id.toString());
 		}
 		
-		if (storyId != null) {
-			info.put(ChoiceTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		}
-		
 		if (currentChapter != null) {
 			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, currentChapter.toString());
 		}
@@ -183,7 +164,7 @@ public class Choice implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Choice [id=" + id + ", Story=" + storyId + ", Current Chapter=" + currentChapter 
+		return "Choice [id=" + id + ", Current Chapter=" + currentChapter 
 				+ ", Next Chapter=" + nextChapter + ", Text=" + text + "]";
 	}
 }

@@ -222,7 +222,7 @@ public class GeneralController {
 		Chapter chapter = (Chapter) objects.get(0);
 		
 		// Get chapter choices
-		Choice choiceCrit = new Choice(null, null, id);
+		Choice choiceCrit = new Choice(null, id);
 		objects = chom.retrieve(choiceCrit, helper);
 		chapter.setChoices(Utilities.objectsToChoices(objects));
 		
