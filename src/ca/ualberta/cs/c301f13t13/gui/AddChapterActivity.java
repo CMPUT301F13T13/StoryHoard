@@ -19,9 +19,9 @@ package ca.ualberta.cs.c301f13t13.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
 import android.text.Editable;
 import android.text.TextWatcher;
 //import android.view.Menu; *Not sure if needed
@@ -34,6 +34,7 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
+import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 /**
  * Add Chapter Activity
@@ -55,6 +56,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
 public class AddChapterActivity extends Activity 
 		implements ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
 	
+	private Context context = this;
 	private Chapter chapt;
 	private Story story;
 	private ImageButton imageButton;
@@ -104,7 +106,8 @@ public class AddChapterActivity extends Activity
 			
 			@Override
 			public void onClick(View v) {
-				//Save chapter/add chapter to story
+				GeneralController.getInstance().addObjectLocally(chapt, 
+						GeneralController.CHAPTER, context);
 				
 			}
 		});
@@ -140,8 +143,6 @@ public class AddChapterActivity extends Activity
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,testArray);
 		choices.setAdapter(adapter);
-		
-		
 	}
 	
 	@Override
