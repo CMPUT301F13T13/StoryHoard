@@ -39,6 +39,8 @@ public class ViewBrowseStories extends Activity {
 	private ArrayAdapter<CharSequence> viewTypeAdapter;
 	private int viewType = GeneralController.CREATED;
 
+	private GeneralController gc;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +48,9 @@ public class ViewBrowseStories extends Activity {
 		setContentView(R.layout.activity_view_browse_stories);
 		storyViewType = (Spinner) findViewById(R.id.storyViewType);
 		storyListGrid = (GridView) findViewById(R.id.viewAllTypeStories);
+
+		/* Setup the GridView Adapter */
+		gc = GeneralController.getInstance();
 
 		/* Setup the spinner adapter */
 		viewTypeAdapter = ArrayAdapter
@@ -76,22 +81,6 @@ public class ViewBrowseStories extends Activity {
 			}
 		});
 
-		/* Setup the GridView Adapter */
-		GeneralController gc = GeneralController.getInstance();
-
-		/*
-		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION
-		 * HERE YOU GO STEPH. SET THIS TO FALSE WHEN YOU TEST 
-		 */
-		boolean normal = false;
-		if (normal) {
-			storyAdapter = new GridStoriesAdapter(this,
-					R.layout.item_browse_story, null);
-		} else {
-			storyAdapter = new GridStoriesAdapter(this,
-					R.layout.item_browse_story,
-					gc.getAllStories(viewType, this));
-		}
 		storyListGrid.setAdapter(storyAdapter);
 		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -116,6 +105,23 @@ public class ViewBrowseStories extends Activity {
 		menu.add(0, 0, 0, R.string.add_new_story);
 		menu.add(0, 1, 1, R.string.search_stories);
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public void onResume() {
+		/*
+		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION HERE YOU GO
+		 * STEPH. SET THIS TO FALSE WHEN YOU TEST
+		 */
+		boolean normal = true;
+		if (normal) {
+			storyAdapter = new GridStoriesAdapter(this,
+					R.layout.item_browse_story, null);
+		} else {
+			storyAdapter = new GridStoriesAdapter(this,
+					R.layout.item_browse_story,
+					gc.getAllStories(viewType, this));
+		}
 	}
 
 	@Override
