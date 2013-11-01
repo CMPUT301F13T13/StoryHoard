@@ -130,7 +130,7 @@ public final class DBContract {
 
 	/** 
 	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the photos and illustrations.
+	 * for the table containing media (photos/illustrations/audio/video)
 	 */
 	protected static abstract class MediaTable implements BaseColumns {
 
