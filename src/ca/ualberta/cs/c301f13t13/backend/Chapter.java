@@ -17,12 +17,9 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-
-import android.net.Uri;
 
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 
@@ -30,9 +27,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * @author Ashley Brown, Stephanie Gil
  *
  */
-//TODO must deal with photos in chapter still
 public class Chapter implements Serializable {
-
 	private UUID id;
 	private UUID storyId;
 	private String text;
@@ -59,7 +54,8 @@ public class Chapter implements Serializable {
 	/**
 	 * Initialize a new chapter with an id. Can also be used to make
 	 * a chapter from the chapter information retrieved from
-	 * the database.
+	 * the database. Can also be used to create a choice that will
+	 * serve to hold search criteria.
 	 * 
 	 * @param id
 	 * @param storyId 

@@ -199,7 +199,7 @@ public class TestStoryManager extends ActivityInstrumentationTestCase2<ViewBrows
 		
 		// make sure you can find new story
 		mockStories = sm.retrieve(newStory, helper);
-		assertTrue(mockStories.size() != 0);
+		assertTrue(mockStories.size() == 1);
 		assertTrue(hasStory(mockStories, newStory));
 		
 		// make sure old version no longer exists

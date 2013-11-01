@@ -22,7 +22,6 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import android.app.Application;
-import android.content.Context;
 
 /**
  * @author Owner
