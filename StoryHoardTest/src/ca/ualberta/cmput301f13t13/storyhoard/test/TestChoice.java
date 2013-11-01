@@ -16,6 +16,7 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import junit.framework.TestCase;
@@ -45,11 +46,49 @@ public class TestChoice extends TestCase{
 		Chapter chap1 = new Chapter(storyId,"test");
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
-		Choice c = new Choice(storyId, chap1.getId(), chap2.getId(), text);
+		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 	}
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	
+	/**
+	 * Tests retrieving the search information placed within the choice, i.e.
+	 * the choice id and the chapter id to which it belongs.
+	 */
+	public void testSetSearchCriteria() {
+		// empty everything
+		Choice criteria = new Choice(null, null);
+		HashMap<String, String> info = criteria.getSearchCriteria();
+		
+		assertTrue(info.size() == 0);
+	
+		// not empty arguments
+		UUID choiceId = UUID.randomUUID();
+		UUID chapId = UUID.randomUUID();
+		
+		criteria = new Choice(choiceId, chapId);
+		info = criteria.getSearchCriteria();
+		
+		assertTrue(info.size() == 2);
+		assertTrue(info.get("choice_id").equals(choiceId.toString()));
+		assertTrue(info.get("curr_chapter").equals(chapId.toString()));
+	}
+	
+	public void testSettersGetters() {
+		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(), "opt1");
+		
+		UUID choiceId = mockChoice.getId();
+		UUID currentChapter = mockChoice.getCurrentChapter();
+		UUID nextChapter = mockChoice.getNextChapter();
+		String text = mockChoice.getText();
+		
+		mockChoice.setId(UUID.randomUUID().toString());
+		mockChoice.setNextChapter(UUID.randomUUID().toString());
+		mockChoice.setCurrentChapter(UUID.randomUUID().toString());
+		mockChoice.setText("blah");
+		
+		assertNotSame(choiceId, mockChoice.getId());
+		assertNotSame(currentChapter, mockChoice.getCurrentChapter());
+		assertNotSame(nextChapter, mockChoice.getNextChapter());
+		assertNotSame("blah", text);	
 	}
 
 }

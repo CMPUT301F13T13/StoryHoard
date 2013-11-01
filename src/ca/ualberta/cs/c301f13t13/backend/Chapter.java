@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.net.Uri;
+
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 
 /**
@@ -35,8 +37,8 @@ public class Chapter implements Serializable {
 	private UUID storyId;
 	private String text;
 	private ArrayList<Choice> choices;
-	private ArrayList<URI> illustrations;
-	private ArrayList<URI> photos;
+	private ArrayList<Media> illustrations;
+	private ArrayList<Media> photos;
 	
 	/**
 	 * Initializes a new chapter object with no id.
@@ -49,8 +51,8 @@ public class Chapter implements Serializable {
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
 		choices = new ArrayList<Choice>();
-		illustrations = new ArrayList<URI>();
-		photos = new ArrayList<URI>();
+		illustrations = new ArrayList<Media>();
+		photos = new ArrayList<Media>();
 	}
 	
 	
@@ -67,8 +69,8 @@ public class Chapter implements Serializable {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		illustrations = new ArrayList<URI>();
-		photos = new ArrayList<URI>();
+		illustrations = new ArrayList<Media>();
+		photos = new ArrayList<Media>();
 	}
 	//Getters
 	
@@ -87,6 +89,7 @@ public class Chapter implements Serializable {
 	public UUID getStoryId() {
 		return this.storyId;
 	}
+	
 	/**
 	 * Returns the text of the chapter.
 	 * @return
@@ -95,6 +98,7 @@ public class Chapter implements Serializable {
 	
 		return this.text;
 	}
+	
 	/**
 	 * Returns the choices of the chapter.
 	 * @return
@@ -103,7 +107,23 @@ public class Chapter implements Serializable {
 		return this.choices;
 	}
 	
-	//Setters
+	/**
+	 * Returns the photos of the chapter.
+	 * @return
+	 */
+	public ArrayList<Media> getPhotos() {
+		return this.photos;
+	}
+	
+	/**
+	 * Returns the illustrations of the chapter.
+	 * @return
+	 */
+	public ArrayList<Media> getIllustrations() {
+		return this.illustrations;
+	}	
+	
+	// SETTERS
 	
 	/**
 	 * Sets the Id of the chapter.
@@ -133,6 +153,24 @@ public class Chapter implements Serializable {
 	public void  setChoices(ArrayList<Choice> choices) {
 		this.choices = choices;
 	}
+	
+	/**
+	 * Returns the photos of the chapter.
+	 * @return
+	 */
+	public void setPhotos(ArrayList<Media> photos) {
+		this.photos = photos;
+	}
+	
+	/**
+	 * Returns the illustrations of the chapter.
+	 * @return
+	 */
+	public void setIllustrations(ArrayList<Media> illustrations) {
+		this.illustrations = illustrations;
+	}	
+	
+	// OTHER METHODS
 	
 	public void addChoice(Choice c) {
 		choices.add(c);

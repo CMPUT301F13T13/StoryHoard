@@ -67,7 +67,6 @@ public class ChoiceManager extends Model implements StoringManager {
 		// Insert choice
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
-		values.put(ChoiceTable.COLUMN_NAME_STORY_ID, choice.getStoryId().toString());
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getNextChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_TEXT, choice.getText());
@@ -91,7 +90,6 @@ public class ChoiceManager extends Model implements StoringManager {
 
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newC.getId().toString());		
-		values.put(ChoiceTable.COLUMN_NAME_STORY_ID, newC.getStoryId().toString());
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getCurrentChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getNextChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
@@ -118,7 +116,6 @@ public class ChoiceManager extends Model implements StoringManager {
 		String[] sArgs = null;
 		String[] projection = {
 				ChoiceTable.COLUMN_NAME_CHOICE_ID,
-				ChoiceTable.COLUMN_NAME_STORY_ID,
 				ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
 				ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
 				ChoiceTable.COLUMN_NAME_TEXT
@@ -145,7 +142,6 @@ public class ChoiceManager extends Model implements StoringManager {
 
 			Choice choice = new Choice(
 					UUID.fromString(choiceId),
-					UUID.fromString(cursor.getString(1)), // story id
 					UUID.fromString(cursor.getString(2)), // current chapter
 					UUID.fromString(cursor.getString(3)), // next chapter
 					cursor.getString(4) // text

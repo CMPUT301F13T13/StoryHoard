@@ -55,7 +55,7 @@ public class Utilities {
 	}	
 
 	/**
-	 * Takes an array of objects and converts them all to Choices.
+	 * Takes an array of objects and converts them all to Choice objects.
 	 * @param objects
 	 * @return
 	 */
@@ -67,6 +67,21 @@ public class Utilities {
 		}
 		
 		return choices;
+	}	
+	
+	/**
+	 * Takes an array of objects and converts them all to Media objects.
+	 * @param objects
+	 * @return
+	 */
+	public static ArrayList<Media> objectsToMedia(ArrayList<Object> objects) {
+		ArrayList<Media> medias = new ArrayList<Media>();
+		
+		for (Object obj : objects) {
+			medias.add((Media) obj);
+		}
+		
+		return medias;
 	}		
 	
 }

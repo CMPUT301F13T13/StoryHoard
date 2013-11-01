@@ -16,27 +16,24 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.ualberta.cs.c301f13t13.gui.ViewStoryActivity;
+import ca.ualberta.cs.c301f13t13.gui.*;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * @author Owner
  *
  */
-public class TestGeneralController extends ActivityInstrumentationTestCase2<Activity> {
+public class TestGeneralController extends ActivityInstrumentationTestCase2<ViewBrowseAuthorStories> {
 
 	/**
 	 * @param name
 	 */
 	public TestGeneralController() {
-		super(Activity.class);
+		super(ViewBrowseAuthorStories.class);
 	}
 
 	/* (non-Javadoc)

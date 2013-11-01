@@ -14,7 +14,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * @author Alexander Wong
  * 
  */
-public class ViewStoryActivity extends Activity {
+public class StorySettingsActivity extends Activity {
 
 	private ImageView storyImage;
 	private TextView storyTitle;

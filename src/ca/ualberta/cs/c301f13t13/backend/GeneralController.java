@@ -122,11 +122,50 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		ArrayList<Object> objects;
-//		Choice criteria = new Choice(chapterId, "");
-//		
-//		objects = cm.retrieve(criteria, helper);
-//		choices = Utilities.objectsToChoices(objects);
+		Choice criteria = new Choice(null, chapterId);
+		
+		objects = cm.retrieve(criteria, helper);
+		choices = Utilities.objectsToChoices(objects);
 		return choices;
+	}
+	
+	/** 
+	 * Retrieves all the illustrations that are in a chapter.
+	 * 
+	 * @param chapterId
+	 * @param context
+	 * 
+	 * @return illustrations
+	 */
+	public ArrayList<Media> getAllIllustrations(UUID chapterId, Context context){
+		MediaManager cm = MediaManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Media> illustrations = new ArrayList<Media>();
+		ArrayList<Object> objects;
+		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
+		
+		objects = cm.retrieve(criteria, helper);
+		illustrations = Utilities.objectsToMedia(objects);
+		return illustrations;
+	}
+	
+	/** 
+	 * Retrieves all the photos that are in a chapter.
+	 * 
+	 * @param chapterId
+	 * @param context
+	 * 
+	 * @return photos
+	 */
+	public ArrayList<Media> getAllPhotos(UUID chapterId, Context context){
+		MediaManager mm = MediaManager.getInstance(context);
+		DBHelper helper = DBHelper.getInstance(context);
+		ArrayList<Media> photos = new ArrayList<Media>();
+		ArrayList<Object> objects;
+		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
+		objects = mm.retrieve(criteria, helper);
+		photos = Utilities.objectsToMedia(objects);
+		return photos;
 	}
 	
 	/**
@@ -197,6 +236,9 @@ public class GeneralController {
 			break;
 		case PUBLISHED:
 			break;
+		default:
+			// raise exception
+			break;
 		}
 		
 		return stories;
@@ -205,6 +247,9 @@ public class GeneralController {
 	/** 
 	 * Retrieves a complete chapter (including any photos, illustrations,
 	 * and choices).
+	 * 
+	 * @param id
+	 * @param context
 	 * 
 	 * @return
 	 */
@@ -222,12 +267,18 @@ public class GeneralController {
 		Chapter chapter = (Chapter) objects.get(0);
 		
 		// Get chapter choices
-		Choice choiceCrit = new Choice(null, null, id);
+		Choice choiceCrit = new Choice(null, id);
 		objects = chom.retrieve(choiceCrit, helper);
 		chapter.setChoices(Utilities.objectsToChoices(objects));
 		
 		// Get media (photos/illustrations)
-		// TODO implement this
+		Media mediaCrit = new Media(null, id, null, Media.PHOTO);
+		objects = mm.retrieve(mediaCrit, helper);
+		chapter.setPhotos(Utilities.objectsToMedia(objects));
+		
+		mediaCrit = new Media(null, id, null, Media.ILLUSTRATION);
+		objects = mm.retrieve(mediaCrit, helper);
+		chapter.setIllustrations(Utilities.objectsToMedia(objects));		
 		
 		return chapter;
 	}
