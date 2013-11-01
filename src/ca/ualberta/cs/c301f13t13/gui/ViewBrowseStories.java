@@ -109,6 +109,7 @@ public class ViewBrowseStories extends Activity {
 
 	@Override
 	public void onResume() {
+		super.onResume();
 		/*
 		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION HERE YOU GO
 		 * STEPH. SET THIS TO FALSE WHEN YOU TEST
