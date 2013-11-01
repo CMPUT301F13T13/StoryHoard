@@ -36,26 +36,23 @@ import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+
 /**
  * Add Chapter Activity
  * 
- * Purpose:
- * 	- To add a chapter to an existing story.
- * 	- The author can:
- * 		- Add images through the use of the image button
- * 		- Set the text of the chapter through the Edit text space
- * 		- View all chapters in the story upon pressing the 'View All Chapters'
- * 		  button
- * 		- Add a choice by pressing the 'Add Choice' button.
- * 		- This activity will also display the choices that exist or have been
- * 		  added.
+ * Purpose: - To add a chapter to an existing story. - The author can: - Add
+ * images through the use of the image button - Set the text of the chapter
+ * through the Edit text space - View all chapters in the story upon pressing
+ * the 'View All Chapters' button - Add a choice by pressing the 'Add Choice'
+ * button. - This activity will also display the choices that exist or have been
+ * added.
  * 
  * author: Josh Tate
  */
 
-public class AddChapterActivity extends Activity 
-		implements ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
-	
+public class AddChapterActivity extends Activity implements
+		ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
+
 	private Context context = this;
 	private Chapter chapt;
 	private Story story;
@@ -65,98 +62,108 @@ public class AddChapterActivity extends Activity
 	private Button addChoiceButton;
 	private EditText chapterContent;
 	private ListView choices;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_chapter);
-		
-		//Get the story that chapter is being added to
+
+		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
 			story = (Story) bundle.getSerializable("New Story");
-			chapt = new Chapter(story.getId()," ");
+			chapt = new Chapter(story.getId(), " ");
 		}
-		
-		imageButton = (ImageButton)findViewById(R.id.imageButton1);
+
+		imageButton = (ImageButton) findViewById(R.id.imageButton1);
 		imageButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//Change/Load images
-				
+				// Change/Load images
+
 			}
 		});
-		
-		//Set the chapters text
-		chapterContent = (EditText)findViewById(R.id.editText1);
+
+		// Set the chapters text
+		chapterContent = (EditText) findViewById(R.id.editText1);
 		chapterContent.setText(chapt.getText());
 		chapterContent.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(
-					CharSequence c, int start, int end, int count) {
+			public void onTextChanged(CharSequence c, int start, int end,
+					int count) {
 				chapt.setText(c.toString());
 			}
-			public void beforeTextChanged(
-					CharSequence c, int start, int end, int count) {}
-			public void afterTextChanged(Editable e) {}
+
+			public void beforeTextChanged(CharSequence c, int start, int end,
+					int count) {
+			}
+
+			public void afterTextChanged(Editable e) {
+			}
 		});
-		
-		saveButton = (Button)findViewById(R.id.save_story);
+
+		saveButton = (Button) findViewById(R.id.save_story);
 		saveButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				GeneralController.getInstance().addObjectLocally(chapt, 
+				story.setFirstChapterId(chapt.getId());
+				GeneralController.getInstance().addObjectLocally(story,
+						GeneralController.STORY, context);
+				
+				GeneralController.getInstance().addObjectLocally(chapt,
 						GeneralController.CHAPTER, context);
 				
+
 			}
 		});
-		
-		allChaptersButton = (Button)findViewById(R.id.add_chapter);
+
+		allChaptersButton = (Button) findViewById(R.id.add_chapter);
 		allChaptersButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//View all chapters
-				
+				// View all chapters
+
 			}
 		});
-		
-		addChoiceButton = (Button)findViewById(R.id.add_choice_button);
+
+		addChoiceButton = (Button) findViewById(R.id.add_choice_button);
 		addChoiceButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
-				//Start add choice activity
-				Intent intent = new Intent(getApplicationContext(),AddChoiceActivity.class);
+
+				// Start add choice activity
+				Intent intent = new Intent(getApplicationContext(),
+						AddChoiceActivity.class);
 				startActivity(intent);
-				
+
 			}
 		});
-		
-		//Use choices to display choices
-		choices = (ListView)findViewById(R.id.listView1);
+
+		// Use choices to display choices
+		choices = (ListView) findViewById(R.id.listView1);
 		ArrayList<String> testArray = new ArrayList<String>();
 		for (int i = 0; i < 3; i++) {
-			testArray.add("Test Choice "+(i+1));
+			testArray.add("Test Choice " + (i + 1));
 		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,testArray);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, testArray);
 		choices.setAdapter(adapter);
 	}
-	
+
 	@Override
 	public void update(ChapterManager model) {
 		// TODO Auto-generated method stub
-		
+
 	};
-	
-	/*  Not sure if needed
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.add_chapter, menu);
-		return true;
-	}
-	*/
+
+	/*
+	 * Not sure if needed
+	 * 
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
+	 * menu; this adds items to the action bar if it is present.
+	 * getMenuInflater().inflate(R.menu.add_chapter, menu); return true; }
+	 */
 }

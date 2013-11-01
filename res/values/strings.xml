@@ -51,5 +51,6 @@
     <string name="title_activity_view_story_settings">ViewStorySettingsActivity</string>
     <string name="title_activity_view_browse_cached_stories">ViewBrowseCachedStories</string>
     <string name="title_activity_view_browse_published_stories">ViewBrowsePublishedStories</string>
+    <string name="title_activity_view_edit_mode">ViewEditMode</string>
 
 </resources>

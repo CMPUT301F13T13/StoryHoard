@@ -32,7 +32,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
-
 /**
  * 
  * ViewBrowseAuthorStories:
@@ -50,7 +49,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class ViewBrowseAuthorStories extends ListActivity {
+public class _ViewBrowseAuthorStories extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -101,22 +100,16 @@ public class ViewBrowseAuthorStories extends ListActivity {
 		// Set the dialog title
 		builder.setTitle("Story Action")
 				// Specify the list array, the items to be selected by default
-				.setSingleChoiceItems(array, 1,
-						new DialogInterface.OnClickListener() {
-
+				.setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// TODO Auto-generated method stub
+							public void onClick(DialogInterface dialog, int which) {
 							}
 						})
-
 				// Set the action buttons
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						// add method
-
+						int new1 = id;
 					}
 				})
 				.setNegativeButton("Cancel",
@@ -145,12 +138,14 @@ public class ViewBrowseAuthorStories extends ListActivity {
 			startActivity(addStory);
 			return true;
 		case R.id.publishIcon:
-			Intent viewPublished = new Intent(this, ViewBrowsePublishedStories.class);
+			Intent viewPublished = new Intent(this,
+					_ViewBrowsePublishedStories.class);
 			finish();
 			startActivity(viewPublished);
 			return true;
 		case R.id.downloadIcon:
-			Intent viewDownloads = new Intent(this, ViewBrowseCachedStories.class);
+			Intent viewDownloads = new Intent(this,
+					_ViewBrowseCachedStories.class);
 			finish();
 			startActivity(viewDownloads);
 			return true;
