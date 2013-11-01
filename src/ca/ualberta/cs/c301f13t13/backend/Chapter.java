@@ -17,12 +17,9 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-
-import android.net.Uri;
 
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 

@@ -21,9 +21,9 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
-import ca.ualberta.cs.c301f13t13.gui.SHView;
-
 import java.util.ArrayList;
+
+import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
  * @editor Stephanie Gil
