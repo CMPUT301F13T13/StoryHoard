@@ -26,8 +26,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
-import com.google.gson.Gson;
-
 /**
  * @author sgil
  *

@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 //import android.view.Menu; *Not sure if needed
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -69,7 +72,7 @@ public class AddChapterActivity extends Activity
 		//Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
-			story = (Story) bundle.getSerializable(Constants._ID);
+			story = (Story) bundle.getSerializable("New Story");
 			chapt = new Chapter(story.getId()," ");
 		}
 		
@@ -131,12 +134,12 @@ public class AddChapterActivity extends Activity
 		
 		//Use choices to display choices
 		choices = (ListView)findViewById(R.id.listView1);
-		/* ArrayList<String> testArray = new ArrayList<String>();
+		ArrayList<String> testArray = new ArrayList<String>();
 		for (int i = 0; i < 3; i++) {
 			testArray.add("Test Choice "+(i+1));
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,testArray);
-		choices.setAdapter(adapter); */
+		choices.setAdapter(adapter);
 		
 		
 	}

@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
-
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**

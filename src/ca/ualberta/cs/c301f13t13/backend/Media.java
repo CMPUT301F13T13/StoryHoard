@@ -19,12 +19,10 @@ package ca.ualberta.cs.c301f13t13.backend;
 import java.util.HashMap;
 import java.util.UUID;
 
-import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
-import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 
 /**
  * @author Stephanie Gil, Ashley Brown
