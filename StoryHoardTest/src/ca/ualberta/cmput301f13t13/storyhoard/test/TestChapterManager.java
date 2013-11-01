@@ -38,7 +38,6 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<ViewBro
 		super(ViewBrowseAuthorStories.class);
 	}	
 	
-	
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -62,8 +61,8 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<ViewBro
 	}	
 		
 	/**
-	 * Tests saving and loading a chapter that has no media from 
-	 * the database.
+	 * Tests saving and loading a chapter that has no media or choices 
+	 * from the database.
 	 */
 	public void testAddLoadChapter() {
 		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
@@ -104,7 +103,7 @@ public class TestChapterManager extends ActivityInstrumentationTestCase2<ViewBro
 	}
 	
 	/**
-	 * Tests updating a chapter's data (except media and choices,
+	 * Tests updating a chapter's data (except media and choices),
 	 * which includes adding and loading a chapter. 
 	 */
 	public void testUpdateChapter() {

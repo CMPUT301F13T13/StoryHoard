@@ -26,6 +26,21 @@ public class Choice implements Serializable{
 	private UUID currentChapter;
 	private UUID nextChapter;
 	private String text;
+
+	/**
+	 * Initializes a new choice object with no id.
+	 * 
+	 * @param chapterIdFrom
+	 * @param chapterIdTo
+	 * @param text
+
+	 */
+	public Choice(UUID chapterIdFrom, UUID chapterIdTo, String text) {
+		this.id = UUID.randomUUID();
+		this.currentChapter = chapterIdFrom;
+		this.nextChapter = chapterIdTo;
+		this.text = text;
+	}
 	
 	/**
 	 * Initializes a new choice object with a UUID id (needed for making a
@@ -45,21 +60,6 @@ public class Choice implements Serializable{
 	}
 	
 	/**
-	 * Initializes a new choice object with no id.
-	 * 
-	 * @param chapterIdFrom
-	 * @param chapterIdTo
-	 * @param text
-
-	 */
-	public Choice(UUID chapterIdFrom, UUID chapterIdTo, String text) {
-		this.id = UUID.randomUUID();
-		this.currentChapter = chapterIdFrom;
-		this.nextChapter = chapterIdTo;
-		this.text = text;
-	}
-	
-	/**
 	 * Initializes a new choice object that will hold search criteria.
 	 * For this reason, only the id, story id, and the id of the chapter
 	 * the choice belongs to are needed.
@@ -71,7 +71,7 @@ public class Choice implements Serializable{
 		this.id = id;
 		this.currentChapter = chapterIdFrom;
 		this.nextChapter = null;
-		this.text = "";
+		this.text = null;
 	}	
 	
 	// SETTERS

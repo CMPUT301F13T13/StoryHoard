@@ -142,9 +142,9 @@ public class ChoiceManager extends Model implements StoringManager {
 
 			Choice choice = new Choice(
 					UUID.fromString(choiceId),
-					UUID.fromString(cursor.getString(2)), // current chapter
-					UUID.fromString(cursor.getString(3)), // next chapter
-					cursor.getString(4) // text
+					UUID.fromString(cursor.getString(1)), // current chapter
+					UUID.fromString(cursor.getString(2)), // next chapter
+					cursor.getString(3) // text
 					);
 			results.add(choice);
 			cursor.moveToNext();
