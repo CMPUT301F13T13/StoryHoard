@@ -69,12 +69,12 @@ public class GeneralController {
 		
 		switch(type) {
 		case CACHED:
-			criteria = new Story(null, "", "", "", false);
+			criteria = new Story(null, null, null, null, false);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
-			criteria = new Story(null, "", "", "", true);
+			criteria = new Story(null, null, null, null, true);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
