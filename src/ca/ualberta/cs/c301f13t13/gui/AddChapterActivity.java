@@ -107,8 +107,13 @@ public class AddChapterActivity extends Activity implements
 
 			@Override
 			public void onClick(View v) {
+				story.setFirstChapterId(chapt.getId());
+				GeneralController.getInstance().addObjectLocally(story,
+						GeneralController.STORY, context);
+				
 				GeneralController.getInstance().addObjectLocally(chapt,
 						GeneralController.CHAPTER, context);
+				
 
 			}
 		});
