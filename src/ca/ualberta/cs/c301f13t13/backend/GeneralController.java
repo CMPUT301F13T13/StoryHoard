@@ -101,7 +101,7 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		ArrayList<Object> objects;
-		Chapter criteria = new Chapter(storyId, "");
+		Chapter criteria = new Chapter(storyId, null);
 		
 		objects = cm.retrieve(criteria, helper);
 		chapters = Utilities.objectsToChapters(objects);
@@ -225,12 +225,12 @@ public class GeneralController {
 		
 		switch(type) {
 		case CACHED:
-			criteria = new Story(null, author, title, "", false);
+			criteria = new Story(null, author, title, null, false);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
-			criteria = new Story(null, author, title, "", true);
+			criteria = new Story(null, author, title, null, true);
 			objects = sm.retrieve(criteria, helper);
 			stories = Utilities.objectsToStories(objects);			
 			break;
@@ -260,7 +260,7 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		
 		// Search criteria gets set
-		Chapter criteria = new Chapter(id, null, "");
+		Chapter criteria = new Chapter(id, null, null);
 		
 		// Get chapter
 		ArrayList<Object> objects = cm.retrieve(criteria, helper);
@@ -298,7 +298,7 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		
 		// Search criteria gets set
-		Story criteria = new Story(id, "", "", "", null);
+		Story criteria = new Story(id, null, null, null, null);
 		ArrayList<Object> objects = sm.retrieve(criteria, helper);
 		Story story = (Story) objects.get(0);
 		

@@ -110,11 +110,11 @@ public class AddChapterActivity extends Activity implements
 				story.setFirstChapterId(chapt.getId());
 				GeneralController.getInstance().addObjectLocally(story,
 						GeneralController.STORY, context);
-				
+
 				GeneralController.getInstance().addObjectLocally(chapt,
 						GeneralController.CHAPTER, context);
-				
 
+				finish();
 			}
 		});
 
