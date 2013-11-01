@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -33,23 +35,39 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  */
 public class ViewBrowseStories extends Activity {
 
+	private Context context = this;
 	private Spinner storyViewType;
 	private GridView storyListGrid;
 	private ArrayAdapter<Story> storyAdapter;
 	private ArrayAdapter<CharSequence> viewTypeAdapter;
 	private int viewType = GeneralController.CREATED;
-
 	private GeneralController gc;
+
+	// BLEGH
+	ArrayList<Story> somebadstories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		/*
+		 * BAD TEST FOR SEEING IS STORIES ACTUALLY DISPLAY STUFF
+		 */
+		String title = "Bad title";
+		String author = "Dumb Author";
+		String description = "Hi, this is my description.";
+		Boolean authorsOwn = true;
+		Story badstory = new Story(title, author, description, authorsOwn);
+		somebadstories = new ArrayList<Story>();
+		somebadstories.add(badstory);
+		/*
+		 * Delete this shit when you're done yo
+		 */
+
 		super.onCreate(savedInstanceState);
 		/* Setup the content view */
 		setContentView(R.layout.activity_view_browse_stories);
 		storyViewType = (Spinner) findViewById(R.id.storyViewType);
 		storyListGrid = (GridView) findViewById(R.id.viewAllTypeStories);
 
-		/* Setup the GridView Adapter */
 		gc = GeneralController.getInstance();
 
 		/* Setup the spinner adapter */
@@ -60,18 +78,14 @@ public class ViewBrowseStories extends Activity {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		storyViewType.setAdapter(viewTypeAdapter);
 		storyViewType.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				if (arg2 == 0) {
-					/* My Stories */
 					viewType = GeneralController.CREATED;
 				} else if (arg2 == 1) {
-					/* Downloaded Stories */
 					viewType = GeneralController.CACHED;
 				} else if (arg2 == 2) {
-					/* Published Stories */
 					viewType = GeneralController.PUBLISHED;
 				}
 			}
@@ -81,22 +95,28 @@ public class ViewBrowseStories extends Activity {
 			}
 		});
 
-		storyListGrid.setAdapter(storyAdapter);
-		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
+		/*
+		 * Setup the Story Grid stuff
+		 */
 
+		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-
+				Toast.makeText(context, "" + arg2 + "" + arg3,
+						Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-
 			}
 		});
+
+		storyAdapter = new GridStoriesAdapter(context,
+				R.layout.item_browse_story, somebadstories);
+		storyListGrid.setAdapter(storyAdapter);
+		storyAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -110,19 +130,6 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		/*
-		 * THIS NEEDS TO BE FIXED. DO NOT USE THIS IN PRODUCTION HERE YOU GO
-		 * STEPH. SET THIS TO FALSE WHEN YOU TEST
-		 */
-		boolean normal = true;
-		if (normal) {
-			storyAdapter = new GridStoriesAdapter(this,
-					R.layout.item_browse_story, null);
-		} else {
-			storyAdapter = new GridStoriesAdapter(this,
-					R.layout.item_browse_story,
-					gc.getAllStories(viewType, this));
-		}
 	}
 
 	@Override
@@ -134,7 +141,8 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case 1:
-			/* Search Stories activity */
+			Toast.makeText(getApplicationContext(),
+					"Search Not Implemented Yet", Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -161,6 +169,7 @@ public class ViewBrowseStories extends Activity {
 		@Override
 		public View getView(int pos, View convertView, ViewGroup parent) {
 			View v = convertView;
+			Log.w("SH View called", "hi");
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 				v = vi.inflate(R.layout.item_browse_story, null);
