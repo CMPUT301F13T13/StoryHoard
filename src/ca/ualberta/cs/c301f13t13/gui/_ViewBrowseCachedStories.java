@@ -45,7 +45,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class ViewBrowseCachedStories extends ListActivity {
+public class _ViewBrowseCachedStories extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 

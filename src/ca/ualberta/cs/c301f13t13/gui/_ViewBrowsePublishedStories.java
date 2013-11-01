@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
-public class ViewBrowsePublishedStories extends Activity {
+public class _ViewBrowsePublishedStories extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

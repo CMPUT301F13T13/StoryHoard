@@ -49,7 +49,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class ViewBrowseAuthorStories extends ListActivity {
+public class _ViewBrowseAuthorStories extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -139,13 +139,13 @@ public class ViewBrowseAuthorStories extends ListActivity {
 			return true;
 		case R.id.publishIcon:
 			Intent viewPublished = new Intent(this,
-					ViewBrowsePublishedStories.class);
+					_ViewBrowsePublishedStories.class);
 			finish();
 			startActivity(viewPublished);
 			return true;
 		case R.id.downloadIcon:
 			Intent viewDownloads = new Intent(this,
-					ViewBrowseCachedStories.class);
+					_ViewBrowseCachedStories.class);
 			finish();
 			startActivity(viewDownloads);
 			return true;
