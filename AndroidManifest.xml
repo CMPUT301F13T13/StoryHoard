@@ -55,14 +55,6 @@
             android:label="@string/title_activity_view_edit_chapter" >
         </activity>
         <activity
-            android:name="ca.ualberta.cs.c301f13t13.gui.ViewBrowseCachedStories"
-            android:label="@string/title_activity_view_browse_cached_stories" >
-        </activity>
-        <activity
-            android:name="ca.ualberta.cs.c301f13t13.gui.ViewBrowsePublishedStories"
-            android:label="@string/title_activity_view_browse_published_stories" >
-        </activity>
-        <activity
             android:name="ca.ualberta.cs.c301f13t13.gui.ViewEditMode"
             android:label="@string/title_activity_view_edit_mode" >
         </activity>
