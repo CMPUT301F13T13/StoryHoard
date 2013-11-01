@@ -47,6 +47,7 @@ public class TestStory extends TestCase{
 		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.addChapter(chapter);
+		assertEquals(story.getChapters().size(), 1);
 	}
 	
 	/**
@@ -70,11 +71,10 @@ public class TestStory extends TestCase{
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Story criteria = new Story(null, null, null, null, false);
+		Story criteria = new Story(null, null, null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 		
-		assertTrue(info.size() == 1);
-		assertTrue(info.get("created").equals("false"));
+		assertTrue(info.size() == 0);
 	
 		// not empty arguments
 		criteria = new Story(null, "john", "the cow", "went home", true);
