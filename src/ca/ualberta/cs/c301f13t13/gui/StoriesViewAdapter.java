@@ -15,13 +15,13 @@ import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
-public class CustomGridViewAdapter extends ArrayAdapter<Story> {
+public class StoriesViewAdapter extends ArrayAdapter<Story> {
 
 	Context context;
 	int layoutResourceId;
 	ArrayList<Story> data = new ArrayList<Story>();
 
-	public CustomGridViewAdapter(Context context, int layoutResourceId,
+	public StoriesViewAdapter(Context context, int layoutResourceId,
 			ArrayList<Story> data) {
 		super(context, layoutResourceId, data);
 		this.layoutResourceId = layoutResourceId;

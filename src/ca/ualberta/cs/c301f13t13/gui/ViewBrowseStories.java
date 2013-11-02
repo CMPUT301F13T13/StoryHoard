@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -26,7 +27,9 @@ public class ViewBrowseStories extends Activity {
 
 	GridView gridView;
 	ArrayList<Story> gridArray = new ArrayList<Story>();
-	CustomGridViewAdapter customGridAdapter;
+	StoriesViewAdapter customGridAdapter;
+	GeneralController gc;
+	int viewType = GeneralController.CREATED;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +56,22 @@ public class ViewBrowseStories extends Activity {
 					@Override
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
+						if (itemPosition == 0) {
+							viewType = GeneralController.CREATED;
+						} else if (itemPosition == 1) {
+							viewType = GeneralController.CACHED;
+						} else if (itemPosition == 2) {
+							viewType = GeneralController.PUBLISHED;
+						}
 						Log.w("StoryHoard ViewType", "" + itemPosition);
-						return false;
+						refreshStories();
+						return true;
 					}
 				});
-		// Testing to see if the stories actually work
-		gridArray.add(new Story("My Bad Story", "I should test this better",
-				"Wow, such story", true));
-		gridArray.add(new Story("My Bad Story The Sequel- Rawr",
-				"I should test this better", "Wow, such story", true));
-		gridArray.add(new Story("My Goodness Hi Santa",
-				"I should test this better", "Wow, such story", true));
 
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
-		customGridAdapter = new CustomGridViewAdapter(this, R.layout.row_grid,
+		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
 
@@ -88,11 +92,49 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
-			Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT)
+					.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	private void refreshStories() {
+		gridArray.clear();
+		gc = GeneralController.getInstance();
+		// Implement this when ready
+		// gridArray = gc.getAllStories(viewType, this);
+		// Testing to see if the stories actually work
+		if (viewType == GeneralController.CREATED) {
+			gridArray.add(new Story("My Bad Story",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("My Bad Story The Sequel- Rawr",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("My Goodness Hi Santa",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("RAWR TESTING BADLY", "", "", true));
+		}
+		if (viewType == GeneralController.PUBLISHED) {
+			gridArray.add(new Story("Life and Times of Chrono",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("Android: To do or not to do",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("Purple MacBook Camera Sticky",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("DIS SO BAD", "", "", true));
+
+		}
+		if (viewType == GeneralController.CACHED) {
+			gridArray.add(new Story("Masterpiece: The Master Piece",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("Hot Dogs and Cream Cheese",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("My God, Santa Was Mean This Year",
+					"I should test this better", "Wow, such story", true));
+			gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
+
+		}
+		customGridAdapter.notifyDataSetChanged();
+	}
 }
