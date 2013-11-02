@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,10 @@ public class CustomGridViewAdapter extends ArrayAdapter<Story> {
 
 		Story item = data.get(position);
 		holder.txtTitle.setText(item.getTitle());
-		holder.imageItem.setImageBitmap(item.getImage());
+		// Implement this when stories actually have pictures
+		// holder.imageItem.setImageBitmap(item.getImage());
+		holder.imageItem.setImageBitmap((Bitmap) BitmapFactory.decodeResource(
+				context.getResources(), R.drawable.ic_launcher));
 		return row;
 
 	}

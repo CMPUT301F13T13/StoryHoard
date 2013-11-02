@@ -57,6 +57,10 @@ public class ViewBrowseStories extends Activity {
 		// Testing to see if the stories actually work
 		gridArray.add(new Story("My Bad Story", "I should test this better",
 				"Wow, such story", true));
+		gridArray.add(new Story("My Bad Story The Sequel- Rawr",
+				"I should test this better", "Wow, such story", true));
+		gridArray.add(new Story("My Goodness Hi Santa",
+				"I should test this better", "Wow, such story", true));
 
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);

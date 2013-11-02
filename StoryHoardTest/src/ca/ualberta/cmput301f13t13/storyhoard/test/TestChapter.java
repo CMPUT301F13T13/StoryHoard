@@ -30,7 +30,6 @@ import org.junit.Test;
 
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.gui.MainActivity;
 
 /**
  * @author Owner
