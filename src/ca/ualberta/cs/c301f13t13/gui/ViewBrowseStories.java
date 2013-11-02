@@ -2,197 +2,75 @@ package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
+ * Class which displays all stories in a grid, handles different view types.
  * 
- * View Browse Stories handles the grid view for showing all stories. There is a
- * spinner to differentiate between story views (My Stories, Published Stories,
- * Downloaded Stories).
- * 
- * @author Alexander Wong
+ * @author alexanderwong
  * 
  */
 public class ViewBrowseStories extends Activity {
 
-	private Context context = this;
-	private Spinner storyViewType;
-	private GridView storyListGrid;
-	private ArrayAdapter<Story> storyAdapter;
-	private ArrayAdapter<CharSequence> viewTypeAdapter;
-	private int viewType = GeneralController.CREATED;
-	private GeneralController gc;
-
-	// BLEGH
-	ArrayList<Story> somebadstories;
+	GridView gridView;
+	ArrayList<Story> gridArray = new ArrayList<Story>();
+	CustomGridViewAdapter customGridAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		/*
-		 * BAD TEST FOR SEEING IS STORIES ACTUALLY DISPLAY STUFF
-		 */
-		String title = "Bad title";
-		String author = "Dumb Author";
-		String description = "Hi, this is my description.";
-		Boolean authorsOwn = true;
-		Story badstory = new Story(title, author, description, authorsOwn);
-		somebadstories = new ArrayList<Story>();
-		somebadstories.add(badstory);
-		/*
-		 * Delete this shit when you're done yo
-		 */
-
 		super.onCreate(savedInstanceState);
-		/* Setup the content view */
 		setContentView(R.layout.activity_view_browse_stories);
-		storyViewType = (Spinner) findViewById(R.id.storyViewType);
-		storyListGrid = (GridView) findViewById(R.id.viewAllTypeStories);
 
-		gc = GeneralController.getInstance();
+		// Set up the action bar to show a dropdown list.
+		final ActionBar actionBar = getActionBar();
+		actionBar.setTitle("StoryHoard");
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-		/* Setup the spinner adapter */
-		viewTypeAdapter = ArrayAdapter
-				.createFromResource(this, R.array.view_type_choices,
-						android.R.layout.simple_spinner_item);
-		viewTypeAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		storyViewType.setAdapter(viewTypeAdapter);
-		storyViewType.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				if (arg2 == 0) {
-					viewType = GeneralController.CREATED;
-				} else if (arg2 == 1) {
-					viewType = GeneralController.CACHED;
-				} else if (arg2 == 2) {
-					viewType = GeneralController.PUBLISHED;
-				}
-			}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				actionBar.getThemedContext(),
+				android.R.layout.simple_list_item_1,
+				android.R.id.text1,
+				new String[] {
+						getString(R.string.title_viewBrowseStories_MyStories),
+						getString(R.string.title_viewBrowseStories_CachedStories),
+						getString(R.string.title_viewBrowseStories_PublishedStories), });
+		actionBar.setListNavigationCallbacks(adapter,
+				new OnNavigationListener() {
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+					@Override
+					public boolean onNavigationItemSelected(int itemPosition,
+							long itemId) {
+						Log.w("StoryHoard ViewType", "" + itemPosition);
+						return false;
+					}
+				});
+		// Testing to see if the stories actually work
+		gridArray.add(new Story("My Bad Story", "I should test this better",
+				"Wow, such story", true));
 
-		/*
-		 * Setup the Story Grid stuff
-		 */
+		// Setup the grid view for the stories
+		gridView = (GridView) findViewById(R.id.gridStoriesView);
+		customGridAdapter = new CustomGridViewAdapter(this, R.layout.row_grid,
+				gridArray);
+		gridView.setAdapter(customGridAdapter);
 
-		storyListGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				Toast.makeText(context, "" + arg2 + "" + arg3,
-						Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
-
-		storyAdapter = new GridStoriesAdapter(context,
-				R.layout.item_browse_story, somebadstories);
-		storyListGrid.setAdapter(storyAdapter);
-		storyAdapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.clear();
-		menu.add(0, 0, 0, R.string.add_new_story);
-		menu.add(0, 1, 1, R.string.search_stories);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case 0:
-			/* Add new story activity */
-			Intent intent = new Intent(this, AddStoryActivity.class);
-			startActivity(intent);
-			return true;
-		case 1:
-			Toast.makeText(getApplicationContext(),
-					"Search Not Implemented Yet", Toast.LENGTH_SHORT).show();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * This class is the subclasses ArrayAdapter<Story> and handles the custom
-	 * view type within the grid
-	 * 
-	 * @author Alexander Wong
-	 * 
-	 */
-	private class GridStoriesAdapter extends ArrayAdapter<Story> {
-
-		private ArrayList<Story> items;
-		private StoryTypeHolder holder;
-
-		public GridStoriesAdapter(Context context, int resource,
-				ArrayList<Story> passedItems) {
-			super(context, resource);
-			this.items = passedItems;
-		}
-
-		@Override
-		public View getView(int pos, View convertView, ViewGroup parent) {
-			View v = convertView;
-			Log.w("SH View called", "hi");
-			if (v == null) {
-				LayoutInflater vi = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-				v = vi.inflate(R.layout.item_browse_story, null);
-				holder = new StoryTypeHolder();
-				holder.storyCover = (ImageView) findViewById(R.id.storyCover);
-				holder.storyTitle = (TextView) findViewById(R.id.storyTitle);
-				v.setTag(holder);
-			} else {
-				holder = (StoryTypeHolder) v.getTag();
-			}
-			Story s = items.get(pos);
-			if (s != null) {
-				holder.storyCover.setImageBitmap(s.getImage());
-				holder.storyTitle.setText(s.getTitle());
-			}
-			return v;
-		}
-
-		public class StoryTypeHolder {
-			ImageView storyCover;
-			TextView storyTitle;
-		}
-
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.view_browse_stories, menu);
+		return true;
 	}
 
 }
