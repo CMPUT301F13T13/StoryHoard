@@ -86,7 +86,7 @@ public class ViewBrowseStories extends Activity {
 				// Handle going to view story activity
 				String title = gridArray.get(arg2).getTitle();
 				Log.w("StoryItemSelected", "" + arg2 + ": " + title);
-				
+
 				// Start the new activity, passing the ID of the story
 				Intent intent = new Intent(getBaseContext(),
 						ViewBrowseStory.class);
@@ -136,20 +136,26 @@ public class ViewBrowseStories extends Activity {
 		gc = GeneralController.getInstance();
 
 		/*
-		 * Implement this when ready. Testing to see if the stories actually work
-		 * To test back end, set this to false
+		 * Implement this when ready. Testing to see if the stories actually
+		 * work To test back end, set this to false
 		 */
 		boolean testing = false;
 
 		if (testing) {
 			if (viewType == GeneralController.CREATED) {
-				gridArray.add(new Story("My Bad Story",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("My Bad Story The Sequel- Rawr",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("My Goodness Hi Santa",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("RAWR TESTING BADLY", "", "", true));
+				// Is broken for some reason, returns null pointer exception
+				gc.addObjectLocally(new Story("My Bad Story",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("My Bad Story The Sequel- Rawr",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("My Goodness Hi Santa",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("RAWR TESTING BADLY", "", "",
+						true), GeneralController.STORY, this);
+				gridArray = gc.getAllStories(viewType, this);
 			}
 			if (viewType == GeneralController.PUBLISHED) {
 				gridArray.add(new Story("Life and Times of Chrono",
@@ -170,9 +176,9 @@ public class ViewBrowseStories extends Activity {
 						"I should test this better", "Wow, such story", true));
 				gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
 
+			} else {
+				gridArray = gc.getAllStories(viewType, this);
 			}
-		} else {
-			gc.getAllStories(viewType, this);
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}
