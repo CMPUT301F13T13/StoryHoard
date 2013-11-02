@@ -101,7 +101,7 @@ public class GeneralController {
 		DBHelper helper = DBHelper.getInstance(context);
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		ArrayList<Object> objects;
-		Chapter criteria = new Chapter(storyId, null);
+		Chapter criteria = new Chapter(null, storyId, null);
 		
 		objects = cm.retrieve(criteria, helper);
 		chapters = Utilities.objectsToChapters(objects);
