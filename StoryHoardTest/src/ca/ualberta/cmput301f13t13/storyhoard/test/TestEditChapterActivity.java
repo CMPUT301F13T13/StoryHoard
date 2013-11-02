@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import ca.ualberta.cs.c301f13t13.gui.AddChapterActivity;
+
 import android.test.ActivityInstrumentationTestCase2;
 
 /**

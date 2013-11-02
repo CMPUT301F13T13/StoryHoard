@@ -19,7 +19,10 @@ package ca.ualberta.cs.c301f13t13.backend;
 import java.util.ArrayList;
 
 /**
- * @author sgil
+ * Class meant for the testing of the Utilities class in the
+ * StoryHoard application.
+ * 
+ * @author Stephanie
  *
  */
 public class Utilities {
@@ -82,6 +85,5 @@ public class Utilities {
 		}
 		
 		return medias;
-	}		
-	
+	}			
 }
