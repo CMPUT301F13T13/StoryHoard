@@ -87,9 +87,9 @@ public class TestChoice extends TestCase {
 		UUID nextChapter = mockChoice.getNextChapter();
 		String text = mockChoice.getText();
 
-		mockChoice.setId(UUID.randomUUID().toString());
-		mockChoice.setNextChapter(UUID.randomUUID().toString());
-		mockChoice.setCurrentChapter(UUID.randomUUID().toString());
+		mockChoice.setId(UUID.randomUUID());
+		mockChoice.setNextChapter(UUID.randomUUID());
+		mockChoice.setCurrentChapter(UUID.randomUUID());
 		mockChoice.setText("blah");
 
 		assertNotSame(choiceId, mockChoice.getId());

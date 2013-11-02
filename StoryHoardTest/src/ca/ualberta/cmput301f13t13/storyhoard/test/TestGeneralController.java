@@ -201,8 +201,8 @@ public class TestGeneralController extends
 		gc.publishStory(s6, getActivity());
 		
 		// both author and title are null
-//		stories = gc.searchStory(null, null, GeneralController.CREATED, getActivity());
-//		assertEquals(stories.size(), 0);
+		stories = gc.searchStory(null, null, GeneralController.CREATED, getActivity());
+		assertEquals(stories.size(), 0);
 		
 		// author is me, and created by author
 		stories = gc.searchStory(null, "me", GeneralController.CREATED, getActivity());
@@ -250,7 +250,10 @@ public class TestGeneralController extends
 		assertFalse(news1.getDescription().equals(s1.getDescription()));
 		assertTrue(news1.getFirstChapterId() != null);
 	}
-	
+
+	/**
+	 * Tests using the general controller to update a chapter.
+	 */	
 	public void testUpdateChapterLocally() {
 		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
@@ -277,8 +280,33 @@ public class TestGeneralController extends
 		assertFalse(newc1.getText().equals(c1.getText()));
 	}	
 
+	/**
+	 * Tests using the general controller to update a choice.
+	 */	
 	public void testUpdateChoiceLocally() {
-		fail("not yet implemented");
+		GeneralController gc = GeneralController.getInstance();
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+		UUID chapId = UUID.randomUUID();
+		
+		// Insert some choices
+		Choice c1 = new Choice(chapId, UUID.randomUUID(), "my choice");
+		
+		gc.addObjectLocally(c1, GeneralController.CHOICE, getActivity());
+		
+		choices = gc.getAllChoices(chapId, getActivity());
+		assertEquals(choices.size(), 1);
+		
+		Choice newc1 = choices.get(0);
+		newc1.setText("a cow mooed");
+		newc1.setNextChapter(UUID.randomUUID());
+		
+		gc.updateObjectLocally(newc1, GeneralController.CHOICE, getActivity());
+		
+		choices = gc.getAllChoices(chapId, getActivity());
+		newc1 = choices.get(0);
+		
+		assertFalse(newc1.getText().equals(c1.getText()));
+		assertFalse(newc1.getNextChapter().equals(c1.getNextChapter()));
 	}
 	
 	public void testUpdateMediaLocally() {
