@@ -42,8 +42,8 @@ public class Story implements Serializable {
 	 * a story object that will be holding search criteria.
 	 * 
 	 * @param id
-	 * @param author
 	 * @param title
+	 * @param author
 	 * @param description
 	 * @param authorsOwn
 	 */
@@ -61,8 +61,8 @@ public class Story implements Serializable {
 	/**
 	 * Initializes a new story object with no id.
 	 * 
-	 * @param author
 	 * @param title
+	 * @param author
 	 * @param description
 	 * @param authorsOwn
 	 */
@@ -81,8 +81,8 @@ public class Story implements Serializable {
 	 * Initializes a new story object from a database entry. 
 	 * 
 	 * @param id
-	 * @param author
 	 * @param title
+	 * @param author
 	 * @param description
 	 */
 	protected Story(String id, String title, String author, String description,

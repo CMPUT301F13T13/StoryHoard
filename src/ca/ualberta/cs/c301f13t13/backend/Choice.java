@@ -79,24 +79,24 @@ public class Choice implements Serializable{
 	 * Set the Id of the choice.
 	 * @param id
 	 */
-	public void setId(String id) {
-		 this.id = UUID.fromString(id);
+	public void setId(UUID id) {
+		 this.id = id;
 	}
 
 	/**
 	 * Sets the chapterIdFrom of the choice.
 	 * @param chapterIdFrom
 	 */
-	public void setCurrentChapter(String chapterIdFrom) {
-		this.currentChapter = UUID.fromString(chapterIdFrom);
+	public void setCurrentChapter(UUID chapterIdFrom) {
+		this.currentChapter = chapterIdFrom;
 	}
 	
 	/**
 	 * Sets the chapterIdTo of the choice.
-	 * @param chapterIdTo
+	 * @param uuid
 	 */
-	public void setNextChapter(String chapterIdTo) {
-		this.nextChapter = UUID.fromString(chapterIdTo);
+	public void setNextChapter(UUID uuid) {
+		this.nextChapter = uuid;
 	}
 	
 	/**
