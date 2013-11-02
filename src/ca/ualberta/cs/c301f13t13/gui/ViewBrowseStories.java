@@ -139,7 +139,7 @@ public class ViewBrowseStories extends Activity {
 		 * Implement this when ready. Testing to see if the stories actually work
 		 * To test back end, set this to false
 		 */
-		boolean testing = true;
+		boolean testing = false;
 
 		if (testing) {
 			if (viewType == GeneralController.CREATED) {
