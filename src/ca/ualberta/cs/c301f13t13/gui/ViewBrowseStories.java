@@ -10,9 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -31,6 +35,9 @@ public class ViewBrowseStories extends Activity {
 	GeneralController gc;
 	int viewType = GeneralController.CREATED;
 
+	/**
+	 * Create the View Browse Stories activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +70,6 @@ public class ViewBrowseStories extends Activity {
 						} else if (itemPosition == 2) {
 							viewType = GeneralController.PUBLISHED;
 						}
-						Log.w("StoryHoard ViewType", "" + itemPosition);
 						refreshStories();
 						return true;
 					}
@@ -74,15 +80,31 @@ public class ViewBrowseStories extends Activity {
 		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Handle going to view story activity
+				String title = gridArray.get(arg2).getTitle();
+				Log.w("StoryItemSelected", "" + arg2 + ": " + title);
+			}
+		});
 
 	}
 
+	/**
+	 * Handle the creation of the View Browse Stories activity menu
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_browse_stories, menu);
 		return true;
 	}
 
+	/**
+	 * Handle the selection of the View Browse Stories activity menu items
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -101,6 +123,10 @@ public class ViewBrowseStories extends Activity {
 		}
 	}
 
+	/**
+	 * Called whenever the spinner is updated. Will story array based on
+	 * whatever the general controller returns.
+	 */
 	private void refreshStories() {
 		gridArray.clear();
 		gc = GeneralController.getInstance();
