@@ -86,8 +86,11 @@ public class ViewBrowseStories extends Activity {
 				// Handle going to view story activity
 				String title = gridArray.get(arg2).getTitle();
 				Log.w("StoryItemSelected", "" + arg2 + ": " + title);
+				
+				// Start the new activity, passing the ID of the story
 				Intent intent = new Intent(getBaseContext(),
 						ViewBrowseStory.class);
+				intent.putExtra("storyID", gridArray.get(arg2).getId());
 				startActivity(intent);
 			}
 		});
@@ -112,7 +115,7 @@ public class ViewBrowseStories extends Activity {
 		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
-			intent = new Intent(this, AddStoryActivity.class);
+			intent = new Intent(this, EditStoryActivity.class);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:

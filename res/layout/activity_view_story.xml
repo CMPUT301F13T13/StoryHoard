@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/story_img_desc"
-        android:src="@android:drawable/alert_dark_frame" />
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/title"

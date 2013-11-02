@@ -1,8 +1,17 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
-import ca.ualberta.cmput301f13t13.storyhoard.R;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
  * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
@@ -21,9 +30,42 @@ import android.os.Bundle;
  */
 
 public class ViewBrowseStory extends Activity {
+	Story focusedStory;
+	GeneralController gc;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_story);
+
+		ImageView storyCover = (ImageView) findViewById(R.id.storyImage);
+		TextView storyTitle = (TextView) findViewById(R.id.storyTitle);
+		TextView storyAuthor = (TextView) findViewById(R.id.storyAuthor);
+		TextView storyDescription = (TextView) findViewById(R.id.storyDescription);
+
+		// Initialize the general controller and grab the story
+		gc = GeneralController.getInstance();
+		Bundle bundle = this.getIntent().getExtras();
+		try {
+			UUID storyID = null;
+			if (bundle != null) {
+				storyID = (UUID) bundle.getSerializable("storyID");
+			} else {
+				Toast.makeText(this, "StoryID failed to pass through activity",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+			// CURRENTLY BROKEN. WAITING FOR STEPH/ASHLEY FIX
+			// focusedStory = gc.getCompleteStory(storyID, this);
+		} finally {
+			// Check if the story exists or not
+			if (focusedStory == null) {
+				Toast.makeText(this,
+						"Story does not exist in back end. Database problem?",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		}
+
 	}
 }

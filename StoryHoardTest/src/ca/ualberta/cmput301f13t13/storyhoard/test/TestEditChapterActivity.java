@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.ualberta.cs.c301f13t13.gui.AddChapterActivity;
+import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -17,10 +17,10 @@ import android.test.ActivityInstrumentationTestCase2;
  *
  */
 public class TestEditChapterActivity extends
-		ActivityInstrumentationTestCase2<AddChapterActivity> {
+		ActivityInstrumentationTestCase2<EditChapterActivity> {
 
 	public TestEditChapterActivity() {
-		super(AddChapterActivity.class);
+		super(EditChapterActivity.class);
 	}
 	
 	/* (non-Javadoc)

@@ -40,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Model;
 
-public class AddChoiceActivity extends Activity 
+public class EditChoiceActivity extends Activity 
 implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
 	
 	private Chapter chapt;

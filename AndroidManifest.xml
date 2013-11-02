@@ -28,15 +28,15 @@
             android:label="@string/view_browse_story" >
         </activity>
         <activity
-            android:name="ca.ualberta.cs.c301f13t13.gui.AddStoryActivity"
+            android:name="ca.ualberta.cs.c301f13t13.gui.EditStoryActivity"
             android:label="@string/add_new_story" >
         </activity>
         <activity
-            android:name="ca.ualberta.cs.c301f13t13.gui.AddChapterActivity"
+            android:name="ca.ualberta.cs.c301f13t13.gui.EditChapterActivity"
             android:label="@string/add_chapter_title" >
         </activity>
         <activity
-            android:name="ca.ualberta.cs.c301f13t13.gui.AddChoiceActivity"
+            android:name="ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity"
             android:label="@string/add_choice"
             android:theme="@android:style/Theme.Dialog" >
         </activity>

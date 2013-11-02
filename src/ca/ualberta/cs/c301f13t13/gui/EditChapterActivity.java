@@ -50,7 +50,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * author: Josh Tate
  */
 
-public class AddChapterActivity extends Activity implements
+public class EditChapterActivity extends Activity implements
 		ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
 
 	private Context context = this;
@@ -136,7 +136,7 @@ public class AddChapterActivity extends Activity implements
 
 				// Start add choice activity
 				Intent intent = new Intent(getApplicationContext(),
-						AddChoiceActivity.class);
+						EditChoiceActivity.class);
 				startActivity(intent);
 
 			}
