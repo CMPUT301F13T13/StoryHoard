@@ -13,12 +13,12 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/subject_box"
+            android:id="@+id/author_search"
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Author Name"
+            android:hint="@string/author"
             android:scrollbars="vertical"
             android:textColor="#0C43A8"
             android:textSize="20sp"
@@ -26,12 +26,12 @@
         </EditText>
 
         <EditText
-            android:id="@+id/subject_box"
+            android:id="@+id/story_search"
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Story Name"
+            android:hint="@string/story"
             android:scrollbars="vertical"
             android:textColor="#0C43A8"
             android:textSize="20sp"
@@ -49,7 +49,8 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Story Type: "
+                android:layout_marginLeft="10dp"
+                android:text="@string/type"
                 android:textColor="#0C43A8"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_default"
             android:onClick="saveNote"
-            android:text="search story"
+            android:text="@string/search_stories"
             android:textSize="20sp" />
     </LinearLayout>
 
