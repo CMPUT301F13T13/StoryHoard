@@ -86,14 +86,15 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
+		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
-			Intent intent = new Intent(this, AddStoryActivity.class);
+			intent = new Intent(this, AddStoryActivity.class);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
-			Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT)
-					.show();
+			intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
