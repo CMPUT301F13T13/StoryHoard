@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/subject_box"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Author Name"
+            android:scrollbars="vertical"
+            android:textColor="#0C43A8"
+            android:textSize="20sp"
+            android:textStyle="bold" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/subject_box"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Story Name"
+            android:scrollbars="vertical"
+            android:textColor="#0C43A8"
+            android:textSize="20sp"
+            android:textStyle="bold" >
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:textColor="#0C43A8" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  Story Type"
+                android:textColor="#0C43A8"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default"
+            android:onClick="saveNote"
+            android:text="search story"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>
