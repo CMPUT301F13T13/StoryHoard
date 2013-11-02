@@ -66,6 +66,11 @@ public class ViewBrowseStory extends Activity {
 				finish();
 			}
 		}
-
+		
+		// Populate the views
+		storyCover.setImageBitmap(focusedStory.getImage());
+		storyTitle.setText(focusedStory.getTitle());
+		storyAuthor.setText(focusedStory.getAuthor());
+		storyDescription.setText(focusedStory.getDescription());
 	}
 }
