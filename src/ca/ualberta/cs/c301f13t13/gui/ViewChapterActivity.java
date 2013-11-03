@@ -76,11 +76,5 @@ public class ViewChapterActivity extends Activity {
 		chapterContent.setText(chapter.getText());
 		choices.addAll(chapter.getChoices());
 		choiceAdapter.notifyDataSetChanged();
-		// Check to make sure chapter story constraint not violated
-		if (chapter.getStoryId() != storyID) {
-			Toast.makeText(this, "Chapter not within story", Toast.LENGTH_SHORT)
-					.show();
-			// finish();
-		}
 	}
 }
