@@ -65,11 +65,11 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 		// Insert Media
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, media.getChapterId().toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, media.getUri().toString());
-		values.put(MediaTable.COLUMN_NAME_TYPE, String.valueOf(media.getType()));;
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (media.getChapterId()).toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getUri()).toString());
+		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
 
-		db.insert(ChapterTable.TABLE_NAME, null, values);	
+		db.insert(MediaTable.TABLE_NAME, null, values);	
 		
 	}
 
@@ -108,7 +108,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 					UUID.fromString(cursor.getString(0)), // media id
 					UUID.fromString(cursor.getString(1)), // chapter id
 					Uri.parse(cursor.getString(2)), // uri
-					Integer.parseInt(cursor.getString(3))
+					cursor.getString(3) // type
 					);
 			results.add(newMedia);
 			cursor.moveToNext();
@@ -125,8 +125,8 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (newM.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, newM.getChapterId().toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, newM.getUri().toString());
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (newM.getChapterId()).toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (newM.getUri()).toString());
 		values.put(MediaTable.COLUMN_NAME_TYPE, newM.getType());
 
 		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";

@@ -53,7 +53,7 @@ public class TestMedia extends TestCase {
 
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
-		Integer type = photo.getType();
+		String type = photo.getType();
 		uri = photo.getUri();
 		Bitmap bm = photo.getBitmap();
 

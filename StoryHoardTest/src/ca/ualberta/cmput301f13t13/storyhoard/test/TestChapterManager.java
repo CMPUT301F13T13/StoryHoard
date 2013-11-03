@@ -74,7 +74,7 @@ public class TestChapterManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		cm.insert(mockChapter, helper);
 		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
+		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 
@@ -114,7 +114,7 @@ public class TestChapterManager extends
 		cm.insert(mockChapter, helper);
 
 		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
+		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 
 		Chapter newChapter = (Chapter) mockChapters.get(0);
