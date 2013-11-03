@@ -70,7 +70,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 
 	 * @param context
 	 */
-	private DBHelper(Context context) {
+	protected DBHelper(Context context) {
 		super(context, DBContract.DATABASE_NAME, null, DBContract.DATABASE_VERSION);
 	}
 
@@ -82,9 +82,7 @@ public class DBHelper extends SQLiteOpenHelper{
 		db.execSQL(DBContract.StoryTable.SQL_CREATE_TABLE);
 		db.execSQL(DBContract.ChapterTable.SQL_CREATE_TABLE);
 		db.execSQL(DBContract.ChoiceTable.SQL_CREATE_TABLE);
-		db.execSQL(DBContract.PhotoTable.SQL_CREATE_TABLE);
-		db.execSQL(DBContract.IllustrationTable.SQL_CREATE_TABLE);
-		db.execSQL(DBContract.PhotoRelationTable.SQL_CREATE_TABLE);
+		db.execSQL(DBContract.MediaTable.SQL_CREATE_TABLE);
 	}
 
 	/**
@@ -95,9 +93,7 @@ public class DBHelper extends SQLiteOpenHelper{
 		db.execSQL(DBContract.StoryTable.SQL_DELETE_TABLE);
 		db.execSQL(DBContract.ChapterTable.SQL_DELETE_TABLE);
 		db.execSQL(DBContract.ChoiceTable.SQL_DELETE_TABLE);
-		db.execSQL(DBContract.PhotoTable.SQL_DELETE_TABLE);
-		db.execSQL(DBContract.IllustrationTable.SQL_DELETE_TABLE);
-		db.execSQL(DBContract.PhotoRelationTable.SQL_DELETE_TABLE);
+		db.execSQL(DBContract.MediaTable.SQL_DELETE_TABLE);
 		onCreate(db);	
 	}
 }

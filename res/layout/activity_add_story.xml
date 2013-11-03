@@ -47,7 +47,7 @@
         android:inputType="text" />
 
     <TextView
-        android:id="@+id/newStoryDescription"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -56,33 +56,34 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/newStoryDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayoutStory"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/newStoryDescription"
+        android:layout_below="@+id/description"
         android:ems="10"
         android:hint="@string/new_description"
         android:inputType="textMultiLine" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutStory" 
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayoutStory"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical" >
 
         <Button
-            android:id="@+id/cancelStory"
-            android:layout_width="wrap_content"
+            android:id="@+id/addStoryImage"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cancel" />
+            android:text="@string/add_story_image" />
 
         <Button
             android:id="@+id/addFirstChapter"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_first_chapter" />
     </LinearLayout>

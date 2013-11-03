@@ -22,45 +22,11 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import android.app.Application;
-import android.content.Context;
 
 /**
  * @author Owner
  *
  */
 public class StoryHoardApplication extends Application{
-    // Singletons
-    transient private static StoryManager stoMan = null;
-//    transient private static ChapterManager chapMan = null;
-//    transient private static ChoiceManager choMan = null;
-//    transient private static StoryController storyController = null;
-    
-    public static StoryManager getStoryManager(Context context) {
-        if (stoMan == null) {
-        	stoMan = new StoryManager(context);
-        }
-        return stoMan;
-    }
-    
-//		UNCOMMENT ONCE MISSING CLASSES HAVE BEEN CREATED    
-//    public static ChapterManager getChapterManager() {
-//        if (chapMan == null) {
-//            chapMan = new ChapterManagerp();
-//        }
-//        return chapMan;
-//    }  
-//    
-//    public static ChoiceManager getChoiceManager() {
-//        if (choMan == null) {
-//            choMan = new ChoiceManager();
-//        }
-//        return choMan;
-//    }     
-//
-//    public static StoryController getStoryController() {
-//        if (storyController == null) {
-//            storyController = new storyController(getStoryManager());
-//        }
-//        return storyController;
-//    }   
+
 }

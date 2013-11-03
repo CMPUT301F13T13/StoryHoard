@@ -34,14 +34,26 @@ limitations under the License.
 
 Third Party Libraries
 =====================
-Google GSON : Licensed under Apache 2.0
+Google GSON  
+Licensed under Apache 2.0  
 URL: http://code.google.com/p/google-gson/
 
 
 Citing
 ======
-ESDemo
-Authors: Abram Hindle and Chenlei Zhang
-Licensed under Creative Commons 
+ESDemo  
+Authors: Abram Hindle and Chenlei Zhang  
+Licensed under Creative Commons  
 URL: https://github.com/rayzhangcl/ESDemo
+
+FillerCreep  
+Author: Abram Hindle  
+License: none  
+URL:https://github.com/abramhindle/FillerCreepForAndroid
+
+LonelyTweeter Camera Code from Lab  
+Author: Joshua Charles Campbell  
+License: Unlicense  
+Date: soon to come...
+
 

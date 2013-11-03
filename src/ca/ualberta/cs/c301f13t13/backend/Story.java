@@ -15,16 +15,19 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.graphics.Bitmap;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
  * @author Stephanie Gil
  *
  */
-public class Story {
+public class Story implements Serializable {
+
 	private UUID id;
 	private String author;
 	private String title;
@@ -32,31 +35,13 @@ public class Story {
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
 	private Boolean authorsOwn;
-
-	/**
-	 * Initializes a new story object with an id.
-	 * 
-	 * @param id
-	 * @param author
-	 * @param title
-	 * @param description
-	 * @param authorsOwn
-	 */
-	public Story(UUID id, String title, String author, String description, 
-			Boolean authorsOwn) {
-		this.id = id;
-		this.author = author;
-		this.title = title;
-		this.description = description;
-		this.authorsOwn = authorsOwn;
-		chapters = new HashMap<UUID, Chapter>();
-	}	
+	private Bitmap image;
 
 	/**
 	 * Initializes a new story object with no id.
 	 * 
-	 * @param author
 	 * @param title
+	 * @param author
 	 * @param description
 	 * @param authorsOwn
 	 */
@@ -67,26 +52,47 @@ public class Story {
 		this.title = title;
 		this.description = description;
 		this.authorsOwn = authorsOwn;
+		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
 	}	
 	
 	/**
-	 * Initializes a new story object from a database entry. Only to be used by
-	 * the story manager class.
+	 * Initializes a new story object with an id. Usually used when making
+	 * a story object that will be holding search criteria.
 	 * 
 	 * @param id
-	 * @param author
 	 * @param title
+	 * @param author
+	 * @param description
+	 * @param authorsOwn
+	 */
+	public Story(UUID id, String title, String author, String description, 
+			Boolean authorsOwn) {
+		this.id = id;
+		this.author = author;
+		this.title = title;
+		this.description = description;
+		this.authorsOwn = authorsOwn;
+		this.firstChapterId = null;
+		chapters = new HashMap<UUID, Chapter>();
+	}		
+	
+	/**
+	 * Initializes a new story object from a database entry. 
+	 * 
+	 * @param id
+	 * @param title
+	 * @param author
 	 * @param description
 	 */
 	protected Story(String id, String title, String author, String description,
-			String chapterId, HashMap<UUID, Chapter> chapters, Boolean authorsOwn) {
+			String chapterId, Boolean authorsOwn) {
 		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
-		this.chapters = new HashMap<UUID, Chapter>(chapters);
+		this.chapters = new HashMap<UUID, Chapter>();
 		this.authorsOwn = authorsOwn;
 	}	
 	
@@ -125,6 +131,14 @@ public class Story {
 	}
 	
 	/**
+	 * Returns the story's cover image.
+	 * @return
+	 */
+	public Bitmap getImage() {
+		return this.image;
+	}
+	
+	/**
 	 * Returns the chapters of the story.
 	 * @return chapters
 	 */
@@ -144,8 +158,8 @@ public class Story {
 	 * Returns the chapter matching the chapter id
 	 * @return chapter
 	 */
-	public Chapter getChapter(String id) {
-		Chapter chap = chapters.get(UUID.fromString(id));
+	public Chapter getChapter(UUID id) {
+		Chapter chap = chapters.get(id);
 		return chap;
 	}	
 	
@@ -164,8 +178,8 @@ public class Story {
 	 * Set the Id of the story.
 	 * @param id
 	 */
-	public void setId(String id) {
-		this.id = UUID.fromString(id);
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	/**
@@ -227,20 +241,31 @@ public class Story {
 	}
 	
 	/**
-	 * Returns the information of the story (id, title, author, etc)
-	 * in a HashMap.
+	 * Returns the information of the story (id, title, author, authorsOwn) 
+	 * that could be used in searching for a story in the database. This 
+	 * information is returned in a HashMap where the keys are the 
+	 * corresponding Story Table column names.
 	 * 
 	 * @return HashMap
 	 */
 	public HashMap<String,String> getSearchCriteria() {
 		HashMap<String,String> info = new HashMap<String,String>();
 		
-		info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
-		info.put(StoryTable.COLUMN_NAME_TITLE, title);
-		info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
-		info.put(StoryTable.COLUMN_NAME_DESCRIPTION, description);
-		info.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, firstChapterId.toString());
-		info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
+		if (id != null)  {
+			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
+		}
+		
+		if (title !=null) {
+			info.put(StoryTable.COLUMN_NAME_TITLE, title);
+		}
+		
+		if (author !=null) {
+			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
+		}
+		
+		if (authorsOwn != null) {
+			info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
+		}
 		
 		return info;
 	}

@@ -17,10 +17,51 @@
     <string name="connect_choice_to">Connect choice to:</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
+    <string name="type">Story type</string>
+    <string name="story">Story title</string>
     <string name="story_description">Story Description</string>
     <string name="new_title">New Story Title</string>
-	<string name="new_author">New Story Author</string>
+    <string name="new_author">New Story Author</string>
     <string name="new_description">New Story Description</string>
     <string name="add_first_chapter">Add First Chapter</string>
-	
+    <string name="add_story_image">Add Story Image</string>
+    <string name="story_img_desc">Story specific description image</string>
+    <string name="view_first_chapter">Begin Reading</string>
+    <string name="add_new_story">Add New Story</string>
+    <string name="search_stories">Search Stories</string>
+    <string name="edit_story">Edit Story</string>
+    <string name="story_view_type">Story View Type</string>
+    <string name="current_view_type">Current View: </string>
+    <string name="story_image_cover">Cover Image</string>
+    <string name="publish">Published Stories</string>
+    <string name="download">Downloaded Stories</string>
+    <string name="my_story">My Stories</string>
+    <string name="story_type">Choose a story type</string>
+    <string name="view_browse_story">View Story</string>
+
+    <string-array name="view_type_choices">
+        <item>My Stories</item>
+        <item>Downloaded Stories</item>
+        <item>Published Stories</item>
+    </string-array>
+
+    <string name="title_activity_viewbrowse_author_stories">ViewbrowseAuthorStories</string>
+    <string name="title_activity_view_author_stories">ViewAuthorStoriesActivity</string>
+    <string name="title_activity_browse_author_stories">BrowseAuthorStoriesActivity</string>
+    <string name="title_activity_view_browse_author_stories">ViewBrowseAuthorStories</string>
+    <string name="title_activity_custom_adapter">CustomAdapter</string>
+    <string name="title_activity_view_edit_story">ViewEditStoryActivity</string>
+    <string name="title_activity_view_edit_chapter">ViewEditChapterActivity</string>
+    <string name="title_activity_view_story_settings">ViewStorySettingsActivity</string>
+    <string name="title_activity_view_browse_cached_stories">ViewBrowseCachedStories</string>
+    <string name="title_activity_view_browse_published_stories">ViewBrowsePublishedStories</string>
+    <string name="title_activity_view_edit_mode">ViewEditMode</string>
+    <string name="title_activity_view_browse_stories">ViewBrowseStories</string>
+    <string name="title_viewBrowseStories_MyStories">My Stories</string>
+    <string name="title_viewBrowseStories_PublishedStories">Published Stories</string>
+    <string name="title_viewBrowseStories_CachedStories">Cached Stories</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="edit_existing_story">Edit Story Content</string>
+    <string name="edit_story_metadata">Edit Story Metadata</string>
+
 </resources>

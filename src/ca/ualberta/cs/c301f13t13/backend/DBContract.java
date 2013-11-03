@@ -66,8 +66,8 @@ public final class DBContract {
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE " + StoryTable.TABLE_NAME + " (" 
-				+ StoryTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT,"
+				+ StoryTable._ID + " INTEGER," 
+				+ StoryTable.COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
 				+ StoryTable.COLUMN_NAME_TITLE + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, " 
 				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, " 
@@ -93,8 +93,8 @@ public final class DBContract {
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChapterTable.TABLE_NAME + " (" 
-				+ ChapterTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+				+ ChapterTable._ID + " INTEGER, "
+				+ ChapterTable.COLUMN_NAME_CHAPTER_ID + " TEXT PRIMARY KEY, "
 		        + ChapterTable.COLUMN_NAME_STORY_ID + " TEXT, "
                 + ChapterTable.COLUMN_NAME_TEXT + " TEXT)";	
 
@@ -111,16 +111,18 @@ public final class DBContract {
 		private ChoiceTable() {}
 
 		public static final String TABLE_NAME = "choice_table";
+		public static final String COLUMN_NAME_CHOICE_ID="choice_id";
 		public static final String COLUMN_NAME_TEXT = "text";
 		public static final String COLUMN_NAME_CURR_CHAPTER = "curr_chapter";
 		public static final String COLUMN_NAME_NEXT_CHAPTER = "next_chapter";
 
 		public static final String SQL_CREATE_TABLE = 
 		        "CREATE TABLE " + ChoiceTable.TABLE_NAME + " (" 
-				+ ChoiceTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
+				+ ChoiceTable._ID + " INTEGER," 
+				+ ChoiceTable.COLUMN_NAME_CHOICE_ID + " TEXT PRIMARY KEY, "
 		        + ChoiceTable.COLUMN_NAME_TEXT + " TEXT, " 
-		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " INTEGER, "
-		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " INTEGER)";	
+		        + ChoiceTable.COLUMN_NAME_CURR_CHAPTER + " TEXT, "
+		        + ChoiceTable.COLUMN_NAME_NEXT_CHAPTER + " TEXT)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
 		        + ChoiceTable.TABLE_NAME; 
@@ -128,65 +130,27 @@ public final class DBContract {
 
 	/** 
 	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the photos
+	 * for the table containing media (photos/illustrations/audio/video)
 	 */
-	protected static abstract class PhotoTable implements BaseColumns {
+	protected static abstract class MediaTable implements BaseColumns {
 
-		private PhotoTable() {}
+		private MediaTable() {}
 
-		public static final String TABLE_NAME = "photos_table";
-		public static final String COLUMN_NAME_PHOTO = "blob";
-
-		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + PhotoTable.TABLE_NAME + " (" 
-				+ PhotoTable._ID + " INTEGER PRIMARY KEY," 
-		        + PhotoTable.COLUMN_NAME_PHOTO + " BLOB)";	
-
-		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + PhotoTable.TABLE_NAME; 
-	}		
-	
-	/** 
-	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the illustrations
-	 */
-	protected static abstract class IllustrationTable implements BaseColumns {
-
-		private IllustrationTable() {}
-
-		public static final String TABLE_NAME = "illustration_table";
-		public static final String COLUMN_NAME_ILL = "blob";
+		public static final String TABLE_NAME = "media_table";
+		public static final String COLUMN_NAME_MEDIA_URI = "uri";
+		public static final String COLUMN_NAME_MEDIA_ID = "media_id";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
-
+		public static final String COLUMN_NAME_TYPE = "type ";  // photo or illustration
+		
 		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + IllustrationTable.TABLE_NAME + " (" 
-				+ IllustrationTable._ID + " INTEGER PRIMARY KEY," 
-		        + IllustrationTable.COLUMN_NAME_ILL + " BLOB, "
-		        + IllustrationTable.COLUMN_NAME_CHAPTER_ID + " INTEGER)";	
+		        "CREATE TABLE " + MediaTable.TABLE_NAME + " (" 
+				+ MediaTable._ID + " INTEGER," 
+				+ MediaTable.COLUMN_NAME_MEDIA_ID + " TEXT PRIMARY KEY," 
+				+ MediaTable.COLUMN_NAME_CHAPTER_ID + " TEXT, "
+		        + MediaTable.COLUMN_NAME_MEDIA_URI + " TEXT," 
+		        + MediaTable.COLUMN_NAME_TYPE + " INTEGER)";	
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + IllustrationTable.TABLE_NAME; 
-	}		
-	
-	/** 
-	 * Sets up column names and then create and delete SQL statements
-	 * for the table containing the illustrations. Describes which 
-	 * photos belong to which chapters.
-	 */
-	protected static abstract class PhotoRelationTable implements BaseColumns {
-
-		private PhotoRelationTable() {}
-
-		public static final String TABLE_NAME = "photo_relation_table";
-		public static final String COLUMN_NAME_PHOTO_ID = "photo_id";
-		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
-
-		public static final String SQL_CREATE_TABLE = 
-		        "CREATE TABLE " + PhotoRelationTable.TABLE_NAME + " (" 
-				+ PhotoRelationTable.COLUMN_NAME_PHOTO_ID+ " INTEGER," 
-		        + PhotoRelationTable.COLUMN_NAME_CHAPTER_ID + " INTEGER)";	
-
-		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " 
-		        + PhotoRelationTable.TABLE_NAME; 
-	}			
+		        + MediaTable.TABLE_NAME; 
+	}				
 }
