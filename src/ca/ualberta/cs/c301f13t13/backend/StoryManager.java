@@ -30,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @author sgil
  *
  */
-public class StoryManager extends Model implements StoringManager, ServerManager{
+public class StoryManager extends Model implements StoringManager {
 	private Context context;
 	private static StoryManager self = null;
 	
@@ -172,9 +172,8 @@ public class StoryManager extends Model implements StoringManager, ServerManager
 	 * Saves a story to the server for other users to see.
 	 * @param story
 	 */
-	@Override
 	public void publish(Story story) {
-		
+		//TODO STUB
 	}	
 	
 	/**
@@ -182,8 +181,8 @@ public class StoryManager extends Model implements StoringManager, ServerManager
 	 * 
 	 * @return ArrayList
 	 */
-	@Override
 	public ArrayList<Story> getPublishedStories() {
+		//TODO STUBB
 		ArrayList<Story> published = new ArrayList<Story>();
 		return published;
 	}	
@@ -193,8 +192,13 @@ public class StoryManager extends Model implements StoringManager, ServerManager
 	 * changes have been made to it.
 	 * @param story
 	 */
-	@Override
 	public void updatePublished(Story story) {
+		//TODO STUBB
+	}
+
+	
+	public void searchPublished(Story story) {
+		// TODO Auto-generated method stub
 		
 	}
 	
@@ -236,9 +240,4 @@ public class StoryManager extends Model implements StoringManager, ServerManager
 		return selection;
 	}
 
-	@Override
-	public void searchPublished(Story story) {
-		// TODO Auto-generated method stub
-		
-	}
 }
