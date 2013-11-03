@@ -16,7 +16,11 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import android.net.Uri;
+import android.os.Environment;
 
 /**
  * Class meant for the testing of the Utilities class in the
@@ -86,4 +90,26 @@ public class Utilities {
 		
 		return medias;
 	}			
+	
+	/**
+	 * Creates a new File to put an image in and a path and Uri to it.
+	 * 
+	 * Citing: CameraTest demo code from CMPUT 301 Lab.
+	 * Date: Nov. 2, 2013
+	 * Authors: Abram Hindle, Chenlei Zhang
+	 */
+	public static Uri createImageUri() {
+		Uri imageFileUri;
+        String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+        File folderF = new File(folder);
+        if (!folderF.exists()) {
+            folderF.mkdir();
+        }
+        
+        String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
+        File imageFile = new File(imageFilePath);
+        imageFileUri = Uri.fromFile(imageFile);		
+        
+        return imageFileUri;
+	}
 }
