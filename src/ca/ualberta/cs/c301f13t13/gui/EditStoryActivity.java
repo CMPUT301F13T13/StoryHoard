@@ -17,6 +17,7 @@ package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.UUID;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
- * 
+ * Activity for editing the story metadata
  * @author Alexander Wong
  * 
  */
@@ -48,6 +49,10 @@ public class EditStoryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_story);
+		
+		final ActionBar actionBar = getActionBar();
+		actionBar.setTitle("Story Metadata");
+		actionBar.setDisplayShowTitleEnabled(true);
 
 		gc = GeneralController.getInstance();
 

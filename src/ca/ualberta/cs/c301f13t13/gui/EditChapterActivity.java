@@ -19,11 +19,8 @@ package ca.ualberta.cs.c301f13t13.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,7 +51,6 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
 public class EditChapterActivity extends Activity implements
 		ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
 
-	private Context context = this;
 	private Chapter chapt;
 	private Story story;
 	private ImageButton imageButton;
@@ -103,6 +99,7 @@ public class EditChapterActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				story.setFirstChapterId(chapt.getId());
+				chapt.setText(chapterContent.getText().toString());
 				GeneralController.getInstance().addObjectLocally(story,
 						GeneralController.STORY, getBaseContext());
 				GeneralController.getInstance().addObjectLocally(chapt,
