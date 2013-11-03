@@ -77,9 +77,11 @@ public class ChapterManager extends Model<SHView> implements StoringManager{
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, (chapter.getId()).toString());		
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId().toString());
-		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
-
-		db.insert(ChapterTable.TABLE_NAME, null, values);		
+		if (chapter.getText() != null) {
+			values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
+		}
+		
+		db.insert(ChapterTable.TABLE_NAME, null, values);	
 	}
 
 	/**
@@ -125,21 +127,11 @@ public class ChapterManager extends Model<SHView> implements StoringManager{
 		while (!cursor.isAfterLast()) {
 			String storyId = cursor.getString(1);
 
-			/*
-			 * GET ALL CHOICES BELONGING TO THIS CHAPTER WITH THE
-			 * CHOICEMANAGER CLASS
-			 *
-			ChoiceManager cm = new ChoiceManager(context);
-			Choice choice = new Choice(chapter.getId());
-			ArrayList<Object> choiceObjs = cm.retrieve(choice, helper);
-
-			 */
 			Chapter newChapter = new Chapter(
 					UUID.fromString(cursor.getString(0)), // chapter id
 					UUID.fromString(storyId), // story id
 					cursor.getString(2) // text
 					);
-			// newChapter.setChoices(Choices)
 			results.add(newChapter);
 			cursor.moveToNext();
 		}
@@ -203,7 +195,6 @@ public class ChapterManager extends Model<SHView> implements StoringManager{
 			if (counter < maxSize) {
 				selection += "AND ";
 			}
-
 		}
 		return selection;
 	}

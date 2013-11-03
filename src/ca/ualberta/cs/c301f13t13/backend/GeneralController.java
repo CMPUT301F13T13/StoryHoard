@@ -32,6 +32,7 @@ public class GeneralController {
 	public static final int STORY = 0;
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
+	public static final int MEDIA = 3;
 	
 	// SELF
 	private static GeneralController self = null;
@@ -163,6 +164,7 @@ public class GeneralController {
 		ArrayList<Media> photos = new ArrayList<Media>();
 		ArrayList<Object> objects;
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
+		
 		objects = mm.retrieve(criteria, helper);
 		photos = Utilities.objectsToMedia(objects);
 		return photos;
@@ -175,7 +177,7 @@ public class GeneralController {
 	 * 			Object to be inserted (must either be a Story, Chapter, or
 	 * 			Choice instance).
 	 * @param type
-	 * 			Will either be STORY(0), CHAPTER(1), CHOICE(2).
+	 * 			Will either be STORY(0), CHAPTER(1), CHOICE(2), MEDIA (3)
 	 * @param context
 	 */
 	public void addObjectLocally(Object object, int type, Context context) {
@@ -183,19 +185,20 @@ public class GeneralController {
 		
 		switch (type) {
 		case STORY:
-			Story story = (Story) object;
-			StoryManager sm = new StoryManager(context);
-			sm.insert(story, helper);
+			StoryManager sm = StoryManager.getInstance(context);
+			sm.insert(object, helper);
 			break;
 		case CHAPTER:
-			Chapter chapter = (Chapter) object;
-			ChapterManager cm = new ChapterManager(context);
-			cm.insert(chapter, helper);
+			ChapterManager cm = ChapterManager.getInstance(context);
+			cm.insert(object, helper);
 			break;
 		case CHOICE:
-			Choice choice = (Choice) object;
-			ChoiceManager chm = new ChoiceManager(context);
-			chm.insert(choice, helper);
+			ChoiceManager chm = ChoiceManager.getInstance(context);
+			chm.insert(object, helper);
+			break;
+		case MEDIA:
+			MediaManager mm = MediaManager.getInstance(context);
+			mm.insert(object, helper);
 			break;
 		}
 	}
@@ -255,8 +258,6 @@ public class GeneralController {
 	 */
 	public Chapter getCompleteChapter(UUID id, Context context){
 		ChapterManager cm = ChapterManager.getInstance(context);
-		ChoiceManager chom = ChoiceManager.getInstance(context);
-		MediaManager mm = MediaManager.getInstance(context);
 		DBHelper helper = DBHelper.getInstance(context);
 		
 		// Search criteria gets set
@@ -267,18 +268,14 @@ public class GeneralController {
 		Chapter chapter = (Chapter) objects.get(0);
 		
 		// Get chapter choices
-		Choice choiceCrit = new Choice(null, id);
-		objects = chom.retrieve(choiceCrit, helper);
-		chapter.setChoices(Utilities.objectsToChoices(objects));
+		chapter.setChoices(getAllChoices(id, context));
 		
 		// Get media (photos/illustrations)
-		Media mediaCrit = new Media(null, id, null, Media.PHOTO);
-		objects = mm.retrieve(mediaCrit, helper);
-		chapter.setPhotos(Utilities.objectsToMedia(objects));
+		ArrayList<Media> photos = getAllPhotos(id, context);
+		chapter.setPhotos(photos);
 		
-		mediaCrit = new Media(null, id, null, Media.ILLUSTRATION);
-		objects = mm.retrieve(mediaCrit, helper);
-		chapter.setIllustrations(Utilities.objectsToMedia(objects));		
+		ArrayList<Media> ills = getAllIllustrations(id, context);
+		chapter.setIllustrations(ills);	
 		
 		return chapter;
 	}
@@ -326,7 +323,7 @@ public class GeneralController {
 	 * @param object
 	 * 			Object to be updated.
 	 * @param type
-	 * 			Will either be STORY (0), CHAPTER (1), or CHOICE (2)
+	 * 			Will either be STORY (0), CHAPTER (1), CHOICE (2), or MEDIA(3)
 	 * @param context
 	 */
 	public void updateObjectLocally(Object object, int type, Context context) {
@@ -344,6 +341,10 @@ public class GeneralController {
 		case CHOICE:
 			ChoiceManager chom = ChoiceManager.getInstance(context);
 			chom.update(object, helper);
+			break;
+		case MEDIA:
+			MediaManager mm = MediaManager.getInstance(context);
+			mm.update(object, helper);
 			break;
 		default:
 			// raise exception

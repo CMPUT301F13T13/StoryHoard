@@ -30,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @author sgil
  *
  */
-public class StoryManager extends Model implements StoringManager{
+public class StoryManager extends Model implements StoringManager, ServerManager{
 	private Context context;
 	private static StoryManager self = null;
 	
@@ -40,6 +40,7 @@ public class StoryManager extends Model implements StoringManager{
 	protected StoryManager(Context context) {
 		this.context = context;
 	}
+
 
 	/**
 	 * Returns an instance of a StoryManager. Used to implement
@@ -55,6 +56,7 @@ public class StoryManager extends Model implements StoringManager{
 		return self;		
 	}
 	
+	
 	/**
 	 * Saves a new story locally (in the database).
 	 */	
@@ -69,8 +71,12 @@ public class StoryManager extends Model implements StoringManager{
 		ContentValues values = new ContentValues();
 		values.put(StoryTable.COLUMN_NAME_STORY_ID, (story.getId()).toString());		
 		values.put(StoryTable.COLUMN_NAME_TITLE, story.getTitle());
-		values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
-		values.put(StoryTable.COLUMN_NAME_DESCRIPTION, story.getDescription());
+		if (story.getAuthor() != null) {
+			values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
+		}
+		if (story.getDescription() != null) {
+			values.put(StoryTable.COLUMN_NAME_DESCRIPTION, story.getDescription());
+		}
 		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, chapterId.toString());
 		values.put(StoryTable.COLUMN_NAME_CREATED, story.getAuthorsOwn().toString());
 		
@@ -166,6 +172,7 @@ public class StoryManager extends Model implements StoringManager{
 	 * Saves a story to the server for other users to see.
 	 * @param story
 	 */
+	@Override
 	public void publish(Story story) {
 		
 	}	
@@ -175,6 +182,7 @@ public class StoryManager extends Model implements StoringManager{
 	 * 
 	 * @return ArrayList
 	 */
+	@Override
 	public ArrayList<Story> getPublishedStories() {
 		ArrayList<Story> published = new ArrayList<Story>();
 		return published;
@@ -185,6 +193,7 @@ public class StoryManager extends Model implements StoringManager{
 	 * changes have been made to it.
 	 * @param story
 	 */
+	@Override
 	public void updatePublished(Story story) {
 		
 	}
@@ -225,5 +234,11 @@ public class StoryManager extends Model implements StoringManager{
 			}			
 		}
 		return selection;
+	}
+
+	@Override
+	public void searchPublished(Story story) {
+		// TODO Auto-generated method stub
+		
 	}
 }

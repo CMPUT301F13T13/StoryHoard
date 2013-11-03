@@ -11,35 +11,32 @@ import android.os.storage.StorageManager;
  * @author sgil
  *
  */
-public class ServerManager implements StoringManager {
+public interface ServerManager {
 
-	ServerManager() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
-	@Override
-	public void insert(Object object, DBHelper helper) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Object newObject, DBHelper helper) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * Saves a story to the server for other users to see.
+	 * @param story
+	 */
+	public void publish(Story story);	
+	
+	/**
+	 * Retrieves all stories from the server, i.e. the published stories.
+	 * 
+	 * @return ArrayList
+	 */
+	public ArrayList<Story> getPublishedStories();	
+	
+	/**
+	 * Updates a published story, i.e. republishes a story after
+	 * changes have been made to it.
+	 * @param story
+	 */
+	public void updatePublished(Story story);	
+	
+	/**
+	 * Searches for a story on the server.
+	 */
+	public void searchPublished(Story story);
 
 }

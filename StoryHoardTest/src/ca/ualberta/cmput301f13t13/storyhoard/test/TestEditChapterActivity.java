@@ -3,8 +3,6 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
