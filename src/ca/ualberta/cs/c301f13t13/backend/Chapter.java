@@ -168,8 +168,28 @@ public class Chapter implements Serializable {
 	
 	// OTHER METHODS
 	
+	/**
+	 * Adds a choice to the chapter.
+	 * @param choice
+	 */
 	public void addChoice(Choice c) {
 		choices.add(c);
+	}
+	
+	/**
+	 * Adds a photo to the chapter
+	 * @param photo
+	 */
+	public void addPhoto(Media p) {
+		photos.add(p);
+	}
+	
+	/**
+	 * Adds an illustration to the chapter.
+	 * @param i
+	 */
+	public void addIllustration(Media i) {
+		illustrations.add(i);
 	}
 
 	/**
