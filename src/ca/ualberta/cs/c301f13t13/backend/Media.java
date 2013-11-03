@@ -108,8 +108,15 @@ public class Media {
 		this.chapterId = chapterId;
 	}
 	
+	/**
+	 * Sets the uri of the media. Also updates the bitmap.
+	 * @param uri
+	 */
 	public void setUri(Uri uri) {
 		this.uri = uri;
+		if (uri != null) {
+			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+		}		
 	}
 	
 	public void setBitmap(Bitmap bitmap) {
