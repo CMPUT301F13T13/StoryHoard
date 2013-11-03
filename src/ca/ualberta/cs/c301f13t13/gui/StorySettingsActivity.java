@@ -26,13 +26,12 @@ public class StorySettingsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_story);
+		setContentView(R.layout.activity_view_browse_story);
 		
 		storyImage = (ImageView) findViewById(R.id.storyImage);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
-		editStory = (Button) findViewById(R.id.editStory);
 		readStory = (Button) findViewById(R.id.viewFirstChapter);
 		
 		editStory.setOnClickListener(new OnClickListener(){

@@ -73,12 +73,6 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/editStory"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_story" />
-
-        <Button
             android:id="@+id/viewFirstChapter"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

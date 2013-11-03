@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-//import android.view.Menu; *Not sure if needed
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +36,8 @@ import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
+//import android.view.Menu; *Not sure if needed
+
 /**
  * Add Chapter Activity
  * 
@@ -47,7 +48,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * button. - This activity will also display the choices that exist or have been
  * added.
  * 
- * author: Josh Tate
+ * author: Alexander Wong, Josh Tate
  */
 
 public class EditChapterActivity extends Activity implements
@@ -68,73 +69,59 @@ public class EditChapterActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_chapter);
 
+		imageButton = (ImageButton) findViewById(R.id.chapterEditIllustration);
+		chapterContent = (EditText) findViewById(R.id.chapterEditText);
+		saveButton = (Button) findViewById(R.id.save_story);
+		allChaptersButton = (Button) findViewById(R.id.add_chapter);
+		addChoiceButton = (Button) findViewById(R.id.add_choice_button);
+		choices = (ListView) findViewById(R.id.chapterEditChoices);
+		ArrayList<String> testArray = new ArrayList<String>();
+
+
 		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
-		if (bundle != null) {
-			story = (Story) bundle.getSerializable("New Story");
-			chapt = new Chapter(story.getId(), " ");
+		if (bundle.getBoolean("isEditing")) {
+			story = (Story) bundle.get("Story");
+			chapt = (Chapter) bundle.get("Chapter");
+		} else {
+			story = (Story) bundle.get("New Story");
+			chapt = new Chapter(story.getId(), "");
 		}
 
-		imageButton = (ImageButton) findViewById(R.id.imageButton1);
+		// Setup the chapter image illustraion button
 		imageButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// Change/Load images
-
 			}
 		});
 
-		// Set the chapters text
-		chapterContent = (EditText) findViewById(R.id.editText1);
+		// Set the chapter text, if new Chapter will simply be blank
 		chapterContent.setText(chapt.getText());
-		chapterContent.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(CharSequence c, int start, int end,
-					int count) {
-				chapt.setText(c.toString());
-			}
 
-			public void beforeTextChanged(CharSequence c, int start, int end,
-					int count) {
-			}
-
-			public void afterTextChanged(Editable e) {
-			}
-		});
-
-		saveButton = (Button) findViewById(R.id.save_story);
+		// Save the story to the general controller, locally
 		saveButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				story.setFirstChapterId(chapt.getId());
 				GeneralController.getInstance().addObjectLocally(story,
-						GeneralController.STORY, context);
-
+						GeneralController.STORY, getBaseContext());
 				GeneralController.getInstance().addObjectLocally(chapt,
-						GeneralController.CHAPTER, context);
-
+						GeneralController.CHAPTER, getBaseContext());
 				finish();
 			}
 		});
 
-		allChaptersButton = (Button) findViewById(R.id.add_chapter);
+		// Click to view all chapters
 		allChaptersButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// View all chapters
-
 			}
 		});
 
-		addChoiceButton = (Button) findViewById(R.id.add_choice_button);
+		// Click to add a choice
 		addChoiceButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
-				// Start add choice activity
 				Intent intent = new Intent(getApplicationContext(),
 						EditChoiceActivity.class);
 				startActivity(intent);
@@ -143,8 +130,6 @@ public class EditChapterActivity extends Activity implements
 		});
 
 		// Use choices to display choices
-		choices = (ListView) findViewById(R.id.listView1);
-		ArrayList<String> testArray = new ArrayList<String>();
 		for (int i = 0; i < 3; i++) {
 			testArray.add("Test Choice " + (i + 1));
 		}
@@ -155,15 +140,5 @@ public class EditChapterActivity extends Activity implements
 
 	@Override
 	public void update(ChapterManager model) {
-		// TODO Auto-generated method stub
-
 	};
-
-	/*
-	 * Not sure if needed
-	 * 
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
-	 * menu; this adds items to the action bar if it is present.
-	 * getMenuInflater().inflate(R.menu.add_chapter, menu); return true; }
-	 */
 }

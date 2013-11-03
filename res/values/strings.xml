@@ -61,5 +61,7 @@
     <string name="title_viewBrowseStories_PublishedStories">Published Stories</string>
     <string name="title_viewBrowseStories_CachedStories">Cached Stories</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="edit_existing_story">Edit Story Content</string>
+    <string name="edit_story_metadata">Edit Story Metadata</string>
 
 </resources>

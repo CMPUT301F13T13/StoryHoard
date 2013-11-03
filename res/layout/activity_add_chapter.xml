@@ -6,19 +6,19 @@
     android:orientation="vertical" >
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/chapterEditIllustration"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/chapterEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/add_chapter_edit_text" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/chapterEditChoices"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
