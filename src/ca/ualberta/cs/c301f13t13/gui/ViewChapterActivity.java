@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,8 @@ public class ViewChapterActivity extends Activity {
 	private UUID chapterID;
 	private GeneralController gc;
 	private Chapter chapter;
-	private ArrayList<Choice> choices;
+	private ArrayList<Choice> choices = new ArrayList<Choice>();
+	private ArrayAdapter<Choice> choiceAdapter;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
@@ -59,19 +61,26 @@ public class ViewChapterActivity extends Activity {
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
+
+		// Setup the choices and choice adapters
+		choiceAdapter = new ArrayAdapter<Choice>(this, android.R.id.text1,
+				choices);
+		chapterChoices.setAdapter(choiceAdapter);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		chapter = gc.getCompleteChapter(chapterID, this);
+		choices.clear();
+		chapterContent.setText(chapter.getText());
+		choices.addAll(chapter.getChoices());
+		choiceAdapter.notifyDataSetChanged();
 		// Check to make sure chapter story constraint not violated
 		if (chapter.getStoryId() != storyID) {
 			Toast.makeText(this, "Chapter not within story", Toast.LENGTH_SHORT)
 					.show();
-			//finish();
+			// finish();
 		}
-		chapterContent.setText(chapter.getText());
-		choices = chapter.getChoices();
 	}
 }
