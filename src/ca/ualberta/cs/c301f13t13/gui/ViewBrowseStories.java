@@ -27,10 +27,10 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  */
 public class ViewBrowseStories extends Activity {
 
-	GridView gridView;
-	ArrayList<Story> gridArray = new ArrayList<Story>();
-	StoriesViewAdapter customGridAdapter;
-	GeneralController gc;
+	private GridView gridView;
+	private ArrayList<Story> gridArray = new ArrayList<Story>();
+	private StoriesViewAdapter customGridAdapter;
+	private GeneralController gc;
 	int viewType = GeneralController.CREATED;
 
 	/**
@@ -56,7 +56,7 @@ public class ViewBrowseStories extends Activity {
 						getString(R.string.title_viewBrowseStories_MyStories),
 						getString(R.string.title_viewBrowseStories_CachedStories),
 						getString(R.string.title_viewBrowseStories_PublishedStories), });
-		
+
 		// Setup the action bar listener
 		actionBar.setListNavigationCallbacks(adapter,
 				new OnNavigationListener() {
@@ -80,7 +80,7 @@ public class ViewBrowseStories extends Activity {
 		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
-		
+
 		// Setup the grid view click listener
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -132,6 +132,12 @@ public class ViewBrowseStories extends Activity {
 		}
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshStories();
+	}
+
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.
@@ -139,7 +145,8 @@ public class ViewBrowseStories extends Activity {
 	private void refreshStories() {
 		gridArray.clear();
 		gc = GeneralController.getInstance();
-		gridArray = gc.getAllStories(viewType, this);
+		gridArray.addAll(gc.getAllStories(viewType, this));
 		customGridAdapter.notifyDataSetChanged();
+		Log.w("GridArrayString", gridArray.toString());
 	}
 }

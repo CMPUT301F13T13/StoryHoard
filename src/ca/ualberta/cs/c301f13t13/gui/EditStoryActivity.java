@@ -62,8 +62,7 @@ public class EditStoryActivity extends Activity {
 		bundle.getBoolean("isEditing", false);
 
 		if (isEditing) {
-			newStory = gc.getCompleteStory(
-					(UUID) bundle.get("storyID"), this);
+			newStory = gc.getCompleteStory((UUID) bundle.get("storyID"), this);
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
@@ -89,6 +88,7 @@ public class EditStoryActivity extends Activity {
 				}
 				Intent intent = new Intent(getApplicationContext(),
 						EditChapterActivity.class);
+				intent.putExtra("isEditing", false);
 				intent.putExtra("New Story", newStory);
 				startActivity(intent);
 				finish();
