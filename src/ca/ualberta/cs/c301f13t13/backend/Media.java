@@ -32,14 +32,14 @@ public class Media {
 	private UUID id;
 	private UUID chapterId;  
 	private Uri uri;
-	private Integer type;
+	private String type;
 	private Bitmap bitmap;
 
 	// MACROS
-	public static final int PHOTO = 0;
-	public static final int ILLUSTRATION = 1;
-	public static final int SOUND = 2;
-	public static final int VIDEO = 3;
+	public static final String PHOTO = "photo";
+	public static final String ILLUSTRATION = "illustration";
+	public static final String SOUND = "sound";
+	public static final String VIDEO = "video";
 	
 	// CONSTRUCTORS
 	/**
@@ -49,11 +49,11 @@ public class Media {
 	 * @param uri
 	 * @param type
 	 */
-	public Media(UUID chapterId, Uri uri, int type) {
+	public Media(UUID chapterId, Uri uri, String type) {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.uri = uri;
-		this.type = Integer.valueOf(type);
+		this.type = type;
 		this.bitmap = BitmapFactory.decodeFile(uri.getPath());
 	}
 	
@@ -66,11 +66,11 @@ public class Media {
 	 * @param uri
 	 * @param type
 	 */
-	public Media(UUID id, UUID chapterId, Uri uri, int type) {
+	public Media(UUID id, UUID chapterId, Uri uri, String type) {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.uri = uri;		
-		this.type = Integer.valueOf(type);
+		this.type = type;
 		if (uri != null) {
 			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
 		}
@@ -90,7 +90,7 @@ public class Media {
 		return uri;
 	}
 	
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 	
@@ -108,16 +108,23 @@ public class Media {
 		this.chapterId = chapterId;
 	}
 	
+	/**
+	 * Sets the uri of the media. Also updates the bitmap.
+	 * @param uri
+	 */
 	public void setUri(Uri uri) {
 		this.uri = uri;
+		if (uri != null) {
+			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+		}		
 	}
 	
 	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
 	}
 	
-	public void setType(int type) {
-		this.type = Integer.valueOf(type);
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	/**
@@ -138,15 +145,11 @@ public class Media {
 		if (chapterId != null) {
 			info.put(MediaTable.COLUMN_NAME_CHAPTER_ID, chapterId.toString());
 		}
-	
-		if (uri != null) { 
-			info.put(MediaTable.COLUMN_NAME_TYPE, uri.toString());
+		
+		if (type != null) {
+			info.put(MediaTable.COLUMN_NAME_TYPE, type);
 		}
 		
-		if (type != null) { 
-			info.put(MediaTable.COLUMN_NAME_TYPE, type.toString());
-		}
-			
 		return info;
 	}
 	

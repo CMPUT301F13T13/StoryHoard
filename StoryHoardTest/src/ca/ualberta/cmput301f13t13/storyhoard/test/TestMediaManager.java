@@ -36,7 +36,7 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestMediaManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String uriString = "https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png";
+	private static final Uri uri = Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png");
 
 	public TestMediaManager() {
 		super(ViewBrowseStories.class);
@@ -56,126 +56,89 @@ public class TestMediaManager extends
 	 */
 	public void testAddLoadImage() {
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		
-		
-		
+		MediaManager mm = MediaManager.getInstance(this.getActivity());
+		Media mockMedia = new Media(UUID.randomUUID(), uri, Media.PHOTO);
+
+		mm.insert(mockMedia, helper);
+
+		ArrayList<Object> objects = mm.retrieve(mockMedia, helper);
+		assertEquals(objects.size(), 1);
+
+		Media check = (Media) objects.get(0);
+		assertTrue(check != null);
 	}
 
-	// /**
-	// * Tests posting a photo to the current segment/chapter/page/whatever
-	// */
-	// public void testPostPhoto() {
-	// // Photo photo = new Photo();
-	// int chapterId = 0;
-	// MediaManager mm = MediaManager.getInstance(this.getActivity());
-	// try {
-	// mm.postPhoto(photo, chapterId);
-	// } catch (Exception e) {
-	// fail("Could not post photo: " + e.getStackTrace());
-	// }
-	// }
+	/**
+	 * Tests getting all photos, and all illustrations belonging to a chapter.
+	 */
+	public void testGetAllMedia() {
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		MediaManager mm = MediaManager.getInstance(this.getActivity());
 
-	// /**
-	// * Tests saving and loading a chapter that has media locally.
-	// */
-	// public void testAddLoadChapterMedia() {
-	// // TO DO: Add media
-	// ChapterManager cm = new ChapterManager(this.getActivity());
-	// newMockChapter(UUID.randomUUID(), "it is raining");
-	// // Give it photos/illustrations
-	//
-	// DBHelper helper = DBHelper.getInstance(this.getActivity());
-	// cm.insert(mockChapter, helper);
-	// mockChapters = cm.retrieve(mockChapter, helper);
-	// assertTrue(mockChapters.size() != 0);
-	// assertTrue(hasChapter(mockChapters, mockChapter));
-	// }
+		UUID chapId = UUID.randomUUID();
+		Media m1 = new Media(chapId, uri, Media.PHOTO);
+		Media m2 = new Media(chapId, uri, Media.PHOTO);
+		Media m3 = new Media(chapId, uri, Media.ILLUSTRATION);
+		Media m4 = new Media(chapId, uri, Media.ILLUSTRATION);
+
+		mm.insert(m1, helper);
+		mm.insert(m2, helper);
+		mm.insert(m3, helper);
+		mm.insert(m4, helper);
+
+		// get all media
+		Media criteria = new Media(null, chapId, null, null);
+		ArrayList<Object> objects = mm.retrieve(criteria, helper);
+		assertEquals(objects.size(), 4);
+
+		// get all photos
+		criteria = new Media(null, chapId, null, Media.PHOTO);
+		objects = mm.retrieve(criteria, helper);
+		assertEquals(objects.size(), 2);
+
+		Media newm = (Media) objects.get(0);
+		assertTrue(newm != null);
+		assertTrue(newm.getType().equals(Media.PHOTO));
+
+		// get all illustrations
+		criteria = new Media(null, chapId, null, Media.ILLUSTRATION);
+		objects = mm.retrieve(criteria, helper);
+		assertEquals(objects.size(), 2);
+
+		newm = (Media) objects.get(0);
+		assertTrue(newm != null);
+		assertTrue(newm.getType().equals(Media.ILLUSTRATION));
+	}
 
 	/**
-	 * Tests updating a chapter's data except for media, which includes adding
-	 * and loading a chapter.
+	 * Tests updating a chapter's media.
 	 */
-	public void testUpdateChapterMedia() {
-		// ADD MEDIA
-		Chapter chapter = new Chapter(UUID.randomUUID(), "the blue cow mood");
-		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
+	public void testUpdateMedia() {
+		MediaManager mm = MediaManager.getInstance(this.getActivity());
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 
 		Chapter mockChapter = new Chapter(UUID.randomUUID(), "hi there");
-		cm.insert(mockChapter, helper);
 
-		ArrayList<Object> mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
-		assertTrue(hasChapter(mockChapters, mockChapter));
+		// Making media for chapter
+		Media m1 = new Media(mockChapter.getId(), uri, Media.PHOTO);
+		mm.insert(m1, helper);
 
-		Chapter newChapter = (Chapter) mockChapters.get(0);
+		ArrayList<Object> objects = mm.retrieve(m1, helper);
+		assertEquals(objects.size(), 1);
 
-		// newChapter.setText("My Wizard newt");
-		cm.update(newChapter, helper);
+		Media newM1 = (Media) objects.get(0);
 
-		// make sure you can find new story
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() != 0);
-		assertTrue(hasChapter(mockChapters, newChapter));
+		newM1.setType(Media.ILLUSTRATION);
+		newM1.setUri(Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/published_stories.jpg"));
 
-		// make sure old version no longer exists
-		mockChapters = cm.retrieve(mockChapter, helper);
-		assertTrue(mockChapters.size() == 0);
-	}
+		mm.update(newM1, helper);
 
-	/**
-	 * Tests edit illustration
-	 * 
-	 * @throws URISyntaxException
-	 */
-//	public void testEditIllustration() throws URISyntaxException {
-//		// Get existing chapter from ChapterManager
-//		MediaManager mm = MediaManager.getInstance(this.getActivity());
-//		Uri uri = Uri.parse("https://www.google.ca");
-//		UUID chapId = UUID.randomUUID();
-//		DBHelper helper = DBHelper.getInstance(this.getActivity());
-//
-//		mm.insert(uri, helper);
-//
-//		// TODO replace uri with Media object
-//		ArrayList<Object> uris = mm.retrieve(uri, helper);
-//
-//		assertSame((URI) uris.get(0), uri);
-//
-//		// Replace existing illustration with new one
-//		URI newUri = new URI("https://www.ualberta.ca");
-//		mm.update(uri, helper); // TODO only need one uri to update
-//		uris = mm.retrieve(uri, helper);
-//		newUri = (URI) uris.get(0);
-//
-//		assertFalse(uri != newUri);
-//	}
+		// make sure you can find new chapter
+		objects = mm.retrieve(newM1, helper);
+		assertEquals(objects.size(), 1);
+		newM1 = (Media) objects.get(0);
 
-	// /**
-	// * Tests taking a photo
-	// */
-	// public void testTakePhoto(){
-	// MediaManager mm = new MediaManager();
-	// mm.takePhoto();
-	// }
-
-	/**
-	 * Checks whether a chapter is contained in a chapters ArrayList.
-	 * 
-	 * @param objs
-	 *            ArrayList of objects.
-	 * @param chap
-	 *            Object for which we are testing whether or not it is contained
-	 *            in the ArrayList.
-	 * @return Boolean
-	 */
-	public Boolean hasChapter(ArrayList<Object> objs, Chapter chap) {
-		for (Object object : objs) {
-			Chapter newChap = (Chapter) object;
-			if (newChap.getId().equals(chap.getId())) {
-				return true;
-			}
-		}
-		return false;
+		assertFalse(newM1.getType().equals(Media.PHOTO));
+		assertNotSame(newM1.getUri(), uri);
 	}
 }
