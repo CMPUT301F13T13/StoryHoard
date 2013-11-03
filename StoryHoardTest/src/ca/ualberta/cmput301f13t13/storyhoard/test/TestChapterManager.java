@@ -124,7 +124,7 @@ public class TestChapterManager extends
 
 		// make sure you can find new chapter
 		mockChapters = cm.retrieve(newChapter, helper);
-		assertTrue(mockChapters.size() != 0);
+		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, newChapter));
 
 		// make sure old version no longer exists

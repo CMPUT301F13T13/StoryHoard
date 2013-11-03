@@ -58,54 +58,53 @@ public class TestMediaManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		MediaManager mm = MediaManager.getInstance(this.getActivity());
 		Media mockMedia = new Media(UUID.randomUUID(), uri, Media.PHOTO);
-	
+
 		mm.insert(mockMedia, helper);
 
 		ArrayList<Object> objects = mm.retrieve(mockMedia, helper);
 		assertEquals(objects.size(), 1);
-		
+
 		Media check = (Media) objects.get(0);
 		assertTrue(check != null);
 	}
 
 	/**
-	 * Tests getting all photos, and all illustrations belonging to 
-	 * a chapter.
+	 * Tests getting all photos, and all illustrations belonging to a chapter.
 	 */
-	public void getAllMedia() {
+	public void testGetAllMedia() {
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		MediaManager mm = MediaManager.getInstance(this.getActivity());
-		
+
 		UUID chapId = UUID.randomUUID();
 		Media m1 = new Media(chapId, uri, Media.PHOTO);
 		Media m2 = new Media(chapId, uri, Media.PHOTO);
 		Media m3 = new Media(chapId, uri, Media.ILLUSTRATION);
 		Media m4 = new Media(chapId, uri, Media.ILLUSTRATION);
-	
+
 		mm.insert(m1, helper);
 		mm.insert(m2, helper);
 		mm.insert(m3, helper);
-		mm.insert(m4, helper);		
+		mm.insert(m4, helper);
 
 		// get all media
-		Media criteria = new Media(chapId, null, null);
+		Media criteria = new Media(null, chapId, null, null);
 		ArrayList<Object> objects = mm.retrieve(criteria, helper);
 		assertEquals(objects.size(), 4);
-		
+
 		// get all photos
-		criteria = new Media(chapId, null, Media.PHOTO);
+		criteria = new Media(null, chapId, null, Media.PHOTO);
 		objects = mm.retrieve(criteria, helper);
 		assertEquals(objects.size(), 2);
-		
+
 		Media newm = (Media) objects.get(0);
 		assertTrue(newm != null);
 		assertTrue(newm.getType().equals(Media.PHOTO));
-		
+
 		// get all illustrations
-		criteria = new Media(chapId, null, Media.ILLUSTRATION);
+		criteria = new Media(null, chapId, null, Media.ILLUSTRATION);
 		objects = mm.retrieve(criteria, helper);
-		assertEquals(objects.size(), 2);		
-		
+		assertEquals(objects.size(), 2);
+
 		newm = (Media) objects.get(0);
 		assertTrue(newm != null);
 		assertTrue(newm.getType().equals(Media.ILLUSTRATION));
@@ -115,17 +114,31 @@ public class TestMediaManager extends
 	 * Tests updating a chapter's media.
 	 */
 	public void testUpdateMedia() {
-		
+		MediaManager mm = MediaManager.getInstance(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+
+		Chapter mockChapter = new Chapter(UUID.randomUUID(), "hi there");
+
+		// Making media for chapter
+		Media m1 = new Media(mockChapter.getId(), uri, Media.PHOTO);
+		mm.insert(m1, helper);
+
+		ArrayList<Object> objects = mm.retrieve(m1, helper);
+		assertEquals(objects.size(), 1);
+
+		Media newM1 = (Media) objects.get(0);
+
+		newM1.setType(Media.ILLUSTRATION);
+		newM1.setUri(Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/published_stories.jpg"));
+
+		mm.update(newM1, helper);
+
+		// make sure you can find new chapter
+		objects = mm.retrieve(newM1, helper);
+		assertEquals(objects.size(), 1);
+		newM1 = (Media) objects.get(0);
+
+		assertFalse(newM1.getType().equals(Media.PHOTO));
+		assertNotSame(newM1.getUri(), uri);
 	}
-
-
-
-	// /**
-	// * Tests taking a photo
-	// */
-	// public void testTakePhoto(){
-	// MediaManager mm = new MediaManager();
-	// mm.takePhoto();
-	// }
-
 }
