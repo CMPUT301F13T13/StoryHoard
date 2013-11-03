@@ -3,13 +3,14 @@ package ca.ualberta.cs.c301f13t13.gui;
 import java.util.UUID;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
@@ -55,8 +56,7 @@ public class ViewBrowseStory extends Activity {
 						Toast.LENGTH_SHORT).show();
 				finish();
 			}
-			// CURRENTLY BROKEN. WAITING FOR STEPH/ASHLEY FIX
-			// focusedStory = gc.getCompleteStory(storyID, this);
+			focusedStory = gc.getCompleteStory(storyID, this);
 		} finally {
 			// Check if the story exists or not
 			if (focusedStory == null) {
@@ -66,11 +66,38 @@ public class ViewBrowseStory extends Activity {
 				finish();
 			}
 		}
-		
+
 		// Populate the views
 		storyCover.setImageBitmap(focusedStory.getImage());
 		storyTitle.setText(focusedStory.getTitle());
 		storyAuthor.setText(focusedStory.getAuthor());
 		storyDescription.setText(focusedStory.getDescription());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_browse_story, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		Intent intent;
+		switch (item.getItemId()) {
+		case R.id.editExistingStory:
+			// Handle editing the story content, like chapters and choices
+			//intent = new Intent(this, EditStoryActivity.class);
+			//startActivity(intent);
+			return true;
+		case R.id.editStoryMetaData:
+			intent = new Intent(this, EditStoryActivity.class);
+			intent.putExtra("isEditing", true);
+			intent.putExtra("storyID", focusedStory.getId());
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }

@@ -15,6 +15,8 @@
  */
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.util.UUID;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -37,17 +40,34 @@ public class EditStoryActivity extends Activity {
 	private EditText newDescription;
 	private Button addfirstChapter;
 	private Button addStoryImage;
+	private Story newStory;
+	private GeneralController gc;
+	private boolean isEditing;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_story);
 
+		gc = GeneralController.getInstance();
+
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
 		addfirstChapter = (Button) findViewById(R.id.addFirstChapter);
 		addStoryImage = (Button) findViewById(R.id.addStoryImage);
+
+		// Check if we are editing the story or making a new story
+		Bundle bundle = this.getIntent().getExtras();
+		bundle.getBoolean("isEditing", false);
+
+		if (isEditing) {
+			newStory = gc.getCompleteStory(
+					(UUID) bundle.get("storyID"), this);
+			newTitle.setText(newStory.getTitle());
+			newAuthor.setText(newStory.getAuthor());
+			newDescription.setText(newStory.getDescription());
+		}
 
 		addfirstChapter.setOnClickListener(new OnClickListener() {
 
@@ -60,9 +80,15 @@ public class EditStoryActivity extends Activity {
 				String title = newTitle.getText().toString();
 				String author = newAuthor.getText().toString();
 				String description = newDescription.getText().toString();
-				Story newStory = new Story(title, author, description, true);
-				
-				Intent intent = new Intent(getApplicationContext(), EditChapterActivity.class);
+				if (isEditing) {
+					newStory.setAuthor(author);
+					newStory.setTitle(title);
+					newStory.setDescription(description);
+				} else {
+					newStory = new Story(title, author, description, true);
+				}
+				Intent intent = new Intent(getApplicationContext(),
+						EditChapterActivity.class);
 				intent.putExtra("New Story", newStory);
 				startActivity(intent);
 			}
@@ -72,7 +98,9 @@ public class EditStoryActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getBaseContext(), "Add Image not implemented yet", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(),
+						"Add Image not implemented yet", Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 	}

@@ -57,7 +57,6 @@ public class ViewBrowseStories extends Activity {
 						getString(R.string.title_viewBrowseStories_PublishedStories), });
 		actionBar.setListNavigationCallbacks(adapter,
 				new OnNavigationListener() {
-
 					@Override
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
@@ -116,6 +115,7 @@ public class ViewBrowseStories extends Activity {
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
+			intent.putExtra("isEditing", false);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
@@ -134,52 +134,7 @@ public class ViewBrowseStories extends Activity {
 	private void refreshStories() {
 		gridArray.clear();
 		gc = GeneralController.getInstance();
-
-		/*
-		 * Implement this when ready. Testing to see if the stories actually
-		 * work To test back end, set this to false
-		 */
-		boolean testing = false;
-
-		if (testing) {
-			if (viewType == GeneralController.CREATED) {
-				// Is broken for some reason, returns null pointer exception
-				gc.addObjectLocally(new Story("My Bad Story",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("My Bad Story The Sequel- Rawr",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("My Goodness Hi Santa",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("RAWR TESTING BADLY", "", "",
-						true), GeneralController.STORY, this);
-				gridArray = gc.getAllStories(viewType, this);
-			}
-			if (viewType == GeneralController.PUBLISHED) {
-				gridArray.add(new Story("Life and Times of Chrono",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Android: To do or not to do",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Purple MacBook Camera Sticky",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("DIS SO BAD", "", "", true));
-
-			}
-			if (viewType == GeneralController.CACHED) {
-				gridArray.add(new Story("Masterpiece: The Master Piece",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Hot Dogs and Cream Cheese",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("My God, Santa Was Mean This Year",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
-
-			} else {
-				gridArray = gc.getAllStories(viewType, this);
-			}
-		}
+		gridArray = gc.getAllStories(viewType, this);
 		customGridAdapter.notifyDataSetChanged();
 	}
 }
