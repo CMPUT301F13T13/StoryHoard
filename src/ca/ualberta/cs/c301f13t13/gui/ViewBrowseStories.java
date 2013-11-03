@@ -47,6 +47,7 @@ public class ViewBrowseStories extends Activity {
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
+		// Setup the action bar items
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				actionBar.getThemedContext(),
 				android.R.layout.simple_list_item_1,
@@ -55,6 +56,8 @@ public class ViewBrowseStories extends Activity {
 						getString(R.string.title_viewBrowseStories_MyStories),
 						getString(R.string.title_viewBrowseStories_CachedStories),
 						getString(R.string.title_viewBrowseStories_PublishedStories), });
+		
+		// Setup the action bar listener
 		actionBar.setListNavigationCallbacks(adapter,
 				new OnNavigationListener() {
 					@Override
@@ -77,8 +80,9 @@ public class ViewBrowseStories extends Activity {
 		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
+		
+		// Setup the grid view click listener
 		gridView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -115,6 +119,7 @@ public class ViewBrowseStories extends Activity {
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
+			// Pass it a boolean to indicate it is not editing
 			intent.putExtra("isEditing", false);
 			startActivity(intent);
 			return true;

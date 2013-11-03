@@ -91,6 +91,7 @@ public class EditStoryActivity extends Activity {
 						EditChapterActivity.class);
 				intent.putExtra("New Story", newStory);
 				startActivity(intent);
+				finish();
 			}
 		});
 
