@@ -200,9 +200,9 @@ public class TestGeneralController extends
 		gc.publishStory(s5, getActivity());
 		gc.publishStory(s6, getActivity());
 		
-		// both author and title are null
+		// both author and title are null (should retrieve all created stories)
 		stories = gc.searchStory(null, null, GeneralController.CREATED, getActivity());
-		assertEquals(stories.size(), 0);
+		assertEquals(stories.size(), 2);
 		
 		// author is me, and created by author
 		stories = gc.searchStory(null, "me", GeneralController.CREATED, getActivity());
@@ -317,16 +317,153 @@ public class TestGeneralController extends
 		fail("not yet implemented");
 	}
 	
+	/**
+	 * Tests getting a complete chapter, but the chapters don't contain
+	 * any media.
+	 */
 	public void testGetCompleteStory() {
-		fail("not yet implemented");
+		GeneralController gc = GeneralController.getInstance();
+		
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", true);
+		
+		// Making chapters and choices
+		Chapter chap1 = new Chapter(s1.getId(),"chapter text rawr");
+		Chapter chap2 = new Chapter(s1.getId(), "then this happens");
+		Chapter chap3 = new Chapter(s2.getId(), "then this dies");
+		Choice c1 = new Choice(chap1.getId(), chap2.getId(), "choice texters");
+		Choice c2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
+		
+		s1.setFirstChapterId(chap1.getId());
+		s2.setFirstChapterId(chap3.getId());
+		
+		chap1.addChoice(c1);
+		chap1.addChoice(c2);
+		
+		s1.addChapter(chap1);
+		s1.addChapter(chap2);
+		s2.addChapter(chap3);
+		
+		// add everything into database
+		gc.addObjectLocally(c1, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(c2, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(chap1, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(chap2, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(chap3, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
+		gc.addObjectLocally(s2, GeneralController.STORY, getActivity());
+		
+		Story myStory1 = gc.getCompleteStory(s1.getId(), getActivity());
+		Story myStory2 = gc.getCompleteStory(s2.getId(), getActivity());
+		
+		assertTrue(myStory1 != null);
+		assertTrue(myStory2 != null);
+
+		// Checking story that has one chapter
+		assertEquals(s2.getId(), myStory2.getId());
+		assertEquals(s2.getChapters().size(), 1);	
+		
+		// checking for correct story information
+		assertEquals(myStory2.getFirstChapterId(), s2.getFirstChapterId());
+		assertTrue(myStory2.getTitle().equals(s2.getTitle()));
+		assertTrue(myStory2.getAuthor().equals(s2.getAuthor()));
+		assertTrue(myStory2.getDescription().equals(s2.getDescription()));		
+		
+		// checking the chapter of the story
+		Chapter s2Chap = myStory2.getChapter(chap3.getId());
+		assertTrue(s2Chap != null);
+		assertEquals(s2Chap.getId(), chap3.getId());
+		assertTrue(s2Chap.getText().equals(chap3.getText()));
+		
+		// Checking the story with 2 chapters, one has choices
+		assertEquals(s1.getId(), myStory1.getId());
+		assertEquals(s1.getChapters().size(), 2);
+		
+		// checking story information
+		assertEquals(myStory1.getFirstChapterId(), s1.getFirstChapterId());
+		assertTrue(myStory1.getTitle().equals(s1.getTitle()));
+		assertTrue(myStory1.getAuthor().equals(s1.getAuthor()));
+		assertTrue(myStory1.getDescription().equals(s1.getDescription()));
+		
+		// Checking the chapter with choices
+		Chapter s1c1 = myStory1.getChapter(chap1.getId());
+		assertTrue(s1c1 != null);
+		
+		ArrayList<Choice> choices = s1c1.getChoices();
+		assertEquals(choices.size(), 2);
+		Choice c1c1 = choices.get(0);
+		Choice c1c2 = choices.get(1);
+		
+		if (c1c1.getId().toString().equals(c1.getId().toString())) {
+			assertTrue(c1c1.getText().equals(c1.getText()));
+			assertEquals(c1c1.getNextChapter(), chap2.getId());
+		} else if (c1c2.getId().toString().equals(c1.getId())){
+			assertTrue(c1c2.getText().equals(c1.getText()));
+			assertEquals(c1c2.getNextChapter(), chap2.getId());	
+		} else {
+			fail("error in retrieving chapter choices: getCompleteStory");
+		}
+		
+		// checking the chapter without choices
+		Chapter s1c2 = myStory1.getChapter(chap2.getId());
+		assertTrue(s1c1 != null);
+		
+		ArrayList<Choice> choices2 = s1c2.getChoices();
+		assertEquals(choices2.size(), 0);	
+		assertTrue(s1c2.getText().equals(chap2.getText()));
+
 	}
 	
+	/**
+	 * Tests getting a complete chapter, contains choices and
+	 * media.
+	 */
 	public void testGetCompleteChapter() {
-		fail("not yet implemented");
+		GeneralController gc = GeneralController.getInstance();
+		UUID s1 = UUID.randomUUID();
+		
+		// Making chapters and choices
+		Chapter chap1 = new Chapter(s1,"chapter text rawr");
+		Chapter chap2 = new Chapter(s1,"chapter text rawr");
+		Choice choice1 = new Choice(chap1.getId(), chap2.getId(), "choice texters");
+		Choice choice2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
+		
+		//TODO insert media
+		
+		chap1.addChoice(choice1);
+		chap1.addChoice(choice2);
+
+		// add everything into database
+		gc.addObjectLocally(choice1, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(choice2, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(chap1, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(chap2, GeneralController.CHAPTER, getActivity());
+		
+		Chapter newChap = gc.getCompleteChapter(chap1.getId(), getActivity());
+		assertTrue(newChap != null);
+		assertEquals(newChap.getId(), chap1.getId());
+
+		ArrayList<Choice> choices = newChap.getChoices();
+		assertEquals(choices.size(), 2);
+		
+		Choice c1 = choices.get(0);
+		Choice c2 = choices.get(1);
+		
+		if (c1.getId().toString().equals(choice1.getId().toString())) {
+			assertTrue(c1.getText().equals(choice1.getText()));
+			assertEquals(c1.getNextChapter(), chap2.getId());
+			
+			assertTrue(c2.getText().equals(choice2.getText()));
+			assertTrue(c2.getNextChapter() != null);
+		} else if (c2.getId().toString().equals(choice1.getId())){
+			assertTrue(c2.getText().equals(choice1.getText()));
+			assertEquals(c2.getNextChapter(), chap2.getId());	
+			
+			assertTrue(c1.getText().equals(choice1.getText()));
+			assertTrue(c1.getNextChapter() != null);		
+		} else {
+			fail("error in retrieving chapter choices: getCompleteChapter");
+		}
 	}
-	
-	public void testGetCompleteChoice() {
-		fail("not yet implemented");
-	}
-	
 }

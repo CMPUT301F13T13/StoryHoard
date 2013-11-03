@@ -30,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
  */
 public class Media {
 	private UUID id;
-	private UUID chapterId;
+	private UUID chapterId;  
 	private Uri uri;
 	private Integer type;
 	private Bitmap bitmap;
@@ -53,8 +53,8 @@ public class Media {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.uri = uri;
-		this.type = type;
-		this.bitmap = BitmapFactory.decodeFile(this.uri.getPath());
+		this.type = Integer.valueOf(type);
+		this.bitmap = BitmapFactory.decodeFile(uri.getPath());
 	}
 	
 	/**
@@ -70,8 +70,10 @@ public class Media {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.uri = uri;		
-		this.type = type;
-		this.bitmap = BitmapFactory.decodeFile(this.uri.getPath());
+		this.type = Integer.valueOf(type);
+		if (uri != null) {
+			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+		}
 	}
 	
 	// GETTERS
@@ -96,14 +98,6 @@ public class Media {
 		return bitmap;
 	}
 	
-	public static int getPhoto() {
-		return PHOTO;
-	}
-	
-	public static int getIllustration() {
-		return ILLUSTRATION;
-	}
-	
 	// SETTERS
 	
 	public void setId(UUID id) {
@@ -123,15 +117,7 @@ public class Media {
 	}
 	
 	public void setType(int type) {
-		this.type = type;
-	}
-	
-	public static int setPhoto() {
-		return PHOTO;
-	}
-	
-	public static int setIllustration() {
-		return ILLUSTRATION;
+		this.type = Integer.valueOf(type);
 	}
 	
 	/**
@@ -153,10 +139,14 @@ public class Media {
 			info.put(MediaTable.COLUMN_NAME_CHAPTER_ID, chapterId.toString());
 		}
 	
+		if (uri != null) { 
+			info.put(MediaTable.COLUMN_NAME_TYPE, uri.toString());
+		}
+		
 		if (type != null) { 
 			info.put(MediaTable.COLUMN_NAME_TYPE, type.toString());
 		}
-		
+			
 		return info;
 	}
 	

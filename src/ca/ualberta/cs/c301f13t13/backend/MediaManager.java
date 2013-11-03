@@ -67,7 +67,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
 		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, media.getChapterId().toString());
 		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, media.getUri().toString());
-		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());
+		values.put(MediaTable.COLUMN_NAME_TYPE, String.valueOf(media.getType()));;
 
 		db.insert(ChapterTable.TABLE_NAME, null, values);	
 		
@@ -108,7 +108,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 					UUID.fromString(cursor.getString(0)), // media id
 					UUID.fromString(cursor.getString(1)), // chapter id
 					Uri.parse(cursor.getString(2)), // uri
-					cursor.getInt(3)
+					Integer.parseInt(cursor.getString(3))
 					);
 			results.add(newMedia);
 			cursor.moveToNext();

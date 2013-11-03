@@ -38,6 +38,25 @@ public class Story implements Serializable {
 	private Bitmap image;
 
 	/**
+	 * Initializes a new story object with no id.
+	 * 
+	 * @param title
+	 * @param author
+	 * @param description
+	 * @param authorsOwn
+	 */
+	public Story(String title, String author, String description, 
+			Boolean authorsOwn) {
+		this.id = UUID.randomUUID();
+		this.author = author;
+		this.title = title;
+		this.description = description;
+		this.authorsOwn = authorsOwn;
+		this.firstChapterId = null;
+		chapters = new HashMap<UUID, Chapter>();
+	}	
+	
+	/**
 	 * Initializes a new story object with an id. Usually used when making
 	 * a story object that will be holding search criteria.
 	 * 
@@ -56,26 +75,7 @@ public class Story implements Serializable {
 		this.authorsOwn = authorsOwn;
 		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
-	}	
-
-	/**
-	 * Initializes a new story object with no id.
-	 * 
-	 * @param title
-	 * @param author
-	 * @param description
-	 * @param authorsOwn
-	 */
-	public Story(String title, String author, String description, 
-			Boolean authorsOwn) {
-		this.id = UUID.randomUUID();
-		this.author = author;
-		this.title = title;
-		this.description = description;
-		this.authorsOwn = authorsOwn;
-		this.firstChapterId = null;
-		chapters = new HashMap<UUID, Chapter>();
-	}	
+	}		
 	
 	/**
 	 * Initializes a new story object from a database entry. 

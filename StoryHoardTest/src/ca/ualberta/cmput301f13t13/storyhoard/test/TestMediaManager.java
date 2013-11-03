@@ -16,8 +16,6 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,6 +24,7 @@ import org.junit.Before;
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
 
+import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -37,6 +36,7 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestMediaManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	private static final String uriString = "https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png";
 
 	public TestMediaManager() {
 		super(ViewBrowseStories.class);
@@ -48,15 +48,17 @@ public class TestMediaManager extends
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);		
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
-	
-	/**
-	 * Tests saving and loading photo.
-	 */
-	public void testSaveLoadPhoto() {
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
 
+	/**
+	 * Tests adding and loading an image.
+	 */
+	public void testAddLoadImage() {
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		
+		
+		
 	}
 
 	// /**
@@ -126,28 +128,28 @@ public class TestMediaManager extends
 	 * 
 	 * @throws URISyntaxException
 	 */
-	public void testEditIllustration() throws URISyntaxException {
-		// Get existing chapter from ChapterManager
-		MediaManager mm = MediaManager.getInstance(this.getActivity());
-		URI uri = new URI("https://www.google.ca");
-		UUID chapId = UUID.randomUUID();
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-
-		mm.insert(uri, helper);
-
-		// TODO replace uri with Media object
-		ArrayList<Object> uris = mm.retrieve(uri, helper);
-
-		assertSame((URI) uris.get(0), uri);
-
-		// Replace existing illustration with new one
-		URI newUri = new URI("https://www.ualberta.ca");
-		mm.update(uri, helper); // TODO only need one uri to update
-		uris = mm.retrieve(uri, helper);
-		newUri = (URI) uris.get(0);
-
-		assertFalse(uri != newUri);
-	}
+//	public void testEditIllustration() throws URISyntaxException {
+//		// Get existing chapter from ChapterManager
+//		MediaManager mm = MediaManager.getInstance(this.getActivity());
+//		Uri uri = Uri.parse("https://www.google.ca");
+//		UUID chapId = UUID.randomUUID();
+//		DBHelper helper = DBHelper.getInstance(this.getActivity());
+//
+//		mm.insert(uri, helper);
+//
+//		// TODO replace uri with Media object
+//		ArrayList<Object> uris = mm.retrieve(uri, helper);
+//
+//		assertSame((URI) uris.get(0), uri);
+//
+//		// Replace existing illustration with new one
+//		URI newUri = new URI("https://www.ualberta.ca");
+//		mm.update(uri, helper); // TODO only need one uri to update
+//		uris = mm.retrieve(uri, helper);
+//		newUri = (URI) uris.get(0);
+//
+//		assertFalse(uri != newUri);
+//	}
 
 	// /**
 	// * Tests taking a photo
