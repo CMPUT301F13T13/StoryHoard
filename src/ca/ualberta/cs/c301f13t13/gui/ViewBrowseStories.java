@@ -147,6 +147,5 @@ public class ViewBrowseStories extends Activity {
 		gc = GeneralController.getInstance();
 		gridArray.addAll(gc.getAllStories(viewType, this));
 		customGridAdapter.notifyDataSetChanged();
-		Log.w("GridArrayString", gridArray.toString());
 	}
 }

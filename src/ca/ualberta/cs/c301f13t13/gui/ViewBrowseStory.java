@@ -34,21 +34,27 @@ public class ViewBrowseStory extends Activity {
 	Story focusedStory;
 	GeneralController gc;
 
+	private ImageView storyCover;
+	private TextView storyTitle;
+	private TextView storyAuthor;
+	private TextView storyDescription;
+	private UUID storyID;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_story);
+		setContentView(R.layout.activity_view_browse_story);
 
-		ImageView storyCover = (ImageView) findViewById(R.id.storyImage);
-		TextView storyTitle = (TextView) findViewById(R.id.storyTitle);
-		TextView storyAuthor = (TextView) findViewById(R.id.storyAuthor);
-		TextView storyDescription = (TextView) findViewById(R.id.storyDescription);
+		storyCover = (ImageView) findViewById(R.id.storyImage);
+		storyTitle = (TextView) findViewById(R.id.storyTitle);
+		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
+		storyDescription = (TextView) findViewById(R.id.storyDescription);
 
 		// Initialize the general controller and grab the story
 		gc = GeneralController.getInstance();
 		Bundle bundle = this.getIntent().getExtras();
 		try {
-			UUID storyID = null;
+			storyID = null;
 			if (bundle != null) {
 				storyID = (UUID) bundle.getSerializable("storyID");
 			} else {
@@ -66,8 +72,12 @@ public class ViewBrowseStory extends Activity {
 				finish();
 			}
 		}
+	}
 
-		// Populate the views
+	@Override
+	public void onResume() {
+		super.onResume();
+		focusedStory = gc.getCompleteStory(storyID, this);
 		storyCover.setImageBitmap(focusedStory.getImage());
 		storyTitle.setText(focusedStory.getTitle());
 		storyAuthor.setText(focusedStory.getAuthor());
@@ -79,7 +89,7 @@ public class ViewBrowseStory extends Activity {
 		getMenuInflater().inflate(R.menu.view_browse_story, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -87,8 +97,8 @@ public class ViewBrowseStory extends Activity {
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
 			// Handle editing the story content, like chapters and choices
-			//intent = new Intent(this, EditStoryActivity.class);
-			//startActivity(intent);
+			// intent = new Intent(this, EditStoryActivity.class);
+			// startActivity(intent);
 			return true;
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);

@@ -59,17 +59,16 @@ public class EditStoryActivity extends Activity {
 
 		// Check if we are editing the story or making a new story
 		Bundle bundle = this.getIntent().getExtras();
-		bundle.getBoolean("isEditing", false);
-
+		isEditing = bundle.getBoolean("isEditing", false);
 		if (isEditing) {
 			newStory = gc.getCompleteStory((UUID) bundle.get("storyID"), this);
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
+			addfirstChapter.setText("Save Metadata");
 		}
-
+		
 		addfirstChapter.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				/*
@@ -83,14 +82,15 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
+					gc.updateObjectLocally(newStory, GeneralController.STORY, getBaseContext());
 				} else {
 					newStory = new Story(title, author, description, true);
+					Intent intent = new Intent(getApplicationContext(),
+							EditChapterActivity.class);
+					intent.putExtra("isEditing", false);
+					intent.putExtra("New Story", newStory);
+					startActivity(intent);
 				}
-				Intent intent = new Intent(getApplicationContext(),
-						EditChapterActivity.class);
-				intent.putExtra("isEditing", false);
-				intent.putExtra("New Story", newStory);
-				startActivity(intent);
 				finish();
 			}
 		});
