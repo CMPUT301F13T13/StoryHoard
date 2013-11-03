@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
@@ -30,7 +31,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * @author Alexander Wong
  * 
  */
-public class AddStoryActivity extends Activity {
+public class EditStoryActivity extends Activity {
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
@@ -61,7 +62,7 @@ public class AddStoryActivity extends Activity {
 				String description = newDescription.getText().toString();
 				Story newStory = new Story(title, author, description, true);
 				
-				Intent intent = new Intent(getApplicationContext(), AddChapterActivity.class);
+				Intent intent = new Intent(getApplicationContext(), EditChapterActivity.class);
 				intent.putExtra("New Story", newStory);
 				startActivity(intent);
 			}
@@ -71,6 +72,7 @@ public class AddStoryActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				Toast.makeText(getBaseContext(), "Add Image not implemented yet", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -31,6 +33,9 @@ public class ViewBrowseStories extends Activity {
 	GeneralController gc;
 	int viewType = GeneralController.CREATED;
 
+	/**
+	 * Create the View Browse Stories activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +68,6 @@ public class ViewBrowseStories extends Activity {
 						} else if (itemPosition == 2) {
 							viewType = GeneralController.PUBLISHED;
 						}
-						Log.w("StoryHoard ViewType", "" + itemPosition);
 						refreshStories();
 						return true;
 					}
@@ -74,66 +78,107 @@ public class ViewBrowseStories extends Activity {
 		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Handle going to view story activity
+				String title = gridArray.get(arg2).getTitle();
+				Log.w("StoryItemSelected", "" + arg2 + ": " + title);
+
+				// Start the new activity, passing the ID of the story
+				Intent intent = new Intent(getBaseContext(),
+						ViewBrowseStory.class);
+				intent.putExtra("storyID", gridArray.get(arg2).getId());
+				startActivity(intent);
+			}
+		});
 
 	}
 
+	/**
+	 * Handle the creation of the View Browse Stories activity menu
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_browse_stories, menu);
 		return true;
 	}
 
+	/**
+	 * Handle the selection of the View Browse Stories activity menu items
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
+		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
-			Intent intent = new Intent(this, AddStoryActivity.class);
+			intent = new Intent(this, EditStoryActivity.class);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
-			Toast.makeText(this, "Search not implemented", Toast.LENGTH_SHORT)
-					.show();
+			intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	/**
+	 * Called whenever the spinner is updated. Will story array based on
+	 * whatever the general controller returns.
+	 */
 	private void refreshStories() {
 		gridArray.clear();
 		gc = GeneralController.getInstance();
-		// Implement this when ready
-		// gridArray = gc.getAllStories(viewType, this);
-		// Testing to see if the stories actually work
-		if (viewType == GeneralController.CREATED) {
-			gridArray.add(new Story("My Bad Story",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("My Bad Story The Sequel- Rawr",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("My Goodness Hi Santa",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("RAWR TESTING BADLY", "", "", true));
-		}
-		if (viewType == GeneralController.PUBLISHED) {
-			gridArray.add(new Story("Life and Times of Chrono",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("Android: To do or not to do",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("Purple MacBook Camera Sticky",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("DIS SO BAD", "", "", true));
 
-		}
-		if (viewType == GeneralController.CACHED) {
-			gridArray.add(new Story("Masterpiece: The Master Piece",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("Hot Dogs and Cream Cheese",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("My God, Santa Was Mean This Year",
-					"I should test this better", "Wow, such story", true));
-			gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
+		/*
+		 * Implement this when ready. Testing to see if the stories actually
+		 * work To test back end, set this to false
+		 */
+		boolean testing = false;
 
+		if (testing) {
+			if (viewType == GeneralController.CREATED) {
+				// Is broken for some reason, returns null pointer exception
+				gc.addObjectLocally(new Story("My Bad Story",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("My Bad Story The Sequel- Rawr",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("My Goodness Hi Santa",
+						"I should test this better", "Wow, such story", true),
+						GeneralController.STORY, this);
+				gc.addObjectLocally(new Story("RAWR TESTING BADLY", "", "",
+						true), GeneralController.STORY, this);
+				gridArray = gc.getAllStories(viewType, this);
+			}
+			if (viewType == GeneralController.PUBLISHED) {
+				gridArray.add(new Story("Life and Times of Chrono",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("Android: To do or not to do",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("Purple MacBook Camera Sticky",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("DIS SO BAD", "", "", true));
+
+			}
+			if (viewType == GeneralController.CACHED) {
+				gridArray.add(new Story("Masterpiece: The Master Piece",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("Hot Dogs and Cream Cheese",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("My God, Santa Was Mean This Year",
+						"I should test this better", "Wow, such story", true));
+				gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
+
+			} else {
+				gridArray = gc.getAllStories(viewType, this);
+			}
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}

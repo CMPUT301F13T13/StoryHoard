@@ -17,6 +17,8 @@
     <string name="connect_choice_to">Connect choice to:</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
+    <string name="type">Story type</string>
+    <string name="story">Story title</string>
     <string name="story_description">Story Description</string>
     <string name="new_title">New Story Title</string>
     <string name="new_author">New Story Author</string>
@@ -34,6 +36,8 @@
     <string name="publish">Published Stories</string>
     <string name="download">Downloaded Stories</string>
     <string name="my_story">My Stories</string>
+    <string name="story_type">Choose a story type</string>
+    <string name="view_browse_story">View Story</string>
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
@@ -56,5 +60,6 @@
     <string name="title_viewBrowseStories_MyStories">My Stories</string>
     <string name="title_viewBrowseStories_PublishedStories">Published Stories</string>
     <string name="title_viewBrowseStories_CachedStories">Cached Stories</string>
+    <string name="title_activity_search">SearchActivity</string>
 
 </resources>
