@@ -11,13 +11,15 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+
 /**
  * Class meant for the testing of the Media class in the StoryHoard application.
  * 
  * @author Owner
  * @see Media
  */
-public class TestMedia extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestMedia extends
+		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private static final Uri uri = Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png");
 
 	public TestMedia() {
