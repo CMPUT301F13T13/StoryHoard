@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -37,6 +38,7 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * application.
  * 
  * @author Stephanie
+ * 
  * @see GeneralController
  */
 public class TestGeneralController extends
@@ -108,9 +110,7 @@ public class TestGeneralController extends
 	 * Tests using the controller to publish stories and then get all published
 	 * stories.
 	 */
-	public void testGetAllPublishedStories() {
-		fail("not yet implemented");
-
+	public void testAddLoadPublishedStories() {
 		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
@@ -301,13 +301,15 @@ public class TestGeneralController extends
 
 		Chapter newc1 = chapters.get(0);
 		newc1.setText("a cow mooed");
-
-		// TODO edit media
+		Media m = new Media(c1.getId(), Uri.parse("https://"), Media.PHOTO);
+		newc1.addPhoto(m);
 
 		gc.updateObjectLocally(newc1, GeneralController.CHAPTER, getActivity());
 
 		chapters = gc.getAllChapters(storyId, getActivity());
 		newc1 = chapters.get(0);
+		ArrayList<Media> medias = gc.getAllPhotos(c1.getId(), getActivity());
+		assertEquals(medias.size(), 1);
 
 		assertFalse(newc1.getText().equals(c1.getText()));
 	}
@@ -349,7 +351,7 @@ public class TestGeneralController extends
 		ArrayList<Media> medias = new ArrayList<Media>();
 		UUID chapId = UUID.randomUUID();
 
-		// Insert some choices
+		// Insert some media
 		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 
@@ -378,7 +380,36 @@ public class TestGeneralController extends
 	 * Tests using the general controller to update a published story.
 	 */
 	public void testUpdatePublished() {
-		fail("not yet implemented");
+		GeneralController gc = GeneralController.getInstance();
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", false);
+
+		gc.publishStory(s1, getActivity());
+		stories = gc.getAllStories(GeneralController.PUBLISHED, getActivity());
+
+		Story newS = stories.get(0);
+		newS.setAuthor("Mr. Blubbers");
+		newS.setTitle("The very long night");
+		newS.setDescription("There once was a blubber");
+		
+		Chapter chap = new Chapter(s1.getId(), "there is a time...");
+		newS.addChapter(chap);
+		newS.setFirstChapterId(chap.getId());
+
+		gc.updatePublished(newS, getActivity());
+		stories = gc.getAllStories(GeneralController.PUBLISHED, getActivity());
+		assertEquals(stories.size(), 1);
+		
+		newS = stories.get(0);
+		assertFalse(newS.getAuthor().equals(s1.getAuthor()));
+		assertFalse(newS.getTitle().equals(s1.getTitle()));
+		assertFalse(newS.getDescription().equals(s1.getDescription()));
+		
+		HashMap<UUID, Chapter> chaps = newS.getChapters();
+		assertEquals(chaps.size(), 1);		
+		assertTrue(chaps.get(newS.getFirstChapterId()) != null);
 	}
 
 	/**

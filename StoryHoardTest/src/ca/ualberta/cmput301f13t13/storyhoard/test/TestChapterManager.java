@@ -103,8 +103,8 @@ public class TestChapterManager extends
 	}
 
 	/**
-	 * Tests updating a chapter's data (except media and choices), which
-	 * includes adding and loading a chapter.
+	 * Tests updating a chapter's data, which includes adding and loading a 
+	 * chapter.
 	 */
 	public void testUpdateChapter() {
 		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
