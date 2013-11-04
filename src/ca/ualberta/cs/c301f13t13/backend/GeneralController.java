@@ -80,7 +80,8 @@ public class GeneralController {
 			stories = Utilities.objectsToStories(objects);
 			break;
 		case PUBLISHED:
-			stories = sm.getPublishedStories();
+			criteria = new Story(null, null, null, null, null);
+			stories = sm.searchPublished(criteria);
 			break;
 		default:		
 			break;

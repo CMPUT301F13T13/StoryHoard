@@ -174,17 +174,7 @@ public class StoryManager extends Model implements StoringManager {
 	 */
 	public void publish(Story story) {
 		//TODO STUB
-	}	
-	
-	/**
-	 * Retrieves all stories from the server, i.e. the published stories.
-	 * 
-	 * @return ArrayList
-	 */
-	public ArrayList<Story> getPublishedStories() {
-		//TODO STUBB
-		ArrayList<Story> published = new ArrayList<Story>();
-		return published;
+
 	}	
 
 	/**
@@ -196,8 +186,8 @@ public class StoryManager extends Model implements StoringManager {
 		//TODO STUBB
 	}
 
-	
-	public void searchPublished(Story story) {
+	public ArrayList<Story> searchPublished(Story story) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
@@ -240,4 +230,8 @@ public class StoryManager extends Model implements StoringManager {
 		return selection;
 	}
 
+	public void deletePublished(Story story) {
+		// TODO Auto-generated method stub
+		
+	}
 }

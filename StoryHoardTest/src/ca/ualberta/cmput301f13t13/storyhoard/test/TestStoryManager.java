@@ -175,7 +175,7 @@ public class TestStoryManager extends
 
 		// setting search criteria
 		Story mockCriteria = new Story(null, null, null, null, false);
-		ArrayList<Story> mockStories = sm.getPublishedStories();
+		ArrayList<Story> mockStories = sm.searchPublished(mockCriteria);
 		assertEquals(mockStories.size(), 3);
 
 	}
@@ -220,7 +220,7 @@ public class TestStoryManager extends
 		StoryManager sm = StoryManager.getInstance(this.getActivity());
 		sm.publish(mockStory);
 
-		ArrayList<Story> pubStories = sm.getPublishedStories();
+		ArrayList<Story> pubStories = sm.searchPublished(mockStory);
 		assertTrue(pubStories.contains(mockStory));
 	}
 
