@@ -97,12 +97,12 @@ public class ESClient {
 			System.err.println(output);
 		}
 
-		try {
-			EntityUtils.consume(entity);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		httpPost.releaseConnection();
+//		try {
+//			EntityUtils.consume(entity);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		httpPost.releaseConnection();
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class ESClient {
 			// We get the recipe from it!
 			Story recipe = esResponse.getSource();
 			System.out.println(recipe.toString());
-			getRequest.releaseConnection();
+//			getRequest.releaseConnection();
 
 		} catch (ClientProtocolException e) {
 
@@ -160,7 +160,7 @@ public class ESClient {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
-		searchRequest.releaseConnection();
+//		searchRequest.releaseConnection();
 	}	
 
 	/**
@@ -187,7 +187,7 @@ public class ESClient {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
-		searchRequest.releaseConnection();
+//		searchRequest.releaseConnection();
 	}	
 
 
@@ -207,7 +207,7 @@ public class ESClient {
 		System.out.println(status);
 
 		String json = getEntityContent(response);
-		updateRequest.releaseConnection();
+//		updateRequest.releaseConnection();
 	}	
 
 	/**
@@ -229,9 +229,9 @@ public class ESClient {
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
 		}
-		EntityUtils.consume(entity);
+//		EntityUtils.consume(entity);
 
-		httpDelete.releaseConnection();
+//		httpDelete.releaseConnection();
 	}
 
 	/**
