@@ -29,8 +29,19 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
- * @author Owner
- *
+ * Role: Interacts with the database to store, update, and retrieve media
+ * objects. It implements the StoringManager interface and inherits from the
+ * Model class, meaning it can hold SHViews and notify them if they need to be
+ * updated.
+ * 
+ * Design Pattern: Singleton
+ * 
+ * @author Stephanie Gil
+ * @author Ashley Brown
+ * 
+ * @see Media
+ * @see StoringManager
+ * @see Model
  */
 public class MediaManager extends Model<SHView> implements StoringManager{
 	private Context context;

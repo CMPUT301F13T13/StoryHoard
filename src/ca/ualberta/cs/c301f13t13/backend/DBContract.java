@@ -31,7 +31,8 @@ import android.provider.BaseColumns;
  * cleaner, and if we need to change a column or something, we only need to
  * change it here and not in the other parts of the code.
  * 
- * @author Ashley Brown, Stephanie Gil
+ * @author Ashley Brown
+ * @author Stephanie Gil
  * 
  */
 public final class DBContract {
@@ -136,8 +137,7 @@ public final class DBContract {
 		public static final String COLUMN_NAME_MEDIA_ID = "media_id";
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
 		public static final String COLUMN_NAME_MEDIA_URI = "uri";
-		public static final String COLUMN_NAME_TYPE = "type"; // photo or
-																// illustration
+		public static final String COLUMN_NAME_TYPE = "type"; 
 
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
 				+ MediaTable.TABLE_NAME + " (" + MediaTable._ID + " INTEGER,"

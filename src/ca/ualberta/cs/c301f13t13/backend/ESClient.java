@@ -1,12 +1,18 @@
 /**
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
  * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  * 
- * CODE RE-USE:
- * This class was taken directly from:
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
- * DATE: Nov. 3, 2013
- * Authors: Abram Hindle, 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
  */
 package ca.ualberta.cs.c301f13t13.backend;
 import java.io.BufferedReader;
@@ -34,17 +40,21 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 /**
  * 
- * Interacts with the server by inserting, retrieving, updating, and
+ * Role: Interacts with the server by inserting, retrieving, updating, and
  * deleting story objects.
  * 
- * CODE RE-USE:
- * This class was taken directly from:
+ * CODE REUSE: This code was taken directly from 
+ * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+ * Date: Nov. 4th, 2013 
+ * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
- * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
- * DATE: Nov. 3, 2013
- * Authors: Abram Hindle, 
+ * Original authors:
+ * @author Abram Hindle
+ * @author Chenlei Zhang
  * 
- * Modifications have been made to deal with stories instead of recipes.
+ * Modifications by:
+ * @author Ashley
+ * @author Stephanie
  */
 public class ESClient {
 	// Http Connector
