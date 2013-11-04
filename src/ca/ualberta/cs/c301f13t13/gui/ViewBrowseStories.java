@@ -154,8 +154,8 @@ public class ViewBrowseStories extends Activity {
 	 */
 	private void refreshStories() {
 		gridArray.clear();
-		gc = GeneralController.getInstance();
-		gridArray.addAll(gc.getAllStories(viewType, this));
+		gc = GeneralController.getInstance(this);
+		gridArray.addAll(gc.getAllStories(viewType));
 		customGridAdapter.notifyDataSetChanged();
 	}
 }

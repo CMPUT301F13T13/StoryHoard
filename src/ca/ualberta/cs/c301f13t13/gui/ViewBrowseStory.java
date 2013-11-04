@@ -80,10 +80,10 @@ public class ViewBrowseStory extends Activity {
 		beginReading = (Button) findViewById(R.id.viewFirstChapter);
 
 		// Initialize the general controller and grab the story
-		gc = GeneralController.getInstance();
+		gc = GeneralController.getInstance(this);
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.getSerializable("storyID");
-		focusedStory = gc.getCompleteStory(storyID, this);
+		focusedStory = gc.getCompleteStory(storyID);
 		
 		// Initialize the read button
 		beginReading.setOnClickListener(new OnClickListener() {
@@ -102,7 +102,7 @@ public class ViewBrowseStory extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		focusedStory = gc.getCompleteStory(storyID, this);
+		focusedStory = gc.getCompleteStory(storyID);
 		storyCover.setImageBitmap(focusedStory.getImage());
 		storyTitle.setText(focusedStory.getTitle());
 		storyAuthor.setText(focusedStory.getAuthor());

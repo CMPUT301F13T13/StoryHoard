@@ -56,7 +56,7 @@ public class ViewChapterActivity extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.get("storyID");
 		chapterID = (UUID) bundle.get("chapterID");
-		gc = GeneralController.getInstance();
+		gc = GeneralController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
@@ -71,7 +71,7 @@ public class ViewChapterActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		chapter = gc.getCompleteChapter(chapterID, this);
+		chapter = gc.getCompleteChapter(chapterID);
 		choices.clear();
 		chapterContent.setText(chapter.getText());
 		choices.addAll(chapter.getChoices());

@@ -54,7 +54,7 @@ public class EditStoryActivity extends Activity {
 		actionBar.setTitle("Story Metadata");
 		actionBar.setDisplayShowTitleEnabled(true);
 
-		gc = GeneralController.getInstance();
+		gc = GeneralController.getInstance(this);
 
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
@@ -66,7 +66,7 @@ public class EditStoryActivity extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		isEditing = bundle.getBoolean("isEditing", false);
 		if (isEditing) {
-			newStory = gc.getCompleteStory((UUID) bundle.get("storyID"), this);
+			newStory = gc.getCompleteStory((UUID) bundle.get("storyID"));
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
@@ -87,7 +87,7 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObjectLocally(newStory, GeneralController.STORY, getBaseContext());
+					gc.updateObjectLocally(newStory, GeneralController.STORY);
 				} else {
 					newStory = new Story(title, author, description, true);
 					Intent intent = new Intent(getApplicationContext(),
