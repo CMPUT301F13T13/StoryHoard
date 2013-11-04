@@ -122,9 +122,9 @@ public class ESClient {
 			String json = getEntityContent(response);
 
 			// We have to tell GSON what type we expect
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			Type elasticSearchResponseType = new TypeToken<SimpleESResponse<Story>>(){}.getType();
 			// Now we expect to get a Story response
-			ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchResponseType);
+			SimpleESResponse<Story> esResponse = gson.fromJson(json, elasticSearchResponseType);
 			// We get the recipe from it!
 			Story recipe = esResponse.getSource();
 			System.out.println(recipe.toString());
@@ -153,10 +153,10 @@ public class ESClient {
 
 		String json = getEntityContent(response);
 
-		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Story>>(){}.getType();
-		ElasticSearchSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
 		System.err.println(esResponse);
-		for (ElasticSearchResponse<Story> r : esResponse.getHits()) {
+		for (SimpleESResponse<Story> r : esResponse.getHits()) {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
@@ -180,10 +180,10 @@ public class ESClient {
 
 		String json = getEntityContent(response);
 
-		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Story>>(){}.getType();
-		ElasticSearchSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
 		System.err.println(esResponse);
-		for (ElasticSearchResponse<Story> r : esResponse.getHits()) {
+		for (SimpleESResponse<Story> r : esResponse.getHits()) {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
