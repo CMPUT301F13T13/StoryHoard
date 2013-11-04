@@ -41,16 +41,19 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  */
 public class TestGeneralController extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-
+	DBHelper helper = null;
+	GeneralController gc = null;
+	
 	public TestGeneralController() {
 		super(ViewBrowseStories.class);
+		helper = DBHelper.getInstance(this.getActivity());
+		GeneralController.getInstance(getActivity());
 	}
 
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
@@ -60,7 +63,6 @@ public class TestGeneralController extends
 	 * stories.
 	 */
 	public void testGetAllCachedStories() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
@@ -71,11 +73,11 @@ public class TestGeneralController extends
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", true);
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s2, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s3, GeneralController.STORY, getActivity());
+		gc.addObjectLocally(s1, GeneralController.STORY);
+		gc.addObjectLocally(s2, GeneralController.STORY);
+		gc.addObjectLocally(s3, GeneralController.STORY);
 
-		stories = gc.getAllStories(GeneralController.CACHED, getActivity());
+		stories = gc.getAllStories(GeneralController.CACHED);
 
 		assertEquals(stories.size(), 2);
 	}
@@ -84,7 +86,6 @@ public class TestGeneralController extends
 	 * Tests using the controller to get all stories created by the author.
 	 */
 	public void testGetAllCreatedStories() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
@@ -95,11 +96,11 @@ public class TestGeneralController extends
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", false);
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s2, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s3, GeneralController.STORY, getActivity());
+		gc.addObjectLocally(s1, GeneralController.STORY);
+		gc.addObjectLocally(s2, GeneralController.STORY);
+		gc.addObjectLocally(s3, GeneralController.STORY);
 
-		stories = gc.getAllStories(GeneralController.CREATED, getActivity());
+		stories = gc.getAllStories(GeneralController.CREATED);
 
 		assertEquals(stories.size(), 2);
 	}
@@ -111,7 +112,6 @@ public class TestGeneralController extends
 	public void testGetAllPublishedStories() {
 		fail("not yet implemented");
 
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
@@ -119,11 +119,11 @@ public class TestGeneralController extends
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", false);
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", false);
 
-		gc.publishStory(s1, getActivity());
-		gc.publishStory(s2, getActivity());
-		gc.publishStory(s3, getActivity());
+		gc.publishStory(s1);
+		gc.publishStory(s2);
+		gc.publishStory(s3);
 
-		stories = gc.getAllStories(GeneralController.PUBLISHED, getActivity());
+		stories = gc.getAllStories(GeneralController.PUBLISHED);
 
 		assertTrue(stories.contains(s1));
 		assertTrue(stories.contains(s2));
@@ -135,7 +135,6 @@ public class TestGeneralController extends
 	 * belonging to a story.
 	 */
 	public void testAddGetAllChapters() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		Story story = new Story("title", "author", "des", true);
 
@@ -143,11 +142,11 @@ public class TestGeneralController extends
 		Chapter c2 = new Chapter(story.getId(), "text");
 		Chapter c3 = new Chapter(UUID.randomUUID(), "text");
 
-		gc.addObjectLocally(c1, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(c2, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(c3, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(c1, GeneralController.CHAPTER);
+		gc.addObjectLocally(c2, GeneralController.CHAPTER);
+		gc.addObjectLocally(c3, GeneralController.CHAPTER);
 
-		chapters = gc.getAllChapters(story.getId(), getActivity());
+		chapters = gc.getAllChapters(story.getId());
 
 		assertEquals(chapters.size(), 2);
 	}
@@ -157,7 +156,6 @@ public class TestGeneralController extends
 	 * belonging to a chapter.
 	 */
 	public void testAddGetAllChoices() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		Chapter chap = new Chapter(UUID.randomUUID(), "text");
 
@@ -165,11 +163,11 @@ public class TestGeneralController extends
 		Choice c2 = new Choice(chap.getId(), UUID.randomUUID(), "text");
 		Choice c3 = new Choice(UUID.randomUUID(), UUID.randomUUID(), "text");
 
-		gc.addObjectLocally(c1, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(c2, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(c3, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(c1, GeneralController.CHOICE);
+		gc.addObjectLocally(c2, GeneralController.CHOICE);
+		gc.addObjectLocally(c3, GeneralController.CHOICE);
 
-		choices = gc.getAllChoices(chap.getId(), getActivity());
+		choices = gc.getAllChoices(chap.getId());
 
 		assertEquals(choices.size(), 2);
 	}
@@ -179,20 +177,19 @@ public class TestGeneralController extends
 	 * again.
 	 */
 	public void testAddGetAllMedia() {
-		GeneralController gc = GeneralController.getInstance();
 		UUID cId = UUID.randomUUID();
 		Media photo1 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
 		Media photo2 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
 		Media ill1 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
 		Media ill2 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
 
-		gc.addObjectLocally(photo1, GeneralController.MEDIA, getActivity());
-		gc.addObjectLocally(photo2, GeneralController.MEDIA, getActivity());
-		gc.addObjectLocally(ill1, GeneralController.MEDIA, getActivity());
-		gc.addObjectLocally(ill2, GeneralController.MEDIA, getActivity());
+		gc.addObjectLocally(photo1, GeneralController.MEDIA);
+		gc.addObjectLocally(photo2, GeneralController.MEDIA);
+		gc.addObjectLocally(ill1, GeneralController.MEDIA);
+		gc.addObjectLocally(ill2, GeneralController.MEDIA);
 
-		ArrayList<Media> photos = gc.getAllPhotos(cId, getActivity());
-		ArrayList<Media> ills = gc.getAllIllustrations(cId, getActivity());
+		ArrayList<Media> photos = gc.getAllPhotos(cId);
+		ArrayList<Media> ills = gc.getAllIllustrations(cId);
 
 		assertEquals(photos.size(), 2);
 		assertEquals(ills.size(), 2);
@@ -203,7 +200,6 @@ public class TestGeneralController extends
 	 * that have been added / published.
 	 */
 	public void testSearchStory() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
@@ -220,36 +216,31 @@ public class TestGeneralController extends
 		Story s6 = new Story("sad hen", "me", "D: none", false);
 		s6.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s2, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s3, GeneralController.STORY, getActivity());
-		gc.publishStory(s4, getActivity());
-		gc.publishStory(s5, getActivity());
-		gc.publishStory(s6, getActivity());
+		gc.addObjectLocally(s1, GeneralController.STORY);
+		gc.addObjectLocally(s2, GeneralController.STORY);
+		gc.addObjectLocally(s3, GeneralController.STORY);
+		gc.publishStory(s4);
+		gc.publishStory(s5);
+		gc.publishStory(s6);
 
 		// both author and title are null (should retrieve all created stories)
-		stories = gc.searchStory(null, null, GeneralController.CREATED,
-				getActivity());
+		stories = gc.searchStory(null, null, GeneralController.CREATED);
 		assertEquals(stories.size(), 2);
 
 		// author is me, and created by author
-		stories = gc.searchStory(null, "me", GeneralController.CREATED,
-				getActivity());
+		stories = gc.searchStory(null, "me", GeneralController.CREATED);
 		assertEquals(stories.size(), 2);
 
 		// author is me, and not created by author
-		stories = gc.searchStory(null, "me", GeneralController.CACHED,
-				getActivity());
+		stories = gc.searchStory(null, "me", GeneralController.CACHED);
 		assertEquals(stories.size(), 1);
 
 		// author is null, created, title is bob the cow
-		stories = gc.searchStory("Bob the cow", null,
-				GeneralController.CREATED, getActivity());
+		stories = gc.searchStory("Bob the cow", null, GeneralController.CREATED);
 		assertEquals(stories.size(), 1);
 
 		// title is sad cow, published
-		stories = gc.searchStory(null, "me", GeneralController.PUBLISHED,
-				getActivity());
+		stories = gc.searchStory(null, "me", GeneralController.PUBLISHED);
 		assertEquals(stories.size(), 2);
 	}
 
@@ -257,16 +248,15 @@ public class TestGeneralController extends
 	 * Tests using the general controller to update a story.
 	 */
 	public void testUpdateStoryLocally() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
 		s1.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
+		gc.addObjectLocally(s1, GeneralController.STORY);
 
-		stories = gc.getAllStories(GeneralController.CREATED, getActivity());
+		stories = gc.getAllStories(GeneralController.CREATED);
 
 		assertEquals(stories.size(), 1);
 
@@ -274,9 +264,9 @@ public class TestGeneralController extends
 		news1.setDescription("new des");
 		news1.setFirstChapterId(UUID.randomUUID());
 
-		gc.updateObjectLocally(news1, GeneralController.STORY, getActivity());
+		gc.updateObjectLocally(news1, GeneralController.STORY);
 
-		stories = gc.getAllStories(GeneralController.CREATED, getActivity());
+		stories = gc.getAllStories(GeneralController.CREATED);
 		news1 = stories.get(0);
 
 		assertFalse(news1.getDescription().equals(s1.getDescription()));
@@ -287,26 +277,23 @@ public class TestGeneralController extends
 	 * Tests using the general controller to update a chapter.
 	 */
 	public void testUpdateChapterLocally() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		UUID storyId = UUID.randomUUID();
 
 		// Insert some chapters
 		Chapter c1 = new Chapter(storyId, "my chapter");
 
-		gc.addObjectLocally(c1, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(c1, GeneralController.CHAPTER);
 
-		chapters = gc.getAllChapters(storyId, getActivity());
+		chapters = gc.getAllChapters(storyId);
 		assertEquals(chapters.size(), 1);
 
 		Chapter newc1 = chapters.get(0);
 		newc1.setText("a cow mooed");
 
-		// TODO edit media
+		gc.updateObjectLocally(newc1, GeneralController.CHAPTER);
 
-		gc.updateObjectLocally(newc1, GeneralController.CHAPTER, getActivity());
-
-		chapters = gc.getAllChapters(storyId, getActivity());
+		chapters = gc.getAllChapters(storyId);
 		newc1 = chapters.get(0);
 
 		assertFalse(newc1.getText().equals(c1.getText()));
@@ -316,25 +303,24 @@ public class TestGeneralController extends
 	 * Tests using the general controller to update a choice.
 	 */
 	public void testUpdateChoiceLocally() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		UUID chapId = UUID.randomUUID();
 
 		// Insert some choices
 		Choice c1 = new Choice(chapId, UUID.randomUUID(), "my choice");
 
-		gc.addObjectLocally(c1, GeneralController.CHOICE, getActivity());
+		gc.addObjectLocally(c1, GeneralController.CHOICE);
 
-		choices = gc.getAllChoices(chapId, getActivity());
+		choices = gc.getAllChoices(chapId);
 		assertEquals(choices.size(), 1);
 
 		Choice newc1 = choices.get(0);
 		newc1.setText("a cow mooed");
 		newc1.setNextChapter(UUID.randomUUID());
 
-		gc.updateObjectLocally(newc1, GeneralController.CHOICE, getActivity());
+		gc.updateObjectLocally(newc1, GeneralController.CHOICE);
 
-		choices = gc.getAllChoices(chapId, getActivity());
+		choices = gc.getAllChoices(chapId);
 		newc1 = choices.get(0);
 
 		assertFalse(newc1.getText().equals(c1.getText()));
@@ -345,7 +331,6 @@ public class TestGeneralController extends
 	 * Tests using the general controller to edit media objects.
 	 */
 	public void testUpdateMediaLocally() {
-		GeneralController gc = GeneralController.getInstance();
 		ArrayList<Media> medias = new ArrayList<Media>();
 		UUID chapId = UUID.randomUUID();
 
@@ -353,22 +338,22 @@ public class TestGeneralController extends
 		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 
-		gc.addObjectLocally(m1, GeneralController.MEDIA, getActivity());
-		gc.addObjectLocally(m2, GeneralController.MEDIA, getActivity());
+		gc.addObjectLocally(m1, GeneralController.MEDIA);
+		gc.addObjectLocally(m2, GeneralController.MEDIA);
 		
-		medias = gc.getAllPhotos(chapId, getActivity());
+		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 2);
 
 		Media newM1 = medias.get(0);
 		newM1.setUri(Uri.parse("https://ualberta.ca"));
 		newM1.setType(Media.ILLUSTRATION);
 
-		gc.updateObjectLocally(newM1, GeneralController.MEDIA, getActivity());
+		gc.updateObjectLocally(newM1, GeneralController.MEDIA);
 
-		medias = gc.getAllPhotos(chapId, getActivity());
+		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 1);
 
-		medias = gc.getAllIllustrations(chapId, getActivity());
+		medias = gc.getAllIllustrations(chapId);
 		assertEquals(medias.size(), 1);
 		newM1 = medias.get(0);
 		assertFalse(newM1.getUri().equals(m1.getUri()));
@@ -386,7 +371,6 @@ public class TestGeneralController extends
 	 * media.
 	 */
 	public void testGetCompleteStory() {
-		GeneralController gc = GeneralController.getInstance();
 
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
@@ -410,16 +394,16 @@ public class TestGeneralController extends
 		s2.addChapter(chap3);
 
 		// add everything into database
-		gc.addObjectLocally(c1, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(c2, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(chap1, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(chap2, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(chap3, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(s1, GeneralController.STORY, getActivity());
-		gc.addObjectLocally(s2, GeneralController.STORY, getActivity());
+		gc.addObjectLocally(c1, GeneralController.CHOICE);
+		gc.addObjectLocally(c2, GeneralController.CHOICE);
+		gc.addObjectLocally(chap1, GeneralController.CHAPTER);
+		gc.addObjectLocally(chap2, GeneralController.CHAPTER);
+		gc.addObjectLocally(chap3, GeneralController.CHAPTER);
+		gc.addObjectLocally(s1, GeneralController.STORY);
+		gc.addObjectLocally(s2, GeneralController.STORY);
 
-		Story myStory1 = gc.getCompleteStory(s1.getId(), getActivity());
-		Story myStory2 = gc.getCompleteStory(s2.getId(), getActivity());
+		Story myStory1 = gc.getCompleteStory(s1.getId());
+		Story myStory2 = gc.getCompleteStory(s2.getId());
 
 		assertTrue(myStory1 != null);
 		assertTrue(myStory2 != null);
@@ -483,7 +467,6 @@ public class TestGeneralController extends
 	 * Tests getting a complete chapter, contains choices and media.
 	 */
 	public void testGetCompleteChapter() {
-		GeneralController gc = GeneralController.getInstance();
 		UUID s1 = UUID.randomUUID();
 
 		// Making chapters and choices
@@ -496,13 +479,13 @@ public class TestGeneralController extends
 							 Media.PHOTO);
 
 		// add everything into database
-		gc.addObjectLocally(m1, GeneralController.MEDIA, getActivity());
-		gc.addObjectLocally(choice1, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(choice2, GeneralController.CHOICE, getActivity());
-		gc.addObjectLocally(chap1, GeneralController.CHAPTER, getActivity());
-		gc.addObjectLocally(chap2, GeneralController.CHAPTER, getActivity());
+		gc.addObjectLocally(m1, GeneralController.MEDIA);
+		gc.addObjectLocally(choice1, GeneralController.CHOICE);
+		gc.addObjectLocally(choice2, GeneralController.CHOICE);
+		gc.addObjectLocally(chap1, GeneralController.CHAPTER);
+		gc.addObjectLocally(chap2, GeneralController.CHAPTER);
 
-		Chapter newChap = gc.getCompleteChapter(chap1.getId(), getActivity());
+		Chapter newChap = gc.getCompleteChapter(chap1.getId());
 		assertTrue(newChap != null);
 		assertEquals(newChap.getId(), chap1.getId());
 

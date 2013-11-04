@@ -28,5 +28,8 @@ import android.app.Application;
  *
  */
 public class StoryHoardApplication extends Application{
-
+	
+	public GeneralController getController() {
+		return GeneralController.getInstance(getApplicationContext());
+	}
 }
