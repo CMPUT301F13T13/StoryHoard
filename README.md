@@ -38,6 +38,9 @@ Google GSON
 Licensed under Apache 2.0  
 URL: http://code.google.com/p/google-gson/
 
+JUnit 4
+Licensed under Eclipse Public License - v 1.0
+URL: http://junit.org/
 
 Citing
 ======
