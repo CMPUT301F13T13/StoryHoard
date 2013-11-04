@@ -17,24 +17,19 @@
 package ca.ualberta.cs.c301f13t13.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,7 +39,7 @@ import com.google.gson.reflect.TypeToken;
  * deleting story objects.
  * 
  * CODE REUSE: This code was taken directly from 
- * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+ * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
@@ -78,7 +73,7 @@ public class ESClient {
 	 * @throws IllegalStateException 
 	 */
 	public void insertStory(Story story) throws IllegalStateException, IOException{
-		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/testing/lab02/"+story.getId().toString());
+		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t13/"+story.getId().toString());
 		StringEntity stringentity = null;
 		try {
 			stringentity = new StringEntity(gson.toJson(story));
@@ -99,20 +94,25 @@ public class ESClient {
 
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
+		
 		HttpEntity entity = response.getEntity();
-		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		BufferedReader br = new BufferedReader(is);
+		
 		String output;
 		System.err.println("Output from Server -> ");
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
 		}
 
-//		try {
-//			EntityUtils.consume(entity);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		httpPost.releaseConnection();
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// NOT SURE THIS IS RIGHT
+		is.close();
 	}
 
 	/**
@@ -138,7 +138,11 @@ public class ESClient {
 			// We get the recipe from it!
 			Story recipe = esResponse.getSource();
 			System.out.println(recipe.toString());
-//			getRequest.releaseConnection();
+			
+			// NOT SURE THIS IS RIGHT OR NEEDED
+			HttpEntity entity = response.getEntity();
+			InputStreamReader is = new InputStreamReader(entity.getContent());
+			is.close();
 
 		} catch (ClientProtocolException e) {
 
@@ -153,7 +157,7 @@ public class ESClient {
 	/**
 	 * search by keywords
 	 */
-	public void searchStorys(String str) throws ClientProtocolException, IOException {
+	public void searchStories(String str) throws ClientProtocolException, IOException {
 		HttpGet searchRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/testing/lab02/_search?pretty=1&q=" +
 				java.net.URLEncoder.encode(str,"UTF-8"));
 		searchRequest.setHeader("Accept","application/json");
@@ -170,13 +174,16 @@ public class ESClient {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
-//		searchRequest.releaseConnection();
+		// NOT SURE THIS IS RIGHT OR NEEDED
+		HttpEntity entity = response.getEntity();
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		is.close();
 	}	
 
 	/**
 	 * advanced search (logical operators)
 	 */
-	public void searchsearchStorys(String str) throws ClientProtocolException, IOException {
+	public void searchsearchStories(String str) throws ClientProtocolException, IOException {
 		HttpPost searchRequest = new HttpPost("http://cmput301.softwareprocess.es:8080/testing/lab02/_search?pretty=1");
 		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"ingredients\",\"query\" : \"" + str + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
@@ -197,14 +204,17 @@ public class ESClient {
 			Story recipe = r.getSource();
 			System.err.println(recipe);
 		}
-//		searchRequest.releaseConnection();
+		// NOT SURE THIS IS RIGHT OR NEEDED
+		HttpEntity entity = response.getEntity();
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		is.close();
 	}	
 
 
 	/**
 	 * update a field in a recipe
 	 */
-	public void updateStorys(String str) throws ClientProtocolException, IOException {
+	public void updateStories(String str) throws ClientProtocolException, IOException {
 		HttpPost updateRequest = new HttpPost("http://cmput301.softwareprocess.es:8080/testing/lab02/1/_update");
 		String query = 	"{\"script\" : \"ctx._source." + str + "}";
 		StringEntity stringentity = new StringEntity(query);
@@ -217,7 +227,11 @@ public class ESClient {
 		System.out.println(status);
 
 		String json = getEntityContent(response);
-//		updateRequest.releaseConnection();
+		
+		// NOT SURE THIS IS RIGHT OR NEEDED
+		HttpEntity entity = response.getEntity();
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		is.close();
 	}	
 
 	/**
@@ -233,16 +247,17 @@ public class ESClient {
 		System.out.println(status);
 
 		HttpEntity entity = response.getEntity();
-		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		BufferedReader br = new BufferedReader(is);
 		String output;
 		System.err.println("Output from Server -> ");
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
 		}
 		
-//		EntityUtils.consume(entity);
-
-//		httpDelete.releaseConnection();
+		entity.consumeContent();
+		
+		is.close();
 	}
 
 	/**
