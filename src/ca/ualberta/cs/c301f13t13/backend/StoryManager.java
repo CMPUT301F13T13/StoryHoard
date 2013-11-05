@@ -40,7 +40,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @see StoringManager
  * @see Model
  */
-public class StoryManager extends Model implements StoringManager {
+public class StoryManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 
@@ -169,49 +169,6 @@ public class StoryManager extends Model implements StoringManager {
 		cursor.close();
 
 		return results;
-	}
-
-	/**
-	 * Saves a story to the server for other users to see.
-	 * 
-	 * @param story
-	 */
-	public void publish(Story story) {
-		// TODO STUB
-
-	}
-
-	/**
-	 * Updates a published story, i.e. republishes a story after changes have
-	 * been made to it.
-	 * 
-	 * @param story
-	 */
-	public void updatePublished(Story story) {
-		// TODO STUBB
-	}
-
-	/**
-	 * Takes search criteria for a story, and returns and array list
-	 * of all stories on the server that matched the criteria.
-	 * 
-	 * @param criteria
-	 * 
-	 */
-	public ArrayList<Story> searchPublished(Story criteria) {
-		return null;
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Deletes a story from the server.
-	 * 
-	 * @param story
-	 */
-	public void deletePublished(Story story) {
-		// TODO Auto-generated method stub
-
 	}
 	
 	/**

@@ -87,7 +87,7 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObjectLocally(newStory, SHController.STORY);
+					gc.updateObject(newStory, SHController.STORY);
 				} else {
 					newStory = new Story(title, author, description, true);
 					Intent intent = new Intent(getApplicationContext(),

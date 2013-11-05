@@ -43,7 +43,7 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  * @see StoringManager
  * @see Model
  */
-public class MediaManager extends Model<SHView> implements StoringManager{
+public class MediaManager implements StoringManager{
 	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	

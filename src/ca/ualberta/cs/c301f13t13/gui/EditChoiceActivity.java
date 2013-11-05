@@ -38,10 +38,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Model;
 
-public class EditChoiceActivity extends Activity 
-implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
+public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
 	
 	private Chapter chapt;
 	private Button existingChapterButton;
@@ -103,9 +101,9 @@ implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOI
 		});
 	}
 
-	@Override
-	public void update(Model model) {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void update(Model model) {
+//		// TODO Auto-generated method stub
+//
+//	}
 }

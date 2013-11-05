@@ -100,9 +100,9 @@ public class EditChapterActivity extends Activity implements
 			public void onClick(View v) {
 				story.setFirstChapterId(chapt.getId());
 				chapt.setText(chapterContent.getText().toString());
-				SHController.getInstance(getBaseContext()).addObjectLocally(story,
+				SHController.getInstance(getBaseContext()).addObject(story,
 						SHController.STORY);
-				SHController.getInstance(getBaseContext()).addObjectLocally(chapt,
+				SHController.getInstance(getBaseContext()).addObject(chapt,
 						SHController.CHAPTER);
 				finish();
 			}
