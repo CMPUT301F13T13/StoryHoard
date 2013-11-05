@@ -112,6 +112,12 @@ public class EditChapterActivity extends Activity implements
 		allChaptersButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						ViewAllChaptersActivity.class);
+				//Notify activity that author is viewing
+				//rather than selecting a chapter
+				intent.putExtra("viewing", true);
+				startActivity(intent);
 			}
 		});
 

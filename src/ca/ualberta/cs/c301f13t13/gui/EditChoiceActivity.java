@@ -29,6 +29,7 @@ package ca.ualberta.cs.c301f13t13.gui;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SyncStateContract.Constants;
 import android.text.Editable;
@@ -65,7 +66,12 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 			@Override
 			public void onClick(View v) {
 				//Connect chapter to an existing one
-
+				Intent intent = new Intent(getApplicationContext(),
+						ViewAllChaptersActivity.class);
+				//Notify activity that we are selecting
+				//rather than viewing
+				intent.putExtra("viewing", false);
+				startActivity(intent);
 			}
 		});
 
