@@ -20,10 +20,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Base64;
 
 /**
@@ -163,5 +165,21 @@ public class Utilities {
 		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		return decodedByte;
+		}
+	/**
+	 * This functions gets the id of the device and returns it as a string
+	 * 
+	 * CODE REUSE:
+	 * This code is modified from:
+	 * 
+	 * URL: http://developer.samsung.com/android/technical-docs/How-to-retrieve-the-Device-Unique-ID-from-android-device
+	 * Date: Nov. 5th, 2013
+	 * 
+	 * 
+	 */
+	public static String getPhoneId(Context context) {
+		String PhoneId = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+		return PhoneId;
+		
 		}
 }
