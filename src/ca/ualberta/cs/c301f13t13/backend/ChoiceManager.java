@@ -26,12 +26,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
 
-
 /**
- * @author adbrown
+ * Role: Interacts with the database to store, update, and retrieve choice
+ * objects. It implements the StoringManager interface and inherits from the
+ * Model class, meaning it can hold SHViews and notify them if they need to be
+ * updated.
+ * 
+ * Design Pattern: Singleton
+ * 
+ * @author Ashley Brown 
+ * 
+ * @see Choice
+ * @see StoringManager
+ * @see Model
  *
  */
-public class ChoiceManager extends Model implements StoringManager {
+
+public class ChoiceManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
 
@@ -43,7 +54,7 @@ public class ChoiceManager extends Model implements StoringManager {
 	}
 
 	/**
-	 * Returns an instance of itself. Used to accomplish the
+	 * Returns an instance of itself(ChoiceManager). Used to accomplish the
 	 * singleton design pattern. 
 	 *  
 	 * @param context
@@ -64,7 +75,6 @@ public class ChoiceManager extends Model implements StoringManager {
 		Choice choice = (Choice) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
-		// Insert choice
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
@@ -76,12 +86,9 @@ public class ChoiceManager extends Model implements StoringManager {
 	/**
 	 * Updates a choice already in the database.
 	 * 
-	 * @param oldObject
-	 * 			The object before update, used to find it in the database.
 	 * 
 	 * @param newObject
-	 * 			Contains the changes to the object, it is what the oldObject
-	 * 			info will be replaced with.
+	 * 			Contains the changes to the object.
 	 */
 	@Override
 	public void update(Object newObject) {

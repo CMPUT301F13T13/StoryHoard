@@ -45,7 +45,7 @@ public class ViewBrowseStories extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private StoriesViewAdapter customGridAdapter;
 	private SHController gc;
-	int viewType = SHController.CREATED;
+	int viewType = SHController.CREATED_STORY;
 
 	/**
 	 * Create the View Browse Stories activity
@@ -78,11 +78,11 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = SHController.CREATED;
+							viewType = SHController.CREATED_STORY;
 						} else if (itemPosition == 1) {
-							viewType = SHController.CACHED;
+							viewType = SHController.CACHED_STORY;
 						} else if (itemPosition == 2) {
-							viewType = SHController.PUBLISHED;
+							viewType = SHController.PUBLISHED_STORY;
 						}
 						refreshStories();
 						return true;

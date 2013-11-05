@@ -48,8 +48,8 @@
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name="ca.ualberta.cmput301f13t13.storyhoard.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:name="ca.ualberta.cs.c301f13t13.gui.ViewAllChaptersActivity"
+            android:label="@string/all_chapters" >
         </activity>
     </application>
 

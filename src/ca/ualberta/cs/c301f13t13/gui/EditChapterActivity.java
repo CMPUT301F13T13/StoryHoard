@@ -100,9 +100,9 @@ public class EditChapterActivity extends Activity implements
 			public void onClick(View v) {
 				story.setFirstChapterId(chapt.getId());
 				chapt.setText(chapterContent.getText().toString());
-				SHController.getInstance(getBaseContext()).addObjectLocally(story,
+				SHController.getInstance(getBaseContext()).addObject(story,
 						SHController.STORY);
-				SHController.getInstance(getBaseContext()).addObjectLocally(chapt,
+				SHController.getInstance(getBaseContext()).addObject(chapt,
 						SHController.CHAPTER);
 				finish();
 			}
@@ -112,6 +112,12 @@ public class EditChapterActivity extends Activity implements
 		allChaptersButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						ViewAllChaptersActivity.class);
+				//Notify activity that author is viewing
+				//rather than selecting a chapter
+				intent.putExtra("viewing", true);
+				startActivity(intent);
 			}
 		});
 
