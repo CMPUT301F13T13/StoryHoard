@@ -100,7 +100,6 @@ public class ViewBrowseStory extends Activity {
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		focusedStory = gc.getCompleteStory(storyID);
 		storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
@@ -121,6 +120,7 @@ public class ViewBrowseStory extends Activity {
 		} else {
 			storyDescription.setText(focusedStory.getDescription());
 		}
+		super.onResume();
 	}
 
 	@Override
