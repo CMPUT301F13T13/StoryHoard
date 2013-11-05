@@ -29,8 +29,8 @@ import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.DBContract;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Media;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
@@ -45,21 +45,22 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  */
 public class TestSHController extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	DBHelper helper = null;
 	SHController gc = null;
 	
 	public TestSHController() {
 		super(ViewBrowseStories.class);
-		helper = DBHelper.getInstance(this.getActivity());
-		SHController.getInstance(getActivity());
 	}
 
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
+		gc = SHController.getInstance(getActivity());
 	}
 
 	/**
@@ -72,14 +73,14 @@ public class TestSHController extends
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.STORY);
-		gc.addObject(s2, SHController.STORY);
-		gc.addObject(s3, SHController.STORY);
+		gc.addObject(s1, SHController.CACHED_STORY);
+		gc.addObject(s2, SHController.CACHED_STORY);
+		gc.addObject(s3, SHController.CACHED_STORY);
 
 		stories = gc.getAllStories(SHController.CACHED_STORY);
 
@@ -97,12 +98,12 @@ public class TestSHController extends
 		s1.setFirstChapterId(UUID.randomUUID());
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "34530");
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.STORY);
-		gc.addObject(s2, SHController.STORY);
-		gc.addObject(s3, SHController.STORY);
+		gc.addObject(s1, SHController.CREATED_STORY);
+		gc.addObject(s2, SHController.CREATED_STORY);
+		gc.addObject(s3, SHController.CREATED_STORY);
 
 		stories = gc.getAllStories(SHController.CREATED_STORY);
 
@@ -117,11 +118,15 @@ public class TestSHController extends
 		fail("not yet implemented");
 
 		ArrayList<Story> stories = new ArrayList<Story>();
-
+		UUID chapId = UUID.randomUUID();
+		
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		s1.setFirstChapterId(chapId);
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		s2.setFirstChapterId(chapId);
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		s3.setFirstChapterId(chapId);
 
 		gc.addObject(s1, SHController.PUBLISHED_STORY);
 		gc.addObject(s2, SHController.PUBLISHED_STORY);
@@ -206,6 +211,7 @@ public class TestSHController extends
 	public void testSearchStory() {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
+		fail("published stories not yet implemented");
 		// Insert some stories
 		Story s1 = new Story("Lily the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
@@ -220,9 +226,9 @@ public class TestSHController extends
 		Story s6 = new Story("sad hen", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s6.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.STORY);
-		gc.addObject(s2, SHController.STORY);
-		gc.addObject(s3, SHController.STORY);
+		gc.addObject(s1, SHController.CREATED_STORY);
+		gc.addObject(s2, SHController.CREATED_STORY);
+		gc.addObject(s3, SHController.CREATED_STORY);
 		gc.addObject(s4, SHController.PUBLISHED_STORY);
 		gc.addObject(s5, SHController.PUBLISHED_STORY);
 		gc.addObject(s6, SHController.PUBLISHED_STORY);
@@ -258,7 +264,7 @@ public class TestSHController extends
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.STORY);
+		gc.addObject(s1, SHController.CREATED_STORY);
 
 		stories = gc.getAllStories(SHController.CREATED_STORY);
 
@@ -268,7 +274,7 @@ public class TestSHController extends
 		news1.setDescription("new des");
 		news1.setFirstChapterId(UUID.randomUUID());
 
-		gc.updateObject(news1, SHController.STORY);
+		gc.updateObject(news1, SHController.CREATED_STORY);
 
 		stories = gc.getAllStories(SHController.CREATED_STORY);
 		news1 = stories.get(0);
@@ -372,6 +378,8 @@ public class TestSHController extends
 	 */
 	public void testUpdatePublished() {
 		ArrayList<Story> stories = new ArrayList<Story>();
+		
+		fail("not yet implemented");
 
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));

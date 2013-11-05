@@ -44,12 +44,14 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 public class StoryManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
+	private Context context = null;
 
 	/**
 	 * Initializes a new StoryManager object.
 	 */
 	protected StoryManager(Context context) {
 		helper = DBHelper.getInstance(context);
+		this.context = context;
 	}
 
 	/**
@@ -198,9 +200,15 @@ public class StoryManager implements StoringManager {
 
 		for (String key : storyCrit.keySet()) {
 			String value = storyCrit.get(key);
-			selection += key + " LIKE ?";
-			sArgs.add(value);
-
+			if (key.equals(StoryTable.COLUMN_NAME_PHONE_ID) && 
+					(!value.equals(Utilities.getPhoneId(context)))) {
+					selection += key + " NOT LIKE ?";
+					sArgs.add(Utilities.getPhoneId(context));
+			} else {
+				selection += key + " LIKE ?";
+				sArgs.add(value);
+			}
+			
 			counter++;
 			if (counter < maxSize) {
 				selection += " AND ";

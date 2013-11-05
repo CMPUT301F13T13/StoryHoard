@@ -82,7 +82,7 @@ public class SHController {
 		
 		switch (type) {
 		case CACHED_STORY:
-			criteria = new Story(null, null, null, null, " NOT " + Utilities.getPhoneId(context));
+			criteria = new Story(null, null, null, null, "NOT" + Utilities.getPhoneId(context));
 			break;
 		case CREATED_STORY:
 			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
