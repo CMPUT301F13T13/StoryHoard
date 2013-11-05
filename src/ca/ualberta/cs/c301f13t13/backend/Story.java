@@ -53,8 +53,8 @@ public class Story implements Serializable {
 	 * @param phoneId
 	 *            The android id of the phone the story was made on
 	 */
-	public Story(String title, String author, String description,
-			String phoneId) {
+	public Story(String title, String author, String description, 
+			      String phoneId) {
 		this.id = UUID.randomUUID();
 		this.author = author;
 		this.title = title;
@@ -81,7 +81,7 @@ public class Story implements Serializable {
 	 *            The android Id of the phone the story was made on
 	 */
 	public Story(UUID id, String title, String author, String description,
-			String phoneId) {
+			      String phoneId) {
 		this.id = id;
 		this.author = author;
 		this.title = title;
@@ -257,7 +257,7 @@ public class Story implements Serializable {
 	}
 
 	/**
-	 * Sets the string of the id
+	 * Sets the string of the phone id
 	 * 
 	 * @param phoneId
 	 */
@@ -302,7 +302,7 @@ public class Story implements Serializable {
 		}
 
 		if (phoneId != null) {
-			info.put(StoryTable.COLUMN_NAME_CREATED, phoneId);
+			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
 		}
 
 		return info;
