@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,6 +31,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,12 +54,25 @@ import com.google.gson.reflect.TypeToken;
  * @author Ashley
  * @author Stephanie
  */
-public class ESClient {
+public class ServerManager implements StoringManager{
 	// Http Connector
-	private HttpClient httpclient = new DefaultHttpClient();
-
+	private static HttpClient httpclient = null;
 	// JSON Utilities
-	private Gson gson = new Gson();
+	private static Gson gson = null;
+	private static ServerManager self = null;
+	private static final String server = "http://cmput301.softwareprocess.es:8080/testing/lab02/";
+	
+	protected ServerManager() {
+		httpclient = new DefaultHttpClient();
+		gson = new Gson();
+	}
+	
+	public static ServerManager getInstance() {
+		if (self == null) {
+			self = new ServerManager();
+		}
+		return self;
+	}	
 
 	/**
 	 * create a simple recipe
@@ -73,7 +89,9 @@ public class ESClient {
 	 * @throws IllegalStateException 
 	 */
 	public void insertStory(Story story) throws IllegalStateException, IOException{
-		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t13/"+story.getId().toString());
+
+		HttpPost httpPost = new HttpPost(server + story.getId().toString());
+
 		StringEntity stringentity = null;
 		try {
 			stringentity = new StringEntity(gson.toJson(story));
@@ -275,5 +293,29 @@ public class ESClient {
 		}
 		System.err.println("JSON:"+json);
 		return json;
+	}
+
+	@Override
+	public void insert(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ArrayList<Object> retrieve(Object criteria) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void update(Object newObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

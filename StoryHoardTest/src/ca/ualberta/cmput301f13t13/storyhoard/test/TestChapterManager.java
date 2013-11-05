@@ -36,7 +36,7 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestChapterManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private ArrayList<Object> mockChapters;
-
+	private ChapterManager cm = null;
 	public TestChapterManager() {
 		super(ViewBrowseStories.class);
 	}
@@ -48,6 +48,7 @@ public class TestChapterManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		cm = ChapterManager.getInstance(getActivity());
 	}
 
 	/**
@@ -68,12 +69,10 @@ public class TestChapterManager extends
 	 * database.
 	 */
 	public void testAddLoadChapter() {
-		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		cm.insert(mockChapter, helper);
-		mockChapters = cm.retrieve(mockChapter, helper);
+		cm.insert(mockChapter);
+		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
@@ -82,20 +81,17 @@ public class TestChapterManager extends
 	 * Tests retrieving all the chapters of a story
 	 */
 	public void testGetAllChapters() {
-		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
-		cm.insert(mockChapter, helper);
+		cm.insert(mockChapter);
 		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
 				"Lily drove");
-		cm.insert(mockChapter2, helper);
+		cm.insert(mockChapter2);
 		Chapter mockChapter3 = newMockChapter(UUID.randomUUID(), "Lily drove");
-		cm.insert(mockChapter3, helper);
+		cm.insert(mockChapter3);
 
 		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), null);
 
-		mockChapters = cm.retrieve(criteria, helper);
+		mockChapters = cm.retrieve(criteria);
 		assertTrue(mockChapters.size() == 2);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 		assertTrue(hasChapter(mockChapters, mockChapter2));
@@ -107,23 +103,20 @@ public class TestChapterManager extends
 	 * chapter.
 	 */
 	public void testUpdateChapter() {
-		ChapterManager cm = ChapterManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
-		cm.insert(mockChapter, helper);
+		cm.insert(mockChapter);
 
-		mockChapters = cm.retrieve(mockChapter, helper);
+		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, mockChapter));
 
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 
 		newChapter.setText("My Wizard newt");
-		cm.update(newChapter, helper);
+		cm.update(newChapter);
 
 		// make sure you can find new chapter
-		mockChapters = cm.retrieve(newChapter, helper);
+		mockChapters = cm.retrieve(newChapter);
 		assertEquals(mockChapters.size(), 1);
 		assertTrue(hasChapter(mockChapters, newChapter));
 

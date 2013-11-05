@@ -275,6 +275,10 @@ public class Story implements Serializable {
 	 * Adds a chapter onto the story object.
 	 */
 	public void addChapter(Chapter chapter) {
+		if (chapters.isEmpty()) {
+			// set first chapter id
+			firstChapterId = chapter.getId();
+		}
 		chapters.put(chapter.getId(), chapter);
 	}
 

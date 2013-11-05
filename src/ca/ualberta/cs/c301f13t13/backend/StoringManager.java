@@ -28,38 +28,37 @@ import java.util.ArrayList;
  * @see ChapterManager
  * @see ChoiceManager
  * @see MediaManager
+ * @see ServerManager
  */
 public interface StoringManager {
 
 	/**
-	 * Inserts an object into a database.
+	 * Inserts an object into a storage place.
 	 * 
 	 * @param object
-	 * @param helper
 	 */
-	public void insert(Object object, DBHelper helper);
+	public void insert(Object object);
 
 	/**
-	 * Retrieves an object from the database.
+	 * Retrieves an object from a storage place.
 	 * 
 	 * @param criteria
-	 * @param helper
+	 * 
 	 * @return
 	 */
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper);
+	public ArrayList<Object> retrieve(Object criteria);
 
 	/**
-	 * Updates an object in the database.
+	 * Updates an object in the storage place.
 	 * 
 	 * @param oldObject
 	 * @param newObject
-	 * @param helper
 	 */
-	public void update(Object newObject, DBHelper helper);
+	public void update(Object newObject);
 
 	/**
 	 * Builds the selection string and the selection arguments to be used in a
-	 * retrieval query.
+	 * retrieval query. Only applicable for the database queries.
 	 * 
 	 * @param object
 	 * @param sArgs

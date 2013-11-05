@@ -44,14 +44,14 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  * @see Model
  */
 public class MediaManager extends Model<SHView> implements StoringManager{
-	private Context context;
+	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	
 	/**
 	 * Initializes a new MediaManager object.
 	 */
 	protected MediaManager(Context context) {
-		this.context = context;
+		helper = DBHelper.getInstance(context);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	}
 	
 	@Override
-	public void insert(Object object, DBHelper helper) {
+	public void insert(Object object) {
 		Media media = (Media) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -85,7 +85,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	}
 
 	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
+	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -130,7 +130,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	
 
 	@Override
-	public void update(Object newObject, DBHelper helper) {
+	public void update(Object newObject) {
 		Media newM = (Media) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
 

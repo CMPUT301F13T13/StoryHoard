@@ -30,7 +30,7 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 //import android.view.Menu; *Not sure if needed
@@ -100,10 +100,10 @@ public class EditChapterActivity extends Activity implements
 			public void onClick(View v) {
 				story.setFirstChapterId(chapt.getId());
 				chapt.setText(chapterContent.getText().toString());
-				GeneralController.getInstance().addObjectLocally(story,
-						GeneralController.STORY, getBaseContext());
-				GeneralController.getInstance().addObjectLocally(chapt,
-						GeneralController.CHAPTER, getBaseContext());
+				SHController.getInstance(getBaseContext()).addObjectLocally(story,
+						SHController.STORY);
+				SHController.getInstance(getBaseContext()).addObjectLocally(chapt,
+						SHController.CHAPTER);
 				finish();
 			}
 		});

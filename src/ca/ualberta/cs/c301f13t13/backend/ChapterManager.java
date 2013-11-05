@@ -42,7 +42,7 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  * @see Model
  */
 public class ChapterManager extends Model<SHView> implements StoringManager {
-	private Context context;
+	private static DBHelper helper = null;
 	private static ChapterManager self = null;
 
 	/**
@@ -51,7 +51,7 @@ public class ChapterManager extends Model<SHView> implements StoringManager {
 	 * @param context
 	 */
 	protected ChapterManager(Context context) {
-		this.context = context;
+		helper = DBHelper.getInstance(context);
 	}
 
 	/**
@@ -74,11 +74,9 @@ public class ChapterManager extends Model<SHView> implements StoringManager {
 	 * @param object
 	 *            Object to be stored in the database. In this case, it will be
 	 *            a chapter object.
-	 * @param helper
-	 *            Used to open a connection to the database.
 	 */
 	@Override
-	public void insert(Object object, DBHelper helper) {
+	public void insert(Object object) {
 		Chapter chapter = (Chapter) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -103,12 +101,10 @@ public class ChapterManager extends Model<SHView> implements StoringManager {
 	 * 
 	 * @param criteria
 	 *            Criteria for the object(s) to be retrieved from the database.
-	 * @param helper
-	 *            Used to open a connection to the database.
 	 * @return chapters Contains the objects that matched the search criteria.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
+	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -155,11 +151,9 @@ public class ChapterManager extends Model<SHView> implements StoringManager {
 	 * 
 	 * @param newObject
 	 *            Holds the new data that will be used to update.
-	 * @param helper
-	 *            Used to open a connection to the database.
 	 */
 	@Override
-	public void update(Object newObject, DBHelper helper) {
+	public void update(Object newObject) {
 		Chapter newC = (Chapter) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
 

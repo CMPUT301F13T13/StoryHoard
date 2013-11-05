@@ -34,22 +34,22 @@ import android.content.Context;
  * @author Ashley
  * 
  */
-public class GeneralController {
+public class SHController {
 	// CONSTANTS
-	public static final int ALL = -1;
-	public static final int CACHED = 0;
-	public static final int CREATED = 1;
-	public static final int PUBLISHED = 2;
-
 	public static final int STORY = 0;
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
 	public static final int MEDIA = 3;
+	public static final int PUBLISHED = 4;
+	public static final int SERVER = 4;
+	public static final int CACHED = 5;
+	public static final int CREATED = 6;
 
-	// SELF
-	private static GeneralController self = null;
+	private static SHController self = null;  // SELF
+	private static StorageFactory sf = null;
 
-	protected GeneralController() {
+	protected SHController(Context context) {
+		sf = new StorageFactory(context);
 	}
 
 	/**
@@ -57,11 +57,10 @@ public class GeneralController {
 	 * 
 	 * @return
 	 */
-	public static GeneralController getInstance() {
+	public static SHController getInstance(Context context) {
 		if (self == null) {
-			self = new GeneralController();
+			self = new SHController(context);
 		}
-
 		return self;
 	}
 
@@ -71,35 +70,30 @@ public class GeneralController {
 	 * 
 	 * @param type
 	 *            Will either be CACHED (0), CREATED (1), or PUBLISHED (2).
-	 * @param context
 	 * @return Array list of all the stories the application asked for.
 	 */
-	public ArrayList<Story> getAllStories(int type, Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+	public ArrayList<Story> getAllStories(int type) {
 		ArrayList<Story> stories = new ArrayList<Story>();
-		ArrayList<Object> objects;
-		Story criteria;
-
+		ArrayList<Object> objects = new ArrayList<Object>();
+		Story criteria = null;
+		StoringManager sm = sf.getStoringManager(type);
+		
 		switch (type) {
 		case CACHED:
 			criteria = new Story(null, null, null, null, false);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
 			criteria = new Story(null, null, null, null, true);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case PUBLISHED:
 			criteria = new Story(null, null, null, null, null);
-			stories = sm.searchPublished(criteria);
 			break;
 		default:
 			break;
 		}
-
+		
+		objects = sm.retrieve(criteria);
+		stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -108,18 +102,17 @@ public class GeneralController {
 	 * 
 	 * @param storyId
 	 *            Id of the story the chapters are wanted from.
-	 * @param context
 	 * 
 	 * @return ArrayList of the chapters.
 	 */
-	public ArrayList<Chapter> getAllChapters(UUID storyId, Context context) {
-		ChapterManager cm = ChapterManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+	public ArrayList<Chapter> getAllChapters(UUID storyId) {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
+		
 		Chapter criteria = new Chapter(null, storyId, null);
-
-		objects = cm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(CHAPTER);
+		
+		objects = sm.retrieve(criteria);
 		chapters = Utilities.objectsToChapters(objects);
 
 		return chapters;
@@ -130,18 +123,17 @@ public class GeneralController {
 	 * 
 	 * @param chapterId
 	 *            Id of the chapter the choices are wanted from.
-	 * @param context
 	 * 
 	 * @return ArrayList of the chapter's choices.
 	 */
-	public ArrayList<Choice> getAllChoices(UUID chapterId, Context context) {
-		ChoiceManager cm = ChoiceManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+	public ArrayList<Choice> getAllChoices(UUID chapterId) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
+		
 		Choice criteria = new Choice(null, chapterId);
-
-		objects = cm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(CHOICE);
+		
+		objects = sm.retrieve(criteria);
 		choices = Utilities.objectsToChoices(objects);
 		return choices;
 	}
@@ -151,18 +143,16 @@ public class GeneralController {
 	 * 
 	 * @param chapterId
 	 *            Id of the chapter the illustrations are wanted from.
-	 * @param context
 	 * 
 	 * @return ArrayList of the illustrations.
 	 */
-	public ArrayList<Media> getAllIllustrations(UUID chapterId, Context context) {
-		MediaManager cm = MediaManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+	public ArrayList<Media> getAllIllustrations(UUID chapterId) {
 		ArrayList<Media> illustrations = new ArrayList<Media>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
-
-		objects = cm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(MEDIA);
+		
+		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
@@ -172,18 +162,16 @@ public class GeneralController {
 	 * 
 	 * @param chapterId
 	 *            Id of the chapter the photos are wanted from.
-	 * @param context
 	 * 
 	 * @return ArrayList of the photos.
 	 */
-	public ArrayList<Media> getAllPhotos(UUID chapterId, Context context) {
-		MediaManager mm = MediaManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+	public ArrayList<Media> getAllPhotos(UUID chapterId) {
 		ArrayList<Media> photos = new ArrayList<Media>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
-
-		objects = mm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(MEDIA);
+		
+		objects = sm.retrieve(criteria);
 		photos = Utilities.objectsToMedia(objects);
 		return photos;
 	}
@@ -196,29 +184,10 @@ public class GeneralController {
 	 *            Choice, or Media object).
 	 * @param type
 	 *            Will either be STORY(0), CHAPTER(1), CHOICE(2), MEDIA (3)
-	 * @param context
 	 */
-	public void addObjectLocally(Object object, int type, Context context) {
-		DBHelper helper = DBHelper.getInstance(context);
-
-		switch (type) {
-		case STORY:
-			StoryManager sm = StoryManager.getInstance(context);
-			sm.insert(object, helper);
-			break;
-		case CHAPTER:
-			ChapterManager cm = ChapterManager.getInstance(context);
-			cm.insert(object, helper);
-			break;
-		case CHOICE:
-			ChoiceManager chm = ChoiceManager.getInstance(context);
-			chm.insert(object, helper);
-			break;
-		case MEDIA:
-			MediaManager mm = MediaManager.getInstance(context);
-			mm.insert(object, helper);
-			break;
-		}
+	public void addObjectLocally(Object object, int type) {
+		StoringManager sm = sf.getStoringManager(type);
+		sm.insert(object);
 	}
 
 	/**
@@ -232,28 +201,21 @@ public class GeneralController {
 	 *            Author of the story user is looking for.
 	 * @param type
 	 *            Will either be CACHED (0), CREATED (1) , or PUBLISHED (2).
-	 * @param context
-	 * 
+	 *            
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title, String author, int type,
-			Context context) {
-		Story criteria;
-		ArrayList<Object> objects;
+	public ArrayList<Story> searchStory(String title, String author, int type) {
+		Story criteria = null;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		ArrayList<Story> stories = new ArrayList<Story>();
-		StoryManager sm = StoryManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
+		StoringManager sm = sf.getStoringManager(type);
 
 		switch (type) {
 		case CACHED:
 			criteria = new Story(null, title, author, null, false);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
 			criteria = new Story(null, title, author, null, true);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case PUBLISHED:
 			break;
@@ -261,7 +223,8 @@ public class GeneralController {
 			// raise exception
 			break;
 		}
-
+		objects = sm.retrieve(criteria);
+		stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -271,30 +234,26 @@ public class GeneralController {
 	 * 
 	 * @param id
 	 *            Id of the chapter wanted.
-	 * @param context
 	 * 
 	 * @return The complete chapter.
 	 */
-	public Chapter getCompleteChapter(UUID id, Context context) {
-		ChapterManager cm = ChapterManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
-
+	public Chapter getCompleteChapter(UUID id) {
 		// Search criteria gets set
 		Chapter criteria = new Chapter(id, null, null);
+		StoringManager sm = sf.getStoringManager(CHAPTER);
 
 		// Get chapter
-		ArrayList<Object> objects = cm.retrieve(criteria, helper);
+		ArrayList<Object> objects = sm.retrieve(criteria);
 		Chapter chapter = (Chapter) objects.get(0);
 
 		// Get chapter choices
-		chapter.setChoices(getAllChoices(id, context));
+		chapter.setChoices(getAllChoices(id));
 
-		// Get media (photos/illustrations)
-		ArrayList<Media> photos = getAllPhotos(id, context);
-		chapter.setPhotos(photos);
+		// Get photos
+		chapter.setPhotos(getAllPhotos(id));
 
-		ArrayList<Media> ills = getAllIllustrations(id, context);
-		chapter.setIllustrations(ills);
+		// Get illustrations
+		chapter.setIllustrations(getAllIllustrations(id));
 
 		return chapter;
 	}
@@ -305,26 +264,23 @@ public class GeneralController {
 	 * 
 	 * @param id
 	 *            Story id of the story wanted.
-	 * @param context
 	 * 
 	 * @return The complete story.
 	 */
-	public Story getCompleteStory(UUID id, Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		DBHelper helper = DBHelper.getInstance(context);
-
+	public Story getCompleteStory(UUID id) {
 		// Search criteria gets set
 		Story criteria = new Story(id, null, null, null, null);
-		ArrayList<Object> objects = sm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(STORY);
+		ArrayList<Object> objects = sm.retrieve(criteria);
 		Story story = (Story) objects.get(0);
 
 		// Get all chapters
-		ArrayList<Chapter> chapters = getAllChapters(id, context);
+		ArrayList<Chapter> chapters = getAllChapters(id);
 		HashMap<UUID, Chapter> chaptersHash = new HashMap<UUID, Chapter>();
 
 		// Get all choices
 		for (Chapter chap : chapters) {
-			Chapter fullChap = getCompleteChapter(chap.getId(), context);
+			Chapter fullChap = getCompleteChapter(chap.getId());
 			chaptersHash.put(chap.getId(), fullChap);
 		}
 
@@ -343,45 +299,25 @@ public class GeneralController {
 	 *            Object to be updated.
 	 * @param type
 	 *            Will either be STORY (0), CHAPTER (1), CHOICE (2), or MEDIA(3)
-	 * @param context
 	 */
-	public void updateObjectLocally(Object object, int type, Context context) {
-		DBHelper helper = DBHelper.getInstance(context);
-
-		switch (type) {
-		case STORY:
-			StoryManager sm = StoryManager.getInstance(context);
-			sm.update(object, helper);
-			break;
-		case CHAPTER:
-			ChapterManager cm = ChapterManager.getInstance(context);
-			cm.update(object, helper);
-			break;
-		case CHOICE:
-			ChoiceManager chom = ChoiceManager.getInstance(context);
-			chom.update(object, helper);
-			break;
-		case MEDIA:
-			MediaManager mm = MediaManager.getInstance(context);
-			mm.update(object, helper);
-			break;
-		default:
-			// raise exception
-			break;
-		}
+	public void updateObjectLocally(Object object, int type) {
+		StoringManager sm = sf.getStoringManager(type);
+		sm.update(object);
 	}
 
 	/**
 	 * Saves a story onto the server.
 	 */
-	public void publishStory(Story story, Context context) {
+	public void publishStory(Story story) {
+		StoringManager sm = sf.getStoringManager(SERVER);
 		// TODO implement
 	}
 
 	/**
 	 * Updates a story that is on the server.
 	 */
-	public void updatePublished(Story story, Context context) {
+	public void updatePublished(Story story) {
+		StoringManager sm = sf.getStoringManager(SERVER);
 		// TODO implement
 	}
 }

@@ -34,9 +34,11 @@ import ca.ualberta.cs.c301f13t13.gui.*;
  */
 public class TestChoiceManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	ChoiceManager cm = null;
 
 	public TestChoiceManager() {
 		super(ViewBrowseStories.class);
+		cm = ChoiceManager.getInstance(getActivity());
 	}
 
 	@Before
@@ -59,12 +61,10 @@ public class TestChoiceManager extends
 		String text = "pick me";
 		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		cm.insert(c, helper);
+		cm.insert(c);
 
 		// retrieving story in db that matches mockStory
-		ArrayList<Object> choice = cm.retrieve(c, helper);
+		ArrayList<Object> choice = cm.retrieve(c);
 		assertTrue(choice.size() == 1);
 		assertTrue(hasChoice(choice, c));
 	}
@@ -80,21 +80,18 @@ public class TestChoiceManager extends
 		String text = "pick me";
 		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		cm.insert(c, helper);
+		cm.insert(c);
 
-		ArrayList<Object> mockChoices = cm.retrieve(c, helper);
+		ArrayList<Object> mockChoices = cm.retrieve(c);
 		assertTrue(mockChoices.size() == 1);
 		assertTrue(hasChoice(mockChoices, c));
 
 		Choice newChoice = (Choice) mockChoices.get(0);
 
 		newChoice.setText("new choice text mrawr");
-		cm.update(c, helper);
-
+		cm.update(c);
 		// make sure you can find new choice
-		mockChoices = cm.retrieve(newChoice, helper);
+		mockChoices = cm.retrieve(newChoice);
 		assertTrue(mockChoices.size() == 1);
 		assertTrue(hasChoice(mockChoices, newChoice));
 
@@ -106,23 +103,20 @@ public class TestChoiceManager extends
 	 * Tests retrieving all the choices of a chapter
 	 */
 	public void testGetAllChoices() {
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
-		cm.insert(mockChoice, helper);
+		cm.insert(mockChoice);
 		Choice mockChoice2 = new Choice(chapId1, chapId2, "Lily drove");
-		cm.insert(mockChoice2, helper);
+		cm.insert(mockChoice2);
 		Choice mockChoice3 = new Choice(chapId2, chapId1, "you hit the cow");
-		cm.insert(mockChoice3, helper);
+		cm.insert(mockChoice3);
 
 		// Looking for all choices belonging to chapter id 1
 		Choice criteria = new Choice(null, chapId1);
 
-		ArrayList<Object> mockChoices = cm.retrieve(criteria, helper);
+		ArrayList<Object> mockChoices = cm.retrieve(criteria);
 		assertTrue(mockChoices.size() == 2);
 		assertTrue(hasChoice(mockChoices, mockChoice));
 		assertTrue(hasChoice(mockChoices, mockChoice2));
