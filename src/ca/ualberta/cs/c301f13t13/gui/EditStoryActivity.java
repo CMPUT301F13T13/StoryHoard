@@ -27,7 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -42,7 +42,7 @@ public class EditStoryActivity extends Activity {
 	private Button addfirstChapter;
 	private Button addStoryImage;
 	private Story newStory;
-	private GeneralController gc;
+	private SHController gc;
 	private boolean isEditing;
 
 	@Override
@@ -54,7 +54,7 @@ public class EditStoryActivity extends Activity {
 		actionBar.setTitle("Story Metadata");
 		actionBar.setDisplayShowTitleEnabled(true);
 
-		gc = GeneralController.getInstance(this);
+		gc = SHController.getInstance(this);
 
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
@@ -87,7 +87,7 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObjectLocally(newStory, GeneralController.STORY);
+					gc.updateObjectLocally(newStory, SHController.STORY);
 				} else {
 					newStory = new Story(title, author, description, true);
 					Intent intent = new Intent(getApplicationContext(),

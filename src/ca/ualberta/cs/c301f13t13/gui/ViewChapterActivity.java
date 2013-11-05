@@ -27,7 +27,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
@@ -39,7 +39,7 @@ import ca.ualberta.cs.c301f13t13.backend.GeneralController;
 public class ViewChapterActivity extends Activity {
 	private UUID storyID;
 	private UUID chapterID;
-	private GeneralController gc;
+	private SHController gc;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayAdapter<Choice> choiceAdapter;
@@ -56,7 +56,7 @@ public class ViewChapterActivity extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.get("storyID");
 		chapterID = (UUID) bundle.get("chapterID");
-		gc = GeneralController.getInstance(this);
+		gc = SHController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);

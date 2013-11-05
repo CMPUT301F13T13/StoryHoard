@@ -30,7 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -44,8 +44,8 @@ public class ViewBrowseStories extends Activity {
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private StoriesViewAdapter customGridAdapter;
-	private GeneralController gc;
-	int viewType = GeneralController.CREATED;
+	private SHController gc;
+	int viewType = SHController.CREATED;
 
 	/**
 	 * Create the View Browse Stories activity
@@ -78,11 +78,11 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = GeneralController.CREATED;
+							viewType = SHController.CREATED;
 						} else if (itemPosition == 1) {
-							viewType = GeneralController.CACHED;
+							viewType = SHController.CACHED;
 						} else if (itemPosition == 2) {
-							viewType = GeneralController.PUBLISHED;
+							viewType = SHController.PUBLISHED;
 						}
 						refreshStories();
 						return true;
@@ -154,7 +154,7 @@ public class ViewBrowseStories extends Activity {
 	 */
 	private void refreshStories() {
 		gridArray.clear();
-		gc = GeneralController.getInstance(this);
+		gc = SHController.getInstance(this);
 		gridArray.addAll(gc.getAllStories(viewType));
 		customGridAdapter.notifyDataSetChanged();
 	}

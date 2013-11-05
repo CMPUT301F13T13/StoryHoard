@@ -28,8 +28,11 @@ import android.app.Application;
  *
  */
 public class StoryHoardApplication extends Application{
-	
-	public GeneralController getController() {
-		return GeneralController.getInstance(getApplicationContext());
+	/**
+	 * Returns a GeneralController instance (is also a singleton).
+	 * @return
+	 */
+	public SHController getController() {
+		return SHController.getInstance(getApplicationContext());
 	}
 }

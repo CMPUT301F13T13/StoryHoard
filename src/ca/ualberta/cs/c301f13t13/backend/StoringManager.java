@@ -35,27 +35,25 @@ public interface StoringManager {
 	 * Inserts an object into a database.
 	 * 
 	 * @param object
-	 * @param helper
 	 */
-	public void insert(Object object, DBHelper helper);
+	public void insert(Object object);
 
 	/**
 	 * Retrieves an object from the database.
 	 * 
 	 * @param criteria
-	 * @param helper
+	 * 
 	 * @return
 	 */
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper);
+	public ArrayList<Object> retrieve(Object criteria);
 
 	/**
 	 * Updates an object in the database.
 	 * 
 	 * @param oldObject
 	 * @param newObject
-	 * @param helper
 	 */
-	public void update(Object newObject, DBHelper helper);
+	public void update(Object newObject);
 
 	/**
 	 * Builds the selection string and the selection arguments to be used in a

@@ -34,34 +34,22 @@ import android.content.Context;
  * @author Ashley
  * 
  */
-public class GeneralController {
+public class SHController {
 	// CONSTANTS
-	public static final int ALL = -1;
-	public static final int CACHED = 0;
-	public static final int CREATED = 1;
-	public static final int PUBLISHED = 2;
-
 	public static final int STORY = 0;
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
 	public static final int MEDIA = 3;
+	public static final int PUBLISHED = 4;
+	public static final int SERVER = 4;
+	public static final int CACHED = 5;
+	public static final int CREATED = 6;
 
-	// SELF
-	private static GeneralController self = null;
-	
-	// Models
-	StoryManager sm = null;
-	ChapterManager chapm = null;
-	ChoiceManager chom = null;
-	MediaManager mm = null;
-	DBHelper helper = null;
+	private static SHController self = null;  // SELF
+	private static StorageFactory sf = null;
 
-	protected GeneralController(Context context) {
-		sm = StoryManager.getInstance(context);
-		chapm = ChapterManager.getInstance(context);
-		chom = ChoiceManager.getInstance(context);
-		mm = MediaManager.getInstance(context);
-		helper = DBHelper.getInstance(context);
+	protected SHController(Context context) {
+		sf = new StorageFactory(context);
 	}
 
 	/**
@@ -69,9 +57,9 @@ public class GeneralController {
 	 * 
 	 * @return
 	 */
-	public static GeneralController getInstance(Context context) {
+	public static SHController getInstance(Context context) {
 		if (self == null) {
-			self = new GeneralController(context);
+			self = new SHController(context);
 		}
 		return self;
 	}
@@ -87,27 +75,25 @@ public class GeneralController {
 	public ArrayList<Story> getAllStories(int type) {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		ArrayList<Object> objects;
-		Story criteria;
-
+		Story criteria = null;
+		StoringManager sm = sf.getStoringManager(type);
+		
 		switch (type) {
 		case CACHED:
 			criteria = new Story(null, null, null, null, false);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
 			criteria = new Story(null, null, null, null, true);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case PUBLISHED:
 			criteria = new Story(null, null, null, null, null);
-			stories = sm.searchPublished(criteria);
 			break;
 		default:
 			break;
 		}
-
+		
+		objects = sm.retrieve(criteria);
+		stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -123,8 +109,9 @@ public class GeneralController {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		ArrayList<Object> objects;
 		Chapter criteria = new Chapter(null, storyId, null);
-
-		objects = chapm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(CHAPTER);
+		
+		objects = sm.retrieve(criteria);
 		chapters = Utilities.objectsToChapters(objects);
 
 		return chapters;
@@ -142,8 +129,9 @@ public class GeneralController {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		ArrayList<Object> objects;
 		Choice criteria = new Choice(null, chapterId);
-
-		objects = chom.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(CHOICE);
+		
+		objects = sm.retrieve(criteria);
 		choices = Utilities.objectsToChoices(objects);
 		return choices;
 	}
@@ -160,8 +148,9 @@ public class GeneralController {
 		ArrayList<Media> illustrations = new ArrayList<Media>();
 		ArrayList<Object> objects;
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
-
-		objects = mm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(MEDIA);
+		
+		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
@@ -178,8 +167,9 @@ public class GeneralController {
 		ArrayList<Media> photos = new ArrayList<Media>();
 		ArrayList<Object> objects;
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
-
-		objects = mm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(MEDIA);
+		
+		objects = sm.retrieve(criteria);
 		photos = Utilities.objectsToMedia(objects);
 		return photos;
 	}
@@ -194,21 +184,8 @@ public class GeneralController {
 	 *            Will either be STORY(0), CHAPTER(1), CHOICE(2), MEDIA (3)
 	 */
 	public void addObjectLocally(Object object, int type) {
-
-		switch (type) {
-		case STORY:
-			sm.insert(object, helper);
-			break;
-		case CHAPTER:
-			chapm.insert(object, helper);
-			break;
-		case CHOICE:
-			chom.insert(object, helper);
-			break;
-		case MEDIA:
-			mm.insert(object, helper);
-			break;
-		}
+		StoringManager sm = sf.getStoringManager(type);
+		sm.insert(object);
 	}
 
 	/**
@@ -226,20 +203,17 @@ public class GeneralController {
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
 	public ArrayList<Story> searchStory(String title, String author, int type) {
-		Story criteria;
+		Story criteria = null;
 		ArrayList<Object> objects;
 		ArrayList<Story> stories = new ArrayList<Story>();
+		StoringManager sm = sf.getStoringManager(type);
 
 		switch (type) {
 		case CACHED:
 			criteria = new Story(null, title, author, null, false);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case CREATED:
 			criteria = new Story(null, title, author, null, true);
-			objects = sm.retrieve(criteria, helper);
-			stories = Utilities.objectsToStories(objects);
 			break;
 		case PUBLISHED:
 			break;
@@ -247,7 +221,8 @@ public class GeneralController {
 			// raise exception
 			break;
 		}
-
+		objects = sm.retrieve(criteria);
+		stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -263,20 +238,20 @@ public class GeneralController {
 	public Chapter getCompleteChapter(UUID id) {
 		// Search criteria gets set
 		Chapter criteria = new Chapter(id, null, null);
+		StoringManager sm = sf.getStoringManager(CHAPTER);
 
 		// Get chapter
-		ArrayList<Object> objects = chapm.retrieve(criteria, helper);
+		ArrayList<Object> objects = sm.retrieve(criteria);
 		Chapter chapter = (Chapter) objects.get(0);
 
 		// Get chapter choices
 		chapter.setChoices(getAllChoices(id));
 
-		// Get media (photos/illustrations)
-		ArrayList<Media> photos = getAllPhotos(id);
-		chapter.setPhotos(photos);
+		// Get photos
+		chapter.setPhotos(getAllPhotos(id));
 
-		ArrayList<Media> ills = getAllIllustrations(id);
-		chapter.setIllustrations(ills);
+		// Get illustrations
+		chapter.setIllustrations(getAllIllustrations(id));
 
 		return chapter;
 	}
@@ -293,7 +268,8 @@ public class GeneralController {
 	public Story getCompleteStory(UUID id) {
 		// Search criteria gets set
 		Story criteria = new Story(id, null, null, null, null);
-		ArrayList<Object> objects = sm.retrieve(criteria, helper);
+		StoringManager sm = sf.getStoringManager(STORY);
+		ArrayList<Object> objects = sm.retrieve(criteria);
 		Story story = (Story) objects.get(0);
 
 		// Get all chapters
@@ -323,30 +299,15 @@ public class GeneralController {
 	 *            Will either be STORY (0), CHAPTER (1), CHOICE (2), or MEDIA(3)
 	 */
 	public void updateObjectLocally(Object object, int type) {
-
-		switch (type) {
-		case STORY:
-			sm.update(object, helper);
-			break;
-		case CHAPTER:
-			chapm.update(object, helper);
-			break;
-		case CHOICE:
-			chom.update(object, helper);
-			break;
-		case MEDIA:
-			mm.update(object, helper);
-			break;
-		default:
-			// raise exception
-			break;
-		}
+		StoringManager sm = sf.getStoringManager(type);
+		sm.update(object);
 	}
 
 	/**
 	 * Saves a story onto the server.
 	 */
 	public void publishStory(Story story) {
+		StoringManager sm = sf.getStoringManager(SERVER);
 		// TODO implement
 	}
 
@@ -354,6 +315,7 @@ public class GeneralController {
 	 * Updates a story that is on the server.
 	 */
 	public void updatePublished(Story story) {
+		StoringManager sm = sf.getStoringManager(SERVER);
 		// TODO implement
 	}
 }

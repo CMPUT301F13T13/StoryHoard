@@ -41,14 +41,14 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @see Model
  */
 public class StoryManager extends Model implements StoringManager {
-	private Context context;
+	private DBHelper helper = null;
 	private static StoryManager self = null;
 
 	/**
 	 * Initializes a new StoryManager object.
 	 */
 	protected StoryManager(Context context) {
-		this.context = context;
+		helper = DBHelper.getInstance(context);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class StoryManager extends Model implements StoringManager {
 	 * Saves a new story locally (in the database).
 	 */
 	@Override
-	public void insert(Object object, DBHelper helper) {
+	public void insert(Object object) {
 		Story story = (Story) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -99,11 +99,9 @@ public class StoryManager extends Model implements StoringManager {
 	 * @param newObject
 	 *            Contains the changes to the object, it is what the oldObject
 	 *            info will be replaced with.
-	 * @param helper
-	 *			  Used to open a connection to the database.
 	 */
 	@Override
-	public void update(Object newObject, DBHelper helper) {
+	public void update(Object newObject) {
 		Story newS = (Story) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -129,11 +127,9 @@ public class StoryManager extends Model implements StoringManager {
 	 * 
 	 * @param criteria
 	 *            Holds the search criteria.
-	 * @param helper
-	 *            Used to open the database connection.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
+	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String[] sArgs = null;

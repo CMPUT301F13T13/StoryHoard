@@ -36,6 +36,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 /**
@@ -56,7 +58,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Ashley
  * @author Stephanie
  */
-public class ESClient {
+public class ServerManager implements StoringManager{
 	// Http Connector
 	private HttpClient httpclient = new DefaultHttpClient();
 
@@ -260,5 +262,34 @@ public class ESClient {
 		}
 		System.err.println("JSON:"+json);
 		return json;
+	}
+
+	@Override
+	public void insert(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ArrayList<Object> retrieve(Object criteria) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void update(Object newObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static StoringManager getInstance(Context context) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
