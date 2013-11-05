@@ -19,9 +19,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.HashMap;
 import java.util.UUID;
 
-import junit.framework.TestCase;
-
-import ca.ualberta.cs.c301f13t13.backend.*;
+import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the Story class in the StoryHoard application.
@@ -29,10 +31,10 @@ import ca.ualberta.cs.c301f13t13.backend.*;
  * @author Stephanie
  * @see Story
  */
-public class TestStory extends TestCase {
+public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestStory() {
-		super();
+		super(ViewBrowseStories.class);
 	}
 
 	/**
@@ -41,7 +43,7 @@ public class TestStory extends TestCase {
 	@SuppressWarnings("unused")
 	public void testCreateStory() {
 		try {
-			Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+			Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		} catch (Exception e) {
 			fail("error creating a new story object");
 		}
@@ -51,7 +53,7 @@ public class TestStory extends TestCase {
 	 * Tests adding a chapter to a story.
 	 */
 	public void testAddChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.addChapter(chapter);
 		assertEquals(story.getChapters().size(), 1);
@@ -61,7 +63,7 @@ public class TestStory extends TestCase {
 	 * Tests retrieving a specific chapter from a story.
 	 */
 	public void testGetChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		Chapter chapter1 = new Chapter(story.getId(), "On a cold, dark night.");
 		Chapter chapter2 = new Chapter(story.getId(), "On a sunny, bright day.");
 		story.addChapter(chapter1);
@@ -84,7 +86,7 @@ public class TestStory extends TestCase {
 		assertTrue(info.size() == 0);
 
 		// not empty arguments
-		criteria = new Story(null, "john", "the cow", "went home", true);
+		criteria = new Story(null, "john", "the cow", "went home", Utilities.getPhoneId(this.getActivity()));
 		info = criteria.getSearchCriteria();
 
 		assertTrue(info.size() == 3);
@@ -98,13 +100,13 @@ public class TestStory extends TestCase {
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		Story mockStory = new Story("title1", "author1", "desc1", true);
+		Story mockStory = new Story("title1", "author1", "desc1", Utilities.getPhoneId(this.getActivity()));
 
 		UUID storyId = mockStory.getId();
 		String title = mockStory.getTitle();
 		String author = mockStory.getAuthor();
 		String desc = mockStory.getDescription();
-		Boolean created = mockStory.getAuthorsOwn();
+		String created = mockStory.getPhoneId();
 		HashMap<UUID, Chapter> chapters = mockStory.getChapters();
 		UUID firstChapId = mockStory.getFirstChapterId();
 
@@ -112,7 +114,7 @@ public class TestStory extends TestCase {
 		mockStory.setTitle("new title");
 		mockStory.setAuthor("pinkie");
 		mockStory.setDescription("new desc");
-		mockStory.setAuthorsOwn(false);
+		mockStory.setPhoneId(Utilities.getPhoneId(this.getActivity()));
 		mockStory.setChapters(null);
 		mockStory.setFirstChapterId(UUID.randomUUID());
 
@@ -120,7 +122,7 @@ public class TestStory extends TestCase {
 		assertNotSame("new title", title);
 		assertNotSame("pinkie", author);
 		assertNotSame("new desc", desc);
-		assertNotSame(created, mockStory.getAuthorsOwn());
+		assertNotSame(created, mockStory.getPhoneId());
 		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);
 	}

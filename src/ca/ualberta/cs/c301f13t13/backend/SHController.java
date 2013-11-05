@@ -44,11 +44,13 @@ public class SHController {
 	public static final int CACHED_STORY = 5;
 	public static final int CREATED_STORY = 6;
 
+	private Context context = null;
 	private static SHController self = null;  // SELF
 	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
 		sf = new ManagerFactory(context);
+		this.context = context;
 	}
 
 	/**
@@ -80,10 +82,10 @@ public class SHController {
 		
 		switch (type) {
 		case CACHED_STORY:
-			criteria = new Story(null, null, null, null, false);
+			criteria = new Story(null, null, null, null, " NOT " + Utilities.getPhoneId(context));
 			break;
 		case CREATED_STORY:
-			criteria = new Story(null, null, null, null, true);
+			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
 			break;
 		case PUBLISHED_STORY:
 			criteria = new Story(null, null, null, null, null);
@@ -213,10 +215,10 @@ public class SHController {
 
 		switch (type) {
 		case CACHED_STORY:
-			criteria = new Story(null, title, author, null, false);
+			criteria = new Story(null, title, author, null, null);
 			break;
 		case CREATED_STORY:
-			criteria = new Story(null, title, author, null, true);
+			criteria = new Story(null, title, author, null, null);
 			break;
 		case PUBLISHED_STORY:
 			break;

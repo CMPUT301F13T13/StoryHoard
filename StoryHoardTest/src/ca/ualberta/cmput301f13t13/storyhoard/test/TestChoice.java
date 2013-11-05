@@ -19,11 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.test.ActivityInstrumentationTestCase2;
 import junit.framework.TestCase;
-
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the Choice class in the StoryHoard
@@ -32,10 +34,10 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * @author Ashley
  * @see Choice
  */
-public class TestChoice extends TestCase {
+public class TestChoice extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestChoice() {
-		super();
+		super(ViewBrowseStories.class);
 	}
 
 	/**
@@ -43,7 +45,7 @@ public class TestChoice extends TestCase {
 	 */
 	@SuppressWarnings("unused")
 	public void testCreateChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story",Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");

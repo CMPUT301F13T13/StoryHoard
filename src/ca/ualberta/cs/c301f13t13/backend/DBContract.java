@@ -58,7 +58,7 @@ public final class DBContract {
 		public static final String COLUMN_NAME_AUTHOR = "author";
 		public static final String COLUMN_NAME_DESCRIPTION = "description";
 		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
-		public static final String COLUMN_NAME_CREATED = "created";
+		public static final String COLUMN_NAME_PHONE_ID = "phone_id";
 
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
@@ -68,7 +68,7 @@ public final class DBContract {
 				+ StoryTable.COLUMN_NAME_AUTHOR + " TEXT, "
 				+ StoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, "
 				+ StoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
-				+ StoryTable.COLUMN_NAME_CREATED + " TEXT)";
+				+ StoryTable.COLUMN_NAME_PHONE_ID + " TEXT)";
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
 				+ StoryTable.TABLE_NAME;

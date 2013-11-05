@@ -35,6 +35,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * Design Pattern: Singleton
  * 
  * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  * @see Story
  * @see StoringManager
@@ -87,8 +88,7 @@ public class StoryManager implements StoringManager {
 					story.getDescription());
 		}
 		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, chapterId.toString());
-		values.put(StoryTable.COLUMN_NAME_CREATED, story.getAuthorsOwn()
-				.toString());
+		values.put(StoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
 
 		db.insert(StoryTable.TABLE_NAME, null, values);
 	}
@@ -109,10 +109,8 @@ public class StoryManager implements StoringManager {
 		values.put(StoryTable.COLUMN_NAME_TITLE, newS.getTitle());
 		values.put(StoryTable.COLUMN_NAME_AUTHOR, newS.getAuthor());
 		values.put(StoryTable.COLUMN_NAME_DESCRIPTION, newS.getDescription());
-		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, newS
-				.getFirstChapterId().toString());
-		values.put(StoryTable.COLUMN_NAME_CREATED, newS.getAuthorsOwn()
-				.toString());
+		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, newS.getFirstChapterId().toString());
+		values.put(StoryTable.COLUMN_NAME_PHONE_ID, newS.getPhoneId());
 
 		// Setting search criteria
 		String selection = StoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
@@ -132,11 +130,13 @@ public class StoryManager implements StoringManager {
 		ArrayList<Object> results = new ArrayList<Object>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String[] sArgs = null;
-		String[] projection = { StoryTable.COLUMN_NAME_STORY_ID,
-				StoryTable.COLUMN_NAME_TITLE, StoryTable.COLUMN_NAME_AUTHOR,
+		String[] projection = { 
+				StoryTable.COLUMN_NAME_STORY_ID,
+				StoryTable.COLUMN_NAME_TITLE, 
+				StoryTable.COLUMN_NAME_AUTHOR,
 				StoryTable.COLUMN_NAME_DESCRIPTION,
 				StoryTable.COLUMN_NAME_FIRST_CHAPTER,
-				StoryTable.COLUMN_NAME_CREATED };
+				StoryTable.COLUMN_NAME_PHONE_ID };
 
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -157,11 +157,13 @@ public class StoryManager implements StoringManager {
 		while (!cursor.isAfterLast()) {
 			String storyId = cursor.getString(0);
 
-			Story story = new Story(storyId, cursor.getString(1), // title
+			Story story = new Story(
+					storyId, cursor.getString(1), // title
 					cursor.getString(2), // author
 					cursor.getString(3), // description
 					cursor.getString(4), // first chapter id
-					Boolean.valueOf(cursor.getString(5)));
+					cursor.getString(5) // phoneId
+					);
 			results.add(story);
 			cursor.moveToNext();
 		}

@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
  * 
@@ -31,6 +32,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
@@ -68,11 +70,11 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", false);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", false);
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", true);
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, SHController.STORY);
@@ -91,11 +93,11 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", true);
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", false);
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, SHController.STORY);
@@ -117,9 +119,9 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", false);
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", false);
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", false);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 
 		gc.addObject(s1, SHController.PUBLISHED_STORY);
 		gc.addObject(s2, SHController.PUBLISHED_STORY);
@@ -138,7 +140,7 @@ public class TestSHController extends
 	 */
 	public void testAddGetAllChapters() {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-		Story story = new Story("title", "author", "des", true);
+		Story story = new Story("title", "author", "des", Utilities.getPhoneId(getActivity()));
 
 		Chapter c1 = new Chapter(story.getId(), "text");
 		Chapter c2 = new Chapter(story.getId(), "text");
@@ -205,17 +207,17 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("Lily the cow", "me", "D: none", true);
+		Story s1 = new Story("Lily the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("Bob the cow", "me", "D: none", true);
+		Story s2 = new Story("Bob the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("Bob the cow", "me", "D: none", false);
+		Story s3 = new Story("Bob the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(UUID.randomUUID());
-		Story s4 = new Story("sad cow", "me", "D: none", false);
+		Story s4 = new Story("sad cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s4.setFirstChapterId(UUID.randomUUID());
-		Story s5 = new Story("sad cow", "me", "D: none", false);
+		Story s5 = new Story("sad cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s5.setFirstChapterId(UUID.randomUUID());
-		Story s6 = new Story("sad hen", "me", "D: none", false);
+		Story s6 = new Story("sad hen", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s6.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, SHController.STORY);
@@ -253,7 +255,7 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, SHController.STORY);
@@ -372,7 +374,7 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", false);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 
 		gc.addObject(s1, SHController.PUBLISHED_STORY);
 		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
@@ -407,8 +409,8 @@ public class TestSHController extends
 	public void testGetCompleteStory() {
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", true);
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", true);
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 
 		// Making chapters and choices
 		Chapter chap1 = new Chapter(s1.getId(), "chapter text rawr");

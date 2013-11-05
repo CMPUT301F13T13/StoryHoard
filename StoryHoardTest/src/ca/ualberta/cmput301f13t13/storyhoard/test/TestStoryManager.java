@@ -19,9 +19,9 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 
 import org.junit.Before;
+
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
-
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -56,9 +56,9 @@ public class TestStoryManager extends
 	 * Create a new story.
 	 */
 	public Story newMockStory(String title, String author, String description,
-			Boolean authorsOwn) {
+			String phoneId) {
 		// story object
-		Story mockStory = new Story(title, author, description, authorsOwn);
+		Story mockStory = new Story(title, author, description, phoneId);
 
 		// first chapter of story
 		Chapter mockChapter = new Chapter(mockStory.getId(), "my first chapter");
@@ -74,7 +74,7 @@ public class TestStoryManager extends
 	 */
 	public void testCacheLoadStory() {
 		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog",
-				false);
+				Utilities.getPhoneId(this.getActivity()));
 
 		sm.insert(mockStory);
 
@@ -88,7 +88,7 @@ public class TestStoryManager extends
 	 */
 	public void testAddLoadStory() {
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
-				true);
+				Utilities.getPhoneId(this.getActivity()));
 
 		sm.insert(mockStory);
 
@@ -108,17 +108,17 @@ public class TestStoryManager extends
 	 */
 	public void testGetAllAuthorStories() {
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
-				true);
+				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
 		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
-				"my chubby frog", true);
+				"my chubby frog", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory2);
 		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer",
-				"my chubby hen", false);
+				"my chubby hen", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, true);
+		Story mockCriteria = new Story(null, null, null, null, null);
 		mockStories = sm.retrieve(mockCriteria);
 		assertFalse(hasStory(mockStories, mockStory3));
 		assertEquals(mockStories.size(), 2);
@@ -130,17 +130,17 @@ public class TestStoryManager extends
 	 */
 	public void testGetAllCachedStories() {
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
-				true);
+				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
 		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
-				"my chubby frog", false);
+				"my chubby frog", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory2);
 		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer",
-				"my chubby hen", false);
+				"my chubby hen", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, false);
+		Story mockCriteria = new Story(null, null, null, null, null);
 		mockStories = sm.retrieve(mockCriteria);
 		assertFalse(hasStory(mockStories, mockStory1));
 		assertEquals(mockStories.size(), 2);
@@ -152,7 +152,7 @@ public class TestStoryManager extends
 	 */
 	public void testEditStory() {
 		Story mockStory = newMockStory("My Wizard Mouse", "JK ROlling",
-				"before the edit...", true);
+				"before the edit...", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory);
 
 		mockStories = sm.retrieve(mockStory);

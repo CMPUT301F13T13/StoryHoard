@@ -55,8 +55,8 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void objectsToStories() {
-		Story story = new Story("title", "author", "desc", true);
-		Story story2 = new Story("title2", "author2", "desc2", true);
+		Story story = new Story("title", "author", "desc", Utilities.getPhoneId(this.getActivity()));
+		Story story2 = new Story("title2", "author2", "desc2", Utilities.getPhoneId(this.getActivity()));
 		ArrayList<Object> objects = new ArrayList<Object>();
 		objects.add(story);
 		objects.add(story2);

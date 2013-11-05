@@ -54,7 +54,7 @@ public class TestChoiceManager extends
 	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");
@@ -73,7 +73,7 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story",Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");

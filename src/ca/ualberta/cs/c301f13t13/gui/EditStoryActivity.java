@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
  * Activity for editing the story metadata
@@ -89,7 +91,7 @@ public class EditStoryActivity extends Activity {
 					newStory.setDescription(description);
 					gc.updateObject(newStory, SHController.STORY);
 				} else {
-					newStory = new Story(title, author, description, true);
+					newStory = new Story(title, author, description, Utilities.getPhoneId(getBaseContext()));
 					Intent intent = new Intent(getApplicationContext(),
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);
