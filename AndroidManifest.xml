@@ -51,6 +51,10 @@
             android:name="ca.ualberta.cs.c301f13t13.gui.ViewAllChaptersActivity"
             android:label="@string/all_chapters" >
         </activity>
+        <activity
+            android:name="ca.ualberta.cmput301f13t13.storyhoard.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
     </application>
 
 </manifest>

@@ -98,7 +98,7 @@ public class EditChapterActivity extends Activity implements
 		saveButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				story.setFirstChapterId(chapt.getId());
+				story.addChapter(chapt);
 				chapt.setText(chapterContent.getText().toString());
 				SHController.getInstance(getBaseContext()).addObject(story,
 						SHController.STORY);
