@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,7 +61,7 @@ public class ServerManager implements StoringManager{
 	// JSON Utilities
 	private static Gson gson = null;
 	private static ServerManager self = null;
-	private static final String server = "http://cmput301.softwareprocess.es:8080/testing/lab02/";
+	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
 	
 	protected ServerManager() {
 		httpclient = new DefaultHttpClient();
@@ -85,11 +86,10 @@ public class ServerManager implements StoringManager{
 
 	/**
 	 * Consumes the POST/Insert operation of the service
-	 * @throws IOException 
-	 * @throws IllegalStateException 
-	 */
-	public void insertStory(Story story) throws IllegalStateException, IOException{
-
+	 */	
+	@Override
+	public void insert(Object object){
+		Story story = (Story) object;
 		HttpPost httpPost = new HttpPost(server + story.getId().toString());
 
 		StringEntity stringentity = null;
@@ -114,31 +114,60 @@ public class ServerManager implements StoringManager{
 		System.out.println(status);
 		
 		HttpEntity entity = response.getEntity();
-		InputStreamReader is = new InputStreamReader(entity.getContent());
+		InputStreamReader is = null;
+		try {
+			is = new InputStreamReader(entity.getContent());
+		} catch (IllegalStateException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		BufferedReader br = new BufferedReader(is);
 		
 		String output;
 		System.err.println("Output from Server -> ");
-		while ((output = br.readLine()) != null) {
-			System.err.println(output);
-		}
-
 		try {
+			while ((output = br.readLine()) != null) {
+				System.err.println(output);
+			}
 			entity.consumeContent();
+			is.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		// NOT SURE THIS IS RIGHT
-		is.close();
 	}
 
+	
+
+	
 	/**
 	 * Consumes the Get operation of the service
 	 */
-	public void getStory(){
+	@Override
+	public ArrayList<Object> retrieve(Object criteria) {
+		Story crit = (Story) criteria;
+		ArrayList<Object> stories = new ArrayList<Object>();
+		
+		if (crit.getId() == null && crit.getAuthor() == null 
+				&& crit.getTitle() == null) {
+			// get all stories
+		} else if (crit.getId() != null){
+			stories.add(searchById(crit));		
+		} else {
+			stories = searchByKeywords(crit);
+		}
+		
+		return stories;
+	}
+
+	/**
+	 * search by story id
+	 */
+	public Story searchById(Story crit) {
+		Story story = null;
 		try{
-			HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/testing/lab02/999?pretty=1");//S4bRPFsuSwKUDSJImbCE2g?pretty=1
+			HttpGet getRequest = new HttpGet(server + crit.getId().toString() 
+					+ "?pretty=1");
 
 			getRequest.addHeader("Accept","application/json");
 
@@ -150,12 +179,12 @@ public class ServerManager implements StoringManager{
 			String json = getEntityContent(response);
 
 			// We have to tell GSON what type we expect
-			Type elasticSearchResponseType = new TypeToken<SimpleESResponse<Story>>(){}.getType();
+			Type simpleESResponseType = new TypeToken<SimpleESResponse<Story>>(){}.getType();
 			// Now we expect to get a Story response
-			SimpleESResponse<Story> esResponse = gson.fromJson(json, elasticSearchResponseType);
+			SimpleESResponse<Story> esResponse = gson.fromJson(json, simpleESResponseType);
 			// We get the recipe from it!
-			Story recipe = esResponse.getSource();
-			System.out.println(recipe.toString());
+			story = esResponse.getSource();
+			System.out.println(story.toString());
 			
 			// NOT SURE THIS IS RIGHT OR NEEDED
 			HttpEntity entity = response.getEntity();
@@ -169,40 +198,78 @@ public class ServerManager implements StoringManager{
 		} catch (IOException e) {
 
 			e.printStackTrace();
-		}
+		}		
+		return story;
 	}
-
+	
 	/**
-	 * search by keywords
-	 */
-	public void searchStories(String str) throws ClientProtocolException, IOException {
-		HttpGet searchRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/testing/lab02/_search?pretty=1&q=" +
-				java.net.URLEncoder.encode(str,"UTF-8"));
+	 * searches by keywords
+	 */ 
+	public ArrayList<Object> searchByKeywords(Story criteria) {
+		ArrayList<Object> stories = new ArrayList<Object>();
+		HashMap<String, String> storyData = criteria.getSearchCriteria();
+		ArrayList<String> sargs = new ArrayList<String>();
+		
+		// setting selection string
+		for (String key: storyData.keySet()) {
+			sargs.add(storyData.get(key));
+		}
+		String selection = setSearchCriteria(criteria, sargs);
+		
+		HttpGet searchRequest = null;
+		try {
+			searchRequest = new HttpGet(server + "_search?pretty=1&q=" +
+					java.net.URLEncoder.encode(selection,"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		searchRequest.setHeader("Accept","application/json");
-		HttpResponse response = httpclient.execute(searchRequest);
+		HttpResponse response = null;
+		
+		try {
+			response = httpclient.execute(searchRequest);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 
-		String json = getEntityContent(response);
+		String json = null;
+		try {
+			json = getEntityContent(response);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+		Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchResponseType);
 		System.err.println(esResponse);
 		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story recipe = r.getSource();
-			System.err.println(recipe);
+			Story story = r.getSource();
+			stories.add(story);
 		}
+		
 		// NOT SURE THIS IS RIGHT OR NEEDED
 		HttpEntity entity = response.getEntity();
-		InputStreamReader is = new InputStreamReader(entity.getContent());
-		is.close();
+		InputStreamReader is;
+		try {
+			is = new InputStreamReader(entity.getContent());
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+		return stories;
 	}	
 
 	/**
 	 * advanced search (logical operators)
 	 */
 	public void searchsearchStories(String str) throws ClientProtocolException, IOException {
-		HttpPost searchRequest = new HttpPost("http://cmput301.softwareprocess.es:8080/testing/lab02/_search?pretty=1");
+		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
 		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"ingredients\",\"query\" : \"" + str + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
 
@@ -228,7 +295,11 @@ public class ServerManager implements StoringManager{
 		is.close();
 	}	
 
-
+	@Override
+	public void update(Object newObject) {
+		// TODO Auto-generated method stub
+		
+	}
 	/**
 	 * update a field in a recipe
 	 */
@@ -296,26 +367,16 @@ public class ServerManager implements StoringManager{
 	}
 
 	@Override
-	public void insert(Object object) {
-		// TODO Auto-generated method stub
+	public String setSearchCriteria(Object object, ArrayList<String> args) {
+		String selection = "";
 		
-	}
-
-	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Object newObject) {
-		// TODO Auto-generated method stub
+		if (args.size() > 0) {
+			selection += args.get(0);
+		}
 		
-	}
-
-	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		// TODO Auto-generated method stub
-		return null;
+		for (int i = 1; i < args.size(); ++i) {
+			selection += " AND " + args.get(i);
+		}
+		return selection;
 	}
 }
