@@ -119,9 +119,9 @@ public class TestGeneralController extends
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", false);
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", false);
 
-		gc.publishStory(s1);
-		gc.publishStory(s2);
-		gc.publishStory(s3);
+		gc.addObject(s1, SHController.PUBLISHED_STORY);
+		gc.addObject(s2, SHController.PUBLISHED_STORY);
+		gc.addObject(s3, SHController.PUBLISHED_STORY);
 
 		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
 
@@ -219,9 +219,9 @@ public class TestGeneralController extends
 		gc.addObject(s1, SHController.STORY);
 		gc.addObject(s2, SHController.STORY);
 		gc.addObject(s3, SHController.STORY);
-		gc.publishStory(s4);
-		gc.publishStory(s5);
-		gc.publishStory(s6);
+		gc.addObject(s4, SHController.PUBLISHED_STORY);
+		gc.addObject(s5, SHController.PUBLISHED_STORY);
+		gc.addObject(s6, SHController.PUBLISHED_STORY);
 
 		// both author and title are null (should retrieve all created stories)
 		stories = gc.searchStory(null, null, SHController.CREATED_STORY);

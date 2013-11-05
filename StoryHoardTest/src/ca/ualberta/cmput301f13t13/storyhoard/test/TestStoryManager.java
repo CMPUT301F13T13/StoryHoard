@@ -148,28 +148,6 @@ public class TestStoryManager extends
 	}
 
 	/**
-	 * Tests loading all created stories, and makes sure the results don't
-	 * include any stories not created by author.
-	 */
-	public void testGetAllPublishedStories() {
-		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
-				true);
-		sm.publish(mockStory1);
-		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
-				"my chubby frog", false);
-		sm.publish(mockStory2);
-		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer",
-				"my chubby hen", false);
-		sm.publish(mockStory3);
-
-		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, false);
-		ArrayList<Story> mockStories = sm.searchPublished(mockCriteria);
-		assertEquals(mockStories.size(), 3);
-
-	}
-
-	/**
 	 * Tests editing story
 	 */
 	public void testEditStory() {
@@ -196,34 +174,6 @@ public class TestStoryManager extends
 		// make sure old version no longer exists
 		mockStories = sm.retrieve(mockStory);
 		assertTrue(mockStories.size() == 0);
-	}
-
-	/**
-	 * Tests publishing story, then loading it from server.
-	 */
-	public void testPublishLoadStory() {
-		Story mockStory = newMockStory("My Monkey", "TS ELLIOT",
-				"monkey is in the server", false);
-		sm.publish(mockStory);
-
-		ArrayList<Story> pubStories = sm.searchPublished(mockStory);
-		assertTrue(pubStories.contains(mockStory));
-	}
-
-	/**
-	 * Tests publishing story, caching it, then loading it from server.
-	 */
-	public void testPublishCacheLoadStory() {
-		fail("Not yet implemented");
-
-		Story mockStory = newMockStory("My Monkey", "TS ELLIOT",
-				"monkey is in the server", false);
-		
-		sm.publish(mockStory);
-		sm.insert(mockStory);
-
-		ArrayList<Object> pubStories = sm.retrieve(mockStory);
-		assertTrue(hasStory(pubStories, mockStory));
 	}
 
 	/**
