@@ -41,12 +41,12 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
  * @see SHController
  */
-public class TestGeneralController extends
+public class TestSHController extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	DBHelper helper = null;
 	SHController gc = null;
 	
-	public TestGeneralController() {
+	public TestSHController() {
 		super(ViewBrowseStories.class);
 		helper = DBHelper.getInstance(this.getActivity());
 		SHController.getInstance(getActivity());
@@ -374,8 +374,8 @@ public class TestGeneralController extends
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", false);
 
-		gc.publishStory(s1);
-		stories = gc.getAllStories(SHController.PUBLISHED);
+		gc.addObject(s1, SHController.PUBLISHED_STORY);
+		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
 
 		Story newS = stories.get(0);
 		newS.setAuthor("Mr. Blubbers");
@@ -386,8 +386,8 @@ public class TestGeneralController extends
 		newS.addChapter(chap);
 		newS.setFirstChapterId(chap.getId());
 
-		gc.updatePublished(newS);
-		stories = gc.getAllStories(SHController.PUBLISHED);
+		gc.updateObject(newS, SHController.PUBLISHED_STORY);
+		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
 		assertEquals(stories.size(), 1);
 		
 		newS = stories.get(0);
