@@ -27,7 +27,18 @@ import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
 
 /**
+ * Role: Interacts with the database to store, update, and retrieve choice
+ * objects. It implements the StoringManager interface and inherits from the
+ * Model class, meaning it can hold SHViews and notify them if they need to be
+ * updated.
+ * 
+ * Design Pattern: Singleton
+ * 
  * @author Ashley Brown 
+ * 
+ * @see Choice
+ * @see StoringManager
+ * @see Model
  *
  */
 
@@ -43,7 +54,7 @@ public class ChoiceManager implements StoringManager {
 	}
 
 	/**
-	 * Returns an instance of itself. Used to accomplish the
+	 * Returns an instance of itself(ChoiceManager). Used to accomplish the
 	 * singleton design pattern. 
 	 *  
 	 * @param context

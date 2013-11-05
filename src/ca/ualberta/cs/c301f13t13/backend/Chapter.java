@@ -24,9 +24,12 @@ import java.util.UUID;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 
 /**
- * @author Ashley Brown 
+ * Role: A container to hold chapter information. This includes id, story id,
+ * text, choices illustrations and photos
+ * 
+ * @author Ashley Brown
  * @author Stephanie Gil
- *
+ * 
  */
 public class Chapter implements Serializable {
 	private UUID id;
@@ -35,12 +38,14 @@ public class Chapter implements Serializable {
 	private ArrayList<Choice> choices;
 	private ArrayList<Media> illustrations;
 	private ArrayList<Media> photos;
-	
+
 	/**
 	 * Initializes a new chapter object with no id.
 	 * 
 	 * @param storyid
+	 *            The id of the story the chapter is from
 	 * @param text
+	 *            The chapter text that the user will be reading
 	 */
 	public Chapter(UUID storyId, String text) {
 		this.text = text;
@@ -50,17 +55,18 @@ public class Chapter implements Serializable {
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
-	
-	
+
 	/**
-	 * Initialize a new chapter with an id. Can also be used to make
-	 * a chapter from the chapter information retrieved from
-	 * the database. Can also be used to create a choice that will
-	 * serve to hold search criteria.
+	 * Initialize a new chapter with an id. Can also be used to make a chapter
+	 * from the chapter information retrieved from the database. Can also be
+	 * used to create a choice that will serve to hold search criteria.
 	 * 
 	 * @param id
-	 * @param storyId 
+	 *            The unique id of the chapter
+	 * @param storyId
+	 *            The id of the story the chapter is from
 	 * @param text
+	 *            The chapter text that the user will be reading
 	 */
 	public Chapter(UUID id, UUID storyId, String text) {
 		this.id = id;
@@ -69,124 +75,147 @@ public class Chapter implements Serializable {
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
-	//Getters
-	
+
+	// Getters
+
 	/**
 	 * Returns the Id of the chapter.
+	 * 
 	 * @return
 	 */
 	public UUID getId() {
 		return this.id;
-	}	
-	
+	}
+
 	/**
 	 * Returns the story Id of the chapter.
+	 * 
 	 * @return
 	 */
 	public UUID getStoryId() {
 		return this.storyId;
 	}
-	
+
 	/**
 	 * Returns the text of the chapter.
+	 * 
 	 * @return
 	 */
 	public String getText() {
-	
+
 		return this.text;
 	}
-	
+
 	/**
 	 * Returns the choices of the chapter.
+	 * 
 	 * @return
 	 */
 	public ArrayList<Choice> getChoices() {
 		return this.choices;
 	}
-	
+
 	/**
 	 * Returns the photos of the chapter.
+	 * 
 	 * @return
 	 */
 	public ArrayList<Media> getPhotos() {
 		return this.photos;
 	}
-	
+
 	/**
 	 * Returns the illustrations of the chapter.
+	 * 
 	 * @return
 	 */
 	public ArrayList<Media> getIllustrations() {
 		return this.illustrations;
-	}	
-	
+	}
+
 	// SETTERS
-	
+
 	/**
 	 * Sets the Id of the chapter.
+	 * 
 	 * @param id
+	 *            The unique Id of the chapter
 	 */
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	/**
 	 * Sets the story Id of the chapter.
-	 * @param story id
+	 * 
+	 * @param storyid
+	 *            The id of the story the chapter is in
 	 */
 	public void setStoryId(UUID id) {
 		this.storyId = id;
 	}
+
 	/**
 	 * Sets the text of the chapter.
+	 * 
 	 * @param text
+	 *            The text of the chapter that the user will read
 	 */
 	public void setText(String text) {
 		this.text = text;
 	}
+
 	/**
 	 * Sets the choices of the chapter.
+	 * 
 	 * @param choices
+	 *            The choices that link this chapter to another
 	 */
-	public void  setChoices(ArrayList<Choice> choices) {
+	public void setChoices(ArrayList<Choice> choices) {
 		this.choices = choices;
 	}
-	
+
 	/**
 	 * Sets the photos of the chapter.
+	 * 
 	 * @param photos
 	 */
 	public void setPhotos(ArrayList<Media> photos) {
 		this.photos = photos;
 	}
-	
+
 	/**
 	 * Sets the illustrations of the chapter.
+	 * 
 	 * @param illustrations
 	 */
 	public void setIllustrations(ArrayList<Media> illustrations) {
 		this.illustrations = illustrations;
-	}	
-	
+	}
+
 	// OTHER METHODS
-	
+
 	/**
 	 * Adds a choice to the chapter.
+	 * 
 	 * @param choice
 	 */
 	public void addChoice(Choice c) {
 		choices.add(c);
 	}
-	
+
 	/**
 	 * Adds a photo to the chapter
+	 * 
 	 * @param photo
 	 */
 	public void addPhoto(Media p) {
 		photos.add(p);
 	}
-	
+
 	/**
 	 * Adds an illustration to the chapter.
+	 * 
 	 * @param i
 	 */
 	public void addIllustration(Media i) {
@@ -200,29 +229,30 @@ public class Chapter implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + "]";
-		
+		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text
+				+ "]";
+
 	}
 
 	/**
-	 * Returns the information of the chapter (id, storyId) that
-	 * could be used in searching for a chapter in the database. 
-	 * This information is returned in a HashMap where the keys are 
-	 * the corresponding Chapter Table column names.
+	 * Returns the information of the chapter (id, storyId) that could be used
+	 * in searching for a chapter in the database. This information is returned
+	 * in a HashMap where the keys are the corresponding Chapter Table column
+	 * names.
 	 * 
 	 * @return HashMap
-	 */	
+	 */
 	public HashMap<String, String> getSearchCriteria() {
-		HashMap<String,String> info = new HashMap<String,String>();
-		
+		HashMap<String, String> info = new HashMap<String, String>();
+
 		if (id != null) {
 			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		} 
-		
+		}
+
 		if (storyId != null) {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
 		}
-		
+
 		return info;
-	}	
+	}
 }
