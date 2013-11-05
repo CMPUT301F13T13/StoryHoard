@@ -59,4 +59,7 @@ Author: Joshua Charles Campbell
 License: Unlicense  
 Date: soon to come...
 
-
+Converting Images to JSON Objects code
+URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
+Date: Nov. 4th, 2013
+Author: Manav

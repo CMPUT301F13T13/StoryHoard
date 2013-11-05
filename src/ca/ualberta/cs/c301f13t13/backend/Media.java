@@ -22,6 +22,7 @@ import java.util.UUID;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+
 import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 
 /**
@@ -37,7 +38,7 @@ public class Media {
 	private UUID chapterId;
 	private Uri uri;
 	private String type;
-	private Bitmap bitmap;
+	private String bitmapString;
 
 	// CONSTANTS
 	public static final String PHOTO = "photo";
@@ -57,7 +58,10 @@ public class Media {
 		this.chapterId = chapterId;
 		this.uri = uri;
 		this.type = type;
-		this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+		if (uri != null) {
+			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+			bitmapString = Utilities.getStringFromBitmap(bitmap);
+		}
 	}
 
 	/**
@@ -76,7 +80,8 @@ public class Media {
 		this.uri = uri;
 		this.type = type;
 		if (uri != null) {
-			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		}
 	}
 
@@ -124,8 +129,17 @@ public class Media {
 	 * @return
 	 */
 	public Bitmap getBitmap() {
-		return bitmap;
+		return Utilities.getBitmapFromString(bitmapString);
 	}
+	
+	/**
+	 * Returns the media's bitmap as an encoded String
+	 * 
+	 * @return
+	 */
+	public String getBitmapString() {
+		return bitmapString;
+	}	
 
 	// SETTERS
 
@@ -155,7 +169,8 @@ public class Media {
 	public void setUri(Uri uri) {
 		this.uri = uri;
 		if (uri != null) {
-			this.bitmap = BitmapFactory.decodeFile(uri.getPath());
+			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		}
 	}
 
@@ -165,9 +180,18 @@ public class Media {
 	 * @param bitmap
 	 */
 	public void setBitmap(Bitmap bitmap) {
-		this.bitmap = bitmap;
+		bitmapString = Utilities.getStringFromBitmap(bitmap);
 	}
 
+	/**
+	 * Sets the media's bitmapString.
+	 * 
+	 * @param bitmap
+	 */
+	public void setBitmap(String bitmapString) {
+		this.bitmapString = bitmapString;
+	}
+	
 	/**
 	 * Sets the media's type.
 	 */
