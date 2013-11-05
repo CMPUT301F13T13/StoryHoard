@@ -6,7 +6,8 @@ package ca.ualberta.cs.c301f13t13.gui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
@@ -28,13 +29,14 @@ public class ViewAllChaptersActivity extends Activity {
 		if (bundle.getBoolean("viewing")) {
 			//Just viewing chapters; not selecting for
 			//any purpose
-			chapters.setOnClickListener(null);
+			chapters.setOnItemClickListener(null);
 		} else {
 			//Selecting a chapter to add as a choice
-			chapters.setOnClickListener(new OnClickListener() {
+			chapters.setOnItemClickListener(new OnItemClickListener() {
 				@Override
-				public void onClick(View v) {
-					//Add selected chapter as choice
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					
 				}
 			});
 		}
