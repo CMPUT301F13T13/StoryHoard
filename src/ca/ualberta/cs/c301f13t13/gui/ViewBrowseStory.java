@@ -122,10 +122,9 @@ public class ViewBrowseStory extends Activity {
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
 			// Handle editing the story content, like chapters and choices
-			// intent = new Intent(this, EditStoryActivity.class);
-			// startActivity(intent);
-			Toast.makeText(this, "Story Editing is not implemented",
-					Toast.LENGTH_SHORT).show();
+			intent = new Intent(this, ViewBrowseChapters.class);
+			intent.putExtra("storyID", storyID);
+			startActivity(intent);
 			return true;
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);

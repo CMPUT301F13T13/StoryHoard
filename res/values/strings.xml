@@ -29,7 +29,7 @@
     <string name="view_first_chapter">Begin Reading</string>
     <string name="add_new_story">Add New Story</string>
     <string name="search_stories">Search Stories</string>
-    <string name="edit_story">Edit Story</string>
+    <string name="edit_story_chapters">Edit Story Chapters</string>
     <string name="story_view_type">Story View Type</string>
     <string name="current_view_type">Current View: </string>
     <string name="story_image_cover">Cover Image</string>
@@ -66,5 +66,8 @@
     <string name="edit_story_metadata">Edit Story Metadata</string>
     <string name="chapter_content">Dummy Chapter Content</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_view_browse_chapters">All Story Chapters</string>
+    <string name="add_new_chapter">Add New Chapter</string>
+    <string name="no_text">No text</string>
 
 </resources>

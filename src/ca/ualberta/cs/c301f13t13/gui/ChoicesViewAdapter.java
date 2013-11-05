@@ -57,7 +57,7 @@ public class ChoicesViewAdapter extends ArrayAdapter<Choice> {
 			row = inflater.inflate(layoutResourceID, parent, false);
 			
 			holder = new ChoiceHolder();
-			holder.choiceText = (TextView) row.findViewById(R.id.choice_text);
+			holder.choiceText = (TextView) row.findViewById(R.id.choiceText);
 			row.setTag(holder);
 		} else {
 			holder = (ChoiceHolder) row.getTag();

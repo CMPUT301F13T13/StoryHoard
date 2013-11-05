@@ -50,7 +50,7 @@ public class EditStoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_story);
+		setContentView(R.layout.activity_edit_story);
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Story Metadata");
