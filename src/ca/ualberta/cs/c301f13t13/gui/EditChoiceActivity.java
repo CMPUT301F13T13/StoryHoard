@@ -58,7 +58,7 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 			chapt = (Chapter) bundle.getSerializable(Constants._ID);
 		}
 		
-		setContentView(R.layout.activity_add_choice);
+		setContentView(R.layout.activity_edit_choice);
 
 		existingChapterButton = (Button)findViewById(R.id.existing_chapter_button);
 		existingChapterButton.setOnClickListener(new View.OnClickListener() {
