@@ -42,7 +42,7 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  * @see Model
  */
 public class ChapterManager extends Model<SHView> implements StoringManager {
-	private DBHelper helper = null;
+	private static DBHelper helper = null;
 	private static ChapterManager self = null;
 
 	/**

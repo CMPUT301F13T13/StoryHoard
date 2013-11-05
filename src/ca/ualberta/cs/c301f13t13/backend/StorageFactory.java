@@ -43,7 +43,7 @@ public class StorageFactory {
 	public StoringManager getStoringManager(int type) {
 		switch (type) {
 		case SHController.PUBLISHED:
-			return ServerManager.getInstance(context);
+			return ServerManager.getInstance();
 		case SHController.CHAPTER:
 			return ChapterManager.getInstance(context);
 		case SHController.CHOICE:

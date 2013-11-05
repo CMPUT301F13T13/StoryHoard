@@ -41,7 +41,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @see Model
  */
 public class StoryManager extends Model implements StoringManager {
-	private DBHelper helper = null;
+	private static DBHelper helper = null;
 	private static StoryManager self = null;
 
 	/**

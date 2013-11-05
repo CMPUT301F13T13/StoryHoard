@@ -32,7 +32,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
  *
  */
 public class ChoiceManager extends Model implements StoringManager {
-	private DBHelper helper;
+	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
 
 	/**
