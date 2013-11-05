@@ -26,11 +26,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
 
-
 /**
- * @author adbrown
+ * @author Ashley Brown 
  *
  */
+
 public class ChoiceManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
@@ -64,7 +64,6 @@ public class ChoiceManager implements StoringManager {
 		Choice choice = (Choice) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
-		// Insert choice
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
@@ -76,12 +75,9 @@ public class ChoiceManager implements StoringManager {
 	/**
 	 * Updates a choice already in the database.
 	 * 
-	 * @param oldObject
-	 * 			The object before update, used to find it in the database.
 	 * 
 	 * @param newObject
-	 * 			Contains the changes to the object, it is what the oldObject
-	 * 			info will be replaced with.
+	 * 			Contains the changes to the object.
 	 */
 	@Override
 	public void update(Object newObject) {

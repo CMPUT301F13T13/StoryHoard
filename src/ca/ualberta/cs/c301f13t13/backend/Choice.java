@@ -20,6 +20,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
+/**
+ * @author Ashley Brown
+ *
+ */
 
 public class Choice implements Serializable{
 	private UUID id;
@@ -141,7 +145,7 @@ public class Choice implements Serializable{
 	}
 	
 	/**
-	 * Returns the information of the choice (id, storyId, chapterIdFrom) that
+	 * Returns the information of the choice (id, chapterIdFrom, chapterIdTo) that
 	 * could be used in searching for a choice in the database. This information
 	 * is returned in a HashMap where the keys are the corresponding Choice 
 	 * Table column names.

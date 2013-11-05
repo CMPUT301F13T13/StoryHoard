@@ -24,7 +24,8 @@ import java.util.UUID;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 
 /**
- * @author Ashley Brown, Stephanie Gil
+ * @author Ashley Brown 
+ * @author Stephanie Gil
  *
  */
 public class Chapter implements Serializable {
@@ -143,24 +144,24 @@ public class Chapter implements Serializable {
 		this.text = text;
 	}
 	/**
-	 * Sets the text of the chapter.
-	 * @param text
+	 * Sets the choices of the chapter.
+	 * @param choices
 	 */
 	public void  setChoices(ArrayList<Choice> choices) {
 		this.choices = choices;
 	}
 	
 	/**
-	 * Returns the photos of the chapter.
-	 * @return
+	 * Sets the photos of the chapter.
+	 * @param photos
 	 */
 	public void setPhotos(ArrayList<Media> photos) {
 		this.photos = photos;
 	}
 	
 	/**
-	 * Returns the illustrations of the chapter.
-	 * @return
+	 * Sets the illustrations of the chapter.
+	 * @param illustrations
 	 */
 	public void setIllustrations(ArrayList<Media> illustrations) {
 		this.illustrations = illustrations;
