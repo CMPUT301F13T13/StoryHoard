@@ -63,7 +63,12 @@ public class ChoicesViewAdapter extends ArrayAdapter<Choice> {
 			holder = (ChoiceHolder) row.getTag();
 		}
 		Choice item = data.get(position);
-		holder.choiceText.setText(item.getText());
+		// Check for no text here
+		if (item.getText().equals("")) {
+			holder.choiceText.setText("<No Choice Text>");
+		} else {
+			holder.choiceText.setText(item.getText());
+		}
 		return row;
 	}
 	

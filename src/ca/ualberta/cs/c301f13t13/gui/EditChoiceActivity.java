@@ -106,10 +106,4 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 			}
 		});
 	}
-
-//	@Override
-//	public void update(Model model) {
-//		// TODO Auto-generated method stub
-//
-//	}
 }

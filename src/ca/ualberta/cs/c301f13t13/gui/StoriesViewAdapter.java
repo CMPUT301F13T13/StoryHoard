@@ -67,7 +67,12 @@ public class StoriesViewAdapter extends ArrayAdapter<Story> {
 		}
 
 		Story item = data.get(position);
-		holder.txtTitle.setText(item.getTitle());
+		// Check for no text here
+		if (item.getTitle().equals("")) {
+			holder.txtTitle.setText("<No Title>");
+		} else {
+			holder.txtTitle.setText(item.getTitle());
+		}
 		// Implement this when stories actually have pictures
 		// holder.imageItem.setImageBitmap(item.getImage());
 		holder.imageItem.setImageBitmap((Bitmap) BitmapFactory.decodeResource(

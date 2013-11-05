@@ -42,7 +42,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -104,9 +103,24 @@ public class ViewBrowseStory extends Activity {
 		super.onResume();
 		focusedStory = gc.getCompleteStory(storyID);
 		storyCover.setImageBitmap(focusedStory.getImage());
-		storyTitle.setText(focusedStory.getTitle());
-		storyAuthor.setText(focusedStory.getAuthor());
-		storyDescription.setText(focusedStory.getDescription());
+		// Check no title
+		if (focusedStory.getTitle().equals("")) {
+			storyTitle.setText("<No Title>");
+		} else {
+			storyTitle.setText(focusedStory.getTitle());
+		}
+		// Check no author
+		if (focusedStory.getAuthor().equals("")) {
+			storyAuthor.setText("<No Author>");
+		} else {
+			storyAuthor.setText(focusedStory.getAuthor());
+		}
+		// Check no description
+		if (focusedStory.getDescription().equals("")) {
+			storyDescription.setText("<No Description>");
+		} else {
+			storyDescription.setText(focusedStory.getDescription());
+		}
 	}
 
 	@Override
