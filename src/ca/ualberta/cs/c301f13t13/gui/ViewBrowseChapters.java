@@ -22,6 +22,7 @@ public class ViewBrowseChapters extends Activity {
 
 	private SHController gc;
 	private UUID storyID;
+	private Story story;
 	private ListView storyChapters;
 	private ChaptersViewAdapter chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
@@ -38,10 +39,11 @@ public class ViewBrowseChapters extends Activity {
 		gc = SHController.getInstance(getBaseContext());
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
 		
-		// Grab the story ID, pull all the available chapters
+		// Grab the story, pull all the available chapters
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.get("storyID");
-		
+		story = gc.getCompleteStory(storyID);
+
 		// Setup the choices and choice adapters
 		chapterAdapter = new ChaptersViewAdapter(this, R.layout.browse_chapter_item, data);
 		storyChapters.setAdapter(chapterAdapter);
@@ -51,8 +53,6 @@ public class ViewBrowseChapters extends Activity {
 					long arg3) {
 				// Go to edit that chapter
 				Chapter chapter = data.get(arg2);
-				UUID storyID = data.get(arg2).getStoryId();
-				Story story = gc.getCompleteStory(storyID);
 				Intent intent = new Intent(getBaseContext(), EditChapterActivity.class);
 				intent.putExtra("isEditing", true);
 				intent.putExtra("Story", story);
@@ -71,8 +71,13 @@ public class ViewBrowseChapters extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+		case R.id.addNewChapter:
+			// Go to the add new chapter page for the specified story
+			Intent intent = new Intent(getBaseContext(), EditChapterActivity.class);
+			intent.putExtra("isEditing", true);
+			intent.putExtra("Story", story);
+			intent.putExtra("Chapter", new Chapter(storyID, null));
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -84,7 +89,5 @@ public class ViewBrowseChapters extends Activity {
 		data.clear();
 		data.addAll(gc.getAllChapters(storyID));
 		chapterAdapter.notifyDataSetChanged();
-		
 	}
-
 }

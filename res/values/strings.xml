@@ -67,5 +67,7 @@
     <string name="chapter_content">Dummy Chapter Content</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_view_browse_chapters">All Story Chapters</string>
+    <string name="add_new_chapter">Add New Chapter</string>
+    <string name="no_text">No text</string>
 
 </resources>

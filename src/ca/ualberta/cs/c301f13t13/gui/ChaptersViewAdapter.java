@@ -58,13 +58,19 @@ public class ChaptersViewAdapter extends ArrayAdapter<Chapter> {
 			row = inflater.inflate(layoutResourceID, parent, false);
 
 			holder = new ChapterHolder();
-			holder.chapterText = (TextView) row.findViewById(R.id.chapterBrowseText);
+			holder.chapterText = (TextView) row
+					.findViewById(R.id.chapterBrowseText);
 			row.setTag(holder);
 		} else {
 			holder = (ChapterHolder) row.getTag();
 		}
 		Chapter item = data.get(position);
-		holder.chapterText.setText(item.getText());
+		// Check for no text here
+		if (item.getText().equals("")) {
+			holder.chapterText.setText("<Blank Chapter>");
+		} else {
+			holder.chapterText.setText(item.getText());
+		}
 		return row;
 	}
 

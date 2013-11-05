@@ -125,8 +125,6 @@ public class ViewBrowseStory extends Activity {
 			intent = new Intent(this, ViewBrowseChapters.class);
 			intent.putExtra("storyID", storyID);
 			startActivity(intent);
-			Toast.makeText(this, "Story Editing is not implemented",
-					Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);
