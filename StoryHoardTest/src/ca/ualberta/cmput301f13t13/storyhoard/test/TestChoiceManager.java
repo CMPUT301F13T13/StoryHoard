@@ -22,8 +22,14 @@ import java.util.UUID;
 import org.junit.Before;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.*;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
+import ca.ualberta.cs.c301f13t13.backend.DBContract;
+import ca.ualberta.cs.c301f13t13.backend.DBHelper;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the ChoiceManager class in the StoryHoard
@@ -38,7 +44,6 @@ public class TestChoiceManager extends
 
 	public TestChoiceManager() {
 		super(ViewBrowseStories.class);
-		cm = ChoiceManager.getInstance(getActivity());
 	}
 
 	@Before
@@ -48,6 +53,7 @@ public class TestChoiceManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		cm = ChoiceManager.getInstance(getActivity());
 	}
 
 	/**
@@ -73,7 +79,7 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story",Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");

@@ -92,7 +92,7 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 		assertTrue(info.size() == 3);
 		assertTrue(info.get("title").equals("john"));
 		assertTrue(info.get("author").equals("the cow"));
-		assertTrue(info.get("created").equals("true"));
+		assertTrue(info.get("phone_id").equals(criteria.getPhoneId()));
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 		String title = mockStory.getTitle();
 		String author = mockStory.getAuthor();
 		String desc = mockStory.getDescription();
-		String created = mockStory.getPhoneId();
+		String phoneid = mockStory.getPhoneId();
 		HashMap<UUID, Chapter> chapters = mockStory.getChapters();
 		UUID firstChapId = mockStory.getFirstChapterId();
 
@@ -122,7 +122,7 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 		assertNotSame("new title", title);
 		assertNotSame("pinkie", author);
 		assertNotSame("new desc", desc);
-		assertNotSame(created, mockStory.getPhoneId());
+		assertTrue(phoneid.equals(mockStory.getPhoneId()));
 		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);
 	}

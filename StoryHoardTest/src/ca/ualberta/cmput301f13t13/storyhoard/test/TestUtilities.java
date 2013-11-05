@@ -54,7 +54,7 @@ public class TestUtilities extends
 	 * Tests converting an arrayList of objects to stories.
 	 */
 	@SuppressWarnings("unused")
-	public void objectsToStories() {
+	public void testObjectsToStories() {
 		Story story = new Story("title", "author", "desc", Utilities.getPhoneId(this.getActivity()));
 		Story story2 = new Story("title2", "author2", "desc2", Utilities.getPhoneId(this.getActivity()));
 		ArrayList<Object> objects = new ArrayList<Object>();
@@ -72,7 +72,7 @@ public class TestUtilities extends
 	 * Tests converting an arrayList of objects to chapters.
 	 */
 	@SuppressWarnings("unused")
-	public void objectsToChapters() {
+	public void testObjectsToChapters() {
 		Chapter chapter = new Chapter(UUID.randomUUID(), "chap text");
 		Chapter chapter2 = new Chapter(UUID.randomUUID(), "chap text");
 		ArrayList<Object> objects = new ArrayList<Object>();
@@ -90,7 +90,7 @@ public class TestUtilities extends
 	 * Tests converting an arrayList of objects to choices.
 	 */
 	@SuppressWarnings("unused")
-	public void objectsToChoices() {
+	public void testObjectsToChoices() {
 		Choice choice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
 				"chap text");
 		Choice choice2 = new Choice(UUID.randomUUID(), UUID.randomUUID(),
@@ -110,7 +110,7 @@ public class TestUtilities extends
 	 * Tests converting an arrayList of objects to medias.
 	 */
 	@SuppressWarnings("unused")
-	public void objectsToMedia() {
+	public void testObjectsToMedia() {
 		Media media = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
 				Media.PHOTO);
 		Media media2 = new Media(UUID.randomUUID(), Uri.parse("https://blah"),

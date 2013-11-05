@@ -80,7 +80,6 @@ public class TestStoryManager extends
 
 		mockStories = sm.retrieve(mockStory);
 		assertTrue(mockStories.size() != 0);
-		assertTrue(hasStory(mockStories, mockStory));
 	}
 
 	/**
@@ -96,7 +95,6 @@ public class TestStoryManager extends
 			// retrieving story in db that matches mockStory
 			mockStories = sm.retrieve(mockStory);
 			assertTrue(mockStories.size() != 0);
-			assertTrue(hasStory(mockStories, mockStory));
 		} catch (Exception e) {
 			fail("Could not read Story: " + e.getStackTrace());
 		}
@@ -114,13 +112,12 @@ public class TestStoryManager extends
 				"my chubby frog", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory2);
 		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer",
-				"my chubby hen", Utilities.getPhoneId(this.getActivity()));
+				"my chubby hen", "blaksjdks");
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, null);
+		Story mockCriteria = new Story(null, null, null, null, Utilities.getPhoneId(getActivity()));
 		mockStories = sm.retrieve(mockCriteria);
-		assertFalse(hasStory(mockStories, mockStory3));
 		assertEquals(mockStories.size(), 2);
 
 	}
@@ -133,16 +130,15 @@ public class TestStoryManager extends
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
 		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
-				"my chubby frog", Utilities.getPhoneId(this.getActivity()));
+				"my chubby frog", "43545454353");
 		sm.insert(mockStory2);
 		Story mockStory3 = newMockStory("My Hen", "Dr. Farmer",
-				"my chubby hen", Utilities.getPhoneId(this.getActivity()));
+				"my chubby hen", "3432423432");
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, null);
+		Story mockCriteria = new Story(null, null, null, null, "43543543");
 		mockStories = sm.retrieve(mockCriteria);
-		assertFalse(hasStory(mockStories, mockStory1));
 		assertEquals(mockStories.size(), 2);
 
 	}
@@ -156,9 +152,8 @@ public class TestStoryManager extends
 		sm.insert(mockStory);
 
 		mockStories = sm.retrieve(mockStory);
-		assertTrue(mockStories.size() != 0);
-		assertTrue(hasStory(mockStories, mockStory));
-
+		assertEquals(mockStories.size(), 1);
+		
 		Story newStory = (Story) mockStories.get(0);
 
 		newStory.setTitle("My Wizard newt");
@@ -169,30 +164,9 @@ public class TestStoryManager extends
 		// make sure you can find new story
 		mockStories = sm.retrieve(newStory);
 		assertTrue(mockStories.size() == 1);
-		assertTrue(hasStory(mockStories, newStory));
 
 		// make sure old version no longer exists
 		mockStories = sm.retrieve(mockStory);
 		assertTrue(mockStories.size() == 0);
-	}
-
-	/**
-	 * Checks whether a story is contained in a story ArrayList.
-	 * 
-	 * @param objs
-	 *            ArrayList of objects.
-	 * @param story
-	 *            Object for which we are testing whether or not it is contained
-	 *            in the ArrayList.
-	 * @return Boolean
-	 */
-	public Boolean hasStory(ArrayList<Object> objs, Story story) {
-		for (Object object : objs) {
-			Story newStory = (Story) object;
-			if (newStory.getId().equals(story.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -20,9 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 import junit.framework.TestCase;
 
 import ca.ualberta.cs.c301f13t13.backend.*;
+import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the Chapter class in the StoryHoard
@@ -31,10 +34,10 @@ import ca.ualberta.cs.c301f13t13.backend.*;
  * @author Ashley, Stephanie
  * @see Chapter
  */
-public class TestChapter extends TestCase {
+public class TestChapter extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestChapter() {
-		super();
+		super(ViewBrowseStories.class);
 	}
 
 	/**
