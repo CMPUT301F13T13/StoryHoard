@@ -97,8 +97,7 @@ public class StoryManager extends Model implements StoringManager {
 	 * Updates a story already in the database.
 	 * 
 	 * @param newObject
-	 *            Contains the changes to the object, it is what the oldObject
-	 *            info will be replaced with.
+	 *            Contains the changes to the object.
 	 */
 	@Override
 	public void update(Object newObject) {

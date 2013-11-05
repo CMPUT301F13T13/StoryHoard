@@ -23,8 +23,9 @@ import android.graphics.Bitmap;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
- * Role: A container to hold media information. The media can be a photo, an
- * illustration, audio, or video.
+ * Role: A container to hold story information. This includes id, author, 
+ * title, description, the id of the first chapter, a collection of
+ * chapters belonging to it, the id of the phone it was created on.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -312,6 +313,9 @@ public class Story implements Serializable {
 		return info;
 	}
 
+	/**
+	 * Converts a story object to an image.
+	 */
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title
