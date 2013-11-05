@@ -19,11 +19,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
@@ -42,7 +45,7 @@ public class ViewChapterActivity extends Activity {
 	private SHController gc;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private ArrayAdapter<Choice> choiceAdapter;
+	private ChoicesViewAdapter choiceAdapter;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
@@ -63,9 +66,22 @@ public class ViewChapterActivity extends Activity {
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 
 		// Setup the choices and choice adapters
-		choiceAdapter = new ArrayAdapter<Choice>(this, android.R.id.text1,
+		choiceAdapter = new ChoicesViewAdapter(this, android.R.id.text1,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
+		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Go to the chapter in question
+				UUID nextChapter = choices.get(arg2).getNextChapter();
+				Intent intent = new Intent(getBaseContext(), ViewChapterActivity.class);
+				intent.putExtra("storyID", storyID);
+				intent.putExtra("chapterID", nextChapter);
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 
 	@Override
