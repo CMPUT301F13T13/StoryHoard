@@ -53,13 +53,13 @@
     <string name="title_activity_view_edit_story">ViewEditStoryActivity</string>
     <string name="title_activity_view_edit_chapter">ViewEditChapterActivity</string>
     <string name="title_activity_view_story_settings">ViewStorySettingsActivity</string>
-    <string name="title_activity_view_browse_cached_stories">ViewBrowseCachedStories</string>
+    <string name="title_activity_view_browse_cached_stories">ViewBrowseDownloadedStories</string>
     <string name="title_activity_view_browse_published_stories">ViewBrowsePublishedStories</string>
     <string name="title_activity_view_edit_mode">ViewEditMode</string>
     <string name="title_activity_view_browse_stories">ViewBrowseStories</string>
     <string name="title_viewBrowseStories_MyStories">My Stories</string>
     <string name="title_viewBrowseStories_PublishedStories">Published Stories</string>
-    <string name="title_viewBrowseStories_CachedStories">Cached Stories</string>
+    <string name="title_viewBrowseStories_CachedStories">Downloaded Stories</string>
     <string name="title_viewChapter">View Chapter</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="edit_existing_story">Edit Story Content</string>
