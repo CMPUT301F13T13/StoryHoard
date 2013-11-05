@@ -74,7 +74,7 @@ public class SHController {
 	 */
 	public ArrayList<Story> getAllStories(int type) {
 		ArrayList<Story> stories = new ArrayList<Story>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		Story criteria = null;
 		StoringManager sm = sf.getStoringManager(type);
 		
@@ -107,7 +107,8 @@ public class SHController {
 	 */
 	public ArrayList<Chapter> getAllChapters(UUID storyId) {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
+		
 		Chapter criteria = new Chapter(null, storyId, null);
 		StoringManager sm = sf.getStoringManager(CHAPTER);
 		
@@ -127,7 +128,8 @@ public class SHController {
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
+		
 		Choice criteria = new Choice(null, chapterId);
 		StoringManager sm = sf.getStoringManager(CHOICE);
 		
@@ -146,7 +148,7 @@ public class SHController {
 	 */
 	public ArrayList<Media> getAllIllustrations(UUID chapterId) {
 		ArrayList<Media> illustrations = new ArrayList<Media>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
 		StoringManager sm = sf.getStoringManager(MEDIA);
 		
@@ -165,7 +167,7 @@ public class SHController {
 	 */
 	public ArrayList<Media> getAllPhotos(UUID chapterId) {
 		ArrayList<Media> photos = new ArrayList<Media>();
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
 		StoringManager sm = sf.getStoringManager(MEDIA);
 		
@@ -204,7 +206,7 @@ public class SHController {
 	 */
 	public ArrayList<Story> searchStory(String title, String author, int type) {
 		Story criteria = null;
-		ArrayList<Object> objects;
+		ArrayList<Object> objects = new ArrayList<Object>();
 		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
 

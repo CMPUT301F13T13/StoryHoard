@@ -151,7 +151,6 @@ public class TestStoryManager extends
 	 * Tests loading all created stories, and makes sure the results don't
 	 * include any stories not created by author.
 	 */
-	@SuppressWarnings("unused")
 	public void testGetAllPublishedStories() {
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				true);
