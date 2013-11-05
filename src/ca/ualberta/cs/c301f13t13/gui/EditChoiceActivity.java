@@ -25,7 +25,7 @@ package ca.ualberta.cs.c301f13t13.gui;
  * 
  *
  * 
- * author: Josh Tate
+ * @author joshuatate
  */
 
 import android.app.Activity;
