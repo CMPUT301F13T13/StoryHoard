@@ -155,7 +155,7 @@ public class ViewBrowseStories extends Activity {
 	private void refreshStories() {
 		ArrayList<Story> newStories;
 		gridArray.clear();
-		gc = GeneralController.getInstance(this);
+		gc = SHController.getInstance(this);
 		newStories = gc.getAllStories(viewType);
 		if (newStories != null) {
 			gridArray.addAll(newStories);
