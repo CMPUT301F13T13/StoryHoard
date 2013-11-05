@@ -21,6 +21,7 @@ public class ViewAllChaptersActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_all_chapters);
 		chapters = (ListView) findViewById(R.id.allChaptersView);
 		
