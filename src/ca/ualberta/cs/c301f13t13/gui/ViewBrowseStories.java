@@ -43,7 +43,7 @@ public class ViewBrowseStories extends Activity {
 
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
-	private StoriesViewAdapter customGridAdapter;
+	private AdapterStories customGridAdapter;
 	private SHController gc;
 	int viewType = SHController.CREATED_STORY;
 
@@ -91,7 +91,7 @@ public class ViewBrowseStories extends Activity {
 
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
-		customGridAdapter = new StoriesViewAdapter(this, R.layout.browse_story_item,
+		customGridAdapter = new AdapterStories(this, R.layout.browse_story_item,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
 

@@ -44,7 +44,7 @@ public class ViewChapterActivity extends Activity {
 	private SHController gc;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private ChoicesViewAdapter choiceAdapter;
+	private AdapterChoices choiceAdapter;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
@@ -65,7 +65,7 @@ public class ViewChapterActivity extends Activity {
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 
 		// Setup the choices and choice adapters
-		choiceAdapter = new ChoicesViewAdapter(this, R.id.choiceText,
+		choiceAdapter = new AdapterChoices(this, R.id.choiceText,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
 		chapterChoices.setOnItemClickListener(new OnItemClickListener() {

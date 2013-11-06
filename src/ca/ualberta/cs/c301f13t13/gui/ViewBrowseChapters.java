@@ -1,3 +1,18 @@
+/**
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.ArrayList;
@@ -23,28 +38,31 @@ public class ViewBrowseChapters extends Activity {
 	private UUID storyID;
 	private Story story;
 	private ListView storyChapters;
-	private ChaptersViewAdapter chapterAdapter;
+	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
-	
+
 	/**
 	 * Takes a storyID bundle, displays all the chapters related to that story.
 	 * Used for editing chapters.
+	 * 
+	 * @author alexanderwwong
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_chapters);
-		
+
 		gc = SHController.getInstance(getBaseContext());
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
-		
+
 		// Grab the story, pull all the available chapters
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.get("storyID");
 		story = gc.getCompleteStory(storyID);
 
 		// Setup the choices and choice adapters
-		chapterAdapter = new ChaptersViewAdapter(this, R.layout.browse_chapter_item, data);
+		chapterAdapter = new AdapterChapters(this,
+				R.layout.browse_chapter_item, data);
 		storyChapters.setAdapter(chapterAdapter);
 		storyChapters.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -52,7 +70,8 @@ public class ViewBrowseChapters extends Activity {
 					long arg3) {
 				// Go to edit that chapter
 				Chapter chapter = data.get(arg2);
-				Intent intent = new Intent(getBaseContext(), EditChapterActivity.class);
+				Intent intent = new Intent(getBaseContext(),
+						EditChapterActivity.class);
 				intent.putExtra("isEditing", true);
 				intent.putExtra("Story", story);
 				intent.putExtra("Chapter", chapter);
@@ -72,7 +91,8 @@ public class ViewBrowseChapters extends Activity {
 		switch (item.getItemId()) {
 		case R.id.addNewChapter:
 			// Go to the add new chapter page for the specified story
-			Intent intent = new Intent(getBaseContext(), EditChapterActivity.class);
+			Intent intent = new Intent(getBaseContext(),
+					EditChapterActivity.class);
 			intent.putExtra("isEditing", true);
 			intent.putExtra("Story", story);
 			intent.putExtra("Chapter", new Chapter(storyID, null));
@@ -81,7 +101,7 @@ public class ViewBrowseChapters extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();

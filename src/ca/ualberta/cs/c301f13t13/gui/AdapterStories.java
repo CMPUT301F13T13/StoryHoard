@@ -19,60 +19,70 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
- * Class which handles taking the Choice object and adapting it to a displayable
- * view type
+ * Class which handles adapting the Story object to a displayable view type
  * 
  * @author alexanderwong
  * 
  */
-public class ChoicesViewAdapter extends ArrayAdapter<Choice> {
+public class AdapterStories extends ArrayAdapter<Story> {
 
 	Context context;
-	int layoutResourceID;
-	ArrayList<Choice> data = new ArrayList<Choice>();
-	
-	public ChoicesViewAdapter(Context context, int layoutResourceId, ArrayList<Choice> data) {
-		super(context,  layoutResourceId, data);
+	int layoutResourceId;
+	ArrayList<Story> data = new ArrayList<Story>();
+
+	public AdapterStories(Context context, int layoutResourceId,
+			ArrayList<Story> data) {
+		super(context, layoutResourceId, data);
+		this.layoutResourceId = layoutResourceId;
 		this.context = context;
-		this.layoutResourceID = layoutResourceId;
 		this.data = data;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-		ChoiceHolder holder = null;
-		
+		StoryHolder holder = null;
+
 		if (row == null) {
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-			row = inflater.inflate(layoutResourceID, parent, false);
-			
-			holder = new ChoiceHolder();
-			holder.choiceText = (TextView) row.findViewById(R.id.choiceText);
+			row = inflater.inflate(layoutResourceId, parent, false);
+			holder = new StoryHolder();
+			holder.txtTitle = (TextView) row.findViewById(R.id.storyText);
+			holder.imageItem = (ImageView) row.findViewById(R.id.storyImage);
 			row.setTag(holder);
 		} else {
-			holder = (ChoiceHolder) row.getTag();
+			holder = (StoryHolder) row.getTag();
 		}
-		Choice item = data.get(position);
+
+		Story item = data.get(position);
 		// Check for no text here
-		if (item.getText().equals("")) {
-			holder.choiceText.setText("<No Choice Text>");
+		if (item.getTitle().equals("")) {
+			holder.txtTitle.setText("<No Title>");
 		} else {
-			holder.choiceText.setText(item.getText());
+			holder.txtTitle.setText(item.getTitle());
 		}
+		// Implement this when stories actually have pictures
+		// holder.imageItem.setImageBitmap(item.getImage());
+		holder.imageItem.setImageBitmap((Bitmap) BitmapFactory.decodeResource(
+				context.getResources(), R.drawable.ic_launcher));
 		return row;
+
 	}
-	
-	static class ChoiceHolder {
-		TextView choiceText;
+
+	static class StoryHolder {
+		TextView txtTitle;
+		ImageView imageItem;
 	}
 }

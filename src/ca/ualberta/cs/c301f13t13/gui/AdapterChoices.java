@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
 
 /**
  * Class which handles taking the Choice object and adapting it to a displayable
@@ -34,47 +34,45 @@ import ca.ualberta.cs.c301f13t13.backend.Chapter;
  * @author alexanderwong
  * 
  */
-public class ChaptersViewAdapter extends ArrayAdapter<Chapter> {
+public class AdapterChoices extends ArrayAdapter<Choice> {
 
 	Context context;
 	int layoutResourceID;
-	ArrayList<Chapter> data = new ArrayList<Chapter>();
-
-	public ChaptersViewAdapter(Context context, int layoutResourceId,
-			ArrayList<Chapter> data) {
-		super(context, layoutResourceId, data);
-		this.layoutResourceID = layoutResourceId;
+	ArrayList<Choice> data = new ArrayList<Choice>();
+	
+	public AdapterChoices(Context context, int layoutResourceId, ArrayList<Choice> data) {
+		super(context,  layoutResourceId, data);
 		this.context = context;
+		this.layoutResourceID = layoutResourceId;
 		this.data = data;
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-		ChapterHolder holder = null;
-
+		ChoiceHolder holder = null;
+		
 		if (row == null) {
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 			row = inflater.inflate(layoutResourceID, parent, false);
-
-			holder = new ChapterHolder();
-			holder.chapterText = (TextView) row
-					.findViewById(R.id.chapterBrowseText);
+			
+			holder = new ChoiceHolder();
+			holder.choiceText = (TextView) row.findViewById(R.id.choiceText);
 			row.setTag(holder);
 		} else {
-			holder = (ChapterHolder) row.getTag();
+			holder = (ChoiceHolder) row.getTag();
 		}
-		Chapter item = data.get(position);
+		Choice item = data.get(position);
 		// Check for no text here
 		if (item.getText().equals("")) {
-			holder.chapterText.setText("<Blank Chapter>");
+			holder.choiceText.setText("<No Choice Text>");
 		} else {
-			holder.chapterText.setText(item.getText());
+			holder.choiceText.setText(item.getText());
 		}
 		return row;
 	}
-
-	static class ChapterHolder {
-		TextView chapterText;
+	
+	static class ChoiceHolder {
+		TextView choiceText;
 	}
 }
