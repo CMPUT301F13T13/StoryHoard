@@ -76,15 +76,6 @@ public class ServerManager implements StoringManager{
 	}	
 
 	/**
-	 * create a simple recipe
-	 * @return
-	 */
-	private Story initializeStory() {
-		return null;
-
-	}
-
-	/**
 	 * Consumes the POST/Insert operation of the service
 	 */	
 	@Override
@@ -148,12 +139,13 @@ public class ServerManager implements StoringManager{
 		Story crit = (Story) criteria;
 		ArrayList<Object> stories = new ArrayList<Object>();
 		
-		if (crit.getId() == null && crit.getAuthor() == null 
-				&& crit.getTitle() == null) {
+		if (crit.getId() == null && crit.getTitle() == null) {
 			// get all stories
 		} else if (crit.getId() != null){
-			stories.add(searchById(crit));		
+			// search by id
+			stories.add(searchById(crit.getId().toString()));		
 		} else {
+			// search by keyword
 			stories = searchByKeywords(crit);
 		}
 		
@@ -163,11 +155,10 @@ public class ServerManager implements StoringManager{
 	/**
 	 * search by story id
 	 */
-	public Story searchById(Story crit) {
+	public Story searchById(String id) {
 		Story story = null;
 		try{
-			HttpGet getRequest = new HttpGet(server + crit.getId().toString() 
-					+ "?pretty=1");
+			HttpGet getRequest = new HttpGet(server + id + "?pretty=1");
 
 			getRequest.addHeader("Accept","application/json");
 
@@ -270,7 +261,7 @@ public class ServerManager implements StoringManager{
 	 */
 	public void searchsearchStories(String str) throws ClientProtocolException, IOException {
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
-		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"ingredients\",\"query\" : \"" + str + "\"}}}";
+		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + str + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
 
 		searchRequest.setHeader("Accept","application/json");
@@ -369,6 +360,8 @@ public class ServerManager implements StoringManager{
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";
+		
+		// split keywords and clean them 
 		
 		if (args.size() > 0) {
 			selection += args.get(0);

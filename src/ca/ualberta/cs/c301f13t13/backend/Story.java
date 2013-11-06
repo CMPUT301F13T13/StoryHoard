@@ -297,10 +297,6 @@ public class Story implements Serializable {
 			info.put(StoryTable.COLUMN_NAME_TITLE, title);
 		}
 
-		if (author != null) {
-			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
-		}
-
 		if (phoneId != null) {
 			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
 		}
