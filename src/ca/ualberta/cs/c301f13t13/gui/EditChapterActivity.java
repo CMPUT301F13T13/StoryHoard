@@ -47,6 +47,7 @@ public class EditChapterActivity extends Activity {
 	private Chapter chapt;
 	private Story story;
 	private Button saveButton;
+	private Button addImage;
 	private EditText chapterContent;
 	private boolean isEditing;
 	private SHController gc;
@@ -86,6 +87,15 @@ public class EditChapterActivity extends Activity {
 				gc.addObject(story, ObjectType.CREATED_STORY);
 				gc.addObject(chapt, ObjectType.CHAPTER);
 				finish();
+			}
+		});
+		
+		addImage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}
