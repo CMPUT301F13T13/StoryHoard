@@ -38,7 +38,7 @@ import ca.ualberta.cs.c301f13t13.backend.SHController;
  * @author Alexander Wong
  * 
  */
-public class ViewChapterActivity extends Activity {
+public class ViewChapter extends Activity {
 	private UUID storyID;
 	private UUID chapterID;
 	private SHController gc;
@@ -74,7 +74,7 @@ public class ViewChapterActivity extends Activity {
 					long arg3) {
 				// Go to the chapter in question
 				UUID nextChapter = choices.get(arg2).getNextChapter();
-				Intent intent = new Intent(getBaseContext(), ViewChapterActivity.class);
+				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", nextChapter);
 				startActivity(intent);

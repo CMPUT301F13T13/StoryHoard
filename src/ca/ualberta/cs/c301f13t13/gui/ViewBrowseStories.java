@@ -103,7 +103,7 @@ public class ViewBrowseStories extends Activity {
 					long arg3) {
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(),
-						ViewBrowseStory.class);
+						ViewStory.class);
 				intent.putExtra("storyID", gridArray.get(arg2).getId());
 				startActivity(intent);
 			}
