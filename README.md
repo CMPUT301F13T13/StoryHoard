@@ -17,7 +17,7 @@ Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
 LICENSE
 =======
 
-Copyright � 2013 Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
+Copyright c 2013 Alexander Wong, Ashley Brown, Joshua Tate, Kim Wu, Stephanie Gil
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -58,5 +58,16 @@ LonelyTweeter Camera Code from Lab
 Author: Joshua Charles Campbell  
 License: Unlicense  
 Date: soon to come...
+
+Converting Images to JSON Objects code   
+URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/  
+Date: Nov. 4th, 2013  
+Author: Manav  
+
+Getting Phone Id  
+URL:http://developer.samsung.com/android/technical-docs/How-to-retrieve-the-Device-Unique-ID-from-android-device  
+Date: Nov.5th,2013  
+Licensed under Creative Commons  
+
 
 

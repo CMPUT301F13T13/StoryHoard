@@ -25,10 +25,11 @@ package ca.ualberta.cs.c301f13t13.gui;
  * 
  *
  * 
- * author: Josh Tate
+ * @author joshuatate
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SyncStateContract.Constants;
 import android.text.Editable;
@@ -38,10 +39,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Model;
 
-public class EditChoiceActivity extends Activity 
-implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
+public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
 	
 	private Chapter chapt;
 	private Button existingChapterButton;
@@ -59,7 +58,7 @@ implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOI
 			chapt = (Chapter) bundle.getSerializable(Constants._ID);
 		}
 		
-		setContentView(R.layout.activity_add_choice);
+		setContentView(R.layout.activity_edit_choice);
 
 		existingChapterButton = (Button)findViewById(R.id.existing_chapter_button);
 		existingChapterButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +66,12 @@ implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOI
 			@Override
 			public void onClick(View v) {
 				//Connect chapter to an existing one
-
+				Intent intent = new Intent(getApplicationContext(),
+						ViewAllChaptersActivity.class);
+				//Notify activity that we are selecting
+				//rather than viewing
+				intent.putExtra("viewing", false);
+				startActivity(intent);
 			}
 		});
 
@@ -101,11 +105,5 @@ implements ca.ualberta.cs.c301f13t13.gui.SHView<Model> {  // CHANGE THIS TO CHOI
 
 			}
 		});
-	}
-
-	@Override
-	public void update(Model model) {
-		// TODO Auto-generated method stub
-
 	}
 }

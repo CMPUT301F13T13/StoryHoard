@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
@@ -66,7 +65,7 @@ public class ViewChapterActivity extends Activity {
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 
 		// Setup the choices and choice adapters
-		choiceAdapter = new ChoicesViewAdapter(this, android.R.id.text1,
+		choiceAdapter = new ChoicesViewAdapter(this, R.id.choiceText,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
 		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
@@ -86,11 +85,21 @@ public class ViewChapterActivity extends Activity {
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		chapter = gc.getCompleteChapter(chapterID);
 		choices.clear();
-		chapterContent.setText(chapter.getText());
-		choices.addAll(chapter.getChoices());
+		// Check for no chapter text
+		if (chapter.getText().equals("")) {
+			chapterContent.setText("<No Chapter Content>");
+		} else {
+			chapterContent.setText(chapter.getText());
+		}
+		// Check for no choices
+		if (chapter.getChoices().isEmpty()) {
+			chapterContent.setText(chapterContent.getText() + "\n\n<No Choices>");
+		} else {
+			choices.addAll(chapter.getChoices());
+		}
 		choiceAdapter.notifyDataSetChanged();
+		super.onResume();
 	}
 }

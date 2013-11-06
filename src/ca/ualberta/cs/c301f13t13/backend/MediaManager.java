@@ -24,9 +24,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
-import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve media
@@ -43,7 +41,7 @@ import ca.ualberta.cs.c301f13t13.gui.SHView;
  * @see StoringManager
  * @see Model
  */
-public class MediaManager extends Model<SHView> implements StoringManager{
+public class MediaManager implements StoringManager{
 	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	

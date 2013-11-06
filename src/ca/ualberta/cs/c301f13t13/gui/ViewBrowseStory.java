@@ -42,7 +42,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -101,12 +100,27 @@ public class ViewBrowseStory extends Activity {
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		focusedStory = gc.getCompleteStory(storyID);
 		storyCover.setImageBitmap(focusedStory.getImage());
-		storyTitle.setText(focusedStory.getTitle());
-		storyAuthor.setText(focusedStory.getAuthor());
-		storyDescription.setText(focusedStory.getDescription());
+		// Check no title
+		if (focusedStory.getTitle().equals("")) {
+			storyTitle.setText("<No Title>");
+		} else {
+			storyTitle.setText(focusedStory.getTitle());
+		}
+		// Check no author
+		if (focusedStory.getAuthor().equals("")) {
+			storyAuthor.setText("<No Author>");
+		} else {
+			storyAuthor.setText(focusedStory.getAuthor());
+		}
+		// Check no description
+		if (focusedStory.getDescription().equals("")) {
+			storyDescription.setText("<No Description>");
+		} else {
+			storyDescription.setText(focusedStory.getDescription());
+		}
+		super.onResume();
 	}
 
 	@Override
@@ -122,10 +136,9 @@ public class ViewBrowseStory extends Activity {
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
 			// Handle editing the story content, like chapters and choices
-			// intent = new Intent(this, EditStoryActivity.class);
-			// startActivity(intent);
-			Toast.makeText(this, "Story Editing is not implemented",
-					Toast.LENGTH_SHORT).show();
+			intent = new Intent(this, ViewBrowseChapters.class);
+			intent.putExtra("storyID", storyID);
+			startActivity(intent);
 			return true;
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);

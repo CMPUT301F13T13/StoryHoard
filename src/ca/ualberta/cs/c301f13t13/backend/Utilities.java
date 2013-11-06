@@ -16,11 +16,17 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
+import android.util.Base64;
 
 /**
  * Class meant for general functions that can be used by any class.
@@ -121,4 +127,59 @@ public class Utilities {
 
 		return imageFileUri;
 	}
+	
+	/**
+	 * This functions converts Bitmap picture to a string which can be
+	 * JSONified.
+	 * 
+	 * CODE REUSE:
+	 * This code is taken straight from:
+	 * 
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
+	 * Date: Nov. 4th, 2013
+	 * Author: Manav
+	 */
+	public static String getStringFromBitmap(Bitmap bitmapPicture) {
+		final int COMPRESSION_QUALITY = 100;
+		String encodedImage;
+		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+		bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+				byteArrayBitmapStream);
+		byte[] b = byteArrayBitmapStream.toByteArray();
+		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+		return encodedImage;
+	}	
+	
+	/**
+	 * This functions converts a string to a Bitmap picture.
+	 * 
+	 * CODE REUSE:
+	 * This code is taken straight from:
+	 * 
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
+	 * Date: Nov. 4th, 2013
+	 * Author: Manav
+	 */
+	public static Bitmap getBitmapFromString(String string) {
+		
+		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
+		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		return decodedByte;
+		}
+	/**
+	 * This functions gets the id of the device and returns it as a string
+	 * 
+	 * CODE REUSE:
+	 * This code is modified from:
+	 * 
+	 * URL: http://developer.samsung.com/android/technical-docs/How-to-retrieve-the-Device-Unique-ID-from-android-device
+	 * Date: Nov. 5th, 2013
+	 * 
+	 * 
+	 */
+	public static String getPhoneId(Context context) {
+		String PhoneId = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+		return PhoneId;
+		
+		}
 }

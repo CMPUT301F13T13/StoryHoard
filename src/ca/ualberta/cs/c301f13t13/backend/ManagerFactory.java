@@ -26,10 +26,10 @@ import android.content.Context;
  * @author Stephanie
  * 
  */
-public class StorageFactory {
+public class ManagerFactory {
 	private Context context;
 
-	protected StorageFactory(Context context) {
+	protected ManagerFactory(Context context) {
 		this.context = context;
 	}
 
@@ -42,7 +42,7 @@ public class StorageFactory {
 	 */
 	public StoringManager getStoringManager(int type) {
 		switch (type) {
-		case SHController.PUBLISHED:
+		case SHController.PUBLISHED_STORY:
 			return ServerManager.getInstance();
 		case SHController.CHAPTER:
 			return ChapterManager.getInstance(context);
@@ -50,7 +50,7 @@ public class StorageFactory {
 			return ChoiceManager.getInstance(context);
 		case SHController.MEDIA:
 			return MediaManager.getInstance(context);
-		default: // Story
+		default: // cached or created story
 			return StoryManager.getInstance(context);
 		}
 	}

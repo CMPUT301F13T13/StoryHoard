@@ -29,6 +29,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
  * Activity for editing the story metadata
@@ -48,7 +49,7 @@ public class EditStoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_story);
+		setContentView(R.layout.activity_edit_story);
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Story Metadata");
@@ -87,9 +88,9 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObjectLocally(newStory, SHController.STORY);
+					gc.updateObject(newStory, SHController.STORY);
 				} else {
-					newStory = new Story(title, author, description, true);
+					newStory = new Story(title, author, description, Utilities.getPhoneId(getBaseContext()));
 					Intent intent = new Intent(getApplicationContext(),
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);

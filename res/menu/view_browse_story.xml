@@ -4,7 +4,7 @@
         android:id="@+id/editExistingStory"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/edit_story"/>
+        android:title="@string/edit_story_chapters"/>
     <item
         android:id="@+id/editStoryMetaData"
         android:orderInCategory="101"

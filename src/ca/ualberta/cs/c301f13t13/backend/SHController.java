@@ -40,16 +40,17 @@ public class SHController {
 	public static final int CHAPTER = 1;
 	public static final int CHOICE = 2;
 	public static final int MEDIA = 3;
-	public static final int PUBLISHED = 4;
-	public static final int SERVER = 4;
-	public static final int CACHED = 5;
-	public static final int CREATED = 6;
+	public static final int PUBLISHED_STORY = 4;
+	public static final int CACHED_STORY = 5;
+	public static final int CREATED_STORY = 6;
 
+	private Context context = null;
 	private static SHController self = null;  // SELF
-	private static StorageFactory sf = null;
+	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
-		sf = new StorageFactory(context);
+		sf = new ManagerFactory(context);
+		this.context = context;
 	}
 
 	/**
@@ -69,7 +70,8 @@ public class SHController {
 	 * published.
 	 * 
 	 * @param type
-	 *            Will either be CACHED (0), CREATED (1), or PUBLISHED (2).
+	 *            Will either be PUBLISHED_STORY (4), CACHED_STORY (5), 
+	 *            or CREATED_STORY (6).
 	 * @return Array list of all the stories the application asked for.
 	 */
 	public ArrayList<Story> getAllStories(int type) {
@@ -79,13 +81,13 @@ public class SHController {
 		StoringManager sm = sf.getStoringManager(type);
 		
 		switch (type) {
-		case CACHED:
-			criteria = new Story(null, null, null, null, false);
+		case CACHED_STORY:
+			criteria = new Story(null, null, null, null, "NOT" + Utilities.getPhoneId(context));
 			break;
-		case CREATED:
-			criteria = new Story(null, null, null, null, true);
+		case CREATED_STORY:
+			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
 			break;
-		case PUBLISHED:
+		case PUBLISHED_STORY:
 			criteria = new Story(null, null, null, null, null);
 			break;
 		default:
@@ -177,15 +179,16 @@ public class SHController {
 	}
 
 	/**
-	 * Adds either a story, chapter, or choice to locally (to the database).
+	 * Adds either a story, chapter, or choice.
 	 * 
 	 * @param object
 	 *            Object to be inserted (must either be a Story, Chapter,
 	 *            Choice, or Media object).
 	 * @param type
-	 *            Will either be STORY(0), CHAPTER(1), CHOICE(2), MEDIA (3)
+	 *            Will either be CHAPTER(1), CHOICE(2), MEDIA(3), 
+	 *            PUBLISHED_STORY(4), CACHED_STORY(5), CREATED_STORY(6)
 	 */
-	public void addObjectLocally(Object object, int type) {
+	public void addObject(Object object, int type) {
 		StoringManager sm = sf.getStoringManager(type);
 		sm.insert(object);
 	}
@@ -200,7 +203,7 @@ public class SHController {
 	 * @param author
 	 *            Author of the story user is looking for.
 	 * @param type
-	 *            Will either be CACHED (0), CREATED (1) , or PUBLISHED (2).
+	 *            Will either be PUBLISHED(4), CACHED(5), or CREATED(6)
 	 *            
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
@@ -211,13 +214,13 @@ public class SHController {
 		StoringManager sm = sf.getStoringManager(type);
 
 		switch (type) {
-		case CACHED:
-			criteria = new Story(null, title, author, null, false);
+		case CACHED_STORY:
+			criteria = new Story(null, title, author, null, null);
 			break;
-		case CREATED:
-			criteria = new Story(null, title, author, null, true);
+		case CREATED_STORY:
+			criteria = new Story(null, title, author, null, null);
 			break;
-		case PUBLISHED:
+		case PUBLISHED_STORY:
 			break;
 		default:
 			// raise exception
@@ -298,26 +301,11 @@ public class SHController {
 	 * @param object
 	 *            Object to be updated.
 	 * @param type
-	 *            Will either be STORY (0), CHAPTER (1), CHOICE (2), or MEDIA(3)
+	 *            Will either be CHAPTER(1), CHOICE(2), MEDIA(3), 
+	 *            PUBLISHED_STORY(4), CACHED_STORY(5), CREATED_STORY(6)
 	 */
-	public void updateObjectLocally(Object object, int type) {
+	public void updateObject(Object object, int type) {
 		StoringManager sm = sf.getStoringManager(type);
 		sm.update(object);
-	}
-
-	/**
-	 * Saves a story onto the server.
-	 */
-	public void publishStory(Story story) {
-		StoringManager sm = sf.getStoringManager(SERVER);
-		// TODO implement
-	}
-
-	/**
-	 * Updates a story that is on the server.
-	 */
-	public void updatePublished(Story story) {
-		StoringManager sm = sf.getStoringManager(SERVER);
-		// TODO implement
 	}
 }

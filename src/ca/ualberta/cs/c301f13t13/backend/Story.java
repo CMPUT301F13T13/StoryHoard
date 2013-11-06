@@ -23,8 +23,9 @@ import android.graphics.Bitmap;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
- * Role: A container to hold media information. The media can be a photo, an
- * illustration, audio, or video.
+ * Role: A container to hold story information. This includes id, author, 
+ * title, description, the id of the first chapter, a collection of
+ * chapters belonging to it, the id of the phone it was created on.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -37,7 +38,7 @@ public class Story implements Serializable {
 	private String description;
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
-	private Boolean authorsOwn;
+	private String phoneId;
 	private Bitmap image;
 
 	/**
@@ -49,17 +50,16 @@ public class Story implements Serializable {
 	 *            Story author
 	 * @param description
 	 *            Story description
-	 * @param authorsOwn
-	 *            Whether or not author created the story (true) or downloaded
-	 *            it from another user (false)
+	 * @param phoneId
+	 *            The android id of the phone the story was made on
 	 */
-	public Story(String title, String author, String description,
-			Boolean authorsOwn) {
+	public Story(String title, String author, String description, 
+			      String phoneId) {
 		this.id = UUID.randomUUID();
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.authorsOwn = authorsOwn;
+		this.phoneId = phoneId;
 		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
 	}
@@ -77,17 +77,16 @@ public class Story implements Serializable {
 	 *            Story author
 	 * @param description
 	 *            Story description
-	 * @param authorsOwn
-	 *            Whether or not author created the story (true) or downloaded
-	 *            it from another user (false)
+	 * @param phoneId
+	 *            The android Id of the phone the story was made on
 	 */
 	public Story(UUID id, String title, String author, String description,
-			Boolean authorsOwn) {
+			      String phoneId) {
 		this.id = id;
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.authorsOwn = authorsOwn;
+		this.phoneId = phoneId;
 		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
 	}
@@ -103,19 +102,18 @@ public class Story implements Serializable {
 	 *            Story author
 	 * @param description
 	 *            Story description
-	 * @param authorsOwn
-	 *            Whether or not author created the story (true) or downloaded
-	 *            it from another user (false)
+	 * @param phoneId
+	 *            The android id of the phone the story was made on
 	 */
 	protected Story(String id, String title, String author, String description,
-			String chapterId, Boolean authorsOwn) {
+			String chapterId, String phoneId) {
 		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.firstChapterId = UUID.fromString(chapterId);
 		this.chapters = new HashMap<UUID, Chapter>();
-		this.authorsOwn = authorsOwn;
+		this.phoneId = phoneId;
 	}
 
 	// GETTERS
@@ -194,13 +192,12 @@ public class Story implements Serializable {
 	}
 
 	/**
-	 * Returns boolean indicating whether or not the story was created by the
-	 * phone's author or not.
+	 * Return the android id of the phone that made this story
 	 * 
 	 * @return
 	 */
-	public Boolean getAuthorsOwn() {
-		return this.authorsOwn;
+	public String getPhoneId() {
+		return this.phoneId;
 	}
 
 	// SETTERS
@@ -260,13 +257,12 @@ public class Story implements Serializable {
 	}
 
 	/**
-	 * Sets the Boolean indicating whether or not the story was created by the
-	 * phone's author.
+	 * Sets the string of the phone id
 	 * 
-	 * @param authorsOwn
+	 * @param phoneId
 	 */
-	public void setAuthorsOwn(Boolean authorsOwn) {
-		this.authorsOwn = authorsOwn;
+	public void setPhoneId(String phoneId) {
+		this.phoneId = phoneId;
 	}
 
 	// Other methods
@@ -283,7 +279,7 @@ public class Story implements Serializable {
 	}
 
 	/**
-	 * Returns the information of the story (id, title, author, authorsOwn) that
+	 * Returns the information of the story (id, title, author, PhoneId) that
 	 * could be used in searching for a story in the database. This information
 	 * is returned in a HashMap where the keys are the corresponding Story Table
 	 * column names.
@@ -305,13 +301,16 @@ public class Story implements Serializable {
 			info.put(StoryTable.COLUMN_NAME_AUTHOR, author);
 		}
 
-		if (authorsOwn != null) {
-			info.put(StoryTable.COLUMN_NAME_CREATED, authorsOwn.toString());
+		if (phoneId != null) {
+			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
 		}
 
 		return info;
 	}
 
+	/**
+	 * Converts a story object to an String.
+	 */
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title

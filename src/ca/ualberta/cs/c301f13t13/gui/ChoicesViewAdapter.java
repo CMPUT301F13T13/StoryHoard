@@ -57,13 +57,18 @@ public class ChoicesViewAdapter extends ArrayAdapter<Choice> {
 			row = inflater.inflate(layoutResourceID, parent, false);
 			
 			holder = new ChoiceHolder();
-			holder.choiceText = (TextView) row.findViewById(R.id.choice_text);
+			holder.choiceText = (TextView) row.findViewById(R.id.choiceText);
 			row.setTag(holder);
 		} else {
 			holder = (ChoiceHolder) row.getTag();
 		}
 		Choice item = data.get(position);
-		holder.choiceText.setText(item.getText());
+		// Check for no text here
+		if (item.getText().equals("")) {
+			holder.choiceText.setText("<No Choice Text>");
+		} else {
+			holder.choiceText.setText(item.getText());
+		}
 		return row;
 	}
 	
