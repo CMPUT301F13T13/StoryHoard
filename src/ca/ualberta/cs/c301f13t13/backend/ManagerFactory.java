@@ -40,15 +40,15 @@ public class ManagerFactory {
 	 * @param type
 	 * @return
 	 */
-	public StoringManager getStoringManager(int type) {
+	public StoringManager getStoringManager(ObjectType type) {
 		switch (type) {
-		case SHController.PUBLISHED_STORY:
+		case PUBLISHED_STORY:
 			return ServerManager.getInstance();
-		case SHController.CHAPTER:
+		case CHAPTER:
 			return ChapterManager.getInstance(context);
-		case SHController.CHOICE:
+		case CHOICE:
 			return ChoiceManager.getInstance(context);
-		case SHController.MEDIA:
+		case MEDIA:
 			return MediaManager.getInstance(context);
 		default: // cached or created story
 			return StoryManager.getInstance(context);

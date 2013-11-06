@@ -36,14 +36,6 @@ import android.content.Context;
  */
 public class SHController {
 	// CONSTANTS
-	public static final int STORY = 0;
-	public static final int CHAPTER = 1;
-	public static final int CHOICE = 2;
-	public static final int MEDIA = 3;
-	public static final int PUBLISHED_STORY = 4;
-	public static final int CACHED_STORY = 5;
-	public static final int CREATED_STORY = 6;
-
 	private Context context = null;
 	private static SHController self = null;  // SELF
 	private static ManagerFactory sf = null;
@@ -70,18 +62,18 @@ public class SHController {
 	 * published.
 	 * 
 	 * @param type
-	 *            Will either be PUBLISHED_STORY (4), CACHED_STORY (5), 
-	 *            or CREATED_STORY (6).
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, 
+	 *            or CREATED_STORY.
 	 * @return Array list of all the stories the application asked for.
 	 */
-	public ArrayList<Story> getAllStories(int type) {
+	public ArrayList<Story> getAllStories(ObjectType type) {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Story criteria = null;
 		StoringManager sm = sf.getStoringManager(type);
 		
-		switch (type) {
-		case CACHED_STORY:
+		switch(type) {
+		case CACHED_STORY: 
 			criteria = new Story(null, null, null, null, "NOT" + Utilities.getPhoneId(context));
 			break;
 		case CREATED_STORY:
@@ -112,7 +104,7 @@ public class SHController {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		
 		Chapter criteria = new Chapter(null, storyId, null);
-		StoringManager sm = sf.getStoringManager(CHAPTER);
+		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
 		
 		objects = sm.retrieve(criteria);
 		chapters = Utilities.objectsToChapters(objects);
@@ -133,7 +125,7 @@ public class SHController {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		
 		Choice criteria = new Choice(null, chapterId);
-		StoringManager sm = sf.getStoringManager(CHOICE);
+		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
 		
 		objects = sm.retrieve(criteria);
 		choices = Utilities.objectsToChoices(objects);
@@ -152,7 +144,7 @@ public class SHController {
 		ArrayList<Media> illustrations = new ArrayList<Media>();
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
-		StoringManager sm = sf.getStoringManager(MEDIA);
+		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
 		
 		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
@@ -171,7 +163,7 @@ public class SHController {
 		ArrayList<Media> photos = new ArrayList<Media>();
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
-		StoringManager sm = sf.getStoringManager(MEDIA);
+		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
 		
 		objects = sm.retrieve(criteria);
 		photos = Utilities.objectsToMedia(objects);
@@ -185,10 +177,10 @@ public class SHController {
 	 *            Object to be inserted (must either be a Story, Chapter,
 	 *            Choice, or Media object).
 	 * @param type
-	 *            Will either be CHAPTER(1), CHOICE(2), MEDIA(3), 
-	 *            PUBLISHED_STORY(4), CACHED_STORY(5), CREATED_STORY(6)
+	 *            Will either be CHAPTER, CHOICE, MEDIA, 
+	 *            PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
 	 */
-	public void addObject(Object object, int type) {
+	public void addObject(Object object, ObjectType type) {
 		StoringManager sm = sf.getStoringManager(type);
 		sm.insert(object);
 	}
@@ -203,11 +195,11 @@ public class SHController {
 	 * @param author
 	 *            Author of the story user is looking for.
 	 * @param type
-	 *            Will either be PUBLISHED(4), CACHED(5), or CREATED(6)
+	 *            Will either be PUBLISHED, CACHED, or CREATED
 	 *            
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title, String author, int type) {
+	public ArrayList<Story> searchStory(String title, String author, ObjectType type) {
 		Story criteria = null;
 		ArrayList<Object> objects = new ArrayList<Object>();
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -243,7 +235,7 @@ public class SHController {
 	public Chapter getCompleteChapter(UUID id) {
 		// Search criteria gets set
 		Chapter criteria = new Chapter(id, null, null);
-		StoringManager sm = sf.getStoringManager(CHAPTER);
+		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
 
 		// Get chapter
 		ArrayList<Object> objects = sm.retrieve(criteria);
@@ -273,7 +265,7 @@ public class SHController {
 	public Story getCompleteStory(UUID id) {
 		// Search criteria gets set
 		Story criteria = new Story(id, null, null, null, null);
-		StoringManager sm = sf.getStoringManager(STORY);
+		StoringManager sm = sf.getStoringManager(ObjectType.CACHED_STORY);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		Story story = (Story) objects.get(0);
 
@@ -301,10 +293,10 @@ public class SHController {
 	 * @param object
 	 *            Object to be updated.
 	 * @param type
-	 *            Will either be CHAPTER(1), CHOICE(2), MEDIA(3), 
-	 *            PUBLISHED_STORY(4), CACHED_STORY(5), CREATED_STORY(6)
+	 *            Will either be CHAPTER, CHOICE, MEDIA, 
+	 *            PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
 	 */
-	public void updateObject(Object object, int type) {
+	public void updateObject(Object object, ObjectType type) {
 		StoringManager sm = sf.getStoringManager(type);
 		sm.update(object);
 	}

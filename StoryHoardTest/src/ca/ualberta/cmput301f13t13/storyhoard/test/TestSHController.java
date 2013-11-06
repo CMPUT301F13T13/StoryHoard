@@ -30,6 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.DBContract;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.backend.Media;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
@@ -78,11 +79,11 @@ public class TestSHController extends
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.CACHED_STORY);
-		gc.addObject(s2, SHController.CACHED_STORY);
-		gc.addObject(s3, SHController.CACHED_STORY);
+		gc.addObject(s1, ObjectType.CACHED_STORY);
+		gc.addObject(s2, ObjectType.CACHED_STORY);
+		gc.addObject(s3, ObjectType.CACHED_STORY);
 
-		stories = gc.getAllStories(SHController.CACHED_STORY);
+		stories = gc.getAllStories(ObjectType.CACHED_STORY);
 
 		assertEquals(stories.size(), 2);
 	}
@@ -101,11 +102,11 @@ public class TestSHController extends
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "34530");
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.CREATED_STORY);
-		gc.addObject(s2, SHController.CREATED_STORY);
-		gc.addObject(s3, SHController.CREATED_STORY);
+		gc.addObject(s1, ObjectType.CREATED_STORY);
+		gc.addObject(s2, ObjectType.CREATED_STORY);
+		gc.addObject(s3, ObjectType.CREATED_STORY);
 
-		stories = gc.getAllStories(SHController.CREATED_STORY);
+		stories = gc.getAllStories(ObjectType.CREATED_STORY);
 
 		assertEquals(stories.size(), 2);
 	}
@@ -128,11 +129,11 @@ public class TestSHController extends
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(chapId);
 
-		gc.addObject(s1, SHController.PUBLISHED_STORY);
-		gc.addObject(s2, SHController.PUBLISHED_STORY);
-		gc.addObject(s3, SHController.PUBLISHED_STORY);
+		gc.addObject(s1, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s2, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s3, ObjectType.PUBLISHED_STORY);
 
-		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
+		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 
 		assertTrue(stories.contains(s1));
 		assertTrue(stories.contains(s2));
@@ -151,9 +152,9 @@ public class TestSHController extends
 		Chapter c2 = new Chapter(story.getId(), "text");
 		Chapter c3 = new Chapter(UUID.randomUUID(), "text");
 
-		gc.addObject(c1, SHController.CHAPTER);
-		gc.addObject(c2, SHController.CHAPTER);
-		gc.addObject(c3, SHController.CHAPTER);
+		gc.addObject(c1, ObjectType.CHAPTER);
+		gc.addObject(c2, ObjectType.CHAPTER);
+		gc.addObject(c3, ObjectType.CHAPTER);
 
 		chapters = gc.getAllChapters(story.getId());
 
@@ -172,9 +173,9 @@ public class TestSHController extends
 		Choice c2 = new Choice(chap.getId(), UUID.randomUUID(), "text");
 		Choice c3 = new Choice(UUID.randomUUID(), UUID.randomUUID(), "text");
 
-		gc.addObject(c1, SHController.CHOICE);
-		gc.addObject(c2, SHController.CHOICE);
-		gc.addObject(c3, SHController.CHOICE);
+		gc.addObject(c1, ObjectType.CHOICE);
+		gc.addObject(c2, ObjectType.CHOICE);
+		gc.addObject(c3, ObjectType.CHOICE);
 
 		choices = gc.getAllChoices(chap.getId());
 
@@ -192,10 +193,10 @@ public class TestSHController extends
 		Media ill1 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
 		Media ill2 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
 
-		gc.addObject(photo1, SHController.MEDIA);
-		gc.addObject(photo2, SHController.MEDIA);
-		gc.addObject(ill1, SHController.MEDIA);
-		gc.addObject(ill2, SHController.MEDIA);
+		gc.addObject(photo1, ObjectType.MEDIA);
+		gc.addObject(photo2, ObjectType.MEDIA);
+		gc.addObject(ill1, ObjectType.MEDIA);
+		gc.addObject(ill2, ObjectType.MEDIA);
 
 		ArrayList<Media> photos = gc.getAllPhotos(cId);
 		ArrayList<Media> ills = gc.getAllIllustrations(cId);
@@ -226,31 +227,31 @@ public class TestSHController extends
 		Story s6 = new Story("sad hen", "me", "D: none", Utilities.getPhoneId(getActivity()));
 		s6.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.CREATED_STORY);
-		gc.addObject(s2, SHController.CREATED_STORY);
-		gc.addObject(s3, SHController.CREATED_STORY);
-		gc.addObject(s4, SHController.PUBLISHED_STORY);
-		gc.addObject(s5, SHController.PUBLISHED_STORY);
-		gc.addObject(s6, SHController.PUBLISHED_STORY);
+		gc.addObject(s1, ObjectType.CREATED_STORY);
+		gc.addObject(s2, ObjectType.CREATED_STORY);
+		gc.addObject(s3, ObjectType.CREATED_STORY);
+		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s5, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s6, ObjectType.PUBLISHED_STORY);
 
 		// both author and title are null (should retrieve all created stories)
-		stories = gc.searchStory(null, null, SHController.CREATED_STORY);
+		stories = gc.searchStory(null, null, ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 2);
 
 		// author is me, and created by author
-		stories = gc.searchStory(null, "me", SHController.CREATED_STORY);
+		stories = gc.searchStory(null, "me", ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 2);
 
 		// author is me, and not created by author
-		stories = gc.searchStory(null, "me", SHController.CACHED_STORY);
+		stories = gc.searchStory(null, "me", ObjectType.CACHED_STORY);
 		assertEquals(stories.size(), 1);
 
 		// author is null, created, title is bob the cow
-		stories = gc.searchStory("Bob the cow", null, SHController.CREATED_STORY);
+		stories = gc.searchStory("Bob the cow", null, ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 1);
 
 		// title is sad cow, published
-		stories = gc.searchStory(null, "me", SHController.PUBLISHED_STORY);
+		stories = gc.searchStory(null, "me", ObjectType.PUBLISHED_STORY);
 		assertEquals(stories.size(), 2);
 	}
 
@@ -264,9 +265,9 @@ public class TestSHController extends
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, SHController.CREATED_STORY);
+		gc.addObject(s1, ObjectType.CREATED_STORY);
 
-		stories = gc.getAllStories(SHController.CREATED_STORY);
+		stories = gc.getAllStories(ObjectType.CREATED_STORY);
 
 		assertEquals(stories.size(), 1);
 
@@ -274,9 +275,9 @@ public class TestSHController extends
 		news1.setDescription("new des");
 		news1.setFirstChapterId(UUID.randomUUID());
 
-		gc.updateObject(news1, SHController.CREATED_STORY);
+		gc.updateObject(news1, ObjectType.CREATED_STORY);
 
-		stories = gc.getAllStories(SHController.CREATED_STORY);
+		stories = gc.getAllStories(ObjectType.CREATED_STORY);
 		news1 = stories.get(0);
 
 		assertFalse(news1.getDescription().equals(s1.getDescription()));
@@ -293,7 +294,7 @@ public class TestSHController extends
 		// Insert some chapters
 		Chapter c1 = new Chapter(storyId, "my chapter");
 
-		gc.addObject(c1, SHController.CHAPTER);
+		gc.addObject(c1, ObjectType.CHAPTER);
 
 		chapters = gc.getAllChapters(storyId);
 		assertEquals(chapters.size(), 1);
@@ -303,7 +304,7 @@ public class TestSHController extends
 		Media m = new Media(c1.getId(), Uri.parse("https://"), Media.PHOTO);
 		newc1.addPhoto(m);
 
-		gc.updateObject(newc1, SHController.CHAPTER);
+		gc.updateObject(newc1, ObjectType.CHAPTER);
 
 		chapters = gc.getAllChapters(storyId);
 		newc1 = chapters.get(0);
@@ -323,7 +324,7 @@ public class TestSHController extends
 		// Insert some choices
 		Choice c1 = new Choice(chapId, UUID.randomUUID(), "my choice");
 
-		gc.addObject(c1, SHController.CHOICE);
+		gc.addObject(c1, ObjectType.CHOICE);
 
 		choices = gc.getAllChoices(chapId);
 		assertEquals(choices.size(), 1);
@@ -332,7 +333,7 @@ public class TestSHController extends
 		newc1.setText("a cow mooed");
 		newc1.setNextChapter(UUID.randomUUID());
 
-		gc.updateObject(newc1, SHController.CHOICE);
+		gc.updateObject(newc1, ObjectType.CHOICE);
 
 		choices = gc.getAllChoices(chapId);
 		newc1 = choices.get(0);
@@ -352,8 +353,8 @@ public class TestSHController extends
 		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
 
-		gc.addObject(m1, SHController.MEDIA);
-		gc.addObject(m2, SHController.MEDIA);
+		gc.addObject(m1, ObjectType.MEDIA);
+		gc.addObject(m2, ObjectType.MEDIA);
 		
 		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 2);
@@ -362,7 +363,7 @@ public class TestSHController extends
 		newM1.setUri(Uri.parse("https://ualberta.ca"));
 		newM1.setType(Media.ILLUSTRATION);
 
-		gc.updateObject(newM1, SHController.MEDIA);
+		gc.updateObject(newM1, ObjectType.MEDIA);
 
 		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 1);
@@ -384,8 +385,8 @@ public class TestSHController extends
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
 
-		gc.addObject(s1, SHController.PUBLISHED_STORY);
-		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
+		gc.addObject(s1, ObjectType.PUBLISHED_STORY);
+		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 
 		Story newS = stories.get(0);
 		newS.setAuthor("Mr. Blubbers");
@@ -396,8 +397,8 @@ public class TestSHController extends
 		newS.addChapter(chap);
 		newS.setFirstChapterId(chap.getId());
 
-		gc.updateObject(newS, SHController.PUBLISHED_STORY);
-		stories = gc.getAllStories(SHController.PUBLISHED_STORY);
+		gc.updateObject(newS, ObjectType.PUBLISHED_STORY);
+		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 		assertEquals(stories.size(), 1);
 		
 		newS = stories.get(0);
@@ -438,13 +439,13 @@ public class TestSHController extends
 		s2.addChapter(chap3);
 
 		// add everything into database
-		gc.addObject(c1, SHController.CHOICE);
-		gc.addObject(c2, SHController.CHOICE);
-		gc.addObject(chap1, SHController.CHAPTER);
-		gc.addObject(chap2, SHController.CHAPTER);
-		gc.addObject(chap3, SHController.CHAPTER);
-		gc.addObject(s1, SHController.STORY);
-		gc.addObject(s2, SHController.STORY);
+		gc.addObject(c1, ObjectType.CHOICE);
+		gc.addObject(c2, ObjectType.CHOICE);
+		gc.addObject(chap1, ObjectType.CHAPTER);
+		gc.addObject(chap2, ObjectType.CHAPTER);
+		gc.addObject(chap3, ObjectType.CHAPTER);
+		gc.addObject(s1, ObjectType.CREATED_STORY);
+		gc.addObject(s2, ObjectType.CREATED_STORY);
 
 		Story myStory1 = gc.getCompleteStory(s1.getId());
 		Story myStory2 = gc.getCompleteStory(s2.getId());
@@ -523,11 +524,11 @@ public class TestSHController extends
 							 Media.PHOTO);
 
 		// add everything into database
-		gc.addObject(m1, SHController.MEDIA);
-		gc.addObject(choice1, SHController.CHOICE);
-		gc.addObject(choice2, SHController.CHOICE);
-		gc.addObject(chap1, SHController.CHAPTER);
-		gc.addObject(chap2, SHController.CHAPTER);
+		gc.addObject(m1, ObjectType.MEDIA);
+		gc.addObject(choice1, ObjectType.CHOICE);
+		gc.addObject(choice2, ObjectType.CHOICE);
+		gc.addObject(chap1, ObjectType.CHAPTER);
+		gc.addObject(chap2, ObjectType.CHAPTER);
 
 		Chapter newChap = gc.getCompleteChapter(chap1.getId());
 		assertTrue(newChap != null);
