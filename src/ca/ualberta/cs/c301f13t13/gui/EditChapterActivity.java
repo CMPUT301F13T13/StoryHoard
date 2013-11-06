@@ -16,24 +16,14 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
-import java.io.File;
-
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
@@ -89,12 +79,12 @@ public class EditChapterActivity extends Activity {
 			public void onClick(View v) {
 				chapt.setText(chapterContent.getText().toString());
 				if (isEditing) {
-					gc.updateObject(chapt, SHController.CHAPTER);
+					gc.updateObject(chapt, ObjectType.CHAPTER);
 				} else {
 					story.addChapter(chapt);
 				}
-				gc.addObject(story, SHController.STORY);
-				gc.addObject(chapt, SHController.CHAPTER);
+				gc.addObject(story, ObjectType.CREATED_STORY);
+				gc.addObject(chapt, ObjectType.CHAPTER);
 				finish();
 			}
 		});

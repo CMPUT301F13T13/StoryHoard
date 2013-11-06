@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
@@ -88,7 +89,7 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObject(newStory, SHController.STORY);
+					gc.updateObject(newStory, ObjectType.CREATED_STORY);
 				} else {
 					newStory = new Story(title, author, description, Utilities.getPhoneId(getBaseContext()));
 					Intent intent = new Intent(getApplicationContext(),

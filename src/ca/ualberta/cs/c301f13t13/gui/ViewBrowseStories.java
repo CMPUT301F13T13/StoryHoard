@@ -30,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
@@ -45,7 +46,7 @@ public class ViewBrowseStories extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private SHController gc;
-	int viewType = SHController.CREATED_STORY;
+	ObjectType viewType = ObjectType.CREATED_STORY;
 
 	/**
 	 * Create the View Browse Stories activity
@@ -78,11 +79,11 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = SHController.CREATED_STORY;
+							viewType = ObjectType.CREATED_STORY;
 						} else if (itemPosition == 1) {
-							viewType = SHController.CACHED_STORY;
+							viewType = ObjectType.CACHED_STORY;
 						} else if (itemPosition == 2) {
-							viewType = SHController.PUBLISHED_STORY;
+							viewType = ObjectType.PUBLISHED_STORY;
 						}
 						refreshStories();
 						return true;
