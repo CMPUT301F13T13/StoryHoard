@@ -16,26 +16,28 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
-import java.util.ArrayList;
+import java.io.File;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-//import android.view.Menu; *Not sure if needed
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.ChapterManager;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+
+//import android.view.Menu; *Not sure if needed
 
 /**
  * Add Chapter Activity
@@ -47,123 +49,142 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * button. - This activity will also display the choices that exist or have been
  * added.
  * 
- * author: Josh Tate
+ * author: Alexander Wong
  */
 
-public class EditChapterActivity extends Activity implements
-		ca.ualberta.cs.c301f13t13.gui.SHView<ChapterManager> {
+public class EditChapterActivity extends Activity {
 
-	private Context context = this;
 	private Chapter chapt;
 	private Story story;
-	private ImageButton imageButton;
 	private Button saveButton;
-	private Button allChaptersButton;
-	private Button addChoiceButton;
 	private EditText chapterContent;
-	private ListView choices;
+	private boolean isEditing;
+	private SHController gc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_chapter);
+		setContentView(R.layout.activity_edit_chapter);
+
+		chapterContent = (EditText) findViewById(R.id.chapterEditText);
+		saveButton = (Button) findViewById(R.id.chapterSave);
+		gc = SHController.getInstance(getBaseContext());
 
 		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
-		if (bundle != null) {
-			story = (Story) bundle.getSerializable("New Story");
-			chapt = new Chapter(story.getId(), " ");
+		isEditing = bundle.getBoolean("isEditing");
+		if (isEditing) {
+			story = (Story) bundle.get("Story");
+			chapt = (Chapter) bundle.get("Chapter");
+		} else {
+			story = (Story) bundle.get("New Story");
+			chapt = new Chapter(story.getId(), "");
 		}
-
-		imageButton = (ImageButton) findViewById(R.id.imageButton1);
-		imageButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// Change/Load images
-
-			}
-		});
-
-		// Set the chapters text
-		chapterContent = (EditText) findViewById(R.id.editText1);
+		// Set the chapter text, if new Chapter will simply be blank
 		chapterContent.setText(chapt.getText());
-		chapterContent.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(CharSequence c, int start, int end,
-					int count) {
-				chapt.setText(c.toString());
-			}
 
-			public void beforeTextChanged(CharSequence c, int start, int end,
-					int count) {
-			}
-
-			public void afterTextChanged(Editable e) {
-			}
-		});
-
-		saveButton = (Button) findViewById(R.id.save_story);
+		// Save the story to the general controller, locally
 		saveButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				story.setFirstChapterId(chapt.getId());
-				GeneralController.getInstance().addObjectLocally(story,
-						GeneralController.STORY, context);
-
-				GeneralController.getInstance().addObjectLocally(chapt,
-						GeneralController.CHAPTER, context);
-
+				chapt.setText(chapterContent.getText().toString());
+				if (isEditing) {
+					gc.updateObject(chapt, SHController.CHAPTER);
+				} else {
+					story.addChapter(chapt);
+				}
+				gc.addObject(story, SHController.STORY);
+				gc.addObject(chapt, SHController.CHAPTER);
 				finish();
 			}
 		});
-
-		allChaptersButton = (Button) findViewById(R.id.add_chapter);
-		allChaptersButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// View all chapters
-
-			}
-		});
-
-		addChoiceButton = (Button) findViewById(R.id.add_choice_button);
-		addChoiceButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				// Start add choice activity
-				Intent intent = new Intent(getApplicationContext(),
-						EditChoiceActivity.class);
-				startActivity(intent);
-
-			}
-		});
-
-		// Use choices to display choices
-		choices = (ListView) findViewById(R.id.listView1);
-		ArrayList<String> testArray = new ArrayList<String>();
-		for (int i = 0; i < 3; i++) {
-			testArray.add("Test Choice " + (i + 1));
-		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, testArray);
-		choices.setAdapter(adapter);
 	}
 
-	@Override
-	public void update(ChapterManager model) {
-		// TODO Auto-generated method stub
-
-	};
-
-	/*
-	 * Not sure if needed
-	 * 
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
-	 * menu; this adds items to the action bar if it is present.
-	 * getMenuInflater().inflate(R.menu.add_chapter, menu); return true; }
-	 */
+//	private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
+//	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+//	Uri imageFileUri;
+//
+//	@Override
+//	public void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.activity_main);
+//
+//		ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
+//		OnClickListener listener = new OnClickListener() {
+//			public void onClick(View v){
+//				takeAPhoto();
+//			}
+//		};
+//		button.setOnClickListener(listener);
+//	}
+//
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		return true;
+//	}
+//
+//
+//
+//	public void takeAPhoto() {
+//		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+//		File folderF = new File(folder);
+//		if (!folderF.exists()) {
+//			folderF.mkdir();
+//		}
+//
+//		String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
+//		File imageFile = new File(imageFilePath);
+//		imageFileUri = Uri.fromFile(imageFile);
+//
+//		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+//		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//	}
+//
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//			TextView tv = (TextView) findViewById(R.id.status);
+//			if (resultCode == RESULT_OK) {
+//				tv.setText("Photo OK!");
+//				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
+//				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+//			} else if (resultCode == RESULT_CANCELED) {
+//				tv.setText("Photo canceled");
+//			} else {
+//				tv.setText("Not sure what happened!" + resultCode);
+//			}
+//		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+//			TextView tv = (TextView) findViewById(R.id.status);
+//			if (resultCode == RESULT_OK) {
+//				tv.setText("Photo OK!");
+//				ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
+//				button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+//			} else if (resultCode == RESULT_CANCELED) {
+//				tv.setText("Photo canceled");
+//			} else {
+//				tv.setText("Not sure what happened!" + resultCode);
+//			}
+//		}
+//	}
+//
+//	public void browseGallery() {
+//		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+//		File folderF = new File(folder);
+//		if (!folderF.exists()) {
+//			folderF.mkdir();
+//		}
+//
+//		String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
+//		File imageFile = new File(imageFilePath);
+//		imageFileUri = Uri.fromFile(imageFile);
+//
+//		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+//
+//		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
+//
+//	}	
 }

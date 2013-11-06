@@ -26,24 +26,35 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
 
-
 /**
- * @author adbrown
+ * Role: Interacts with the database to store, update, and retrieve choice
+ * objects. It implements the StoringManager interface and inherits from the
+ * Model class, meaning it can hold SHViews and notify them if they need to be
+ * updated.
+ * 
+ * Design Pattern: Singleton
+ * 
+ * @author Ashley Brown 
+ * 
+ * @see Choice
+ * @see StoringManager
+ * @see Model
  *
  */
-public class ChoiceManager extends Model implements StoringManager {
-	private Context context;
+
+public class ChoiceManager implements StoringManager {
+	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
 
 	/**
 	 * Initializes a new ChoiceManager object.
 	 */
 	protected ChoiceManager(Context context) {
-		this.context = context;
+		helper = DBHelper.getInstance(context);
 	}
 
 	/**
-	 * Returns an instance of itself. Used to accomplish the
+	 * Returns an instance of itself(ChoiceManager). Used to accomplish the
 	 * singleton design pattern. 
 	 *  
 	 * @param context
@@ -60,11 +71,10 @@ public class ChoiceManager extends Model implements StoringManager {
 	 * Saves a new choice locally (in the database).
 	 */	
 	@Override
-	public void insert(Object object, DBHelper helper) {
+	public void insert(Object object) {
 		Choice choice = (Choice) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
-		// Insert choice
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
@@ -76,15 +86,12 @@ public class ChoiceManager extends Model implements StoringManager {
 	/**
 	 * Updates a choice already in the database.
 	 * 
-	 * @param oldObject
-	 * 			The object before update, used to find it in the database.
 	 * 
 	 * @param newObject
-	 * 			Contains the changes to the object, it is what the oldObject
-	 * 			info will be replaced with.
+	 * 			Contains the changes to the object.
 	 */
 	@Override
-	public void update(Object newObject, DBHelper helper) {
+	public void update(Object newObject) {
 		Choice newC = (Choice) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -106,11 +113,9 @@ public class ChoiceManager extends Model implements StoringManager {
 	 * 
 	 * @param criteria 
 	 * 			Holds the search criteria.
-	 * @param helper
-	 * 			Used to open the database connection.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
+	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String[] sArgs = null;

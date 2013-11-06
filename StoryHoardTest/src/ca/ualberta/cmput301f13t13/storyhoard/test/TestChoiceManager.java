@@ -22,8 +22,14 @@ import java.util.UUID;
 import org.junit.Before;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.*;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
+import ca.ualberta.cs.c301f13t13.backend.DBContract;
+import ca.ualberta.cs.c301f13t13.backend.DBHelper;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the ChoiceManager class in the StoryHoard
@@ -34,6 +40,7 @@ import ca.ualberta.cs.c301f13t13.gui.*;
  */
 public class TestChoiceManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	ChoiceManager cm = null;
 
 	public TestChoiceManager() {
 		super(ViewBrowseStories.class);
@@ -46,25 +53,24 @@ public class TestChoiceManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		cm = ChoiceManager.getInstance(getActivity());
 	}
 
 	/**
 	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		cm.insert(c, helper);
+		cm.insert(c);
 
 		// retrieving story in db that matches mockStory
-		ArrayList<Object> choice = cm.retrieve(c, helper);
+		ArrayList<Object> choice = cm.retrieve(c);
 		assertTrue(choice.size() == 1);
 		assertTrue(hasChoice(choice, c));
 	}
@@ -73,28 +79,25 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", true);
+		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");
 		String text = "pick me";
 		Choice c = new Choice(chap1.getId(), chap2.getId(), text);
 
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		cm.insert(c, helper);
+		cm.insert(c);
 
-		ArrayList<Object> mockChoices = cm.retrieve(c, helper);
+		ArrayList<Object> mockChoices = cm.retrieve(c);
 		assertTrue(mockChoices.size() == 1);
 		assertTrue(hasChoice(mockChoices, c));
 
 		Choice newChoice = (Choice) mockChoices.get(0);
 
 		newChoice.setText("new choice text mrawr");
-		cm.update(c, helper);
-
+		cm.update(c);
 		// make sure you can find new choice
-		mockChoices = cm.retrieve(newChoice, helper);
+		mockChoices = cm.retrieve(newChoice);
 		assertTrue(mockChoices.size() == 1);
 		assertTrue(hasChoice(mockChoices, newChoice));
 
@@ -106,23 +109,20 @@ public class TestChoiceManager extends
 	 * Tests retrieving all the choices of a chapter
 	 */
 	public void testGetAllChoices() {
-		ChoiceManager cm = ChoiceManager.getInstance(this.getActivity());
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
-		cm.insert(mockChoice, helper);
+		cm.insert(mockChoice);
 		Choice mockChoice2 = new Choice(chapId1, chapId2, "Lily drove");
-		cm.insert(mockChoice2, helper);
+		cm.insert(mockChoice2);
 		Choice mockChoice3 = new Choice(chapId2, chapId1, "you hit the cow");
-		cm.insert(mockChoice3, helper);
+		cm.insert(mockChoice3);
 
 		// Looking for all choices belonging to chapter id 1
 		Choice criteria = new Choice(null, chapId1);
 
-		ArrayList<Object> mockChoices = cm.retrieve(criteria, helper);
+		ArrayList<Object> mockChoices = cm.retrieve(criteria);
 		assertTrue(mockChoices.size() == 2);
 		assertTrue(hasChoice(mockChoices, mockChoice));
 		assertTrue(hasChoice(mockChoices, mockChoice2));

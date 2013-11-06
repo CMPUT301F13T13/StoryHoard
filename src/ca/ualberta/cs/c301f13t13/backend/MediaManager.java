@@ -24,23 +24,32 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
-import ca.ualberta.cs.c301f13t13.gui.SHView;
 
 /**
- * @author Owner
- *
+ * Role: Interacts with the database to store, update, and retrieve media
+ * objects. It implements the StoringManager interface and inherits from the
+ * Model class, meaning it can hold SHViews and notify them if they need to be
+ * updated.
+ * 
+ * Design Pattern: Singleton
+ * 
+ * @author Stephanie Gil
+ * @author Ashley Brown
+ * 
+ * @see Media
+ * @see StoringManager
+ * @see Model
  */
-public class MediaManager extends Model<SHView> implements StoringManager{
-	private Context context;
+public class MediaManager implements StoringManager{
+	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	
 	/**
 	 * Initializes a new MediaManager object.
 	 */
 	protected MediaManager(Context context) {
-		this.context = context;
+		helper = DBHelper.getInstance(context);
 	}
 	
 	/**
@@ -58,23 +67,23 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	}
 	
 	@Override
-	public void insert(Object object, DBHelper helper) {
+	public void insert(Object object) {
 		Media media = (Media) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
 
 		// Insert Media
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, media.getChapterId().toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, media.getUri().toString());
-		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (media.getChapterId()).toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getUri()).toString());
+		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
 
-		db.insert(ChapterTable.TABLE_NAME, null, values);	
+		db.insert(MediaTable.TABLE_NAME, null, values);	
 		
 	}
 
 	@Override
-	public ArrayList<Object> retrieve(Object criteria, DBHelper helper) {
+	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -108,7 +117,7 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 					UUID.fromString(cursor.getString(0)), // media id
 					UUID.fromString(cursor.getString(1)), // chapter id
 					Uri.parse(cursor.getString(2)), // uri
-					cursor.getInt(3)
+					cursor.getString(3) // type
 					);
 			results.add(newMedia);
 			cursor.moveToNext();
@@ -119,14 +128,14 @@ public class MediaManager extends Model<SHView> implements StoringManager{
 	
 
 	@Override
-	public void update(Object newObject, DBHelper helper) {
+	public void update(Object newObject) {
 		Media newM = (Media) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (newM.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, newM.getChapterId().toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, newM.getUri().toString());
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (newM.getChapterId()).toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (newM.getUri()).toString());
 		values.put(MediaTable.COLUMN_NAME_TYPE, newM.getType());
 
 		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";

@@ -1,3 +1,18 @@
+/**
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.ArrayList;
@@ -7,7 +22,6 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.GeneralController;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -27,11 +41,11 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  */
 public class ViewBrowseStories extends Activity {
 
-	GridView gridView;
-	ArrayList<Story> gridArray = new ArrayList<Story>();
-	StoriesViewAdapter customGridAdapter;
-	GeneralController gc;
-	int viewType = GeneralController.CREATED;
+	private GridView gridView;
+	private ArrayList<Story> gridArray = new ArrayList<Story>();
+	private AdapterStories customGridAdapter;
+	private SHController gc;
+	int viewType = SHController.CREATED_STORY;
 
 	/**
 	 * Create the View Browse Stories activity
@@ -47,6 +61,7 @@ public class ViewBrowseStories extends Activity {
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
+		// Setup the action bar items
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				actionBar.getThemedContext(),
 				android.R.layout.simple_list_item_1,
@@ -55,18 +70,19 @@ public class ViewBrowseStories extends Activity {
 						getString(R.string.title_viewBrowseStories_MyStories),
 						getString(R.string.title_viewBrowseStories_CachedStories),
 						getString(R.string.title_viewBrowseStories_PublishedStories), });
+
+		// Setup the action bar listener
 		actionBar.setListNavigationCallbacks(adapter,
 				new OnNavigationListener() {
-
 					@Override
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = GeneralController.CREATED;
+							viewType = SHController.CREATED_STORY;
 						} else if (itemPosition == 1) {
-							viewType = GeneralController.CACHED;
+							viewType = SHController.CACHED_STORY;
 						} else if (itemPosition == 2) {
-							viewType = GeneralController.PUBLISHED;
+							viewType = SHController.PUBLISHED_STORY;
 						}
 						refreshStories();
 						return true;
@@ -75,19 +91,16 @@ public class ViewBrowseStories extends Activity {
 
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
-		customGridAdapter = new StoriesViewAdapter(this, R.layout.row_grid,
+		customGridAdapter = new AdapterStories(this, R.layout.browse_story_item,
 				gridArray);
 		gridView.setAdapter(customGridAdapter);
-		gridView.setOnItemClickListener(new OnItemClickListener() {
 
+		// Setup the grid view click listener
+		gridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// Handle going to view story activity
-				String title = gridArray.get(arg2).getTitle();
-				Log.w("StoryItemSelected", "" + arg2 + ": " + title);
-
-				// Start the new activity, passing the ID of the story
 				Intent intent = new Intent(getBaseContext(),
 						ViewBrowseStory.class);
 				intent.putExtra("storyID", gridArray.get(arg2).getId());
@@ -116,6 +129,8 @@ public class ViewBrowseStories extends Activity {
 		switch (item.getItemId()) {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
+			// Pass it a boolean to indicate it is not editing
+			intent.putExtra("isEditing", false);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
@@ -127,58 +142,23 @@ public class ViewBrowseStories extends Activity {
 		}
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshStories();
+	}
+
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.
 	 */
 	private void refreshStories() {
+		ArrayList<Story> newStories;
 		gridArray.clear();
-		gc = GeneralController.getInstance();
-
-		/*
-		 * Implement this when ready. Testing to see if the stories actually
-		 * work To test back end, set this to false
-		 */
-		boolean testing = false;
-
-		if (testing) {
-			if (viewType == GeneralController.CREATED) {
-				// Is broken for some reason, returns null pointer exception
-				gc.addObjectLocally(new Story("My Bad Story",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("My Bad Story The Sequel- Rawr",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("My Goodness Hi Santa",
-						"I should test this better", "Wow, such story", true),
-						GeneralController.STORY, this);
-				gc.addObjectLocally(new Story("RAWR TESTING BADLY", "", "",
-						true), GeneralController.STORY, this);
-				gridArray = gc.getAllStories(viewType, this);
-			}
-			if (viewType == GeneralController.PUBLISHED) {
-				gridArray.add(new Story("Life and Times of Chrono",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Android: To do or not to do",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Purple MacBook Camera Sticky",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("DIS SO BAD", "", "", true));
-
-			}
-			if (viewType == GeneralController.CACHED) {
-				gridArray.add(new Story("Masterpiece: The Master Piece",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("Hot Dogs and Cream Cheese",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("My God, Santa Was Mean This Year",
-						"I should test this better", "Wow, such story", true));
-				gridArray.add(new Story("HUUUURRRRRRR", "", "", true));
-
-			} else {
-				gridArray = gc.getAllStories(viewType, this);
-			}
+		gc = SHController.getInstance(this);
+		newStories = gc.getAllStories(viewType);
+		if (newStories != null) {
+			gridArray.addAll(newStories);
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}
