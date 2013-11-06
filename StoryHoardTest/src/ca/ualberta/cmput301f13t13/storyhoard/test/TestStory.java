@@ -31,7 +31,8 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * @author Stephanie
  * @see Story
  */
-public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestStory extends
+		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestStory() {
 		super(ViewBrowseStories.class);
@@ -43,7 +44,8 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 	@SuppressWarnings("unused")
 	public void testCreateStory() {
 		try {
-			Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
+			Story story = new Story("7 bugs", "Shamalan", "scary story",
+					Utilities.getPhoneId(this.getActivity()));
 		} catch (Exception e) {
 			fail("error creating a new story object");
 		}
@@ -53,7 +55,8 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 	 * Tests adding a chapter to a story.
 	 */
 	public void testAddChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
+				Utilities.getPhoneId(this.getActivity()));
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.addChapter(chapter);
 		assertEquals(story.getChapters().size(), 1);
@@ -63,7 +66,8 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 	 * Tests retrieving a specific chapter from a story.
 	 */
 	public void testGetChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
+				Utilities.getPhoneId(this.getActivity()));
 		Chapter chapter1 = new Chapter(story.getId(), "On a cold, dark night.");
 		Chapter chapter2 = new Chapter(story.getId(), "On a sunny, bright day.");
 		story.addChapter(chapter1);
@@ -86,7 +90,8 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 		assertTrue(info.size() == 0);
 
 		// not empty arguments
-		criteria = new Story(null, "john", "the cow", "went home", Utilities.getPhoneId(this.getActivity()));
+		criteria = new Story(null, "john", "the cow", "went home",
+				Utilities.getPhoneId(this.getActivity()));
 		info = criteria.getSearchCriteria();
 
 		assertTrue(info.size() == 3);
@@ -100,7 +105,8 @@ public class TestStory extends ActivityInstrumentationTestCase2<ViewBrowseStorie
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		Story mockStory = new Story("title1", "author1", "desc1", Utilities.getPhoneId(this.getActivity()));
+		Story mockStory = new Story("title1", "author1", "desc1",
+				Utilities.getPhoneId(this.getActivity()));
 
 		UUID storyId = mockStory.getId();
 		String title = mockStory.getTitle();

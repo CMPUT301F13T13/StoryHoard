@@ -170,9 +170,11 @@ public class ServerManager implements StoringManager{
 			String json = getEntityContent(response);
 
 			// We have to tell GSON what type we expect
-			Type simpleESResponseType = new TypeToken<SimpleESResponse<Story>>(){}.getType();
+			Type simpleESResponseType = 
+					new TypeToken<SimpleESResponse<Story>>(){}.getType();
 			// Now we expect to get a Story response
-			SimpleESResponse<Story> esResponse = gson.fromJson(json, simpleESResponseType);
+			SimpleESResponse<Story> esResponse = 
+					gson.fromJson(json, simpleESResponseType);
 			// We get the recipe from it!
 			story = esResponse.getSource();
 			System.out.println(story.toString());
@@ -234,8 +236,10 @@ public class ServerManager implements StoringManager{
 			e.printStackTrace();
 		}
 
-		Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchResponseType);
+		Type elasticSearchResponseType = 
+				new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+		ElasticSearchResponse<Story> esResponse = 
+				gson.fromJson(json, elasticSearchResponseType);
 		System.err.println(esResponse);
 		for (SimpleESResponse<Story> r : esResponse.getHits()) {
 			Story story = r.getSource();
@@ -286,39 +290,54 @@ public class ServerManager implements StoringManager{
 		is.close();
 	}	
 
-	@Override
-	public void update(Object newObject) {
-		// TODO Auto-generated method stub
-		
-	}
 	/**
 	 * update a field in a recipe
 	 */
-	public void updateStories(String str) throws ClientProtocolException, IOException {
-		HttpPost updateRequest = new HttpPost("http://cmput301.softwareprocess.es:8080/testing/lab02/1/_update");
-		String query = 	"{\"script\" : \"ctx._source." + str + "}";
-		StringEntity stringentity = new StringEntity(query);
-
-		updateRequest.setHeader("Accept","application/json");
-		updateRequest.setEntity(stringentity);
-
-		HttpResponse response = httpclient.execute(updateRequest);
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		String json = getEntityContent(response);
+	@Override
+	public void update(Object object) { 
+		// retrieve current story with id
+		// delete
+		// re insert
 		
-		// NOT SURE THIS IS RIGHT OR NEEDED
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is = new InputStreamReader(entity.getContent());
-		is.close();
+//		Story story = (Story) object;
+//		
+//		HttpPost updateRequest = new HttpPost(server + "/1/_update");
+//
+//		ArrayList<Object> stories = new ArrayList<Object>();
+//		HashMap<String, String> storyData = story.getSearchCriteria();
+//		ArrayList<String> sargs = new ArrayList<String>();
+//		
+//		// setting selection string
+//		for (String key: storyData.keySet()) {
+//			sargs.add(storyData.get(key));
+//		}
+//		String selection = setSearchCriteria(story, sargs);
+//		
+//		String query = 	"{\"script\" : \"ctx._source." + str + "}";
+//		StringEntity stringentity = new StringEntity(query);
+//		
+//		updateRequest.setHeader("Accept","application/json");
+//		updateRequest.setEntity(stringentity);
+//
+//		HttpResponse response = httpclient.execute(updateRequest);
+//		String status = response.getStatusLine().toString();
+//		System.out.println(status);
+//
+//		String json = getEntityContent(response);
+//		
+//		// NOT SURE THIS IS RIGHT OR NEEDED
+//		HttpEntity entity = response.getEntity();
+//		InputStreamReader is = new InputStreamReader(entity.getContent());
+//		is.close();
 	}	
 
 	/**
 	 * delete an entry specified by the id
 	 */
-	public void deleteStory() throws IOException {
-		HttpDelete httpDelete = new HttpDelete("http://cmput301.softwareprocess.es:8080/testing/lab02/1");
+	public void deleteStory(Object object) throws IOException {
+		Story story = (Story) object;
+		HttpDelete httpDelete = new HttpDelete(server 
+				+ story.getId().toString());
 		httpDelete.addHeader("Accept","application/json");
 
 		HttpResponse response = httpclient.execute(httpDelete);
