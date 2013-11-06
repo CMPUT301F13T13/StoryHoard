@@ -22,6 +22,9 @@ package ca.ualberta.cs.c301f13t13.gui;
  * Purpose:
  * 	- To add a choice to an existing chapter
  * 	- The author can:
+ * 		-Set the text for a choice in a given chapter
+ * 		-Link the choice to an existing chapter
+ * 		-Link the choice to a new chapter
  * 
  *
  * 
@@ -39,14 +42,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
 
 public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
 	
 	private Chapter chapt;
+	private Choice choice;
 	private Button existingChapterButton;
 	private Button newChapterButton;
 	private Button cancelButton;
-	private EditText chapterChoice;
+	private EditText choiceDesc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
 			chapt = (Chapter) bundle.getSerializable(Constants._ID);
+			choice.setCurrentChapter(chapt.getId());
 		}
 		
 		setContentView(R.layout.activity_edit_choice);
@@ -71,6 +77,7 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 				//Notify activity that we are selecting
 				//rather than viewing
 				intent.putExtra("viewing", false);
+				intent.putExtra("Choice",choice);
 				startActivity(intent);
 			}
 		});
@@ -85,11 +92,11 @@ public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MA
 			}
 		});
 
-		chapterChoice = (EditText)findViewById(R.id.chapter_title);
-		chapterChoice.addTextChangedListener(new TextWatcher() {
+		choiceDesc = (EditText)findViewById(R.id.chapter_title);
+		choiceDesc.addTextChangedListener(new TextWatcher() {
 			public void onTextChanged(
 					CharSequence c, int start, int end, int count) {
-				//Chapter title
+				choice.setText(c.toString());
 			}
 			public void beforeTextChanged(
 					CharSequence c, int start, int end, int count) {}

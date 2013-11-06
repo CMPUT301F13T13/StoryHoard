@@ -15,13 +15,19 @@
  */
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 
 /**
  * ViewAllChaptersActivity
@@ -38,6 +44,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 public class ViewAllChaptersActivity extends Activity {
 
 	private ListView chapters;
+	private Choice choice;
+	private ArrayList<Chapter> listOfChapters;
+	private SHController controller;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,14 @@ public class ViewAllChaptersActivity extends Activity {
 		setContentView(R.layout.activity_all_chapters);
 		chapters = (ListView) findViewById(R.id.allChaptersView);
 		
+		//Get list of chapters from SHController
+		listOfChapters = controller.getAllChapters(null);
+		
+		ArrayAdapter<Chapter> adapter = new ArrayAdapter<Chapter> (this,
+				android.R.layout.simple_list_item_1,listOfChapters);
+		
+		
+		chapters.setAdapter(adapter);
 		
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle.getBoolean("viewing")) {
@@ -53,11 +70,13 @@ public class ViewAllChaptersActivity extends Activity {
 			chapters.setOnItemClickListener(null);
 		} else {
 			//Selecting a chapter to add as a choice
+			choice = (Choice) bundle.get("Choice");
 			chapters.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
-					
+					//Set choice's next chapter upon selection
+					choice.setNextChapter(null);
 				}
 			});
 		}
