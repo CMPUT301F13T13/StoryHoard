@@ -21,7 +21,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -56,10 +58,8 @@ import com.google.gson.reflect.TypeToken;
  * @author Stephanie
  */
 public class ServerManager implements StoringManager{
-	// Http Connector
-	private static HttpClient httpclient = null;
-	// JSON Utilities
-	private static Gson gson = null;
+	private static HttpClient httpclient = null;		// Http Connector
+	private static Gson gson = null;		// JSON Utilities
 	private static ServerManager self = null;
 	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
 	
@@ -127,9 +127,6 @@ public class ServerManager implements StoringManager{
 			e.printStackTrace();
 		}
 	}
-
-	
-
 	
 	/**
 	 * Consumes the Get operation of the service
@@ -146,7 +143,15 @@ public class ServerManager implements StoringManager{
 			stories.add(searchById(crit.getId().toString()));		
 		} else {
 			// search by keyword
-			stories = searchByKeywords(crit);
+			try {
+				stories = searchByKeywords(crit);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return stories;
@@ -197,8 +202,10 @@ public class ServerManager implements StoringManager{
 	
 	/**
 	 * searches by keywords
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
 	 */ 
-	public ArrayList<Object> searchByKeywords(Story criteria) {
+	public ArrayList<Object> searchByKeywords(Story criteria) throws ClientProtocolException, IOException {
 		ArrayList<Object> stories = new ArrayList<Object>();
 		HashMap<String, String> storyData = criteria.getSearchCriteria();
 		ArrayList<String> sargs = new ArrayList<String>();
@@ -210,31 +217,17 @@ public class ServerManager implements StoringManager{
 		String selection = setSearchCriteria(criteria, sargs);
 		
 		HttpGet searchRequest = null;
-		try {
-			searchRequest = new HttpGet(server + "_search?pretty=1&q=" +
-					java.net.URLEncoder.encode(selection,"UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		searchRequest = new HttpGet(server + "_search?pretty=1&q=" + java.net.URLEncoder.encode(selection,"UTF-8"));
 		searchRequest.setHeader("Accept","application/json");
 		HttpResponse response = null;
 		
-		try {
-			response = httpclient.execute(searchRequest);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		response = httpclient.execute(searchRequest);
+
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 
 		String json = null;
-		try {
-			json = getEntityContent(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		json = getEntityContent(response);
 
 		Type elasticSearchResponseType = 
 				new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
@@ -252,8 +245,6 @@ public class ServerManager implements StoringManager{
 		try {
 			is = new InputStreamReader(entity.getContent());
 			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}
@@ -263,9 +254,14 @@ public class ServerManager implements StoringManager{
 	/**
 	 * advanced search (logical operators)
 	 */
-	public void searchsearchStories(String str) throws ClientProtocolException, IOException {
+	public ArrayList<Object> searchStories(Story criteria) throws ClientProtocolException, IOException {
+		ArrayList<Object> stories = new ArrayList<Object>();
+		
+		String selection = setSearchCriteria(criteria, null);
+		
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
-		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + str + "\"}}}";
+		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\"" 
+				+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
 
 		searchRequest.setHeader("Accept","application/json");
@@ -281,13 +277,11 @@ public class ServerManager implements StoringManager{
 		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
 		System.err.println(esResponse);
 		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story recipe = r.getSource();
-			System.err.println(recipe);
+			Story story = r.getSource();
+			stories.add(story);
 		}
-		// NOT SURE THIS IS RIGHT OR NEEDED
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is = new InputStreamReader(entity.getContent());
-		is.close();
+		
+		return stories;
 	}	
 
 	/**
@@ -364,7 +358,7 @@ public class ServerManager implements StoringManager{
 	 */
 	String getEntityContent(HttpResponse response) throws IOException {
 		BufferedReader br = new BufferedReader(
-				new InputStreamReader((response.getEntity().getContent())));
+				new InputStreamReader(response.getEntity().getContent()));
 		String output;
 		System.err.println("Output from Server -> ");
 		String json = "";
@@ -379,15 +373,19 @@ public class ServerManager implements StoringManager{
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";
+		Story story = (Story) object;
 		
-		// split keywords and clean them 
+		String allWords = story.getTitle();
 		
-		if (args.size() > 0) {
-			selection += args.get(0);
+		// split keywords and clean them
+		List<String> words = Arrays.asList(allWords.split("\\s+"));
+		
+		if (words.size() > 0) {
+			selection += words.get(0);
 		}
 		
-		for (int i = 1; i < args.size(); ++i) {
-			selection += " AND " + args.get(i);
+		for (int i = 1; i < words.size(); ++i) {
+			selection += " AND " + words.get(i);
 		}
 		return selection;
 	}
