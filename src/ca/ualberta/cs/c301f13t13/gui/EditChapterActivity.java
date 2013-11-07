@@ -285,7 +285,7 @@ public class EditChapterActivity extends Activity {
 
 				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
-				illustrations.addView(insertImage(ill));
+//				illustrations.addView(insertImage(ill));
 
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo" );
