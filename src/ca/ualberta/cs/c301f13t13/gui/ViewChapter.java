@@ -19,11 +19,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
@@ -39,15 +43,18 @@ import ca.ualberta.cs.c301f13t13.backend.SHController;
  * 
  */
 public class ViewChapter extends Activity {
+	private Context context = this;
 	private UUID storyID;
 	private UUID chapterID;
 	private SHController gc;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private AdapterChoices choiceAdapter;
+	private AlertDialog photoDialog;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
+	private Button addPhotoButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class ViewChapter extends Activity {
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
+		addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
@@ -81,6 +89,40 @@ public class ViewChapter extends Activity {
 				finish();
 			}
 		});
+		
+		addPhotoButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+				// Set dialog title
+				alert.setTitle("Choose method:");
+
+				// Options that user may choose to add photo
+				final String[] methods = { "Take Photo", "Choose from Gallery" };
+
+				alert.setSingleChoiceItems(methods, -1,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int item) {
+								switch (item) {
+								case 0:
+									// Take a photo
+									break;
+								case 1:
+									// Choose from gallery
+									break;
+								}
+								photoDialog.dismiss();
+							}
+						});
+				photoDialog = alert.create();
+				photoDialog.show();
+			}
+		});
+		
 	}
 
 	@Override
