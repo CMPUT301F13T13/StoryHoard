@@ -34,11 +34,10 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * 
  * Design Pattern: Singleton
  * 
- * @author Stephanie
+ * @author Stephanie Gil
  * 
  * @see Chapter
  * @see StoringManager
- * @see Model
  */
 public class ChapterManager implements StoringManager {
 	private static DBHelper helper = null;

@@ -25,14 +25,11 @@ import java.util.Collection;
  * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/Hits.java
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
- * 
- * Original authors:
+
  * @author Abram Hindle
  * @author Chenlei Zhang
- * 
- * Modifications by:
- * @author Ashley
- * @author Stephanie
+ * @author Ashley Brown
+ * @author Stephanie Gil
  */
 public class Hits<T> {
 	    int total;

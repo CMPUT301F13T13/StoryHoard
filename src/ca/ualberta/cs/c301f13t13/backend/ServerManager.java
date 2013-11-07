@@ -49,13 +49,10 @@ import com.google.gson.reflect.TypeToken;
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
- * Original authors:
  * @author Abram Hindle
  * @author Chenlei Zhang
- * 
- * Modifications by:
- * @author Ashley
- * @author Stephanie
+ * @author Ashley Brown
+ * @author Stephanie Gil
  */
 public class ServerManager implements StoringManager{
 	private static HttpClient httpclient = null;		// Http Connector

@@ -24,7 +24,13 @@ package ca.ualberta.cs.c301f13t13.backend;
 import android.app.Application;
 
 /**
- * @author Owner
+ * The main StoryHoard Application. 
+ * 
+ * @author Alex Wong
+ * @author Josh Tate
+ * @author Kim Wu
+ * @author Ashley Brown
+ * @author Stephanie Gil
  *
  */
 public class StoryHoardApplication extends Application{

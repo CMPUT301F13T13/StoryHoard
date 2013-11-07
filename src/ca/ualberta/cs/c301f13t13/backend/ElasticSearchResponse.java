@@ -28,13 +28,10 @@ import java.util.Collection;
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
- * Original authors:
  * @author Abram Hindle
  * @author Chenlei Zhang
- * 
- * Modifications by:
- * @author Ashley
- * @author Stephanie
+ * @author Ashley Brown
+ * @author Stephanie Gil
  */
 public class ElasticSearchResponse<T> {
 	int took;

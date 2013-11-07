@@ -31,7 +31,7 @@ import android.util.Base64;
 /**
  * Class meant for general functions that can be used by any class.
  * 
- * @author Stephanie
+ * @author Stephanie Gil
  * 
  */
 public class Utilities {
