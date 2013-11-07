@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
@@ -153,20 +154,26 @@ public class EditChapterActivity extends Activity {
 		addChoice.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getBaseContext(),
-						EditChoiceActivity.class);
-				intent.putExtra("chapter", chapt);
-				intent.putExtra("story", story);
-				startActivity(intent);
+				if (isEditing) {
+					Intent intent = new Intent(getBaseContext(),
+							EditChoiceActivity.class);
+					intent.putExtra("chapter", chapt);
+					intent.putExtra("story", story);
+					startActivity(intent);
+				} else {
+					Toast.makeText(getBaseContext(),
+							"Save story before adding first choice",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
+		// Set the chapter text, if new Chapter will simply be blank
+		chapterContent.setText(chapt.getText());
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Set the chapter text, if new Chapter will simply be blank
-		chapterContent.setText(chapt.getText());
 		choices.clear();
 		choices.addAll(gc.getAllChoices(chapt.getId()));
 		choiceAdapter.notifyDataSetChanged();
