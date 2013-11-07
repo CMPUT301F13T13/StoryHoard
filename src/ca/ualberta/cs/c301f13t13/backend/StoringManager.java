@@ -21,8 +21,8 @@ import java.util.ArrayList;
 /**
  * Interface for storing objects locally (to the database).
  * 
- * @author Stephanie
- * @author Ashley
+ * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  * @see StoryManager
  * @see ChapterManager

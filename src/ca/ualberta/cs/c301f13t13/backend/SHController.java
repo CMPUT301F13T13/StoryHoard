@@ -30,8 +30,8 @@ import android.content.Context;
  * 
  * Design Pattern: Singleton
  * 
- * @author Stephanie
- * @author Ashley
+ * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  */
 public class SHController {

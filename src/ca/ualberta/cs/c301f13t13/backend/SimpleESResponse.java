@@ -25,12 +25,9 @@ package ca.ualberta.cs.c301f13t13.backend;
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
- * Original authors:
  * @author Abram Hindle
  * @author Chenlei Zhang
- * 
- * Modifications by:
- * @author Stephanie
+ * @author Stephanie Gil
  */
 public class SimpleESResponse<T> {
     String _index;

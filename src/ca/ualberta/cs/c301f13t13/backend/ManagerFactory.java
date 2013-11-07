@@ -23,7 +23,7 @@ import android.content.Context;
  * 
  * Design Pattern: Factory Class
  * 
- * @author Stephanie
+ * @author Stephanie Gil
  * 
  */
 public class ManagerFactory {
