@@ -143,7 +143,7 @@ public class Utilities {
 		final int COMPRESSION_QUALITY = 100;
 		String encodedImage;
 		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-		bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_QUALITY,
 				byteArrayBitmapStream);
 		byte[] b = byteArrayBitmapStream.toByteArray();
 		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
