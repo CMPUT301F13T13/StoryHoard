@@ -69,9 +69,10 @@ public class EditChapterActivity extends Activity {
 		setContentView(R.layout.activity_edit_chapter);
 
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
-		saveButton = (Button) findViewById(R.id.chapterSave);
+		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
+		addIllust = (Button) findViewById(R.id.chapterAddIllust);
 		gc = SHController.getInstance(getBaseContext());
 
 		// Get the story that chapter is being added to
