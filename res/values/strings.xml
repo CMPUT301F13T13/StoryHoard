@@ -38,6 +38,7 @@
     <string name="my_story">My Stories</string>
     <string name="story_type">Choose a story type</string>
     <string name="view_browse_story">View Story</string>
+    <string name="add_chapter_illust">Add Illustration</string>
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
