@@ -60,7 +60,6 @@ public class ViewAllChaptersActivity extends Activity {
 		ArrayAdapter<Chapter> adapter = new ArrayAdapter<Chapter> (this,
 				android.R.layout.simple_list_item_1,listOfChapters);
 		
-		
 		chapters.setAdapter(adapter);
 		
 		Bundle bundle = this.getIntent().getExtras();

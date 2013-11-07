@@ -16,13 +16,20 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -46,11 +53,15 @@ public class EditChapterActivity extends Activity {
 
 	private Chapter chapt;
 	private Story story;
+	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
 	private Button addIllust;
+	private Button addChoice;
+	private ListView viewChoices;
 	private EditText chapterContent;
 	private boolean isEditing;
 	private SHController gc;
+	private AdapterChoices choiceAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,8 @@ public class EditChapterActivity extends Activity {
 
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSave);
+		addChoice = (Button) findViewById(R.id.addNewChoice);
+		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		gc = SHController.getInstance(getBaseContext());
 
 		// Get the story that chapter is being added to
@@ -71,11 +84,13 @@ public class EditChapterActivity extends Activity {
 			story = (Story) bundle.get("New Story");
 			chapt = new Chapter(story.getId(), "");
 		}
-		// Set the chapter text, if new Chapter will simply be blank
-		chapterContent.setText(chapt.getText());
 
-		// Save the story to the general controller, locally
-		saveButton.setOnClickListener(new View.OnClickListener() {
+		// Setup the adapter
+		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item, choices);
+		viewChoices.setAdapter(choiceAdapter);
+		
+		// Save the chapter to the database, or update if editing
+		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				chapt.setText(chapterContent.getText().toString());
@@ -83,9 +98,9 @@ public class EditChapterActivity extends Activity {
 					gc.updateObject(chapt, ObjectType.CHAPTER);
 				} else {
 					story.addChapter(chapt);
+					gc.addObject(story, ObjectType.CREATED_STORY);
+					gc.addObject(chapt, ObjectType.CHAPTER);
 				}
-				gc.addObject(story, ObjectType.CREATED_STORY);
-				gc.addObject(chapt, ObjectType.CHAPTER);
 				finish();
 			}
 		});
@@ -97,6 +112,28 @@ public class EditChapterActivity extends Activity {
 				chapt.addIllustration(null);
 			}
 		});
+
+		// Add a choice to this chapter
+		addChoice.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getBaseContext(),
+						EditChoiceActivity.class);
+				intent.putExtra("chapter", chapt);
+				intent.putExtra("story", story);
+				startActivity(intent);
+			}
+		});
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Set the chapter text, if new Chapter will simply be blank
+		chapterContent.setText(chapt.getText());
+		choices.clear();
+		choices.addAll(gc.getAllChoices(chapt.getId()));
+		choiceAdapter.notifyDataSetChanged();
 	}
 
 	// private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;

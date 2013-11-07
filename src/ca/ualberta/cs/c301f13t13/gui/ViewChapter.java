@@ -65,7 +65,7 @@ public class ViewChapter extends Activity {
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 
 		// Setup the choices and choice adapters
-		choiceAdapter = new AdapterChoices(this, R.id.choiceText,
+		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
 		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
