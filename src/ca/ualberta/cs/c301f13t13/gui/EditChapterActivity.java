@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
@@ -66,6 +67,7 @@ public class EditChapterActivity extends Activity {
 	private SHController gc;
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
+	private ImageView illustration;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class EditChapterActivity extends Activity {
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
+		illustration = (ImageView) findViewById(R.id.chaptIllust);
 		gc = SHController.getInstance(getBaseContext());
 
 		// Get the story that chapter is being added to
@@ -91,9 +94,10 @@ public class EditChapterActivity extends Activity {
 		}
 
 		// Setup the adapter
-		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item, choices);
+		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
+				choices);
 		viewChoices.setAdapter(choiceAdapter);
-		
+
 		// Save the chapter to the database, or update if editing
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -109,39 +113,40 @@ public class EditChapterActivity extends Activity {
 				finish();
 			}
 		});
-		
+
 		addIllust.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(context);
-				
-				//Set dialog title
+
+				// Set dialog title
 				alert.setTitle("Choose method:");
-				
-				//Options that user may choose to add illustration
-				final String[] methods = {"Take Photo","Choose from Gallery"};
-				
-				alert.setSingleChoiceItems(methods, -1, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int item) {
-						switch(item) {
-						case 0:
-							//Take a photo
-							break;
-						case 1:
-							//Choose from gallery
-							break;
-						}
-						illustDialog.dismiss();
-					}
-				});
+
+				// Options that user may choose to add illustration
+				final String[] methods = { "Take Photo", "Choose from Gallery" };
+
+				alert.setSingleChoiceItems(methods, -1,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int item) {
+								switch (item) {
+								case 0:
+									// Take a photo
+									break;
+								case 1:
+									// Choose from gallery
+									break;
+								}
+								illustDialog.dismiss();
+							}
+						});
 				illustDialog = alert.create();
 				illustDialog.show();
-				//chapt.addIllustration(null);
+				// chapt.addIllustration(null);
 			}
-			
+
 		});
 
 		// Add a choice to this chapter
@@ -156,7 +161,7 @@ public class EditChapterActivity extends Activity {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -218,13 +223,13 @@ public class EditChapterActivity extends Activity {
 	// TextView tv = (TextView) findViewById(R.id.status);
 	// if (resultCode == RESULT_OK) {
 	// tv.setText("Photo OK!");
-	
+
 	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
 	// if (illsArray.size() == 0) {
-	// 		gc.addObject(ill, ObjectType.MEDIA);
+	// gc.addObject(ill, ObjectType.MEDIA);
 	// } else {
-	//      ill.setId(illustration.getId());
-	//		gc.updateObject(ill, ObjectType.MEDIA);
+	// ill.setId(illustration.getId());
+	// gc.updateObject(ill, ObjectType.MEDIA);
 	// }
 	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
@@ -239,11 +244,11 @@ public class EditChapterActivity extends Activity {
 	// tv.setText("Photo OK!");
 	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
 	// if (illsArray.size() == 0) {
-	// 		gc.addObject(ill, ObjectType.MEDIA);
+	// gc.addObject(ill, ObjectType.MEDIA);
 	// } else {
-	//      ill.setId(illustration.getId());
-	//		gc.updateObject(ill, ObjectType.MEDIA);
-	// }	
+	// ill.setId(illustration.getId());
+	// gc.updateObject(ill, ObjectType.MEDIA);
+	// }
 	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 	// } else if (resultCode == RESULT_CANCELED) {

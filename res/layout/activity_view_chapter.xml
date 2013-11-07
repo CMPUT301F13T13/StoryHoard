@@ -56,4 +56,12 @@
         </ListView>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/addPhotoButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/add_photo" >
+    </Button>
+
 </RelativeLayout>
