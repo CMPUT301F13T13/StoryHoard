@@ -150,6 +150,31 @@ public class SHController {
 		illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
+	
+	/**
+	 * Retrieves the first illustration of a chapter. Returns null
+	 * if the chapter has no illustrations.
+	 * 
+	 * @param chapterId
+	 *            Id of the chapter the illustrations are wanted from.
+	 * 
+	 * @return ArrayList of the illustrations.
+	 */
+	public Media getFirstIllustration(UUID chapterId) {
+		ArrayList<Media> illustrations = new ArrayList<Media>();
+		ArrayList<Object> objects = new ArrayList<Object>();
+		Media ill = null; 
+		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
+		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
+		
+		objects = sm.retrieve(criteria);
+		illustrations = Utilities.objectsToMedia(objects);
+		
+		if(illustrations.size() < 0) {
+			ill = illustrations.get(0);
+		}
+		return ill;
+	}	
 
 	/**
 	 * Retrieves all the photos that are in a chapter.

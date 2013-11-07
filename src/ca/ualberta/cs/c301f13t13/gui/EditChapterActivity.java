@@ -187,6 +187,14 @@ public class EditChapterActivity extends Activity {
 	// TextView tv = (TextView) findViewById(R.id.status);
 	// if (resultCode == RESULT_OK) {
 	// tv.setText("Photo OK!");
+	
+	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
+	// if (illsArray.size() == 0) {
+	// 		gc.addObject(ill, ObjectType.MEDIA);
+	// } else {
+	//      ill.setId(illustration.getId());
+	//		gc.updateObject(ill, ObjectType.MEDIA);
+	// }
 	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 	// } else if (resultCode == RESULT_CANCELED) {
@@ -198,6 +206,13 @@ public class EditChapterActivity extends Activity {
 	// TextView tv = (TextView) findViewById(R.id.status);
 	// if (resultCode == RESULT_OK) {
 	// tv.setText("Photo OK!");
+	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
+	// if (illsArray.size() == 0) {
+	// 		gc.addObject(ill, ObjectType.MEDIA);
+	// } else {
+	//      ill.setId(illustration.getId());
+	//		gc.updateObject(ill, ObjectType.MEDIA);
+	// }	
 	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 	// } else if (resultCode == RESULT_CANCELED) {
