@@ -69,5 +69,6 @@
     <string name="title_activity_view_browse_chapters">All Story Chapters</string>
     <string name="add_new_chapter">Add New Chapter</string>
     <string name="no_text">No text</string>
+    <string name="choiceText">Choice Text</string>
 
 </resources>

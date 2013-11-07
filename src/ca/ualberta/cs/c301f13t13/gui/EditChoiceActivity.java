@@ -16,101 +16,72 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
-/**
- * Add Choice Activity
- * 
- * Purpose:
- * 	- To add a choice to an existing chapter
- * 	- The author can:
- * 		-Set the text for a choice in a given chapter
- * 		-Link the choice to an existing chapter
- * 		-Link the choice to a new chapter
- * 
- *
- * 
- * @author joshuatate
- */
+import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
-public class EditChoiceActivity extends Activity  {  // CHANGE THIS TO CHOICE MANAGER ONCE CLASS HAS BEEN MADE
-	
-	private Chapter chapt;
-	private Choice choice;
-	private Button existingChapterButton;
-	private Button newChapterButton;
-	private Button cancelButton;
-	private EditText choiceDesc;
+public class EditChoiceActivity extends Activity {
+
+	private EditText choiceText;
+	private ListView chapters;
+	private AdapterChapters chapterAdapter;
+	private ArrayList<Chapter> data = new ArrayList<Chapter>();
+	private Story story;
+	private Chapter fromChapter;
+	private Chapter toChapter;
+	private SHController gc;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//Get the chapter that choice is being added to
-		Bundle bundle = this.getIntent().getExtras();
-		if (bundle != null) {
-			chapt = (Chapter) bundle.getSerializable(Constants._ID);
-			choice.setCurrentChapter(chapt.getId());
-		}
-		
 		setContentView(R.layout.activity_edit_choice);
 
-		existingChapterButton = (Button)findViewById(R.id.existing_chapter_button);
-		existingChapterButton.setOnClickListener(new View.OnClickListener() {
+		gc = SHController.getInstance(this);
 
+		choiceText = (EditText) findViewById(R.id.choiceText);
+		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
+		chapterAdapter = new AdapterChapters(this,
+				R.layout.browse_chapter_item, data);
+		chapters.setAdapter(chapterAdapter);
+
+		// Grab the data from the previous activity
+		Bundle bundle = this.getIntent().getExtras();
+		story = (Story) bundle.get("story");
+		fromChapter = (Chapter) bundle.get("chapter");
+
+		// Handle adding the choice into the chapter
+		chapters.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onClick(View v) {
-				//Connect chapter to an existing one
-				Intent intent = new Intent(getApplicationContext(),
-						ViewAllChaptersActivity.class);
-				//Notify activity that we are selecting
-				//rather than viewing
-				intent.putExtra("viewing", false);
-				intent.putExtra("Choice",choice);
-				startActivity(intent);
-			}
-		});
-
-		newChapterButton = (Button)findViewById(R.id.new_chapter_button);
-		newChapterButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//Connect chapter to a new one
-
-			}
-		});
-
-		choiceDesc = (EditText)findViewById(R.id.chapter_title);
-		choiceDesc.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(
-					CharSequence c, int start, int end, int count) {
-				choice.setText(c.toString());
-			}
-			public void beforeTextChanged(
-					CharSequence c, int start, int end, int count) {}
-			public void afterTextChanged(Editable e) {}
-		});
-
-		cancelButton = (Button)findViewById(R.id.dialog_cancel_button);
-		cancelButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				toChapter = data.get(arg2);
+				String text = choiceText.getText().toString();
+				Choice addedChoice = new Choice(fromChapter.getId(), toChapter
+						.getId(), text);
+				gc.addObject(addedChoice, ObjectType.CHOICE);
 				finish();
-
 			}
 		});
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		data.clear();
+		data.addAll(gc.getAllChapters(story.getId()));
+		chapterAdapter.notifyDataSetChanged();
 	}
 }
