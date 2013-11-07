@@ -19,6 +19,9 @@ package ca.ualberta.cs.c301f13t13.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,6 +53,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
 
 public class EditChapterActivity extends Activity {
 
+	private Context context = this;
 	private Chapter chapt;
 	private Story story;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -61,6 +65,7 @@ public class EditChapterActivity extends Activity {
 	private boolean isEditing;
 	private SHController gc;
 	private AdapterChoices choiceAdapter;
+	private AlertDialog illustDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +114,34 @@ public class EditChapterActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				chapt.addIllustration(null);
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				
+				//Set dialog title
+				alert.setTitle("Choose method:");
+				
+				//Options that user may choose to add illustration
+				final String[] methods = {"Take Photo","Choose from Gallery"};
+				
+				alert.setSingleChoiceItems(methods, -1, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch(item) {
+						case 0:
+							//Take a photo
+							break;
+						case 1:
+							//Choose from gallery
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
+				illustDialog = alert.create();
+				illustDialog.show();
+				//chapt.addIllustration(null);
 			}
+			
 		});
 
 		// Add a choice to this chapter
