@@ -191,9 +191,8 @@ public class EditChapterActivity extends Activity {
 		choices.addAll(gc.getAllChoices(chapt.getId()));
 		choiceAdapter.notifyDataSetChanged();
 		
-		// Getting photos and illustrations
-		photoList = chapt.getPhotos();
-		illList = chapt.getIllustrations();
+		// Getting illustrations
+		illList = gc.getAllIllustrations(chapt.getId());
 
 		// Not sure if photos need to be displayed here?
 		
@@ -209,8 +208,7 @@ public class EditChapterActivity extends Activity {
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
 	public View insertImage(Media ill) {
-		Bitmap bm = Utilities
-				.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
+		Bitmap bm = Utilities.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
 		LinearLayout layout = new LinearLayout(getApplicationContext());
 
 		layout.setLayoutParams(new LayoutParams(250, 250));
