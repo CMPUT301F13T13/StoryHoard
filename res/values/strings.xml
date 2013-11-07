@@ -65,7 +65,7 @@
     <string name="title_viewChapter">View Chapter</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="edit_existing_story">Edit Story Content</string>
-    <string name="edit_story_metadata">Edit Story Metadata</string>
+    <string name="edit_story_metadata">Edit Story Details</string>
     <string name="chapter_content">Dummy Chapter Content</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_view_browse_chapters">All Story Chapters</string>
