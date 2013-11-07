@@ -101,7 +101,7 @@ public class ViewStory extends Activity {
 	@Override
 	public void onResume() {
 		focusedStory = gc.getCompleteStory(storyID);
-		storyCover.setImageBitmap(focusedStory.getImage());
+//		storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
 		if (focusedStory.getTitle().equals("")) {
 			storyTitle.setText("<No Title>");

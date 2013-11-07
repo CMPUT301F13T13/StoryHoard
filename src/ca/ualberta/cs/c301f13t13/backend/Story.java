@@ -39,7 +39,6 @@ public class Story implements Serializable {
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
 	private String phoneId;
-	private Bitmap image;
 
 	/**
 	 * Initializes a new story object without need an id as an argument.
@@ -154,14 +153,14 @@ public class Story implements Serializable {
 		return this.description;
 	}
 
-	/**
-	 * Returns the story's cover image.
-	 * 
-	 * @return
-	 */
-	public Bitmap getImage() {
-		return this.image;
-	}
+//	/**
+//	 * Returns the story's cover image.
+//	 * 
+//	 * @return
+//	 */
+//	public Bitmap getImage() {
+//		return this.image;
+//	}
 
 	/**
 	 * Returns the chapters of the story.

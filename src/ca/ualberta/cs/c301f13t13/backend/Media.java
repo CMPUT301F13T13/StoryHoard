@@ -16,6 +16,7 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -33,10 +34,10 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
  * @author Ashley Brown
  * 
  */
-public class Media {
+public class Media implements Serializable{
 	private UUID id;
 	private UUID chapterId;
-	private Uri uri;
+	private String uri;
 	private String type;
 	private String bitmapString;
 
@@ -56,11 +57,14 @@ public class Media {
 	public Media(UUID chapterId, Uri uri, String type) {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
-		this.uri = uri;
 		this.type = type;
 		if (uri != null) {
+			this.uri = uri.toString();
 			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
+		} else {
+			this.uri = new String();
+			bitmapString = new String();
 		}
 	}
 
@@ -77,11 +81,14 @@ public class Media {
 	public Media(UUID id, UUID chapterId, Uri uri, String type) {
 		this.id = id;
 		this.chapterId = chapterId;
-		this.uri = uri;
 		this.type = type;
 		if (uri != null) {
+			this.uri = uri.toString();
 			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
+		} else {
+			this.uri = new String();
+			bitmapString = new String();
 		}
 	}
 
@@ -111,7 +118,7 @@ public class Media {
 	 * @return
 	 */
 	public Uri getUri() {
-		return uri;
+		return Uri.parse(uri);
 	}
 
 	/**
@@ -167,7 +174,7 @@ public class Media {
 	 * @param uri
 	 */
 	public void setUri(Uri uri) {
-		this.uri = uri;
+		this.uri = uri.toString();
 		if (uri != null) {
 			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
@@ -233,6 +240,6 @@ public class Media {
 	@Override
 	public String toString() {
 		return "Media [id=" + id + ", chapter_id=" + chapterId + ", uri="
-				+ uri.toString() + ", type=" + type + "]";
+				+ uri + ", type=" + type + "]";
 	}
 }

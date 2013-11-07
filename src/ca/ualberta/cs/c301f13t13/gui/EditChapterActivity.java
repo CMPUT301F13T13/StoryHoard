@@ -16,6 +16,7 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -23,19 +24,28 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 //import android.view.Menu; *Not sure if needed
 
@@ -67,7 +77,14 @@ public class EditChapterActivity extends Activity {
 	private SHController gc;
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
-	private ImageView illustration;
+//	private ImageView illustration;
+	private ArrayList<Media> photoList;
+	private ArrayList<Media> illList;
+	private LinearLayout illustrations;
+//	private LinearLayout photos;
+	private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
+	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	Uri imageFileUri;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +96,11 @@ public class EditChapterActivity extends Activity {
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
-		illustration = (ImageView) findViewById(R.id.chaptIllust);
+//		illustration = (ImageView) findViewById(R.id.chaptIllust);
 		gc = SHController.getInstance(getBaseContext());
+		
+		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions2);
+//		photos = (LinearLayout) findViewById(R.id.horizontalPhotos2);	
 
 		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
@@ -92,7 +112,7 @@ public class EditChapterActivity extends Activity {
 			story = (Story) bundle.get("New Story");
 			chapt = new Chapter(story.getId(), "");
 		}
-
+		
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
@@ -129,19 +149,19 @@ public class EditChapterActivity extends Activity {
 				alert.setSingleChoiceItems(methods, -1,
 						new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									// Take a photo
-									break;
-								case 1:
-									// Choose from gallery
-									break;
-								}
-								illustDialog.dismiss();
-							}
-						});
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto();
+							break;
+						case 1:
+							browseGallery();
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
 				illustDialog = alert.create();
 				illustDialog.show();
 				// chapt.addIllustration(null);
@@ -170,114 +190,104 @@ public class EditChapterActivity extends Activity {
 		choices.clear();
 		choices.addAll(gc.getAllChoices(chapt.getId()));
 		choiceAdapter.notifyDataSetChanged();
+		
+		// Getting photos and illustrations
+		photoList = chapt.getPhotos();
+		illList = chapt.getIllustrations();
+
+		// Not sure if photos need to be displayed here?
+		
+		// Insert Illustrations
+		for (Media ill : illList) {
+			illustrations.addView(insertImage(ill));
+		}					
 	}
 
-	// private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
-	// private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	// Uri imageFileUri;
-	//
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// setContentView(R.layout.activity_main);
-	//
-	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
-	// OnClickListener listener = new OnClickListener() {
-	// public void onClick(View v){
-	// takeAPhoto();
-	// }
-	// };
-	// button.setOnClickListener(listener);
-	// }
-	//
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// getMenuInflater().inflate(R.menu.activity_main, menu);
-	// return true;
-	// }
-	//
-	//
-	//
-	// public void takeAPhoto() {
-	// Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	//
-	// String folder =
-	// Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
-	// File folderF = new File(folder);
-	// if (!folderF.exists()) {
-	// folderF.mkdir();
-	// }
-	//
-	// String imageFilePath = folder + "/" +
-	// String.valueOf(System.currentTimeMillis()) + "jpg";
-	// File imageFile = new File(imageFilePath);
-	// imageFileUri = Uri.fromFile(imageFile);
-	//
-	// intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-	// startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	// }
-	//
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-	// TextView tv = (TextView) findViewById(R.id.status);
-	// if (resultCode == RESULT_OK) {
-	// tv.setText("Photo OK!");
+	/**
+	 * CODE REUSE URL:
+	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
+	 * Nov. 7, 2013 Author: Andr.oid Eric
+	 */
+	public View insertImage(Media ill) {
+		Bitmap bm = Utilities
+				.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
+		LinearLayout layout = new LinearLayout(getApplicationContext());
 
-	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
-	// if (illsArray.size() == 0) {
-	// gc.addObject(ill, ObjectType.MEDIA);
-	// } else {
-	// ill.setId(illustration.getId());
-	// gc.updateObject(ill, ObjectType.MEDIA);
-	// }
-	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
-	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
-	// } else if (resultCode == RESULT_CANCELED) {
-	// tv.setText("Photo canceled");
-	// } else {
-	// tv.setText("Not sure what happened!" + resultCode);
-	// }
-	// } else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-	// TextView tv = (TextView) findViewById(R.id.status);
-	// if (resultCode == RESULT_OK) {
-	// tv.setText("Photo OK!");
-	// Media ill = new Media(chapt.getId(), imageFileUri, Media.Illustration);
-	// if (illsArray.size() == 0) {
-	// gc.addObject(ill, ObjectType.MEDIA);
-	// } else {
-	// ill.setId(illustration.getId());
-	// gc.updateObject(ill, ObjectType.MEDIA);
-	// }
-	// ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
-	// button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
-	// } else if (resultCode == RESULT_CANCELED) {
-	// tv.setText("Photo canceled");
-	// } else {
-	// tv.setText("Not sure what happened!" + resultCode);
-	// }
-	// }
-	// }
-	//
-	// public void browseGallery() {
-	// Intent intent = new Intent(Intent.ACTION_PICK,
-	// android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	//
-	// String folder =
-	// Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
-	// File folderF = new File(folder);
-	// if (!folderF.exists()) {
-	// folderF.mkdir();
-	// }
-	//
-	// String imageFilePath = folder + "/" +
-	// String.valueOf(System.currentTimeMillis()) + "jpg";
-	// File imageFile = new File(imageFilePath);
-	// imageFileUri = Uri.fromFile(imageFile);
-	//
-	// intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-	//
-	// startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
-	//
-	// }
+		layout.setLayoutParams(new LayoutParams(250, 250));
+		layout.setGravity(Gravity.CENTER);
+
+		ImageView imageView = new ImageView(getApplicationContext());
+		imageView.setLayoutParams(new LayoutParams(220, 220));
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		imageView.setImageBitmap(bm);
+
+		layout.addView(imageView);
+		return layout;
+	}	
+
+	/**
+	 * Code for taking a photo
+	 */
+	public void takePhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+		String folder =
+				Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+		if (!folderF.exists()) {
+			folderF.mkdir();
+		}
+
+		String imageFilePath = folder + "/" +
+				String.valueOf(System.currentTimeMillis()) + "jpg";
+		File imageFile = new File(imageFilePath);
+		imageFileUri = Uri.fromFile(imageFile);
+
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+	}
+
+	/** 
+	 * Code for browsing the gallery
+	 */
+	public void browseGallery() {
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+		String folder =
+				Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+		if (!folderF.exists()) {
+			folderF.mkdir();
+		}
+
+		String imageFilePath = folder + "/" +
+				String.valueOf(System.currentTimeMillis()) + "jpg";
+		File imageFile = new File(imageFilePath);
+		imageFileUri = Uri.fromFile(imageFile);
+
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+
+		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
+
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent
+			data) {
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE 
+				|| requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+
+				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
+				gc.addObject(ill, ObjectType.MEDIA);
+				illustrations.addView(insertImage(ill));
+
+			} else if (resultCode == RESULT_CANCELED) {
+				System.out.println("cancelled taking a photo" );
+			} else {
+				System.err.println("Error in taking a photo" + resultCode);
+			}
+		} 
+	}	
 }
+

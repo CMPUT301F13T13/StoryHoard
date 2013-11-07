@@ -5,14 +5,20 @@
     android:gravity="center"
     android:orientation="vertical" >
     
-    <ImageView 
-        android:id="@+id/chaptIllust"
-        android:layout_width="fill_parent"
+     <HorizontalScrollView
+        android:id="@+id/horizontalSCIllustraions2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/chapterEditText"
-        android:src="@drawable/ic_launcher">
-    </ImageView>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:id="@+id/horizontalIllustraions2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </HorizontalScrollView>   
 
     <EditText
         android:id="@+id/chapterEditText"
