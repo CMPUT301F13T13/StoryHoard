@@ -38,6 +38,10 @@
     <string name="my_story">My Stories</string>
     <string name="story_type">Choose a story type</string>
     <string name="view_browse_story">View Story</string>
+    <string name="add_chapter_illust">Add Illustration</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="search_results">Search Results</string>
+    
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
@@ -63,11 +67,13 @@
     <string name="title_viewChapter">View Chapter</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="edit_existing_story">Edit Story Content</string>
-    <string name="edit_story_metadata">Edit Story Metadata</string>
+    <string name="edit_story_metadata">Edit Story Details</string>
     <string name="chapter_content">Dummy Chapter Content</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_view_browse_chapters">All Story Chapters</string>
     <string name="add_new_chapter">Add New Chapter</string>
     <string name="no_text">No text</string>
+    <string name="choiceText">Choice Text</string>
+    <string name="title_activity_view_search_results">ViewSearchResults</string>
 
 </resources>

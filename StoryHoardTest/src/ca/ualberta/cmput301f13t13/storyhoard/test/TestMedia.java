@@ -13,9 +13,11 @@ import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
- * Class meant for the testing of the Media class in the StoryHoard application.
+ * Class meant for the testing of the Media class in the StoryHoard 
+ * application.
  * 
- * @author Owner
+ * @author Stephanie Gil
+ * 
  * @see Media
  */
 public class TestMedia extends

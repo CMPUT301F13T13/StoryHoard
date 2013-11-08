@@ -31,7 +31,8 @@ import android.test.ActivityInstrumentationTestCase2;
  * Class meant for the testing of the MediaManager class in the StoryHoard
  * application.
  * 
- * @author Stephanie
+ * @author Stephanie Gil
+ * 
  * @see MediaManager
  */
 public class TestMediaManager extends

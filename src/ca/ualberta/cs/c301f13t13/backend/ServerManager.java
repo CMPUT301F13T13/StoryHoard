@@ -35,10 +35,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 /**
  * 
  * Role: Interacts with the server by inserting, retrieving, updating, and
@@ -49,17 +48,14 @@ import com.google.gson.reflect.TypeToken;
  * Date: Nov. 4th, 2013 
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
- * Original authors:
  * @author Abram Hindle
  * @author Chenlei Zhang
- * 
- * Modifications by:
- * @author Ashley
- * @author Stephanie
+ * @author Ashley Brown
+ * @author Stephanie Gil
  */
 public class ServerManager implements StoringManager{
 	private static HttpClient httpclient = null;		// Http Connector
-	private static Gson gson = null;		// JSON Utilities
+	private static Gson gson = null;					// JSON Utilities
 	private static ServerManager self = null;
 	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
 	

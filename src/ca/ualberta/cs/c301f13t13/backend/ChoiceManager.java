@@ -38,7 +38,6 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
  * 
  * @see Choice
  * @see StoringManager
- * @see Model
  *
  */
 

@@ -13,7 +13,7 @@ import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
 /**
  * Test case for the activity to edit choices
  * 
- * @author joshuatate
+ * @author Joshua Tate
  * 
  */
 public class TestEditChoiceActivity extends
@@ -41,5 +41,7 @@ public class TestEditChoiceActivity extends
 	public void test() {
 		fail("Not yet implemented");
 	}
+	
+	
 
 }

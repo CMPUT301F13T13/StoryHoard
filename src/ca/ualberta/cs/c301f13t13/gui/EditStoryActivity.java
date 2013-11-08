@@ -19,24 +19,29 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
  * Activity for editing the story metadata
+ * 
  * @author Alexander Wong
  * 
  */
 public class EditStoryActivity extends Activity {
+	private Context context = this;
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
@@ -45,12 +50,13 @@ public class EditStoryActivity extends Activity {
 	private Story newStory;
 	private SHController gc;
 	private boolean isEditing;
+	private AlertDialog imageDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_story);
-		
+
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Story Metadata");
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -73,7 +79,7 @@ public class EditStoryActivity extends Activity {
 			newDescription.setText(newStory.getDescription());
 			addfirstChapter.setText("Save Metadata");
 		}
-		
+
 		addfirstChapter.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -88,9 +94,10 @@ public class EditStoryActivity extends Activity {
 					newStory.setAuthor(author);
 					newStory.setTitle(title);
 					newStory.setDescription(description);
-					gc.updateObject(newStory, SHController.STORY);
+					gc.updateObject(newStory, ObjectType.CREATED_STORY);
 				} else {
-					newStory = new Story(title, author, description, Utilities.getPhoneId(getBaseContext()));
+					newStory = new Story(title, author, description, Utilities
+							.getPhoneId(getBaseContext()));
 					Intent intent = new Intent(getApplicationContext(),
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);
@@ -105,9 +112,32 @@ public class EditStoryActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getBaseContext(),
-						"Add Image not implemented yet", Toast.LENGTH_SHORT)
-						.show();
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+				// Set dialog title
+				alert.setTitle("Choose method:");
+
+				// Options that user may choose to add photo
+				final String[] methods = { "Take Photo", "Choose from Gallery" };
+
+				alert.setSingleChoiceItems(methods, -1,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int item) {
+								switch (item) {
+								case 0:
+									// Take a photo
+									break;
+								case 1:
+									// Choose from gallery
+									break;
+								}
+								imageDialog.dismiss();
+							}
+						});
+				imageDialog = alert.create();
+				imageDialog.show();
 			}
 		});
 	}

@@ -1,5 +1,3 @@
-package ca.ualberta.cs.c301f13t13.gui;
-
 /**
  * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
  *
@@ -16,32 +14,33 @@ package ca.ualberta.cs.c301f13t13.gui;
  * limitations under the License.
  */
 
+package ca.ualberta.cs.c301f13t13.gui;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
- * Search Activity
+ * Search Results activity
  * 
- * Allows user to search for a specific story
+ * Displays a list of search results with the parameters given by the user
  * 
  * @author Kim Wu
  * 
  */
-
-public class SearchActivity extends Activity {
+public class SearchResultsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_search);
+		setContentView(R.layout.activity_view_search_results);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
+		getMenuInflater().inflate(R.menu.view_search_results, menu);
 		return true;
 	}
 

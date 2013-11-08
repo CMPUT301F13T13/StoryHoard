@@ -57,7 +57,7 @@ URL:https://github.com/abramhindle/FillerCreepForAndroid
 LonelyTweeter Camera Code from Lab  
 Author: Joshua Charles Campbell  
 License: Unlicense  
-Date: soon to come...
+Date: Nov. 7, 2013
 
 Converting Images to JSON Objects code   
 URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/  

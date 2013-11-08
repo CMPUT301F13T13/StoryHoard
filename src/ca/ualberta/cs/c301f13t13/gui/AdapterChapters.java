@@ -28,7 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 
 /**
- * Class which handles taking the Choice object and adapting it to a displayable
+ * Class which handles taking the Chapter object and adapting it to a displayable
  * view type
  * 
  * @author alexanderwong

@@ -31,7 +31,8 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * Class meant for the testing of the Choice class in the StoryHoard
  * application.
  * 
- * @author Ashley
+ * @author Ashley Brown
+ * 
  * @see Choice
  */
 public class TestChoice extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
@@ -80,6 +81,9 @@ public class TestChoice extends ActivityInstrumentationTestCase2<ViewBrowseStori
 		assertTrue(info.get("curr_chapter").equals(chapId.toString()));
 	}
 
+	/**
+	 * Tests the setters and getters methods
+	 */
 	public void testSettersGetters() {
 		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
 				"opt1");

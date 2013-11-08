@@ -39,7 +39,6 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
  * 
  * @see Media
  * @see StoringManager
- * @see Model
  */
 public class MediaManager implements StoringManager{
 	private static DBHelper helper = null;

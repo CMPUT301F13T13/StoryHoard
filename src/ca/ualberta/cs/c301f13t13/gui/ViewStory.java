@@ -52,7 +52,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * @author alexanderwong
  * 
  */
-public class ViewBrowseStory extends Activity {
+public class ViewStory extends Activity {
 	Story focusedStory;
 	SHController gc;
 
@@ -89,7 +89,7 @@ public class ViewBrowseStory extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Begin reading, go to first chapter
-				Intent intent = new Intent(getBaseContext(), ViewChapterActivity.class);
+				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", focusedStory.getFirstChapterId());
 				startActivity(intent);
@@ -101,7 +101,7 @@ public class ViewBrowseStory extends Activity {
 	@Override
 	public void onResume() {
 		focusedStory = gc.getCompleteStory(storyID);
-		storyCover.setImageBitmap(focusedStory.getImage());
+//		storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
 		if (focusedStory.getTitle().equals("")) {
 			storyTitle.setText("<No Title>");

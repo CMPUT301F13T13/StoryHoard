@@ -42,13 +42,26 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <ListView
-        android:id="@+id/chapterChoices"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/horizontalSCPhotos"
-        android:paddingTop="10sp" >
-    </ListView>
+        android:orientation="horizontal"
+        android:paddingTop="20sp" >
+
+        <ListView
+            android:id="@+id/chapterChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addPhotoButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/add_photo" >
+    </Button>
 
 </RelativeLayout>

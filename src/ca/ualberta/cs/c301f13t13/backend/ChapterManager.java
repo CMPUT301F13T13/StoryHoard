@@ -34,11 +34,10 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * 
  * Design Pattern: Singleton
  * 
- * @author Stephanie
+ * @author Stephanie Gil
  * 
  * @see Chapter
  * @see StoringManager
- * @see Model
  */
 public class ChapterManager implements StoringManager {
 	private static DBHelper helper = null;
@@ -83,8 +82,7 @@ public class ChapterManager implements StoringManager {
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID,
 				(chapter.getId()).toString());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId()
-				.toString());
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId().toString());
 		if (chapter.getText() != null) {
 			values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		}
