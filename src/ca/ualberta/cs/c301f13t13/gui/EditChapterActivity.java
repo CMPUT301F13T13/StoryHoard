@@ -111,7 +111,6 @@ public class EditChapterActivity extends Activity {
 		story = (Story) bundle.get("Story");
 		chapt = (Chapter) bundle.get("Chapter");
 
-
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
@@ -127,7 +126,7 @@ public class EditChapterActivity extends Activity {
 				} else {
 					story.addChapter(chapt);
 					if (!addingNewChapt) {
-						gc.addObject(story, ObjectType.CREATED_STORY);						
+						gc.addObject(story, ObjectType.CREATED_STORY);
 					}
 					gc.addObject(chapt, ObjectType.CHAPTER);
 				}
@@ -135,39 +134,43 @@ public class EditChapterActivity extends Activity {
 			}
 		});
 
+		/*
+		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
+		 * IMPLEMENTED MESSAGE HERE.
+		 */
 		addIllust.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				//
+				// AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				// // Set dialog title
+				// alert.setTitle("Choose method:");
+				// // Options that user may choose to add illustration
+				// final String[] methods = { "Take Photo",
+				// "Choose from Gallery" };
+				// alert.setSingleChoiceItems(methods, -1,
+				// new DialogInterface.OnClickListener() {
+				// @Override
+				// public void onClick(DialogInterface dialog, int item) {
+				// switch (item) {
+				// case 0:
+				// takePhoto();
+				// break;
+				// case 1:
+				// browseGallery();
+				// break;
+				// }
+				// illustDialog.dismiss();
+				// }
+				// });
+				// illustDialog = alert.create();
+				// illustDialog.show();
+				// // chapt.addIllustration(null);
 
-				// Set dialog title
-				alert.setTitle("Choose method:");
-
-				// Options that user may choose to add illustration
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto();
-									break;
-								case 1:
-									browseGallery();
-									break;
-								}
-								illustDialog.dismiss();
-							}
-						});
-				illustDialog = alert.create();
-				illustDialog.show();
-				// chapt.addIllustration(null);
+				Toast.makeText(getBaseContext(),
+						"Not implemented this iteration", Toast.LENGTH_SHORT)
+						.show();
 			}
-
 		});
 
 		// Add a choice to this chapter
@@ -187,7 +190,7 @@ public class EditChapterActivity extends Activity {
 				}
 			}
 		});
-		
+
 		// Set the chapter text, if new Chapter will simply be blank
 		chapterContent.setText(chapt.getText());
 	}
@@ -211,10 +214,9 @@ public class EditChapterActivity extends Activity {
 	}
 
 	/**
-	 * CODE REUSE 
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
-	 * Nov. 7, 2013 
-	 * Author: Andr.oid Eric
+	 * CODE REUSE URL:
+	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
+	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
 	public View insertImage(Media ill) {
 		Bitmap bm = Utilities
@@ -236,11 +238,8 @@ public class EditChapterActivity extends Activity {
 	/**
 	 * Code for taking a photo
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
 	public void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -264,11 +263,8 @@ public class EditChapterActivity extends Activity {
 	/**
 	 * Code for browsing the gallery
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
 	public void browseGallery() {
 		Intent intent = new Intent(Intent.ACTION_PICK,
@@ -292,21 +288,17 @@ public class EditChapterActivity extends Activity {
 
 	}
 
-
 	/**
 	 * Activity results for taking photos and browsing gallery.
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
-	protected void onActivityResult(int requestCode, int resultCode, Intent
-			data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
+				Media ill = new Media(chapt.getId(), imageFileUri,
+						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 				insertIntoGallery();
 			} else if (resultCode == RESULT_CANCELED) {
@@ -318,21 +310,23 @@ public class EditChapterActivity extends Activity {
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = data.getData();
-				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
+				Media ill = new Media(chapt.getId(), imageFileUri,
+						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo" );
+				System.out.println("cancelled taking a photo");
 			} else {
 				System.err.println("Error in taking a photo" + resultCode);
-			}			
+			}
 		}
-	}	
+	}
 
-	/** 
+	/**
 	 * Adds an image into the gallery
 	 */
 	public void insertIntoGallery() {
-		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		Intent mediaScanIntent = new Intent(
+				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 		mediaScanIntent.setData(imageFileUri);
 	}
 }
