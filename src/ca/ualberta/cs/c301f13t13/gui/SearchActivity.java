@@ -17,8 +17,12 @@ package ca.ualberta.cs.c301f13t13.gui;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -31,11 +35,23 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  */
 
 public class SearchActivity extends Activity {
+	private Button searchButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+		searchButton = (Button) findViewById(R.id.searchButton);
+		
+		searchButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getBaseContext(),
+							SearchResultsActivity.class);
+					finish();
+					startActivity(intent);
+				}
+			});
 	}
 
 	@Override
@@ -46,3 +62,7 @@ public class SearchActivity extends Activity {
 	}
 
 }
+
+
+
+
