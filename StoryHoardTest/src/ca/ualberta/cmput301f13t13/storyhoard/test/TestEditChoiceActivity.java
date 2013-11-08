@@ -45,15 +45,13 @@ public class TestEditChoiceActivity extends
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
-		mActivity = getActivity();
-		mActivity.findViewById(ca.ualberta.cmput301f13t13.storyhoard.R.layout.activity_edit_choice);
 	}
 
 	@Test
 	public void test() {
 		fail("Not yet implemented");
+		mActivity = getActivity();
+		mActivity.findViewById(ca.ualberta.cmput301f13t13.storyhoard.R.layout.activity_edit_choice);	
+		
 	}
-	
-	
-
 }

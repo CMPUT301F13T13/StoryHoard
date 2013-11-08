@@ -230,7 +230,7 @@ public class TestSHController extends
 				Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
 		Story s3 = new Story("Bob the cow", "me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
+				"34532432423");
 		s3.setFirstChapterId(UUID.randomUUID());
 		Story s4 = new Story("sad cow", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
@@ -242,7 +242,7 @@ public class TestSHController extends
 				Utilities.getPhoneId(getActivity()));
 		s6.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, ObjectType.CREATED_STORY);
+		gc.addObject(s1, ObjectType.CACHED_STORY);
 		gc.addObject(s2, ObjectType.CREATED_STORY);
 		gc.addObject(s3, ObjectType.CREATED_STORY);
 		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
@@ -267,7 +267,7 @@ public class TestSHController extends
 
 		// title is sad cow, published
 		stories = gc.searchStory(null, "me", ObjectType.PUBLISHED_STORY);
-		assertEquals(stories.size(), 2);
+		assertEquals(stories.size(), 3);
 	}
 
 	/**
