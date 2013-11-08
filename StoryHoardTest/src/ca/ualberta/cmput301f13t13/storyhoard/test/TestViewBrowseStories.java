@@ -8,7 +8,7 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 /**
  * Test case for the activity to view all stories
  * 
- * @author alexanderwong
+ * @author Alex Wong
  * 
  */
 public class TestViewBrowseStories extends

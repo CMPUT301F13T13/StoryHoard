@@ -35,7 +35,8 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * Class meant for the testing of the ChoiceManager class in the StoryHoard
  * application.
  * 
- * @author Ashley
+ * @author Ashley Brown
+ * 
  * @see ChoiceManager
  */
 public class TestChoiceManager extends
@@ -49,6 +50,7 @@ public class TestChoiceManager extends
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();

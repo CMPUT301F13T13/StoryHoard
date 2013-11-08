@@ -26,9 +26,11 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
- * Class meant for the testing of the Story class in the StoryHoard application.
+ * Class meant for the testing of the Story class in the StoryHoard 
+ * application.
  * 
- * @author Stephanie
+ * @author Stephanie Gil
+ * 
  * @see Story
  */
 public class TestStory extends

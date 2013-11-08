@@ -29,7 +29,8 @@ import android.test.ActivityInstrumentationTestCase2;
  * Class meant for the testing of the ChapterManager class in the StoryHoard
  * application.
  * 
- * @author Stephanie
+ * @author Stephanie Gil
+ * 
  * @see ChapterManager
  * 
  */
