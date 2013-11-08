@@ -35,7 +35,8 @@ import android.test.ActivityInstrumentationTestCase2;
  * Class meant for the testing of the Utilities class in the StoryHoard
  * application.
  * 
- * @author Stephanie
+ * @author Stephanie Gil
+ * 
  * @see Utilities
  */
 public class TestUtilities extends

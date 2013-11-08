@@ -23,7 +23,9 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
- * @author Owner
+ * Tests the methods of the ServerManager class.
+ * 
+ * @author Stephanie Gil
  *
  */
 public class TestServerManager extends ActivityInstrumentationTestCase2<ViewBrowseStories>{

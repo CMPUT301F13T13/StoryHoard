@@ -11,7 +11,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 
 /**
- * @author joshuatate
+ * Tests the editChapterActivity
+ * 
+ * @author Joshua Tate
  *
  */
 public class TestEditChapterActivity extends

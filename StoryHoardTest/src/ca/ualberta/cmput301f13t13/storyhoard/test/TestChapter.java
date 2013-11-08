@@ -31,7 +31,9 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * Class meant for the testing of the Chapter class in the StoryHoard
  * application.
  * 
- * @author Ashley, Stephanie
+ * @author Ashley Brown
+ * @author Stephanie Gil
+ * 
  * @see Chapter
  */
 public class TestChapter extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
@@ -88,6 +90,9 @@ public class TestChapter extends ActivityInstrumentationTestCase2<ViewBrowseStor
 		assertTrue(info.get("story_id").equals(sId.toString()));
 	}
 
+	/**
+	 * Tests the setters and getter methods
+	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
 		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
