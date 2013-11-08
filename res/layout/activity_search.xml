@@ -13,19 +13,6 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/author_search"
-            android:layout_width="match_parent"
-            android:layout_height="45sp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/author"
-            android:scrollbars="vertical"
-            android:textColor="#0C43A8"
-            android:textSize="20sp"
-            android:textStyle="bold" >
-        </EditText>
-
-        <EditText
             android:id="@+id/story_search"
             android:layout_width="match_parent"
             android:layout_height="45sp"
