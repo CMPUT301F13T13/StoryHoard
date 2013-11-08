@@ -36,6 +36,7 @@ import android.test.ActivityInstrumentationTestCase2;
  * application.
  * 
  * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  * @see Utilities
  */
@@ -49,6 +50,13 @@ public class TestUtilities extends
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+	}
+	/**
+	 * Tests the get phoneId returns a string of phoneid 
+	 */
+	
+	public void testGetPhoneId() {
+	assertFalse(Utilities.getPhoneId(this.getActivity()) == null);
 	}
 
 	/**
