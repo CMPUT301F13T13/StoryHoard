@@ -30,7 +30,7 @@ import android.view.Menu;
  * @author Kim Wu
  * 
  */
-public class ViewSearchResults extends Activity {
+public class SearchResultsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
