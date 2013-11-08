@@ -193,7 +193,7 @@ public class Story implements Serializable {
 	/**
 	 * Return the android id of the phone that made this story
 	 * 
-	 * @return
+	 * @return phone id
 	 */
 	public String getPhoneId() {
 		return this.phoneId;

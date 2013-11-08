@@ -97,7 +97,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the id of the media.
 	 * 
-	 * @return
+	 * @return id
 	 */
 	public UUID getId() {
 		return id;
