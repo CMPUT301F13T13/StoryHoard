@@ -32,6 +32,13 @@ import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
+/**
+ * Takes a storyID bundle, displays all the chapters related to that story.
+ * Used for editing chapters.
+ * 
+ * @author alexanderwwong
+ */
+
 public class ViewBrowseChapters extends Activity {
 
 	private SHController gc;
@@ -41,12 +48,6 @@ public class ViewBrowseChapters extends Activity {
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
 
-	/**
-	 * Takes a storyID bundle, displays all the chapters related to that story.
-	 * Used for editing chapters.
-	 * 
-	 * @author alexanderwwong
-	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,6 +74,7 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				intent.putExtra("isEditing", true);
+				intent.putExtra("addingNewChapt", false);
 				intent.putExtra("Story", story);
 				intent.putExtra("Chapter", chapter);
 				startActivity(intent);
@@ -93,7 +95,8 @@ public class ViewBrowseChapters extends Activity {
 			// Go to the add new chapter page for the specified story
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
-			intent.putExtra("isEditing", true);
+			intent.putExtra("isEditing", false);
+			intent.putExtra("addingNewChapt", true);
 			intent.putExtra("Story", story);
 			intent.putExtra("Chapter", new Chapter(storyID, null));
 			startActivity(intent);

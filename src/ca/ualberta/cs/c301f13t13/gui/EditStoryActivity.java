@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -101,7 +102,9 @@ public class EditStoryActivity extends Activity {
 					Intent intent = new Intent(getApplicationContext(),
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);
-					intent.putExtra("New Story", newStory);
+					intent.putExtra("addingNewChapt", false);
+					intent.putExtra("Story", newStory);
+					intent.putExtra("Chapter", new Chapter(newStory.getId(), ""));
 					startActivity(intent);
 				}
 				finish();
