@@ -22,7 +22,7 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final Uri uri = Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png");
+	private static final Uri uri = Uri.parse("https://cow");
 
 	public TestMedia() {
 		super(ViewBrowseStories.class);
@@ -32,6 +32,8 @@ public class TestMedia extends
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
+		fail("not yet implemented");
+		
 		// Make photo
 		try {
 			Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
@@ -54,6 +56,8 @@ public class TestMedia extends
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
+		fail("not yet implemented");
+		
 		Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
 
 		UUID id = photo.getId();
@@ -64,7 +68,7 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
-		photo.setUri(Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/published_stories.jpg"));
+		photo.setUri(Uri.parse("https://dog"));
 
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());

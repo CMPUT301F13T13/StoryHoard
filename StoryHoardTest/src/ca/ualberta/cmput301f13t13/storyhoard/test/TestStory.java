@@ -70,8 +70,10 @@ public class TestStory extends
 	public void testGetChapter() {
 		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
-		Chapter chapter1 = new Chapter(story.getId(), "On a cold, dark night.");
-		Chapter chapter2 = new Chapter(story.getId(), "On a sunny, bright day.");
+		Chapter chapter1 = new Chapter(story.getId(), 
+				"On a cold, dark night.");
+		Chapter chapter2 = new Chapter(story.getId(), 
+				"On a sunny, bright day.");
 		story.addChapter(chapter1);
 		story.addChapter(chapter2);
 

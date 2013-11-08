@@ -85,6 +85,7 @@ public class Choice implements Serializable {
 	}
 
 	// SETTERS
+	
 	/**
 	 * Set the Id of the choice.
 	 * 
@@ -122,6 +123,7 @@ public class Choice implements Serializable {
 	}
 
 	// GETTERS
+	
 	/**
 	 * Returns the Id of the choice.
 	 * 
@@ -161,8 +163,8 @@ public class Choice implements Serializable {
 	/**
 	 * Returns the information of the choice (id, chapterIdFrom, chapterIdTo)
 	 * that could be used in searching for a choice in the database. This
-	 * information is returned in a HashMap where the keys are the corresponding
-	 * Choice Table column names.
+	 * information is returned in a HashMap where the keys are the 
+	 * corresponding Choice Table column names.
 	 * 
 	 * @return HashMap
 	 */
@@ -180,12 +182,12 @@ public class Choice implements Serializable {
 
 		return info;
 	}
+	
 	/**
 	 * Returns choice as a string 
 	 * 
 	 * @return String
 	 */
-	
 	@Override
 	public String toString() {
 		return "Choice [id=" + id + ", Current Chapter=" + currentChapter

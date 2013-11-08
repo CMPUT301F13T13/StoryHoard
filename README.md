@@ -70,4 +70,10 @@ Date: Nov.5th,2013
 Licensed under Creative Commons  
 
 
+Photo / gallery related code
+CODE REUSE
+URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
+Date: Nov. 7, 2013
+Author: Andr.oid Eric
+
 

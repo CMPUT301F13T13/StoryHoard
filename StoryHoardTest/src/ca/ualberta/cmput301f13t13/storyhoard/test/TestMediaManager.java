@@ -37,7 +37,7 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestMediaManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final Uri uri = Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/all_chapters.png");
+	private static final Uri uri = Uri.parse("https://cow");
 	private MediaManager mm = null;
 	
 	public TestMediaManager() {
@@ -59,6 +59,7 @@ public class TestMediaManager extends
 	 * Tests adding and loading an image.
 	 */
 	public void testAddLoadImage() {
+		fail("not yet implemented");
 		Media mockMedia = new Media(UUID.randomUUID(), uri, Media.PHOTO);
 
 		mm.insert(mockMedia);
@@ -74,6 +75,8 @@ public class TestMediaManager extends
 	 * Tests getting all photos, and all illustrations belonging to a chapter.
 	 */
 	public void testGetAllMedia() {
+		fail("not yet implemented");
+		
 		UUID chapId = UUID.randomUUID();
 		Media m1 = new Media(chapId, uri, Media.PHOTO);
 		Media m2 = new Media(chapId, uri, Media.PHOTO);
@@ -113,6 +116,8 @@ public class TestMediaManager extends
 	 * Tests updating a chapter's media.
 	 */
 	public void testUpdateMedia() {
+		fail("not yet implemented");
+		
 		Chapter mockChapter = new Chapter(UUID.randomUUID(), "hi there");
 
 		// Making media for chapter
@@ -125,7 +130,7 @@ public class TestMediaManager extends
 		Media newM1 = (Media) objects.get(0);
 
 		newM1.setType(Media.ILLUSTRATION);
-		newM1.setUri(Uri.parse("https://raw.github.com/CMPUT301F13T13/StoryHoard/master/mockups/published_stories.jpg"));
+		newM1.setUri(Uri.parse("https://dog"));
 
 		mm.update(newM1);
 

@@ -82,7 +82,8 @@ public class ChapterManager implements StoringManager {
 		ContentValues values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID,
 				(chapter.getId()).toString());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, chapter.getStoryId().toString());
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
+				chapter.getStoryId().toString());
 		if (chapter.getText() != null) {
 			values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		}
@@ -155,9 +156,10 @@ public class ChapterManager implements StoringManager {
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, newC.getId().toString());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, newC.getStoryId()
-				.toString());
+		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, 
+				newC.getId().toString());
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
+				newC.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
 
 		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";

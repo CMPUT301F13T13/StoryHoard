@@ -36,7 +36,8 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * 
  * @see Chapter
  */
-public class TestChapter extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestChapter 
+		extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestChapter() {
 		super(ViewBrowseStories.class);
@@ -68,9 +69,9 @@ public class TestChapter extends ActivityInstrumentationTestCase2<ViewBrowseStor
 	}
 
 	/**
-	 * Tests retrieving the search information places within the story, i.e. the
-	 * id, title, author, description, and whether or not it was created by the
-	 * author.
+	 * Tests retrieving the search information places within the story, i.e. 
+	 * the id, title, author, description, and whether or not it was created 
+	 * by the author.
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything

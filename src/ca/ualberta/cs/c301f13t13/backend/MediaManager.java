@@ -56,6 +56,7 @@ public class MediaManager implements StoringManager{
 	 * the singleton design pattern.
 	 * 
 	 * @param context
+	 * 
 	 * @return
 	 */
 	public static MediaManager getInstance(Context context) {
@@ -65,6 +66,12 @@ public class MediaManager implements StoringManager{
 		return self;
 	}
 	
+	/**
+	 * Inserts a new media object into the database.
+	 * 
+	 * @param object
+	 * 			Media object to be inserted.
+	 */
 	@Override
 	public void insert(Object object) {
 		Media media = (Media) object;
@@ -81,6 +88,12 @@ public class MediaManager implements StoringManager{
 		
 	}
 
+	/**
+	 * Retrieves a media object from the database.
+	 * 
+	 * @param criteria 
+	 * 			Holds the search criteria.
+	 */	
 	@Override
 	public ArrayList<Object> retrieve(Object criteria) {
 		ArrayList<Object> results = new ArrayList<Object>();
@@ -126,6 +139,13 @@ public class MediaManager implements StoringManager{
 	}
 	
 
+	/**
+	 * Updates a media object already in the database.
+	 * 
+	 * 
+	 * @param newObject
+	 * 			Contains the changes to the object.
+	 */	
 	@Override
 	public void update(Object newObject) {
 		Media newM = (Media) newObject;
@@ -144,6 +164,19 @@ public class MediaManager implements StoringManager{
 		
 	}
 
+	/**
+	 * Creates the selection string (a prepared statement) to be used 
+	 * in the database query. Also creates an array holding the items
+	 * to be placed in the ? of the selection.
+	 *  
+	 * @param object
+	 * 			Holds the data needed to build the selection string 
+	 * 			and the selection arguments array.
+	 * @param sArgs
+	 * 			Holds the arguments to be passed into the selection string.
+	 * @return String
+	 * 			The selection string.
+	 */	
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
 		Media media = (Media) object;
@@ -161,7 +194,6 @@ public class MediaManager implements StoringManager{
 			if (counter < maxSize) {
 				selection += "AND ";
 			}
-
 		}
 		return selection;
 	}

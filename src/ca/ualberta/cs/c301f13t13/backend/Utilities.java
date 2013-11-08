@@ -42,10 +42,10 @@ public class Utilities {
 	 * @param objects
 	 * @return
 	 */
-	public static ArrayList<Story> objectsToStories(ArrayList<Object> objects) {
+	public static ArrayList<Story> objectsToStories(ArrayList<Object> objs) {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
-		for (Object obj : objects) {
+		for (Object obj : objs) {
 			stories.add((Story) obj);
 		}
 
@@ -58,10 +58,10 @@ public class Utilities {
 	 * @param objects
 	 * @return
 	 */
-	public static ArrayList<Chapter> objectsToChapters(ArrayList<Object> objects) {
+	public static ArrayList<Chapter> objectsToChapters(ArrayList<Object> objs) {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 
-		for (Object obj : objects) {
+		for (Object obj : objs) {
 			chapters.add((Chapter) obj);
 		}
 
@@ -74,10 +74,10 @@ public class Utilities {
 	 * @param objects
 	 * @return
 	 */
-	public static ArrayList<Choice> objectsToChoices(ArrayList<Object> objects) {
+	public static ArrayList<Choice> objectsToChoices(ArrayList<Object> objs) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 
-		for (Object obj : objects) {
+		for (Object obj : objs) {
 			choices.add((Choice) obj);
 		}
 
@@ -142,9 +142,10 @@ public class Utilities {
 	public static String getStringFromBitmap(Bitmap bitmapPicture) {
 		final int COMPRESSION_QUALITY = 100;
 		String encodedImage;
-		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_QUALITY,
-				byteArrayBitmapStream);
+		ByteArrayOutputStream byteArrayBitmapStream 
+				= new ByteArrayOutputStream();
+		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 
+				COMPRESSION_QUALITY, byteArrayBitmapStream);
 		byte[] b = byteArrayBitmapStream.toByteArray();
 		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 		return encodedImage;
@@ -163,7 +164,8 @@ public class Utilities {
 	public static Bitmap getBitmapFromString(String string) {
 
 		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
-		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 
+				0, decodedString.length);
 		return decodedByte;
 	}
 
@@ -179,7 +181,8 @@ public class Utilities {
 	 * 
 	 */
 	public static String getPhoneId(Context context) {
-		String PhoneId = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+		String PhoneId = Settings.Secure.getString(context.getContentResolver(), 
+				Settings.Secure.ANDROID_ID);
 		return PhoneId;
 
 	}
@@ -216,7 +219,8 @@ public class Utilities {
 	 * Date: Nov. 7, 2013
 	 * Author: Andr.oid Eric
 	 */	
-	public static Bitmap decodeSampledBitmapFromUri(Uri uri, int reqWidth, int reqHeight) {
+	public static Bitmap decodeSampledBitmapFromUri(Uri uri, 
+				int reqWidth, int reqHeight) {
 		Bitmap bm = null;
 
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -225,7 +229,8 @@ public class Utilities {
 		BitmapFactory.decodeFile(uri.getPath(), options);
 
 		// Calculate inSampleSize
-		options.inSampleSize = Utilities.calculateInSampleSize(options, reqWidth, reqHeight);
+		options.inSampleSize = Utilities.calculateInSampleSize(options, 
+				reqWidth, reqHeight);
 
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;

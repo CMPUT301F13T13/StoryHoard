@@ -37,7 +37,8 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
- * Activity for editing the story metadata
+ * Activity for editing the story metadata (title, author, description,
+ * and cover image).
  * 
  * @author Alexander Wong
  * 

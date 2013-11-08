@@ -280,8 +280,8 @@ public class Story implements Serializable {
 	/**
 	 * Returns the information of the story (id, title, author, PhoneId) that
 	 * could be used in searching for a story in the database. This information
-	 * is returned in a HashMap where the keys are the corresponding Story Table
-	 * column names.
+	 * is returned in a HashMap where the keys are the corresponding Story 
+	 * Table column names.
 	 * 
 	 * @return HashMap
 	 */

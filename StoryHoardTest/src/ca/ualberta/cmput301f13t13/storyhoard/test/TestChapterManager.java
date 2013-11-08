@@ -70,7 +70,8 @@ public class TestChapterManager extends
 	 * database.
 	 */
 	public void testAddLoadChapter() {
-		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), 
+				"bob went away");
 
 		cm.insert(mockChapter);
 		mockChapters = cm.retrieve(mockChapter);

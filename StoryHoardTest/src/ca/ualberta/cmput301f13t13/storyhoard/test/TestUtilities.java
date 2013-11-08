@@ -64,8 +64,10 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void testObjectsToStories() {
-		Story story = new Story("title", "author", "desc", Utilities.getPhoneId(this.getActivity()));
-		Story story2 = new Story("title2", "author2", "desc2", Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("title", "author", "desc", 
+				Utilities.getPhoneId(this.getActivity()));
+		Story story2 = new Story("title2", "author2", "desc2", 
+				Utilities.getPhoneId(this.getActivity()));
 		ArrayList<Object> objects = new ArrayList<Object>();
 		objects.add(story);
 		objects.add(story2);
@@ -120,6 +122,7 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void testObjectsToMedia() {
+		fail("not yet implemented");
 		Media media = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
 				Media.PHOTO);
 		Media media2 = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
@@ -134,5 +137,4 @@ public class TestUtilities extends
 			fail("converstion from objects to medias failed");
 		}
 	}
-
 }

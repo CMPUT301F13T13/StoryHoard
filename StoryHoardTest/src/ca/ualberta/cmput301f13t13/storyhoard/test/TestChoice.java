@@ -35,7 +35,8 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * 
  * @see Choice
  */
-public class TestChoice extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestChoice 
+		extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestChoice() {
 		super(ViewBrowseStories.class);
@@ -46,7 +47,8 @@ public class TestChoice extends ActivityInstrumentationTestCase2<ViewBrowseStori
 	 */
 	@SuppressWarnings("unused")
 	public void testCreateChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story",Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");

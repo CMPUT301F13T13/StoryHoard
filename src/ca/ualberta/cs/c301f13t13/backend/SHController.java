@@ -37,7 +37,7 @@ import android.content.Context;
 public class SHController {
 	// CONSTANTS
 	private Context context = null;
-	private static SHController self = null;  // SELF
+	private static SHController self = null;  	// SELF
 	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
@@ -74,10 +74,12 @@ public class SHController {
 		
 		switch(type) {
 		case CACHED_STORY: 
-			criteria = new Story(null, null, null, null, "NOT" + Utilities.getPhoneId(context));
+			criteria = new Story(null, null, null, null, "NOT" 
+					+ Utilities.getPhoneId(context));
 			break;
 		case CREATED_STORY:
-			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
+			criteria = new Story(null, null, null, null, 
+					Utilities.getPhoneId(context));
 			break;
 		case PUBLISHED_STORY:
 			criteria = new Story(null, null, null, null, null);
@@ -170,7 +172,7 @@ public class SHController {
 		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
 		
-		if(illustrations.size() < 0) {
+		if(illustrations.size() > 0) {
 			ill = illustrations.get(0);
 		}
 		return ill;
@@ -211,9 +213,9 @@ public class SHController {
 	}
 
 	/**
-	 * Used to search for stories matching the given search criteria. Users can
-	 * either search by specifying the title or author of the story. All stories
-	 * that match will be retrieved.
+	 * Used to search for stories matching the given search criteria. 
+	 * Users can either search by specifying the title or author of the story. 
+	 * All stories that match will be retrieved.
 	 * 
 	 * @param title
 	 *            Title of the story user is looking for.
@@ -224,7 +226,8 @@ public class SHController {
 	 *            
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title, String author, ObjectType type) {
+	public ArrayList<Story> searchStory(String title, String author, 
+				ObjectType type) {
 		Story criteria = null;
 		ArrayList<Object> objects = new ArrayList<Object>();
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -311,9 +314,9 @@ public class SHController {
 	}
 
 	/**
-	 * Updates either a story, chapter, or choice object. Must specify what type
-	 * of object it getting updated. Also, updates are happening to the database
-	 * of the phone, not the server.
+	 * Updates either a story, chapter, or choice object. Must specify what 
+	 * type of object it getting updated. Also, updates are happening to the 
+	 * database of the phone, not the server.
 	 * 
 	 * @param object
 	 *            Object to be updated.
