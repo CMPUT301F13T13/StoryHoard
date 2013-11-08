@@ -38,7 +38,7 @@ public class ManagerFactory {
 	 * singleton object.
 	 * 
 	 * @param type
-	 * @return
+	 * @return StoringManager
 	 */
 	public StoringManager getStoringManager(ObjectType type) {
 		switch (type) {

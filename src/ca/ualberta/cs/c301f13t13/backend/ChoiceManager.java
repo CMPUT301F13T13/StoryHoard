@@ -57,7 +57,7 @@ public class ChoiceManager implements StoringManager {
 	 * singleton design pattern. 
 	 *  
 	 * @param context
-	 * @return
+	 * @return ChoiceManager
 	 */
 	public static ChoiceManager getInstance(Context context) {
 		if (self == null) {

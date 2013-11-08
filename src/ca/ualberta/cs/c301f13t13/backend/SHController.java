@@ -48,7 +48,7 @@ public class SHController {
 	/**
 	 * Returns an instance of the general controller as a singleton.
 	 * 
-	 * @return
+	 * @return SHController
 	 */
 	public static SHController getInstance(Context context) {
 		if (self == null) {

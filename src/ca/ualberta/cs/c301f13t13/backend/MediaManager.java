@@ -57,7 +57,7 @@ public class MediaManager implements StoringManager{
 	 * 
 	 * @param context
 	 * 
-	 * @return
+	 * @return MediaManager
 	 */
 	public static MediaManager getInstance(Context context) {
 		if (self == null) {

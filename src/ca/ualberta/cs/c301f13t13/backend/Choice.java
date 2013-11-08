@@ -127,7 +127,7 @@ public class Choice implements Serializable {
 	/**
 	 * Returns the Id of the choice.
 	 * 
-	 * @return
+	 * @return id
 	 */
 	public UUID getId() {
 		return this.id;
@@ -136,7 +136,7 @@ public class Choice implements Serializable {
 	/**
 	 * Returns the chapterIdFrom of the choice.
 	 * 
-	 * @return
+	 * @return currentChapterId
 	 */
 	public UUID getCurrentChapter() {
 		return this.currentChapter;
@@ -145,7 +145,7 @@ public class Choice implements Serializable {
 	/**
 	 * Returns the chapterIdTo of the choice.
 	 * 
-	 * @return
+	 * @return nextChapterId
 	 */
 	public UUID getNextChapter() {
 		return this.nextChapter;
@@ -154,7 +154,7 @@ public class Choice implements Serializable {
 	/**
 	 * Returns the text of the choice.
 	 * 
-	 * @return
+	 * @return text
 	 */
 	public String getText() {
 		return this.text;

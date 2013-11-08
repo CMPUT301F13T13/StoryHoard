@@ -317,6 +317,8 @@ public class TestSHController extends
 
 		Chapter newc1 = chapters.get(0);
 		newc1.setText("a cow mooed");
+		
+		fail("not yet implemented");
 		Media m = new Media(c1.getId(), Uri.parse("https://"), Media.PHOTO);
 		newc1.addPhoto(m);
 

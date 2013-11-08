@@ -106,7 +106,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the chapter id the media belongs to.
 	 * 
-	 * @return
+	 * @return chapterId
 	 */
 	public UUID getChapterId() {
 		return this.chapterId;
@@ -115,7 +115,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the uri of the media.
 	 * 
-	 * @return
+	 * @return uri
 	 */
 	public Uri getUri() {
 		return Uri.parse(uri);
@@ -124,7 +124,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the media's type (PHOTO, ILLUSTRATION, AUDIO, or VIDEO).
 	 * 
-	 * @return
+	 * @return type
 	 */
 	public String getType() {
 		return type;
@@ -133,7 +133,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the media's bitmap.
 	 * 
-	 * @return
+	 * @return bitmap
 	 */
 	public Bitmap getBitmap() {
 		return Utilities.getBitmapFromString(bitmapString);
@@ -142,7 +142,7 @@ public class Media implements Serializable{
 	/**
 	 * Returns the media's bitmap as an encoded String
 	 * 
-	 * @return
+	 * @return bitmap string
 	 */
 	public String getBitmapString() {
 		return bitmapString;
@@ -234,8 +234,6 @@ public class Media implements Serializable{
 
 	/**
 	 * Converts a chapter object to a string.
-	 * 
-	 * @param String
 	 */
 	@Override
 	public String toString() {

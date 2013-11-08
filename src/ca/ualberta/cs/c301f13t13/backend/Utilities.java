@@ -40,7 +40,7 @@ public class Utilities {
 	 * Takes an array of objects and converts them all to Stories.
 	 * 
 	 * @param objects
-	 * @return
+	 * @return stories
 	 */
 	public static ArrayList<Story> objectsToStories(ArrayList<Object> objs) {
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -56,7 +56,7 @@ public class Utilities {
 	 * Takes an array of objects and converts them all to Chapters.
 	 * 
 	 * @param objects
-	 * @return
+	 * @return chapters
 	 */
 	public static ArrayList<Chapter> objectsToChapters(ArrayList<Object> objs) {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
@@ -72,7 +72,7 @@ public class Utilities {
 	 * Takes an array of objects and converts them all to Choice objects.
 	 * 
 	 * @param objects
-	 * @return
+	 * @return choices
 	 */
 	public static ArrayList<Choice> objectsToChoices(ArrayList<Object> objs) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -88,7 +88,7 @@ public class Utilities {
 	 * Takes an array of objects and converts them all to Media objects.
 	 * 
 	 * @param objects
-	 * @return
+	 * @return medias
 	 */
 	public static ArrayList<Media> objectsToMedia(ArrayList<Object> objects) {
 		ArrayList<Media> medias = new ArrayList<Media>();
@@ -108,8 +108,7 @@ public class Utilities {
 	 * 
 	 * Date: Nov. 2, 2013
 	 * 
-	 * @author Abram Hindle
-	 * @author Chenlei Zhang
+	 * Authors: Abram Hindle, Chenlei Zhang
 	 */
 	public static Uri createImageUri() {
 		Uri imageFileUri;

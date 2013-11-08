@@ -58,7 +58,7 @@ public class StoryManager implements StoringManager {
 	 * design pattern.
 	 * 
 	 * @param context
-	 * @return
+	 * @return StoryManager
 	 */
 	public static StoryManager getInstance(Context context) {
 		if (self == null) {

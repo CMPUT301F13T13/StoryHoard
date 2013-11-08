@@ -120,7 +120,7 @@ public class Story implements Serializable {
 	/**
 	 * Returns the Id of the story.
 	 * 
-	 * @return
+	 * @return id
 	 */
 	public UUID getId() {
 		return this.id;
@@ -129,7 +129,7 @@ public class Story implements Serializable {
 	/**
 	 * Returns the title of the story.
 	 * 
-	 * @return
+	 * @return title
 	 */
 	public String getTitle() {
 		return this.title;
@@ -138,7 +138,7 @@ public class Story implements Serializable {
 	/**
 	 * Returns the author of the story.
 	 * 
-	 * @return
+	 * @return author
 	 */
 	public String getAuthor() {
 		return this.author;
@@ -147,7 +147,7 @@ public class Story implements Serializable {
 	/**
 	 * Returns the description of the story.
 	 * 
-	 * @return
+	 * @return description
 	 */
 	public String getDescription() {
 		return this.description;
@@ -240,7 +240,7 @@ public class Story implements Serializable {
 	/**
 	 * Sets the first chapter of the story.
 	 * 
-	 * @param chapter
+	 * @param chapterId
 	 */
 	public void setFirstChapterId(UUID chapterId) {
 		firstChapterId = chapterId;

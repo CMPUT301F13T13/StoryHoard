@@ -42,7 +42,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Initializes a new chapter object with no id.
 	 * 
-	 * @param storyid
+	 * @param storyId
 	 *            The id of the story the chapter is from
 	 * @param text
 	 *            The chapter text that the user will be reading
@@ -148,7 +148,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Sets the story Id of the chapter.
 	 * 
-	 * @param storyid
+	 * @param storyId
 	 *            The id of the story the chapter is in
 	 */
 	public void setStoryId(UUID id) {
@@ -200,8 +200,8 @@ public class Chapter implements Serializable {
 	 * 
 	 * @param choice
 	 */
-	public void addChoice(Choice c) {
-		choices.add(c);
+	public void addChoice(Choice choice) {
+		choices.add(choice);
 	}
 
 	/**
@@ -209,8 +209,8 @@ public class Chapter implements Serializable {
 	 * 
 	 * @param photo
 	 */
-	public void addPhoto(Media p) {
-		photos.add(p);
+	public void addPhoto(Media photo) {
+		photos.add(photo);
 	}
 
 	/**
@@ -224,8 +224,6 @@ public class Chapter implements Serializable {
 
 	/**
 	 * Converts a chapter object to a string.
-	 * 
-	 * @param String
 	 */
 	@Override
 	public String toString() {
