@@ -75,17 +75,18 @@ public class EditChapterActivity extends Activity {
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private boolean isEditing;
+	private boolean addingNewChapt;
 	private SHController gc;
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
-	//	private ImageView illustration;
+	// private ImageView illustration;
 	private ArrayList<Media> photoList;
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
-	//	private LinearLayout photos;
+	// private LinearLayout photos;
 	private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	Uri imageFileUri;	
+	Uri imageFileUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,22 +98,18 @@ public class EditChapterActivity extends Activity {
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
-		//		illustration = (ImageView) findViewById(R.id.chaptIllust);
+		// illustration = (ImageView) findViewById(R.id.chaptIllust);
 		gc = SHController.getInstance(getBaseContext());
 
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions2);
-		//		photos = (LinearLayout) findViewById(R.id.horizontalPhotos2);	
+		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos2);
 
 		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
 		isEditing = bundle.getBoolean("isEditing");
-		if (isEditing) {
-			story = (Story) bundle.get("Story");
-			chapt = (Chapter) bundle.get("Chapter");
-		} else {
-			story = (Story) bundle.get("New Story");
-			chapt = new Chapter(story.getId(), "");
-		}
+		addingNewChapt = bundle.getBoolean("addingNewChapt");
+		story = (Story) bundle.get("Story");
+		chapt = (Chapter) bundle.get("Chapter");
 
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
@@ -128,46 +125,52 @@ public class EditChapterActivity extends Activity {
 					gc.updateObject(chapt, ObjectType.CHAPTER);
 				} else {
 					story.addChapter(chapt);
-					gc.addObject(story, ObjectType.CREATED_STORY);
+					if (!addingNewChapt) {
+						gc.addObject(story, ObjectType.CREATED_STORY);
+					}
 					gc.addObject(chapt, ObjectType.CHAPTER);
 				}
 				finish();
 			}
 		});
 
+		/*
+		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
+		 * IMPLEMENTED MESSAGE HERE.
+		 */
 		addIllust.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				//
+				// AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				// // Set dialog title
+				// alert.setTitle("Choose method:");
+				// // Options that user may choose to add illustration
+				// final String[] methods = { "Take Photo",
+				// "Choose from Gallery" };
+				// alert.setSingleChoiceItems(methods, -1,
+				// new DialogInterface.OnClickListener() {
+				// @Override
+				// public void onClick(DialogInterface dialog, int item) {
+				// switch (item) {
+				// case 0:
+				// takePhoto();
+				// break;
+				// case 1:
+				// browseGallery();
+				// break;
+				// }
+				// illustDialog.dismiss();
+				// }
+				// });
+				// illustDialog = alert.create();
+				// illustDialog.show();
+				// // chapt.addIllustration(null);
 
-				// Set dialog title
-				alert.setTitle("Choose method:");
-
-				// Options that user may choose to add illustration
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int item) {
-						switch (item) {
-						case 0:
-							takePhoto();
-							break;
-						case 1:
-							browseGallery();
-							break;
-						}
-						illustDialog.dismiss();
-					}
-				});
-				illustDialog = alert.create();
-				illustDialog.show();
-				// chapt.addIllustration(null);
+				Toast.makeText(getBaseContext(),
+						"Not implemented this iteration", Toast.LENGTH_SHORT)
+						.show();
 			}
-
 		});
 
 		// Add a choice to this chapter
@@ -187,7 +190,7 @@ public class EditChapterActivity extends Activity {
 				}
 			}
 		});
-		
+
 		// Set the chapter text, if new Chapter will simply be blank
 		chapterContent.setText(chapt.getText());
 	}
@@ -207,17 +210,17 @@ public class EditChapterActivity extends Activity {
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(insertImage(ill));
-		}					
+		}
 	}
 
 	/**
-	 * CODE REUSE 
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
-	 * Nov. 7, 2013 
-	 * Author: Andr.oid Eric
+	 * CODE REUSE URL:
+	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
+	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
 	public View insertImage(Media ill) {
-		Bitmap bm = Utilities.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
+		Bitmap bm = Utilities
+				.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
 		LinearLayout layout = new LinearLayout(getApplicationContext());
 
 		layout.setLayoutParams(new LayoutParams(250, 250));
@@ -230,29 +233,26 @@ public class EditChapterActivity extends Activity {
 
 		layout.addView(imageView);
 		return layout;
-	}	
+	}
 
 	/**
 	 * Code for taking a photo
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
 	public void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-		String folder =
-				Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
 		}
 
-		String imageFilePath = folder + "/" +
-				String.valueOf(System.currentTimeMillis()) + "jpg";
+		String imageFilePath = folder + "/"
+				+ String.valueOf(System.currentTimeMillis()) + "jpg";
 		File imageFile = new File(imageFilePath);
 		imageFileUri = Uri.fromFile(imageFile);
 
@@ -260,18 +260,29 @@ public class EditChapterActivity extends Activity {
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
-	/** 
+	/**
 	 * Code for browsing the gallery
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
 	public void browseGallery() {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+		String folder = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+		if (!folderF.exists()) {
+			folderF.mkdir();
+		}
+
+		String imageFilePath = folder + "/"
+				+ String.valueOf(System.currentTimeMillis()) + "jpg";
+		File imageFile = new File(imageFilePath);
+		imageFileUri = Uri.fromFile(imageFile);
+
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 
 		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
 
@@ -280,43 +291,42 @@ public class EditChapterActivity extends Activity {
 	/**
 	 * Activity results for taking photos and browsing gallery.
 	 * 
-	 * CODE REUSE
-	 * LonelyTweeter Camera Code from Lab  
-	 * Author: Joshua Charles Campbell  
-	 * License: Unlicense  
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
+	 * Campbell License: Unlicense Date: Nov. 7, 2013
 	 */
-	protected void onActivityResult(int requestCode, int resultCode, Intent
-			data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
+				Media ill = new Media(chapt.getId(), imageFileUri,
+						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 				insertIntoGallery();
 			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo" );
+				System.out.println("cancelled taking a photo");
 			} else {
 				System.err.println("Error in taking a photo" + resultCode);
 			}
+
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = data.getData();
-				Media ill = new Media(chapt.getId(), imageFileUri, Media.ILLUSTRATION);
+				Media ill = new Media(chapt.getId(), imageFileUri,
+						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo" );
+				System.out.println("cancelled taking a photo");
 			} else {
 				System.err.println("Error in taking a photo" + resultCode);
-			}			
+			}
 		}
-	}	
+	}
 
-	/** 
+	/**
 	 * Adds an image into the gallery
 	 */
 	public void insertIntoGallery() {
-		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		Intent mediaScanIntent = new Intent(
+				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 		mediaScanIntent.setData(imageFileUri);
 	}
 }
-

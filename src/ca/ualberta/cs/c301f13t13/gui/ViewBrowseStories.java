@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
@@ -92,8 +93,8 @@ public class ViewBrowseStories extends Activity {
 
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
-		customGridAdapter = new AdapterStories(this, R.layout.browse_story_item,
-				gridArray);
+		customGridAdapter = new AdapterStories(this,
+				R.layout.browse_story_item, gridArray);
 		gridView.setAdapter(customGridAdapter);
 
 		// Setup the grid view click listener
@@ -102,8 +103,7 @@ public class ViewBrowseStories extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// Handle going to view story activity
-				Intent intent = new Intent(getBaseContext(),
-						ViewStory.class);
+				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				intent.putExtra("storyID", gridArray.get(arg2).getId());
 				startActivity(intent);
 			}
@@ -135,8 +135,14 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
-			intent = new Intent(this, SearchActivity.class);
-			startActivity(intent);
+			/*
+			 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING
+			 * NON IMPLEMENTED MESSAGE HERE.
+			 */
+			// intent = new Intent(this, SearchActivity.class);
+			// startActivity(intent);
+			Toast.makeText(getBaseContext(), "Not implemented this iteration",
+					Toast.LENGTH_SHORT).show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

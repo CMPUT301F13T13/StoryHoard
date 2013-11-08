@@ -41,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
@@ -114,36 +115,39 @@ public class ViewChapter extends Activity {
 			}
 		});
 
+		/*
+		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
+		 * IMPLEMENTED MESSAGE HERE.
+		 */
 		addPhotoButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(context);
-
-				// Set dialog title
-				alert.setTitle("Choose method:");
-
-				// Options that user may choose to add photo
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto();
-									break;
-								case 1:
-									browseGallery();
-									break;
-								}
-								photoDialog.dismiss();
-							}
-						});
-				photoDialog = alert.create();
-				photoDialog.show();
+				// AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				// // Set dialog title
+				// alert.setTitle("Choose method:");
+				// // Options that user may choose to add photo
+				// final String[] methods = { "Take Photo",
+				// "Choose from Gallery" };
+				// alert.setSingleChoiceItems(methods, -1,
+				// new DialogInterface.OnClickListener() {
+				// @Override
+				// public void onClick(DialogInterface dialog, int item) {
+				// switch (item) {
+				// case 0:
+				// takePhoto();
+				// break;
+				// case 1:
+				// browseGallery();
+				// break;
+				// }
+				// photoDialog.dismiss();
+				// }
+				// });
+				// photoDialog = alert.create();
+				// photoDialog.show();
+				Toast.makeText(getBaseContext(),
+						"Not implemented this iteration", Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 
@@ -168,7 +172,7 @@ public class ViewChapter extends Activity {
 		}
 		choiceAdapter.notifyDataSetChanged();
 		super.onResume();
-		
+
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
 
