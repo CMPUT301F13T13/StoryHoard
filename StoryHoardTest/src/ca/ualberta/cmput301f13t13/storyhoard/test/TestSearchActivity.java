@@ -39,7 +39,7 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 		    }
 		  });
 
-		  Activity nextActivity = getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 5);
+		  Activity nextActivity = getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 10);
 		  // next activity is opened and captured.
 		  assertNotNull(nextActivity);
 		  nextActivity .finish();
