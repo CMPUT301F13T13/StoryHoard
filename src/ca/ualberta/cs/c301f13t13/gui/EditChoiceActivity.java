@@ -33,6 +33,12 @@ import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
+/**
+ * Activity class for adding and editing a choice.
+ * 
+ * @author Alexander Wong
+ *
+ */
 public class EditChoiceActivity extends Activity {
 
 	private EditText choiceText;

@@ -57,7 +57,7 @@ public class ChoiceManager implements StoringManager {
 	 * singleton design pattern. 
 	 *  
 	 * @param context
-	 * @return
+	 * @return ChoiceManager
 	 */
 	public static ChoiceManager getInstance(Context context) {
 		if (self == null) {
@@ -96,8 +96,10 @@ public class ChoiceManager implements StoringManager {
 
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newC.getId().toString());		
-		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, newC.getCurrentChapter().toString());
-		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, newC.getNextChapter().toString());
+		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, 
+				newC.getCurrentChapter().toString());
+		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, 
+				newC.getNextChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
 
 		// Setting search criteria
@@ -146,18 +148,16 @@ public class ChoiceManager implements StoringManager {
 
 			Choice choice = new Choice(
 					UUID.fromString(choiceId),
-					UUID.fromString(cursor.getString(1)), // current chapter
-					UUID.fromString(cursor.getString(2)), // next chapter
-					cursor.getString(3) // text
+					UUID.fromString(cursor.getString(1)), 	// current chapter
+					UUID.fromString(cursor.getString(2)), 	// next chapter
+					cursor.getString(3) 	// text
 					);
 			results.add(choice);
 			cursor.moveToNext();
 		}
 		cursor.close();		
-
 		return results;
 	}
-
 
 	/**
 	 * Creates the selection string (a prepared statement) to be used 

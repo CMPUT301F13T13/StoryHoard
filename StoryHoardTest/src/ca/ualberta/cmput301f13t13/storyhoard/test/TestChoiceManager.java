@@ -62,7 +62,8 @@ public class TestChoiceManager extends
 	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");
@@ -81,7 +82,8 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", Utilities.getPhoneId(this.getActivity()));
+		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
 		Chapter chap2 = new Chapter(storyId, "test2");
@@ -137,8 +139,8 @@ public class TestChoiceManager extends
 	 * @param objs
 	 *            ArrayList of objects.
 	 * @param chap
-	 *            Object for which we are testing whether or not it is contained
-	 *            in the ArrayList.
+	 *            Object for which we are testing whether or not it is 
+	 *            contained in the ArrayList.
 	 * @return Boolean
 	 */
 	public Boolean hasChoice(ArrayList<Object> objs, Choice choice) {

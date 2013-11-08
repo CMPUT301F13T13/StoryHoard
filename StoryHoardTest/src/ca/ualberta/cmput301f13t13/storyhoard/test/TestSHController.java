@@ -72,7 +72,8 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		s2.setFirstChapterId(UUID.randomUUID());
@@ -95,9 +96,11 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "34530");
 		s3.setFirstChapterId(UUID.randomUUID());
@@ -122,11 +125,14 @@ public class TestSHController extends
 		UUID chapId = UUID.randomUUID();
 		
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(chapId);
-		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(chapId);
-		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(chapId);
 
 		gc.addObject(s1, ObjectType.PUBLISHED_STORY);
@@ -146,7 +152,8 @@ public class TestSHController extends
 	 */
 	public void testAddGetAllChapters() {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-		Story story = new Story("title", "author", "des", Utilities.getPhoneId(getActivity()));
+		Story story = new Story("title", "author", "des", 
+				Utilities.getPhoneId(getActivity()));
 
 		Chapter c1 = new Chapter(story.getId(), "text");
 		Chapter c2 = new Chapter(story.getId(), "text");
@@ -187,6 +194,8 @@ public class TestSHController extends
 	 * again.
 	 */
 	public void testAddGetAllMedia() {
+		fail("not yet implemented");
+		
 		UUID cId = UUID.randomUUID();
 		Media photo1 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
 		Media photo2 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
@@ -214,17 +223,23 @@ public class TestSHController extends
 
 		fail("published stories not yet implemented");
 		// Insert some stories
-		Story s1 = new Story("Lily the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s1 = new Story("Lily the cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("Bob the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("Bob the cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
-		Story s3 = new Story("Bob the cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("Bob the cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s3.setFirstChapterId(UUID.randomUUID());
-		Story s4 = new Story("sad cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s4 = new Story("sad cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s4.setFirstChapterId(UUID.randomUUID());
-		Story s5 = new Story("sad cow", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s5 = new Story("sad cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s5.setFirstChapterId(UUID.randomUUID());
-		Story s6 = new Story("sad hen", "me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s6 = new Story("sad hen", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s6.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, ObjectType.CREATED_STORY);
@@ -262,7 +277,8 @@ public class TestSHController extends
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", Utilities.getPhoneId(getActivity()));
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, ObjectType.CREATED_STORY);
@@ -301,6 +317,8 @@ public class TestSHController extends
 
 		Chapter newc1 = chapters.get(0);
 		newc1.setText("a cow mooed");
+		
+		fail("not yet implemented");
 		Media m = new Media(c1.getId(), Uri.parse("https://"), Media.PHOTO);
 		newc1.addPhoto(m);
 
@@ -346,12 +364,15 @@ public class TestSHController extends
 	 * Tests using the general controller to edit media objects.
 	 */
 	public void testUpdateMediaLocally() {
+		fail("not yet implemented");
 		ArrayList<Media> medias = new ArrayList<Media>();
 		UUID chapId = UUID.randomUUID();
 
 		// Insert some media
-		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
-		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), Media.PHOTO);
+		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), 
+				Media.PHOTO);
+		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), 
+				Media.PHOTO);
 
 		gc.addObject(m1, ObjectType.MEDIA);
 		gc.addObject(m2, ObjectType.MEDIA);
@@ -520,6 +541,8 @@ public class TestSHController extends
 		Choice choice1 = new Choice(chap1.getId(), chap2.getId(),
 				"choice texters");
 		Choice choice2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
+		
+		fail("not yet implemented");
 		Media m1 = new Media(chap1.getId(), Uri.parse("https://googe.ca"),
 							 Media.PHOTO);
 

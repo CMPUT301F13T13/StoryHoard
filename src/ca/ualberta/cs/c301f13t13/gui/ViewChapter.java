@@ -51,8 +51,8 @@ import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
- * Views the chapter provided through the intent. Does not allow going backwards
- * through the activity stack.
+ * Views the chapter provided through the intent. Does not allow going 
+ * backwards through the activity stack.
  * 
  * @author Alexander Wong
  * 
@@ -107,7 +107,8 @@ public class ViewChapter extends Activity {
 					long arg3) {
 				// Go to the chapter in question
 				UUID nextChapter = choices.get(arg2).getNextChapter();
-				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+				Intent intent = new Intent(getBaseContext(), 
+						ViewChapter.class);
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", nextChapter);
 				startActivity(intent);
@@ -188,9 +189,10 @@ public class ViewChapter extends Activity {
 	}
 
 	/**
-	 * CODE REUSE URL:
-	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
-	 * Nov. 7, 2013 Author: Andr.oid Eric
+	 * CODE REUSE 
+	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html 
+	 * Date: Nov. 7, 2013 
+	 * Author: Andr.oid Eric
 	 */
 	public View insertImage(Media photo) {
 		Bitmap bm = Utilities.decodeSampledBitmapFromUri(photo.getUri(), 220,
@@ -255,8 +257,10 @@ public class ViewChapter extends Activity {
 	/**
 	 * Code for taking a photo.
 	 * 
-	 * CODE RESUSE: LonelyTweeter Camera Code from Lab Author: Joshua Charles
-	 * Campbell License: Unlicense Date: Nov. 7, 2013
+	 * CODE RESUSE: LonelyTweeter Camera Code from Lab 
+	 * Author: Joshua Charles Campbell 
+	 * License: Unlicense 
+	 * Date: Nov. 7, 2013
 	 */
 	public void browseGallery() {
 		Intent intent = new Intent(Intent.ACTION_PICK,

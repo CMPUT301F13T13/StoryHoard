@@ -57,8 +57,8 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
  * images through the use of the image button - Set the text of the chapter
  * through the Edit text space - View all chapters in the story upon pressing
  * the 'View All Chapters' button - Add a choice by pressing the 'Add Choice'
- * button. - This activity will also display the choices that exist or have been
- * added.
+ * button. - This activity will also display the choices that exist or have 
+ * been added.
  * 
  * author: Alexander Wong
  */

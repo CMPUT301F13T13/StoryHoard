@@ -201,7 +201,8 @@ public class ServerManager implements StoringManager{
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */ 
-	public ArrayList<Object> searchByKeywords(Story criteria) throws ClientProtocolException, IOException {
+	public ArrayList<Object> searchByKeywords(Story criteria) 
+				throws ClientProtocolException, IOException {
 		ArrayList<Object> stories = new ArrayList<Object>();
 		HashMap<String, String> storyData = criteria.getSearchCriteria();
 		ArrayList<String> sargs = new ArrayList<String>();
@@ -250,7 +251,8 @@ public class ServerManager implements StoringManager{
 	/**
 	 * advanced search (logical operators)
 	 */
-	public ArrayList<Object> searchStories(Story criteria) throws ClientProtocolException, IOException {
+	public ArrayList<Object> searchStories(Story criteria) 
+				throws ClientProtocolException, IOException {
 		ArrayList<Object> stories = new ArrayList<Object>();
 		
 		String selection = setSearchCriteria(criteria, null);
@@ -269,8 +271,10 @@ public class ServerManager implements StoringManager{
 
 		String json = getEntityContent(response);
 
-		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+		Type elasticSearchSearchResponseType 
+				= new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, 
+				elasticSearchSearchResponseType);
 		System.err.println(esResponse);
 		for (SimpleESResponse<Story> r : esResponse.getHits()) {
 			Story story = r.getSource();

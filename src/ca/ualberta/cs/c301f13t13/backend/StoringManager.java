@@ -44,14 +44,13 @@ public interface StoringManager {
 	 * 
 	 * @param criteria
 	 * 
-	 * @return
+	 * @return object
 	 */
 	public ArrayList<Object> retrieve(Object criteria);
 
 	/**
 	 * Updates an object in the storage place.
 	 * 
-	 * @param oldObject
 	 * @param newObject
 	 */
 	public void update(Object newObject);
@@ -62,7 +61,7 @@ public interface StoringManager {
 	 * 
 	 * @param object
 	 * @param sArgs
-	 * @return
+	 * @return selectionString
 	 */
 	public String setSearchCriteria(Object object, ArrayList<String> sArgs);
 
