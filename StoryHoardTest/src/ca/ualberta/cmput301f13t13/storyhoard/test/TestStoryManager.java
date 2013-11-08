@@ -18,8 +18,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
@@ -40,7 +38,6 @@ public class TestStoryManager extends
 		super(ViewBrowseStories.class);
 	}
 
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 
@@ -74,12 +71,12 @@ public class TestStoryManager extends
 	 */
 	public void testCacheLoadStory() {
 		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog",
-				Utilities.getPhoneId(this.getActivity()));
+				"32432423");
 
 		sm.insert(mockStory);
 
 		mockStories = sm.retrieve(mockStory);
-		assertTrue(mockStories.size() != 0);
+		assertEquals(mockStories.size(), 1);
 	}
 
 	/**
@@ -90,14 +87,10 @@ public class TestStoryManager extends
 				Utilities.getPhoneId(this.getActivity()));
 
 		sm.insert(mockStory);
-
-		try {
-			// retrieving story in db that matches mockStory
-			mockStories = sm.retrieve(mockStory);
-			assertTrue(mockStories.size() != 0);
-		} catch (Exception e) {
-			fail("Could not read Story: " + e.getStackTrace());
-		}
+		
+		// retrieving story in db that matches mockStory
+		mockStories = sm.retrieve(mockStory);
+		assertEquals(mockStories.size(), 1);
 	}
 
 	/**

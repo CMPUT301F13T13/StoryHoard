@@ -15,11 +15,18 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import org.junit.Before;
-import org.junit.Test;
-
-//import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
+
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.gui.AdapterChoices;
 import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 
 /**
@@ -30,7 +37,15 @@ import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
  */
 public class TestEditChapterActivity extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
-	
+	private EditChapterActivity activity;
+	private Button saveButton;
+	private Button addIllust;
+	private Button addChoice;
+	private ListView viewChoices;
+	private EditText chapterContent;
+	private AdapterChoices choiceAdapter;
+	private AlertDialog illustDialog;
+	private LinearLayout illustrations;
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);
@@ -39,14 +54,34 @@ public class TestEditChapterActivity extends
 	/* (non-Javadoc)
 	 * @see android.test.ActivityInstrumentationTestCase2#setUp()
 	 */
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("Story", story);
+		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+		
+		setActivityIntent(intent);
+		
+		activity = getActivity();
+		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
+		saveButton = (Button) activity.findViewById(R.id.chapterSaveButton);
+		addChoice = (Button) activity.findViewById(R.id.addNewChoice);
+		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
+		addIllust = (Button) activity.findViewById(R.id.chapterAddIllust);
+		illustrations = (LinearLayout) activity.findViewById(R.id.horizontalIllustraions2);
 	}
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testPreconditions() {
+		assertTrue(activity != null);
+		assertTrue(chapterContent != null);
+		assertTrue(saveButton != null);
+		assertTrue(addChoice != null);
+		assertTrue(viewChoices != null);
+		assertTrue(addIllust != null);
+		assertTrue(illustrations != null);
 	}
-
 }

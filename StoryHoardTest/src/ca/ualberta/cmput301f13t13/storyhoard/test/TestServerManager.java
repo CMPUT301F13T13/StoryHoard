@@ -20,18 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.Media;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.ServerManager;
 import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.StoryManager;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
@@ -49,7 +44,6 @@ public class TestServerManager
 		super(ViewBrowseStories.class);
 	}
 
-	@Before
 	public void setUp() throws Exception {
 		// clean up server
 		sm = ServerManager.getInstance();

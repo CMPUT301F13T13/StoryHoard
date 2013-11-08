@@ -22,8 +22,6 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import junit.framework.TestCase;
-
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 

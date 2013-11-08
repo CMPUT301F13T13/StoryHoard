@@ -15,11 +15,17 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
+import android.widget.ListView;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.Story;
+import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
 
 /**
@@ -30,8 +36,10 @@ import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
  */
 public class TestEditChoiceActivity extends
 		ActivityInstrumentationTestCase2<EditChoiceActivity> {
+	private EditText choiceText;
+	private ListView chapters;
 	
-	private Activity mActivity;
+	private EditChoiceActivity mActivity;
 	
 	public TestEditChoiceActivity() {
 		super(EditChoiceActivity.class);
@@ -42,16 +50,25 @@ public class TestEditChoiceActivity extends
 	 * 
 	 * @see android.test.ActivityInstrumentationTestCase2#setUp()
 	 */
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("story", story);
+		intent.putExtra("chapter", new Chapter(story.getId(), null));
+		
+		setActivityIntent(intent);
+		
+		mActivity = (EditChoiceActivity) getActivity();
+		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
+		chapters = (ListView) mActivity.findViewById(R.id.listAllLinkableChapters);
 	}
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-		mActivity = getActivity();
-		mActivity.findViewById(ca.ualberta.cmput301f13t13.storyhoard.R.layout.activity_edit_choice);	
-		
+	public void testPreConditions() {
+		assertTrue(mActivity != null);
+		assertTrue(choiceText != null);
+		assertTrue(chapters != null);
 	}
 }

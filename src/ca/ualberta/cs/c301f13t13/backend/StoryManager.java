@@ -207,7 +207,7 @@ public class StoryManager implements StoringManager {
 					selection += key + " NOT LIKE ?";
 					sArgs.add(Utilities.getPhoneId(context));
 			} else if (key.equals(StoryTable.COLUMN_NAME_TITLE)){
-				selection += key + " LIKE '%?%'";
+				selection += key + " LIKE ?";
 				sArgs.add(value);
 			} else {
 				selection += key + " LIKE ?";

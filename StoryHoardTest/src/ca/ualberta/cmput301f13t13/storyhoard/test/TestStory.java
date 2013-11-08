@@ -98,9 +98,8 @@ public class TestStory extends
 				Utilities.getPhoneId(this.getActivity()));
 		info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 3);
+		assertEquals(info.size(), 2);
 		assertTrue(info.get("title").equals("john"));
-		assertTrue(info.get("author").equals("the cow"));
 		assertTrue(info.get("phone_id").equals(criteria.getPhoneId()));
 	}
 

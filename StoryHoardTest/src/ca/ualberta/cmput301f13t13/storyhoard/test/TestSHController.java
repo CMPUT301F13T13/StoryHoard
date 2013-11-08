@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.junit.Before;
-
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
@@ -52,7 +50,6 @@ public class TestSHController extends
 		super(ViewBrowseStories.class);
 	}
 
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 		

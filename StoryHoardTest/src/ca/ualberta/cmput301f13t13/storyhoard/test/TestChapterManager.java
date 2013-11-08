@@ -19,8 +19,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.junit.Before;
-
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
@@ -42,7 +40,6 @@ public class TestChapterManager extends
 		super(ViewBrowseStories.class);
 	}
 
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Clearing database
