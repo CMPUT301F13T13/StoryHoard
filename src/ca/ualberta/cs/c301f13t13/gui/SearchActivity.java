@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
+
 /**
  * Search Activity
  * 
