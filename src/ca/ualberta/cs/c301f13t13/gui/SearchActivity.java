@@ -24,6 +24,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 /**
  * Search Activity
  * 
+ * Allows user to search for a specific story
+ * 
  * @author Kim Wu
  * 
  */
