@@ -81,7 +81,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the Id of the chapter.
 	 * 
-	 * @return
+	 * @return id
 	 */
 	public UUID getId() {
 		return this.id;
@@ -90,7 +90,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the story Id of the chapter.
 	 * 
-	 * @return
+	 * @return story id
 	 */
 	public UUID getStoryId() {
 		return this.storyId;
@@ -99,7 +99,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the text of the chapter.
 	 * 
-	 * @return
+	 * @return text
 	 */
 	public String getText() {
 
@@ -109,7 +109,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the choices of the chapter.
 	 * 
-	 * @return
+	 * @return choices
 	 */
 	public ArrayList<Choice> getChoices() {
 		return this.choices;
@@ -118,7 +118,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the photos of the chapter.
 	 * 
-	 * @return
+	 * @return photos
 	 */
 	public ArrayList<Media> getPhotos() {
 		return this.photos;
@@ -127,7 +127,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Returns the illustrations of the chapter.
 	 * 
-	 * @return
+	 * @return illustrations
 	 */
 	public ArrayList<Media> getIllustrations() {
 		return this.illustrations;
@@ -148,7 +148,7 @@ public class Chapter implements Serializable {
 	/**
 	 * Sets the story Id of the chapter.
 	 * 
-	 * @param storyId
+	 * @param id
 	 *            The id of the story the chapter is in
 	 */
 	public void setStoryId(UUID id) {
