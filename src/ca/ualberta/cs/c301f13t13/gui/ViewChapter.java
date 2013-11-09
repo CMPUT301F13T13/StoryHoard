@@ -179,62 +179,15 @@ public class ViewChapter extends Activity {
 
 		// Insert Photos
 		for (Media photo : photoList) {
-			photos.addView(insertImage(photo));
+			photos.addView(GUIMediaUtilities.insertImage(photo, this));
 		}
 
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(insertImage(ill));
+			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
 		}
 	}
 
-	/**
-	 * CODE REUSE 
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html 
-	 * Date: Nov. 7, 2013 
-	 * Author: Andr.oid Eric
-	 */
-	public View insertImage(Media photo) {
-		Bitmap bm = Utilities.decodeSampledBitmapFromUri(photo.getUri(), 220,
-				220);
-		LinearLayout layout = new LinearLayout(getApplicationContext());
-
-		layout.setLayoutParams(new LayoutParams(250, 250));
-		layout.setGravity(Gravity.CENTER);
-
-		ImageView imageView = new ImageView(getApplicationContext());
-		imageView.setLayoutParams(new LayoutParams(220, 220));
-		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		imageView.setImageBitmap(bm);
-
-		layout.addView(imageView);
-		return layout;
-	}
-
-	/**
-	 * Code for taking a photo.
-	 * 
-	 * CODE RESUSE: LonelyTweeter Camera Code from Lab Author: Joshua Charles
-	 * Campbell License: Unlicense Date: Nov. 7, 2013
-	 */
-	public void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
-		File folderF = new File(folder);
-		if (!folderF.exists()) {
-			folderF.mkdir();
-		}
-
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis()) + "jpg";
-		File imageFile = new File(imageFilePath);
-		imageFileUri = Uri.fromFile(imageFile);
-
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
@@ -244,7 +197,7 @@ public class ViewChapter extends Activity {
 				Media photo = new Media(chapter.getId(), imageFileUri,
 						Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
-				photos.addView(insertImage(photo));
+				photos.addView(GUIMediaUtilities.insertImage(photo, this));
 
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
@@ -255,32 +208,33 @@ public class ViewChapter extends Activity {
 	}
 
 	/**
-	 * Code for taking a photo.
+	 * Code for taking a photo
 	 * 
-	 * CODE RESUSE: LonelyTweeter Camera Code from Lab 
-	 * Author: Joshua Charles Campbell 
-	 * License: Unlicense 
+	 * CODE REUSE 
+	 * LonelyTweeter Camera Code from Lab 
+	 * Author: Joshua Charles
+	 * Campbell License: Unlicense 
+	 * Date: Nov. 7, 2013
+	 */
+	public void takePhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		imageFileUri = GUIMediaUtilities.getUri(intent);
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+	}
+
+	/**
+	 * Code for taking a photo
+	 * 
+	 * CODE REUSE 
+	 * LonelyTweeter Camera Code from Lab 
+	 * Author: Joshua Charles
+	 * Campbell License: Unlicense 
 	 * Date: Nov. 7, 2013
 	 */
 	public void browseGallery() {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
-		File folderF = new File(folder);
-		if (!folderF.exists()) {
-			folderF.mkdir();
-		}
-
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis()) + "jpg";
-		File imageFile = new File(imageFilePath);
-		imageFileUri = Uri.fromFile(imageFile);
-
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-
-		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
-
+		imageFileUri = GUIMediaUtilities.getUri(intent);
+		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
 	}
 }

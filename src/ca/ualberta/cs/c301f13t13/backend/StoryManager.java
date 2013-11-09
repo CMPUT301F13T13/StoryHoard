@@ -89,8 +89,10 @@ public class StoryManager implements StoringManager {
 			values.put(StoryTable.COLUMN_NAME_DESCRIPTION,
 					story.getDescription());
 		}
-		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
-				chapterId.toString());
+		if (story.getFirstChapterId() != null) {
+			values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
+					chapterId.toString());
+		}
 		values.put(StoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
 
 		db.insert(StoryTable.TABLE_NAME, null, values);
