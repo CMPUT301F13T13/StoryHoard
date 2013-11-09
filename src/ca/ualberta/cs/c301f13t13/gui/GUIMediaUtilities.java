@@ -6,7 +6,9 @@ package ca.ualberta.cs.c301f13t13.gui;
 import java.io.File;
 
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -38,8 +40,7 @@ public class GUIMediaUtilities {
 	 */
 	public static Uri getUri(Intent intent) {
 
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
@@ -61,7 +62,8 @@ public class GUIMediaUtilities {
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
 	public static View insertImage(Media ill, Context context) {
-		Bitmap bm = Utilities.decodeSampledBitmapFromUri(ill.getUri(), 220, 220);
+		Bitmap bm = Utilities.decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
+				220, 220);
 		LinearLayout layout = new LinearLayout(context);
 
 		layout.setLayoutParams(new LayoutParams(250, 250));
@@ -96,4 +98,22 @@ public class GUIMediaUtilities {
 		      v.setImageDrawable(null);
 		}		
 	}	
+	
+	/**
+	 * CODE REUSE
+	 * URL: http://stackoverflow.com/questions/3401579/get-filename-and-path-from-uri-from-mediastore
+	 * DATE: NOV. 9, 2013
+	 * 
+	 * @param contentUri
+	 * @param context
+	 * @return
+	 */
+	public static String getRealPathFromURI(Uri contentUri, Context context) {
+	    String[] proj = { MediaStore.Images.Media.DATA };
+	    CursorLoader loader = new CursorLoader(context, contentUri, proj, null, null, null);
+	    Cursor cursor = loader.loadInBackground();
+	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	}		
 }

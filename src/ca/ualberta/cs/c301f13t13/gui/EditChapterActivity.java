@@ -272,7 +272,7 @@ public class EditChapterActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Media ill = new Media(chapt.getId(), imageFileUri,
+				Media ill = new Media(chapt.getId(), imageFileUri.getPath(), 
 						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 				GUIMediaUtilities.insertIntoGallery(imageFileUri);
@@ -285,12 +285,8 @@ public class EditChapterActivity extends Activity {
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = intent.getData();
-				String path = getImagePath(imageFileUri);
-				Bitmap bm1 = BitmapFactory.decodeFile(imageFileUri.getPath());
-				Bitmap bitmap = BitmapFactory.decodeFile(path);
-				
-				Media ill = new Media(chapt.getId(), imageFileUri,
-						Media.ILLUSTRATION);
+				String path = GUIMediaUtilities.getRealPathFromURI(imageFileUri, this);
+				Media ill = new Media(chapt.getId(), path, Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
@@ -299,26 +295,4 @@ public class EditChapterActivity extends Activity {
 			}
 		}		
 	}
-	
-	@SuppressWarnings("deprecation")
-	public String getImagePath(Uri uri) {
-	    String selectedImagePath;
-	    // 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
-	    String[] projection = { MediaStore.Images.Media.DATA };
-	    Cursor cursor = managedQuery(uri, projection, null, null, null);
-	    if (cursor != null) {
-	        int column_index = cursor
-	                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-	        cursor.moveToFirst();
-	        selectedImagePath = cursor.getString(column_index);
-	    } else {
-	        selectedImagePath = null;
-	    }
-
-	    if (selectedImagePath == null) {
-	        // 2:OI FILE Manager --- call method: uri.getPath()
-	        selectedImagePath = uri.getPath();
-	    }
-	    return selectedImagePath;
-	}	
 }

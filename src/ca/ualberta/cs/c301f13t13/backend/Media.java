@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 
 import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 
@@ -37,7 +36,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 public class Media implements Serializable{
 	private UUID id;
 	private UUID chapterId;
-	private String uri;
+	private String path;
 	private String type;
 	private String bitmapString;
 
@@ -51,19 +50,19 @@ public class Media implements Serializable{
 	 * Initializes a new Media object without an id.
 	 * 
 	 * @param chapterId
-	 * @param uri
+	 * @param path
 	 * @param type
 	 */
-	public Media(UUID chapterId, Uri uri, String type) {
+	public Media(UUID chapterId, String path, String type) {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
-		if (uri != null) {
-			this.uri = uri.toString();
-			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+		if (path != null) {
+			this.path = path;
+			Bitmap bitmap = BitmapFactory.decodeFile(path);
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		} else {
-			this.uri = new String();
+			this.path = new String();
 			bitmapString = new String();
 		}
 	}
@@ -75,19 +74,19 @@ public class Media implements Serializable{
 	 * 
 	 * @param id
 	 * @param chapterId
-	 * @param uri
+	 * @param path
 	 * @param type
 	 */
-	public Media(UUID id, UUID chapterId, Uri uri, String type) {
+	public Media(UUID id, UUID chapterId, String path, String type) {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
-		if (uri != null) {
-			this.uri = uri.toString();
-			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+		if (path != null) {
+			this.path = path;
+			Bitmap bitmap = BitmapFactory.decodeFile(path);
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		} else {
-			this.uri = new String();
+			this.path = new String();
 			bitmapString = new String();
 		}
 	}
@@ -113,12 +112,12 @@ public class Media implements Serializable{
 	}
 
 	/**
-	 * Returns the uri of the media.
+	 * Returns the path of the media.
 	 * 
-	 * @return uri
+	 * @return path
 	 */
-	public Uri getUri() {
-		return Uri.parse(uri);
+	public String getPath() {
+		return path;
 	}
 
 	/**
@@ -169,14 +168,14 @@ public class Media implements Serializable{
 	}
 
 	/**
-	 * Sets the uri of the media. Also updates the bitmap.
+	 * Sets the path of the media. Also updates the bitmap.
 	 * 
-	 * @param uri
+	 * @param path
 	 */
-	public void setUri(Uri uri) {
-		this.uri = uri.toString();
-		if (uri != null) {
-			Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+	public void setPath(String path) {
+		this.path = path;
+		if (path != null) {
+			Bitmap bitmap = BitmapFactory.decodeFile(path);
 			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		}
 	}
@@ -238,6 +237,6 @@ public class Media implements Serializable{
 	@Override
 	public String toString() {
 		return "Media [id=" + id + ", chapter_id=" + chapterId + ", uri="
-				+ uri + ", type=" + type + "]";
+				+ path + ", type=" + type + "]";
 	}
 }

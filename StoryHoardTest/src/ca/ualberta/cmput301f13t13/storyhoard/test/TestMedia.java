@@ -80,12 +80,12 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
-		photo.setUri(Uri.parse("https://dog"));
+		photo.setPath(Uri.parse("https://dog"));
 
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertNotSame(type, photo.getType());
 		assertTrue(photo.getBitmap() != null);
-		assertTrue(photo.getUri() != uri);
+		assertTrue(photo.getPath() != uri);
 	}
 }

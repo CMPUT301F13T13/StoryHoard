@@ -378,7 +378,7 @@ public class TestSHController extends
 		assertEquals(medias.size(), 2);
 
 		Media newM1 = medias.get(0);
-		newM1.setUri(Uri.parse("https://ualberta.ca"));
+		newM1.setPath(Uri.parse("https://ualberta.ca"));
 		newM1.setType(Media.ILLUSTRATION);
 
 		gc.updateObject(newM1, ObjectType.MEDIA);
@@ -389,7 +389,7 @@ public class TestSHController extends
 		medias = gc.getAllIllustrations(chapId);
 		assertEquals(medias.size(), 1);
 		newM1 = medias.get(0);
-		assertFalse(newM1.getUri().equals(m1.getUri()));
+		assertFalse(newM1.getPath().equals(m1.getPath()));
 	}
 
 	/**

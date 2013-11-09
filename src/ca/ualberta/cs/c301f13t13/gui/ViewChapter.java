@@ -215,8 +215,8 @@ public class ViewChapter extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Media photo = new Media(chapter.getId(), imageFileUri,
-						Media.PHOTO);
+				String path = GUIMediaUtilities.getRealPathFromURI(imageFileUri, this);
+				Media photo = new Media(chapter.getId(), path, Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
 				GUIMediaUtilities.insertIntoGallery(imageFileUri);
 			} else if (resultCode == RESULT_CANCELED) {
@@ -227,9 +227,9 @@ public class ViewChapter extends Activity {
 
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Uri imageFileUri = intent.getData();
-				Media photo = new Media(chapter.getId(), imageFileUri,
-						Media.PHOTO);
+				imageFileUri = intent.getData();
+				String path = GUIMediaUtilities.getRealPathFromURI(imageFileUri, this);
+				Media photo = new Media(chapter.getId(), path, Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");

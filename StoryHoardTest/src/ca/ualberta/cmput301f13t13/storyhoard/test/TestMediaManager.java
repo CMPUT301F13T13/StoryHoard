@@ -127,7 +127,7 @@ public class TestMediaManager extends
 		Media newM1 = (Media) objects.get(0);
 
 		newM1.setType(Media.ILLUSTRATION);
-		newM1.setUri(Uri.parse("https://dog"));
+		newM1.setPath(Uri.parse("https://dog"));
 
 		mm.update(newM1);
 
@@ -137,6 +137,6 @@ public class TestMediaManager extends
 		newM1 = (Media) objects.get(0);
 
 		assertFalse(newM1.getType().equals(Media.PHOTO));
-		assertNotSame(newM1.getUri(), uri);
+		assertNotSame(newM1.getPath(), uri);
 	}
 }
