@@ -99,9 +99,8 @@ public class EditStoryActivity extends Activity {
 					newStory.setDescription(description);
 					gc.updateObject(newStory, ObjectType.CREATED_STORY);
 				} else {
-					newStory = new Story(title, author, description, Utilities
-							.getPhoneId(getBaseContext()));
-					Intent intent = new Intent(getApplicationContext(),
+					newStory = new Story(title, author, description, Utilities.getPhoneId(getBaseContext()));
+					Intent intent = new Intent(EditStoryActivity.this,
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);
 					intent.putExtra("addingNewChapt", false);

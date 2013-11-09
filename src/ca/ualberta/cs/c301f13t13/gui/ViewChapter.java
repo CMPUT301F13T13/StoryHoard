@@ -58,7 +58,6 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
  * 
  */
 public class ViewChapter extends Activity {
-	private Context context = this;
 	private UUID storyID;
 	private UUID chapterID;
 	private SHController gc;
@@ -75,7 +74,7 @@ public class ViewChapter extends Activity {
 	private ListView chapterChoices;
 	private Button addPhotoButton;
 
-	private static int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
+	private static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 200;
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	Uri imageFileUri;
 
@@ -84,6 +83,22 @@ public class ViewChapter extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_chapter);
 
+		setUpFields();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		setNextChapterListener();
+		setAddPhotoListener();		
+		updateData();
+	}
+
+	/**
+	 * Initializes the private fields needed.
+	 */
+	public void setUpFields() {
 		// Grab the necessary UUIDs and GC
 		Bundle bundle = this.getIntent().getExtras();
 		storyID = (UUID) bundle.get("storyID");
@@ -100,30 +115,52 @@ public class ViewChapter extends Activity {
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
-		chapterChoices.setAdapter(choiceAdapter);
-		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// Go to the chapter in question
-				UUID nextChapter = choices.get(arg2).getNextChapter();
-				Intent intent = new Intent(getBaseContext(), 
-						ViewChapter.class);
-				intent.putExtra("storyID", storyID);
-				intent.putExtra("chapterID", nextChapter);
-				startActivity(intent);
-				finish();
-			}
-		});
+		chapterChoices.setAdapter(choiceAdapter);	
+	}
+	
+	/**
+	 * Gets the new chapter and updates the view's components.
+	 */
+	public void updateData() {
+		chapter = gc.getCompleteChapter(chapterID);
+		choices.clear();
+		// Check for no chapter text
+		if (chapter.getText().equals("")) {
+			chapterContent.setText("<No Chapter Content>");
+		} else {
+			chapterContent.setText(chapter.getText());
+		}
+		// Check for no choices
+		if (chapter.getChoices().isEmpty()) {
+			chapterContent.setText(chapterContent.getText()
+					+ "\n\n<No Choices>");
+		} else {
+			choices.addAll(chapter.getChoices());
+		}
+		choiceAdapter.notifyDataSetChanged();		
+		
+		photoList = chapter.getPhotos();
+		illList = chapter.getIllustrations();
+		
+		// Insert Photos
+		for (Media photo : photoList) {
+			photos.addView(GUIMediaUtilities.insertImage(photo, this));
+		}
 
-		/*
-		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
-		 * IMPLEMENTED MESSAGE HERE.
-		 */
+		// Insert Illustrations
+		for (Media ill : illList) {
+			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
+		}		
+	}
+	
+	/**
+	 * Sets up the onClick listener for the button to add a new photo.
+	 */
+	public void setAddPhotoListener() {
 		addPhotoButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				AlertDialog.Builder alert = new AlertDialog.Builder(getBaseContext());
 				// Set dialog title
 				alert.setTitle("Choose method:");
 				// Options that user may choose to add photo
@@ -146,47 +183,34 @@ public class ViewChapter extends Activity {
 				});
 				photoDialog = alert.create();
 				photoDialog.show();
-				Toast.makeText(getBaseContext(),
-						"Not implemented this iteration", Toast.LENGTH_SHORT).show();
 			}
-		});
-
+		});		
 	}
-
-	@Override
-	public void onResume() {
-		chapter = gc.getCompleteChapter(chapterID);
-		choices.clear();
-		// Check for no chapter text
-		if (chapter.getText().equals("")) {
-			chapterContent.setText("<No Chapter Content>");
-		} else {
-			chapterContent.setText(chapter.getText());
-		}
-		// Check for no choices
-		if (chapter.getChoices().isEmpty()) {
-			chapterContent.setText(chapterContent.getText()
-					+ "\n\n<No Choices>");
-		} else {
-			choices.addAll(chapter.getChoices());
-		}
-		choiceAdapter.notifyDataSetChanged();
-		super.onResume();
-
-		photoList = chapter.getPhotos();
-		illList = chapter.getIllustrations();
-
-		// Insert Photos
-		for (Media photo : photoList) {
-			photos.addView(GUIMediaUtilities.insertImage(photo, this));
-		}
-
-		// Insert Illustrations
-		for (Media ill : illList) {
-			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
-		}
+	
+	/**
+	 * Sets up the onClick listener for the button to flip to the next
+	 * chapter (selecting a choice).
+	 */
+	public void setNextChapterListener() {
+		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Go to the chapter in question
+				UUID nextChapter = choices.get(arg2).getNextChapter();
+				Intent intent = new Intent(getBaseContext(), 
+						ViewChapter.class);
+				intent.putExtra("storyID", storyID);
+				intent.putExtra("chapterID", nextChapter);
+				
+				GUIMediaUtilities.cleanUpMedia(photos);
+				GUIMediaUtilities.cleanUpMedia(illustrations);
+				
+				startActivity(intent);
+				finish();
+			}
+		});		
 	}
-
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -214,7 +238,7 @@ public class ViewChapter extends Activity {
 			}
 		}		
 	}
-
+	
 	/**
 	 * Code for taking a photo
 	 * 

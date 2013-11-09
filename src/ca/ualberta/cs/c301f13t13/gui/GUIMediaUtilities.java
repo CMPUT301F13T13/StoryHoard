@@ -84,4 +84,16 @@ public class GUIMediaUtilities {
 				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 		mediaScanIntent.setData(imageUri);
 	}	
+	
+	/**
+	 * Clears all the image views to avoid out of memory error.
+	 */
+	public static void cleanUpMedia(LinearLayout lv) {
+		int viewCount = lv.getChildCount();
+		for (int i=0; i < viewCount; i++){
+				LinearLayout ll = (LinearLayout) lv.getChildAt(i);
+		      ImageView v = (ImageView) ll.getChildAt(0);
+		      v.setImageDrawable(null);
+		}		
+	}	
 }

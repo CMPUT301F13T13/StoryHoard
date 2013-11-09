@@ -66,8 +66,6 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
  */
 
 public class EditChapterActivity extends Activity {
-
-	private Context context = this;
 	private Chapter chapt;
 	private Story story;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -95,15 +93,52 @@ public class EditChapterActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_chapter);
 
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	
+		setUpFields();		
+		setSaveButtonListener();
+		setAddChoiceListener();
+		setAddIllustrationListener();
+		updateData();
+	}
+
+	/**
+	 * Updates the view components depending on the chapter data.
+	 */
+	private void updateData() {
+		// Set the chapter text, if new Chapter will simply be blank
+		chapterContent.setText(chapt.getText());				
+		choices.clear();
+		choices.addAll(gc.getAllChoices(chapt.getId()));
+		choiceAdapter.notifyDataSetChanged();
+
+		// Getting illustrations
+		illList = gc.getAllIllustrations(chapt.getId());
+
+		// Insert Illustrations
+		for (Media ill : illList) {
+			illustrations.addView(GUIMediaUtilities.insertImage(ill, EditChapterActivity.this));
+		}		
+	}
+	
+	
+	/**
+	 * Sets up the fields, and gets the bundle from the intent.
+	 */
+	private void setUpFields() {
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
-		gc = SHController.getInstance(getBaseContext());
-
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
-
+		gc = SHController.getInstance(getBaseContext());
+		
 		// Get the story that chapter is being added to
 		Bundle bundle = this.getIntent().getExtras();
 		isEditing = bundle.getBoolean("isEditing");
@@ -114,8 +149,13 @@ public class EditChapterActivity extends Activity {
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
-		viewChoices.setAdapter(choiceAdapter);
-
+		viewChoices.setAdapter(choiceAdapter);		
+	}
+	
+	/**
+	 * Sets the onClick listener for saving.
+	 */
+	private void setSaveButtonListener() {
 		// Save the chapter to the database, or update if editing
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -132,17 +172,41 @@ public class EditChapterActivity extends Activity {
 				}
 				finish();
 			}
-		});
-
-		/*
-		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
-		 * IMPLEMENTED MESSAGE HERE.
-		 */
+		});		
+	}
+	
+	/**
+	 * Sets the onClick Listener for adding a choice.
+	 */
+	private void setAddChoiceListener() {
+		// Add a choice to this chapter
+		addChoice.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isEditing) {
+					Intent intent = new Intent(getBaseContext(),
+							EditChoiceActivity.class);
+					intent.putExtra("chapter", chapt);
+					intent.putExtra("story", story);
+					startActivity(intent);
+				} else {
+					Toast.makeText(getBaseContext(),
+							"Save story before adding first choice",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		});		
+	}
+	
+	/**
+	 * Sets the onCLick listener for adding an illustration.
+	 */
+	private void setAddIllustrationListener() {
 		addIllust.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				AlertDialog.Builder alert = new AlertDialog.Builder(getBaseContext());
+				AlertDialog.Builder alert = new AlertDialog.Builder(EditChapterActivity.this);
 				// Set dialog title
 				alert.setTitle("Choose method:");
 				// Options that user may choose to add illustration
@@ -165,52 +229,11 @@ public class EditChapterActivity extends Activity {
 				});
 				illustDialog = alert.create();
 				illustDialog.show();
-				chapt.addIllustration(null);
-
-				Toast.makeText(getBaseContext(),
-						"Not implemented this iteration", 
-						Toast.LENGTH_SHORT).show();
 			}
-		});
-
-		// Add a choice to this chapter
-		addChoice.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (isEditing) {
-					Intent intent = new Intent(getBaseContext(),
-							EditChoiceActivity.class);
-					intent.putExtra("chapter", chapt);
-					intent.putExtra("story", story);
-					startActivity(intent);
-				} else {
-					Toast.makeText(getBaseContext(),
-							"Save story before adding first choice",
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-
-		// Set the chapter text, if new Chapter will simply be blank
-		chapterContent.setText(chapt.getText());
+		});		
 	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		choices.clear();
-		choices.addAll(gc.getAllChoices(chapt.getId()));
-		choiceAdapter.notifyDataSetChanged();
-
-		// Getting illustrations
-		illList = gc.getAllIllustrations(chapt.getId());
-
-		// Insert Illustrations
-		for (Media ill : illList) {
-			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
-		}
-	}
-
+	
+	
 	/**
 	 * Code for taking a photo
 	 * 
@@ -263,6 +286,7 @@ public class EditChapterActivity extends Activity {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = intent.getData();
 				String path = getImagePath(imageFileUri);
+				Bitmap bm1 = BitmapFactory.decodeFile(imageFileUri.getPath());
 				Bitmap bitmap = BitmapFactory.decodeFile(path);
 				
 				Media ill = new Media(chapt.getId(), imageFileUri,
@@ -276,6 +300,7 @@ public class EditChapterActivity extends Activity {
 		}		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public String getImagePath(Uri uri) {
 	    String selectedImagePath;
 	    // 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
