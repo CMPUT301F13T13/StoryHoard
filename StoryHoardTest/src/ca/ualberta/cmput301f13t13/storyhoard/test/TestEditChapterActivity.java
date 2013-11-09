@@ -72,7 +72,7 @@ public class TestEditChapterActivity extends
 		addChoice = (Button) activity.findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) activity.findViewById(R.id.chapterAddIllust);
-		illustrations = (LinearLayout) activity.findViewById(R.id.horizontalIllustraions2);
+		illustrations = (LinearLayout) activity.findViewById(R.id.editHorizontalIllustrations);
 	}
 
 	public void testPreconditions() {

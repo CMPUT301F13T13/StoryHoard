@@ -203,7 +203,7 @@ public class ViewChapter extends Activity {
 
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				imageFileUri = intent.getData();
+				Uri imageFileUri = intent.getData();
 				Media photo = new Media(chapter.getId(), imageFileUri,
 						Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);

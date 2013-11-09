@@ -24,7 +24,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -140,7 +142,7 @@ public class EditChapterActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				AlertDialog.Builder alert = new AlertDialog.Builder(getBaseContext());
 				// Set dialog title
 				alert.setTitle("Choose method:");
 				// Options that user may choose to add illustration
@@ -260,6 +262,9 @@ public class EditChapterActivity extends Activity {
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = intent.getData();
+				String path = getImagePath(imageFileUri);
+				Bitmap bitmap = BitmapFactory.decodeFile(path);
+				
 				Media ill = new Media(chapt.getId(), imageFileUri,
 						Media.ILLUSTRATION);
 				gc.addObject(ill, ObjectType.MEDIA);
@@ -270,4 +275,25 @@ public class EditChapterActivity extends Activity {
 			}
 		}		
 	}
+	
+	public String getImagePath(Uri uri) {
+	    String selectedImagePath;
+	    // 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
+	    String[] projection = { MediaStore.Images.Media.DATA };
+	    Cursor cursor = managedQuery(uri, projection, null, null, null);
+	    if (cursor != null) {
+	        int column_index = cursor
+	                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	        cursor.moveToFirst();
+	        selectedImagePath = cursor.getString(column_index);
+	    } else {
+	        selectedImagePath = null;
+	    }
+
+	    if (selectedImagePath == null) {
+	        // 2:OI FILE Manager --- call method: uri.getPath()
+	        selectedImagePath = uri.getPath();
+	    }
+	    return selectedImagePath;
+	}	
 }
