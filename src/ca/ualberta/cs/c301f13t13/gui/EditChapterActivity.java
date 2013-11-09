@@ -225,19 +225,17 @@ public class EditChapterActivity extends Activity {
 	}
 
 	/**
-	 * Code for taking a photo
+	 * Code for browsing gallery
 	 * 
 	 * CODE REUSE 
-	 * LonelyTweeter Camera Code from Lab 
-	 * Author: Joshua Charles
-	 * Campbell License: Unlicense 
-	 * Date: Nov. 7, 2013
+	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
 	 */
 	public void browseGallery() {
-		Intent intent = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		imageFileUri = GUIMediaUtilities.getUri(intent);
-		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"), 
+				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
 	}
 	
 	/**

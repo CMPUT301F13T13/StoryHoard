@@ -123,32 +123,31 @@ public class ViewChapter extends Activity {
 		addPhotoButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// AlertDialog.Builder alert = new AlertDialog.Builder(context);
-				// // Set dialog title
-				// alert.setTitle("Choose method:");
-				// // Options that user may choose to add photo
-				// final String[] methods = { "Take Photo",
-				// "Choose from Gallery" };
-				// alert.setSingleChoiceItems(methods, -1,
-				// new DialogInterface.OnClickListener() {
-				// @Override
-				// public void onClick(DialogInterface dialog, int item) {
-				// switch (item) {
-				// case 0:
-				// takePhoto();
-				// break;
-				// case 1:
-				// browseGallery();
-				// break;
-				// }
-				// photoDialog.dismiss();
-				// }
-				// });
-				// photoDialog = alert.create();
-				// photoDialog.show();
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				// Set dialog title
+				alert.setTitle("Choose method:");
+				// Options that user may choose to add photo
+				final String[] methods = { "Take Photo",
+				"Choose from Gallery" };
+				alert.setSingleChoiceItems(methods, -1,
+						new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto();
+							break;
+						case 1:
+							browseGallery();
+							break;
+						}
+						photoDialog.dismiss();
+					}
+				});
+				photoDialog = alert.create();
+				photoDialog.show();
 				Toast.makeText(getBaseContext(),
-						"Not implemented this iteration", Toast.LENGTH_SHORT)
-						.show();
+						"Not implemented this iteration", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -189,22 +188,31 @@ public class ViewChapter extends Activity {
 	}
 
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-				|| requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-
 				Media photo = new Media(chapter.getId(), imageFileUri,
 						Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
-				photos.addView(GUIMediaUtilities.insertImage(photo, this));
-
+				GUIMediaUtilities.insertIntoGallery(imageFileUri);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
 			} else {
 				System.err.println("Error in taking a photo" + resultCode);
 			}
-		}
+
+		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				imageFileUri = intent.getData();
+				Media photo = new Media(chapter.getId(), imageFileUri,
+						Media.PHOTO);
+				gc.addObject(photo, ObjectType.MEDIA);
+			} else if (resultCode == RESULT_CANCELED) {
+				System.out.println("cancelled taking a photo");
+			} else {
+				System.err.println("Error in taking a photo" + resultCode);
+			}
+		}		
 	}
 
 	/**
@@ -223,18 +231,16 @@ public class ViewChapter extends Activity {
 	}
 
 	/**
-	 * Code for taking a photo
+	 * Code for browsing gallery
 	 * 
 	 * CODE REUSE 
-	 * LonelyTweeter Camera Code from Lab 
-	 * Author: Joshua Charles
-	 * Campbell License: Unlicense 
-	 * Date: Nov. 7, 2013
+	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
 	 */
 	public void browseGallery() {
-		Intent intent = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		imageFileUri = GUIMediaUtilities.getUri(intent);
-		startActivityForResult(intent, BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);//
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"), 
+				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
 	}
 }
