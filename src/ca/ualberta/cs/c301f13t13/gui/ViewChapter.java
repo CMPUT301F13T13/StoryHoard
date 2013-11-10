@@ -61,6 +61,7 @@ public class ViewChapter extends Activity {
 	private UUID storyID;
 	private UUID chapterID;
 	private SHController gc;
+	private GUIMediaUtilities util;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayList<Media> photoList;
@@ -73,10 +74,10 @@ public class ViewChapter extends Activity {
 	private TextView chapterContent;
 	private ListView chapterChoices;
 	private Button addPhotoButton;
-
-	private static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 200;
-	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	Uri imageFileUri;
+	
+	private Uri imageFileUri;
+	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
+	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class ViewChapter extends Activity {
 		storyID = (UUID) bundle.get("storyID");
 		chapterID = (UUID) bundle.get("chapterID");
 		gc = SHController.getInstance(this);
+		util = new GUIMediaUtilities();
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
@@ -142,14 +144,17 @@ public class ViewChapter extends Activity {
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
 		
+		photos.removeAllViews();
+		illustrations.removeAllViews();
+		
 		// Insert Photos
 		for (Media photo : photoList) {
-			photos.addView(GUIMediaUtilities.insertImage(photo, this));
+			photos.addView(util.insertImage(photo, this));
 		}
 
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
+			illustrations.addView(util.insertImage(ill, this));
 		}		
 	}
 	
@@ -160,7 +165,7 @@ public class ViewChapter extends Activity {
 		addPhotoButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(getBaseContext());
+				AlertDialog.Builder alert = new AlertDialog.Builder(ViewChapter.this);
 				// Set dialog title
 				alert.setTitle("Choose method:");
 				// Options that user may choose to add photo
@@ -203,8 +208,8 @@ public class ViewChapter extends Activity {
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", nextChapter);
 				
-				GUIMediaUtilities.cleanUpMedia(photos);
-				GUIMediaUtilities.cleanUpMedia(illustrations);
+				photos.removeAllViews();
+				illustrations.removeAllViews();
 				
 				startActivity(intent);
 				finish();
@@ -212,13 +217,45 @@ public class ViewChapter extends Activity {
 		});		
 	}
 
+	/**
+	 * Code for browsing gallery
+	 * 
+	 * CODE REUSE 
+	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
+	 */
+	private void browseGallery() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"), 
+				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
+	}	
+	
+	private void takePhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		imageFileUri = util.getUri();
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+	}		
+	
+	/**
+	 * Adds an image into the gallery
+	 */
+	public void insertIntoGallery(Media image) {
+	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    File f = new File(image.getPath());
+	    Uri contentUri = Uri.fromFile(f);
+	    mediaScanIntent.setData(contentUri);
+	    this.sendBroadcast(mediaScanIntent);		
+	}	
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				String path = GUIMediaUtilities.getRealPathFromURI(imageFileUri, this);
-				Media photo = new Media(chapter.getId(), path, Media.PHOTO);
+				Media photo = new Media(chapter.getId(), imageFileUri.getPath(), 
+						Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
-				GUIMediaUtilities.insertIntoGallery(imageFileUri);
+				insertIntoGallery(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
 			} else {
@@ -228,7 +265,7 @@ public class ViewChapter extends Activity {
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				imageFileUri = intent.getData();
-				String path = GUIMediaUtilities.getRealPathFromURI(imageFileUri, this);
+				String path = util.getRealPathFromURI(imageFileUri, this);
 				Media photo = new Media(chapter.getId(), path, Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
 			} else if (resultCode == RESULT_CANCELED) {
@@ -239,32 +276,4 @@ public class ViewChapter extends Activity {
 		}		
 	}
 	
-	/**
-	 * Code for taking a photo
-	 * 
-	 * CODE REUSE 
-	 * LonelyTweeter Camera Code from Lab 
-	 * Author: Joshua Charles
-	 * Campbell License: Unlicense 
-	 * Date: Nov. 7, 2013
-	 */
-	public void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		imageFileUri = GUIMediaUtilities.getUri(intent);
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	}
-
-	/**
-	 * Code for browsing gallery
-	 * 
-	 * CODE REUSE 
-	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
-	 */
-	public void browseGallery() {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);//
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"), 
-				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
-	}
 }
