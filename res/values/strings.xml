@@ -75,5 +75,6 @@
     <string name="no_text">No text</string>
     <string name="choiceText">Choice Text</string>
     <string name="title_activity_view_search_results">ViewSearchResults</string>
+    <string name= "browse_stories">Browse stories</string>
 
 </resources>

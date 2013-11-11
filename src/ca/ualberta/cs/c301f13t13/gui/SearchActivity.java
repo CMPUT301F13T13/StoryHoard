@@ -42,7 +42,6 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		searchButton = (Button) findViewById(R.id.searchButton);
-		
 		searchButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
