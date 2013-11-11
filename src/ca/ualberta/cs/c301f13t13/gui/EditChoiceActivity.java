@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -37,7 +37,7 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * Activity class for adding and editing a choice.
  * 
  * @author Alexander Wong
- *
+ * 
  */
 public class EditChoiceActivity extends Activity {
 
@@ -54,20 +54,42 @@ public class EditChoiceActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_choice);
+	}
 
-		gc = SHController.getInstance(this);
+	@Override
+	public void onResume() {
+		super.onResume();
+		setUpFields();
+		setAddChoiceListener();
+		data.clear();
+		data.addAll(gc.getAllChapters(story.getId()));
+		chapterAdapter.notifyDataSetChanged();
+	}
 
-		choiceText = (EditText) findViewById(R.id.choiceText);
-		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
-		chapterAdapter = new AdapterChapters(this,
-				R.layout.browse_chapter_item, data);
-		chapters.setAdapter(chapterAdapter);
-
-		// Grab the data from the previous activity
+	/**
+	 * Initializes the private fields needed
+	 */
+	public void setUpFields() {
+		// Grab GC and necessary story and chapter info
 		Bundle bundle = this.getIntent().getExtras();
 		story = (Story) bundle.get("story");
 		fromChapter = (Chapter) bundle.get("chapter");
+		gc = SHController.getInstance(this);
 
+		// Set up activity fields
+		choiceText = (EditText) findViewById(R.id.choiceText);
+		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
+		
+		//Set up adapter
+		chapterAdapter = new AdapterChapters(this,
+				R.layout.browse_chapter_item, data);
+		chapters.setAdapter(chapterAdapter);
+	}
+
+	/**
+	 * Set onClick listener for adding choice
+	 */
+	public void setAddChoiceListener() {
 		// Handle adding the choice into the chapter
 		chapters.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -81,13 +103,5 @@ public class EditChoiceActivity extends Activity {
 				finish();
 			}
 		});
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		data.clear();
-		data.addAll(gc.getAllChapters(story.getId()));
-		chapterAdapter.notifyDataSetChanged();
 	}
 }
