@@ -135,14 +135,8 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
-			/*
-			 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING
-			 * NON IMPLEMENTED MESSAGE HERE.
-			 */
-			// intent = new Intent(this, SearchActivity.class);
-			// startActivity(intent);
-			Toast.makeText(getBaseContext(), "Not implemented this iteration",
-					Toast.LENGTH_SHORT).show();
+			intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
