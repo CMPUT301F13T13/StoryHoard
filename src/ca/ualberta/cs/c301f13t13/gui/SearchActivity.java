@@ -19,11 +19,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 
 /**
  * Search Activity
@@ -43,15 +43,17 @@ public class SearchActivity extends Activity {
 		setContentView(R.layout.activity_search);
 		searchButton = (Button) findViewById(R.id.searchButton);
 		searchButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(getBaseContext(),
-							SearchResultsActivity.class);
-					finish();
-					startActivity(intent);
-				}
-			});
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getBaseContext(),
+						SearchResultsActivity.class);
+				finish();
+				startActivity(intent);
+			}
+		});
 	}
+
+	// MENU INFORMATION
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,7 +61,23 @@ public class SearchActivity extends Activity {
 		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.browse_stories:
+			Intent add = new Intent(this, ViewBrowseStories.class);
+			startActivity(add);
+			finish();
+			return true;
+		case R.id.add_story:
+			Intent stats = new Intent(this, EditStoryActivity.class);
+			startActivity(stats);
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
-
-
-
