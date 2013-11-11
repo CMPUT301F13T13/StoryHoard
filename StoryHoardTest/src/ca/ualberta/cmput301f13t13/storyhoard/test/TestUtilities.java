@@ -24,8 +24,11 @@ import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -39,14 +42,25 @@ import android.test.ActivityInstrumentationTestCase2;
  * @see Utilities
  */
 public class TestUtilities extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-
+		ActivityInstrumentationTestCase2<EditChapterActivity> {
+	private EditChapterActivity activity;
+	
 	public TestUtilities() {
-		super(ViewBrowseStories.class);
+		super(EditChapterActivity.class);
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("Story", story);
+		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+		
+		setActivityIntent(intent);		
+		activity = getActivity();
 	}
 	/**
 	 * Tests the get phoneId returns a string of phoneid 
@@ -119,14 +133,14 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void testObjectsToMedia() {
-		fail("not yet implemented");
-		Media media = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
+		activity.takePhoto();
+		Uri uri = activity.getImageFileUri();
+		
+		Media media = new Media(UUID.randomUUID(), uri.getPath(),
 				Media.PHOTO);
-		Media media2 = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
-				Media.ILLUSTRATION);
+
 		ArrayList<Object> objects = new ArrayList<Object>();
 		objects.add(media);
-		objects.add(media2);
 		ArrayList<Media> medias = Utilities.objectsToMedia(objects);
 		try {
 			ArrayList<Media> as = medias;

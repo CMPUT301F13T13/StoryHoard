@@ -81,11 +81,12 @@ public class MediaManager implements StoringManager{
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
 		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (media.getChapterId()).toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getPath()));
+		if (media.getPath() != null) {
+			values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getPath()));
+		}
 		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
 
 		db.insert(MediaTable.TABLE_NAME, null, values);	
-		
 	}
 
 	/**

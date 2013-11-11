@@ -223,7 +223,7 @@ public class ViewChapter extends Activity {
 	 * CODE REUSE 
 	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
 	 */
-	private void browseGallery() {
+	public void browseGallery() {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -231,7 +231,7 @@ public class ViewChapter extends Activity {
 				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
 	}	
 	
-	private void takePhoto() {
+	public void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		imageFileUri = util.getUri();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
@@ -275,5 +275,4 @@ public class ViewChapter extends Activity {
 			}
 		}		
 	}
-	
 }

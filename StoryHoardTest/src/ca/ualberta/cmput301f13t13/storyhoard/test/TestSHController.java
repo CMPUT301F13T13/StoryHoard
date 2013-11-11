@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
@@ -28,11 +29,14 @@ import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.DBContract;
 import ca.ualberta.cs.c301f13t13.backend.DBHelper;
 import ca.ualberta.cs.c301f13t13.backend.Media;
+import ca.ualberta.cs.c301f13t13.backend.MediaManager;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
 
 /**
  * Class meant for the testing of the GeneralController class in the 
@@ -43,20 +47,32 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * @see SHController
  */
 public class TestSHController extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<EditChapterActivity> {
 	SHController gc = null;
+	private static Uri uri;
+	private static EditChapterActivity activity;
 	
 	public TestSHController() {
-		super(ViewBrowseStories.class);
+		super(EditChapterActivity.class);
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("Story", story);
+		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+
+		setActivityIntent(intent);
+		activity = getActivity();	
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		activity.deleteDatabase(DBContract.DATABASE_NAME);
 		
 		gc = SHController.getInstance(getActivity());
 	}
@@ -186,30 +202,22 @@ public class TestSHController extends
 		assertEquals(choices.size(), 2);
 	}
 	
-	/**
-	 * Tests using the controller to add media and then retrieve it 
-	 * again.
-	 */
-	public void testAddGetAllMedia() {
-		fail("not yet implemented");
-		
-		UUID cId = UUID.randomUUID();
-		Media photo1 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
-		Media photo2 = new Media(cId, Uri.parse("https://"), Media.PHOTO);
-		Media ill1 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
-		Media ill2 = new Media(cId, Uri.parse("https://"), Media.ILLUSTRATION);
-
-		gc.addObject(photo1, ObjectType.MEDIA);
-		gc.addObject(photo2, ObjectType.MEDIA);
-		gc.addObject(ill1, ObjectType.MEDIA);
-		gc.addObject(ill2, ObjectType.MEDIA);
-
-		ArrayList<Media> photos = gc.getAllPhotos(cId);
-		ArrayList<Media> ills = gc.getAllIllustrations(cId);
-
-		assertEquals(photos.size(), 2);
-		assertEquals(ills.size(), 2);
-	}	
+//	/**
+//	 * Tests using the controller to add media and then retrieve it 
+//	 * again.
+//	 */
+//	public void testAddGetAllMedia() {
+//		activity.takePhoto();	
+//		uri = activity.getImageFileUri();		
+//		Chapter chap = activity.getChapter();
+//		Media photo1 = new Media(chap.getId(), null, Media.PHOTO);
+//
+//		gc.addObject(photo1, ObjectType.MEDIA);
+//
+//		ArrayList<Media> photos = gc.getAllPhotos(chap.getId());
+//
+//		assertEquals(photos.size(), 2);
+//	}	
 
 	/**
 	 * Tests using the controller to test for a variety of different stories
@@ -218,12 +226,11 @@ public class TestSHController extends
 	public void testSearchStory() {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
-		fail("published stories not yet implemented");
 		// Insert some stories
 		Story s1 = new Story("Lily the cow", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
 		s1.setFirstChapterId(UUID.randomUUID());
-		Story s2 = new Story("Bob the cow", "me", "D: none", 
+		Story s2 = new Story("Bob the hen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
 		s2.setFirstChapterId(UUID.randomUUID());
 		Story s3 = new Story("Bob the cow", "me", "D: none", 
@@ -242,29 +249,25 @@ public class TestSHController extends
 		gc.addObject(s1, ObjectType.CACHED_STORY);
 		gc.addObject(s2, ObjectType.CREATED_STORY);
 		gc.addObject(s3, ObjectType.CREATED_STORY);
-		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
-		gc.addObject(s5, ObjectType.PUBLISHED_STORY);
-		gc.addObject(s6, ObjectType.PUBLISHED_STORY);
+//		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
+//		gc.addObject(s5, ObjectType.PUBLISHED_STORY);
+//		gc.addObject(s6, ObjectType.PUBLISHED_STORY);
 
-		// both author and title are null (should retrieve all created stories)
-		stories = gc.searchStory(null, null, ObjectType.CREATED_STORY);
+		// title are null (should retrieve all created stories)
+		stories = gc.searchStory(null, ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 2);
 
-		// author is me, and created by author
-		stories = gc.searchStory(null, "me", ObjectType.CREATED_STORY);
-		assertEquals(stories.size(), 2);
-
-		// author is me, and not created by author
-		stories = gc.searchStory(null, "me", ObjectType.CACHED_STORY);
+		// title has cow, created
+		stories = gc.searchStory("cow", ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 1);
 
-		// author is null, created, title is bob the cow
-		stories = gc.searchStory("Bob the cow", null, ObjectType.CREATED_STORY);
+		// created, title has bob and hen
+		stories = gc.searchStory("Bob hen", ObjectType.CREATED_STORY);
 		assertEquals(stories.size(), 1);
 
-		// title is sad cow, published
-		stories = gc.searchStory(null, "me", ObjectType.PUBLISHED_STORY);
-		assertEquals(stories.size(), 3);
+		// title has sad
+//		stories = gc.searchStory("sad", ObjectType.PUBLISHED_STORY);
+//		assertEquals(stories.size(), 3);
 	}
 
 	/**
@@ -314,17 +317,11 @@ public class TestSHController extends
 
 		Chapter newc1 = chapters.get(0);
 		newc1.setText("a cow mooed");
-		
-		fail("not yet implemented");
-		Media m = new Media(c1.getId(), Uri.parse("https://"), Media.PHOTO);
-		newc1.addPhoto(m);
 
 		gc.updateObject(newc1, ObjectType.CHAPTER);
 
 		chapters = gc.getAllChapters(storyId);
 		newc1 = chapters.get(0);
-		ArrayList<Media> medias = gc.getAllPhotos(c1.getId());
-		assertEquals(medias.size(), 1);
 
 		assertFalse(newc1.getText().equals(c1.getText()));
 	}
@@ -361,24 +358,21 @@ public class TestSHController extends
 	 * Tests using the general controller to edit media objects.
 	 */
 	public void testUpdateMediaLocally() {
-		fail("not yet implemented");
 		ArrayList<Media> medias = new ArrayList<Media>();
 		UUID chapId = UUID.randomUUID();
 
 		// Insert some media
-		Media m1 = new Media(chapId, Uri.parse("https://google.ca"), 
-				Media.PHOTO);
-		Media m2 = new Media(chapId, Uri.parse("https://google.ca"), 
-				Media.PHOTO);
+		Media m1 = new Media(chapId, null, Media.PHOTO);
+
 
 		gc.addObject(m1, ObjectType.MEDIA);
-		gc.addObject(m2, ObjectType.MEDIA);
 		
 		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 2);
 
 		Media newM1 = medias.get(0);
-		newM1.setPath(Uri.parse("https://ualberta.ca"));
+		activity.takePhoto();
+		newM1.setPath(activity.getImageFileUri().getPath());
 		newM1.setType(Media.ILLUSTRATION);
 
 		gc.updateObject(newM1, ObjectType.MEDIA);
@@ -389,7 +383,7 @@ public class TestSHController extends
 		medias = gc.getAllIllustrations(chapId);
 		assertEquals(medias.size(), 1);
 		newM1 = medias.get(0);
-		assertFalse(newM1.getPath().equals(m1.getPath()));
+		assertFalse(newM1.getPath() == null);
 	}
 
 	/**
@@ -540,8 +534,8 @@ public class TestSHController extends
 		Choice choice2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
 		
 		fail("not yet implemented");
-		Media m1 = new Media(chap1.getId(), Uri.parse("https://googe.ca"),
-							 Media.PHOTO);
+		Media m1 = new Media(chap1.getId(), 
+				activity.getImageFileUri().getPath(), Media.PHOTO);
 
 		// add everything into database
 		gc.addObject(m1, ObjectType.MEDIA);

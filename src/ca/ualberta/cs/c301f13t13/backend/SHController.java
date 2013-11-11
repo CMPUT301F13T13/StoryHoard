@@ -219,33 +219,27 @@ public class SHController {
 	 * 
 	 * @param title
 	 *            Title of the story user is looking for.
-	 * @param author
-	 *            Author of the story user is looking for.
+	 *            
 	 * @param type
-	 *            Will either be PUBLISHED, CACHED, or CREATED
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, 
+	 *            CREATED_STORY
 	 *            
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title, String author, 
-				ObjectType type) {
+	public ArrayList<Story> searchStory(String title, ObjectType type) {
 		Story criteria = null;
 		ArrayList<Object> objects = new ArrayList<Object>();
 		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
 
-		switch (type) {
-		case CACHED_STORY:
-			criteria = new Story(null, title, author, null, null);
-			break;
-		case CREATED_STORY:
-			criteria = new Story(null, title, author, null, null);
-			break;
-		case PUBLISHED_STORY:
-			break;
-		default:
-			// raise exception
-			break;
+		if (type.equals(ObjectType.CREATED_STORY)) {
+			criteria = new Story(null, title, null, null, 
+					Utilities.getPhoneId(context));
+		} else if (type.equals(ObjectType.CACHED_STORY)) {
+			criteria = new Story(null, title, null, null, 
+					"none");
 		}
+
 		objects = sm.retrieve(criteria);
 		stories = Utilities.objectsToStories(objects);
 		return stories;

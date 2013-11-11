@@ -17,12 +17,15 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.UUID;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 import ca.ualberta.cs.c301f13t13.backend.*;
+import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
 
 /**
  * Class meant for the testing of the Media class in the StoryHoard 
@@ -33,31 +36,42 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  * @see Media
  */
 public class TestMedia extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final Uri uri = Uri.parse("https://cow");
-
+		ActivityInstrumentationTestCase2<EditChapterActivity> {
+	private static Uri uri;
+	private static EditChapterActivity activity;
+	
 	public TestMedia() {
-		super(ViewBrowseStories.class);
+		super(EditChapterActivity.class);
+	}
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("Story", story);
+		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+		
+		setActivityIntent(intent);
+		
+		activity = getActivity();
+		activity.takePhoto();
+		uri = activity.getImageFileUri();
 	}
 
 	/**
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		fail("not yet implemented");
+		assertTrue(uri != null);
 		
 		// Make photo
 		try {
-			Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
+			Media photo = new Media(UUID.randomUUID(), uri.getPath(), 
+					Media.PHOTO);
 			assertTrue(photo.getBitmap() != null);
-		} catch (Exception e) {
-			fail("error creating a new media object");
-		}
-
-		// Make illustration
-		try {
-			Media ill = new Media(UUID.randomUUID(), uri, Media.ILLUSTRATION);
-			assertTrue(ill.getBitmap() != null);
 		} catch (Exception e) {
 			fail("error creating a new media object");
 		}
@@ -70,8 +84,12 @@ public class TestMedia extends
 	public void testSettersGetters() {
 		fail("not yet implemented");
 		
-		Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
+		Media photo = new Media(UUID.randomUUID(), uri.getPath(), Media.PHOTO);
 
+		// Take new photo
+		activity.takePhoto();
+		Uri newUri = activity.getImageFileUri();
+		
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
 		String type = photo.getType();
@@ -80,12 +98,12 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
-		photo.setPath(Uri.parse("https://dog"));
-
+		photo.setPath(newUri.getPath());
+		
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertNotSame(type, photo.getType());
 		assertTrue(photo.getBitmap() != null);
-		assertTrue(photo.getPath() != uri);
+		assertFalse(photo.getPath().equals(uri.getPath()));
 	}
 }

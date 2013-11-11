@@ -57,9 +57,9 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
 		
-		chap.addPhoto(m);
+//		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
@@ -87,11 +87,11 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
 		
 		// generate bitmap 
 		
-		chap.addPhoto(m);
+//		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
@@ -123,11 +123,11 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
 		
 		// generate bitmap 
 		
-		chap.addPhoto(m);
+//		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);

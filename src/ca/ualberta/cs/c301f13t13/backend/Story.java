@@ -16,7 +16,9 @@
 package ca.ualberta.cs.c301f13t13.backend;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
@@ -293,7 +295,7 @@ public class Story implements Serializable {
 		}
 
 		if (title != null) {
-			info.put(StoryTable.COLUMN_NAME_TITLE, title);
+			multiWord(info);
 		}
 
 		if (phoneId != null) {
@@ -303,6 +305,23 @@ public class Story implements Serializable {
 		return info;
 	}
 
+	/**
+	 * Splits up the string for the title into keywords so a search
+	 * to find stories with titles containing the keywords will
+	 * be possible.
+	 * 
+	 * @param info
+	 */
+	private void multiWord(HashMap<String, String> info) {
+		List<String> words;
+
+		words = Arrays.asList(title.split("\\s+"));
+		
+		for (String keyword : words) {
+			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
+		}
+	}
+	
 	/**
 	 * Converts a story object to an String.
 	 */

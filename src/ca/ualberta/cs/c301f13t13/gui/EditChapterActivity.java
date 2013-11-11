@@ -256,7 +256,7 @@ public class EditChapterActivity extends Activity {
 	 * Campbell License: Unlicense 
 	 * Date: Nov. 7, 2013
 	 */
-	private void takePhoto() {
+	public void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		imageFileUri = util.getUri();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
@@ -306,4 +306,12 @@ public class EditChapterActivity extends Activity {
 			}
 		}	
 	}
+	
+	public Uri getImageFileUri() {
+		return this.imageFileUri;
+	}	
+	
+	public Chapter getChapter() {
+		return this.chapt;
+	}		
 }

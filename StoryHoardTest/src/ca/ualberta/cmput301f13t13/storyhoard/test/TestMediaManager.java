@@ -22,6 +22,7 @@ import java.util.UUID;
 import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.*;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -34,12 +35,13 @@ import android.test.ActivityInstrumentationTestCase2;
  * @see MediaManager
  */
 public class TestMediaManager extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final Uri uri = Uri.parse("https://cow");
+		ActivityInstrumentationTestCase2<EditChapterActivity> {
+	private static Uri uri;
 	private MediaManager mm = null;
+	private static EditChapterActivity activity;
 	
 	public TestMediaManager() {
-		super(ViewBrowseStories.class);
+		super(EditChapterActivity.class);
 	}
 
 	protected void setUp() throws Exception {
@@ -50,84 +52,74 @@ public class TestMediaManager extends
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
 		mm = MediaManager.getInstance(getActivity());
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Intent intent = new Intent();
+		intent.putExtra("isEditing", false);
+		intent.putExtra("addingNewChapt", true);
+		intent.putExtra("Story", story);
+		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+		
+		setActivityIntent(intent);
+		
+		activity = getActivity();
+		activity.takePhoto();
+		uri = activity.getImageFileUri();		
 	}
 
 	/**
 	 * Tests adding and loading an image.
 	 */
 	public void testAddLoadImage() {
-		fail("not yet implemented");
-		Media mockMedia = new Media(UUID.randomUUID(), uri, Media.PHOTO);
-
-		mm.insert(mockMedia);
+		Chapter chap = activity.getChapter();
+		Media mockMedia = new Media(null, chap.getId(), null, null);
 
 		ArrayList<Object> objects = mm.retrieve(mockMedia);
 		assertEquals(objects.size(), 1);
 
 		Media check = (Media) objects.get(0);
-		assertTrue(check != null);
+		assertTrue(check.getBitmap() != null);
 	}
 
 	/**
 	 * Tests getting all photos, and all illustrations belonging to a chapter.
 	 */
 	public void testGetAllMedia() {
-		fail("not yet implemented");
-		
+		activity.takePhoto();
+		Uri uri2 = activity.getImageFileUri();
 		UUID chapId = UUID.randomUUID();
-		Media m1 = new Media(chapId, uri, Media.PHOTO);
-		Media m2 = new Media(chapId, uri, Media.PHOTO);
-		Media m3 = new Media(chapId, uri, Media.ILLUSTRATION);
-		Media m4 = new Media(chapId, uri, Media.ILLUSTRATION);
+		
+		Media m2 = new Media(chapId, uri2.getPath(), Media.PHOTO);
 
-		mm.insert(m1);
 		mm.insert(m2);
-		mm.insert(m3);
-		mm.insert(m4);
 
 		// get all media
 		Media criteria = new Media(null, chapId, null, null);
 		ArrayList<Object> objects = mm.retrieve(criteria);
-		assertEquals(objects.size(), 4);
-
-		// get all photos
-		criteria = new Media(null, chapId, null, Media.PHOTO);
-		objects = mm.retrieve(criteria);
-		assertEquals(objects.size(), 2);
+		assertEquals(objects.size(), 1);
 
 		Media newm = (Media) objects.get(0);
-		assertTrue(newm != null);
-		assertTrue(newm.getType().equals(Media.PHOTO));
-
-		// get all illustrations
-		criteria = new Media(null, chapId, null, Media.ILLUSTRATION);
-		objects = mm.retrieve(criteria);
-		assertEquals(objects.size(), 2);
-
-		newm = (Media) objects.get(0);
-		assertTrue(newm != null);
-		assertTrue(newm.getType().equals(Media.ILLUSTRATION));
+		assertTrue(newm.getBitmap() != null);
 	}
 
 	/**
 	 * Tests updating a chapter's media.
 	 */
 	public void testUpdateMedia() {
-		fail("not yet implemented");
+		Chapter chap = activity.getChapter();
+		Media criteria = new Media(null, chap.getId(), null, null);
 		
-		Chapter mockChapter = new Chapter(UUID.randomUUID(), "hi there");
-
-		// Making media for chapter
-		Media m1 = new Media(mockChapter.getId(), uri, Media.PHOTO);
-		mm.insert(m1);
-
-		ArrayList<Object> objects = mm.retrieve(m1);
+		ArrayList<Object> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);
 
 		Media newM1 = (Media) objects.get(0);
 
 		newM1.setType(Media.ILLUSTRATION);
-		newM1.setPath(Uri.parse("https://dog"));
+		
+		activity.takePhoto();
+		Uri uri2 = activity.getImageFileUri();
+		
+		newM1.setPath(uri2.getPath());
 
 		mm.update(newM1);
 
@@ -137,6 +129,6 @@ public class TestMediaManager extends
 		newM1 = (Media) objects.get(0);
 
 		assertFalse(newM1.getType().equals(Media.PHOTO));
-		assertNotSame(newM1.getPath(), uri);
+		assertFalse(newM1.getPath().equals(uri.getPath()));
 	}
 }
