@@ -26,7 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
@@ -42,7 +42,7 @@ public class ViewStory extends Activity {
 	Story focusedStory;
 	SHController gc;
 
-	private ImageView storyCover;
+	//private ImageView storyCover;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
@@ -54,41 +54,47 @@ public class ViewStory extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_story);
 
-		final ActionBar actionBar = getActionBar();
-		actionBar.setTitle("Story Metadata");
-		actionBar.setDisplayShowTitleEnabled(true);
+		/*
+		 * final ActionBar actionBar = getActionBar();
+		 * actionBar.setTitle("Story Metadata");
+		 * actionBar.setDisplayShowTitleEnabled(true);
+		 */
 
-		storyCover = (ImageView) findViewById(R.id.storyImage);
-		storyTitle = (TextView) findViewById(R.id.storyTitle);
-		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
-		storyDescription = (TextView) findViewById(R.id.storyDescription);
-		beginReading = (Button) findViewById(R.id.viewFirstChapter);
-
+		/*
+		 * storyCover = (ImageView) findViewById(R.id.storyImage); storyTitle =
+		 * (TextView) findViewById(R.id.storyTitle); storyAuthor = (TextView)
+		 * findViewById(R.id.storyAuthor); storyDescription = (TextView)
+		 * findViewById(R.id.storyDescription); beginReading = (Button)
+		 * findViewById(R.id.viewFirstChapter);
+		 */
 		// Initialize the general controller and grab the story
-		gc = SHController.getInstance(this);
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.getSerializable("storyID");
-		focusedStory = gc.getCompleteStory(storyID);
-		
+		/*
+		 * gc = SHController.getInstance(this); Bundle bundle =
+		 * this.getIntent().getExtras(); storyID = (UUID)
+		 * bundle.getSerializable("storyID"); focusedStory =
+		 * gc.getCompleteStory(storyID);
+		 */
 		// Initialize the read button
-		beginReading.setOnClickListener(new OnClickListener() {
+		/*beginReading.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Begin reading, go to first chapter
-				Intent intent = new Intent(getBaseContext(), 
-						ViewChapter.class);
+				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", focusedStory.getFirstChapterId());
 				startActivity(intent);
 				finish();
 			}
-		});
+		});*/
 	}
 
 	@Override
 	public void onResume() {
+		super.onResume();
+		setUpFields();
+		setBeginReading();
 		focusedStory = gc.getCompleteStory(storyID);
-//		storyCover.setImageBitmap(focusedStory.getImage());
+		// storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
 		if (focusedStory.getTitle().equals("")) {
 			storyTitle.setText("<No Title>");
@@ -107,7 +113,6 @@ public class ViewStory extends Activity {
 		} else {
 			storyDescription.setText(focusedStory.getDescription());
 		}
-		super.onResume();
 	}
 
 	@Override
@@ -136,5 +141,45 @@ public class ViewStory extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	/**
+	 * Initialize private fields
+	 */
+	public void setUpFields() {
+		// Grab GC and story info
+		gc = SHController.getInstance(this);
+		Bundle bundle = this.getIntent().getExtras();
+		storyID = (UUID) bundle.getSerializable("storyID");
+		focusedStory = gc.getCompleteStory(storyID);
+
+		// Initialize the activity fields
+		//storyCover = (ImageView) findViewById(R.id.storyImage);
+		storyTitle = (TextView) findViewById(R.id.storyTitle);
+		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
+		storyDescription = (TextView) findViewById(R.id.storyDescription);
+		beginReading = (Button) findViewById(R.id.viewFirstChapter);
+
+		// Set up action bar
+		final ActionBar actionBar = getActionBar();
+		actionBar.setTitle("Story Metadata");
+		actionBar.setDisplayShowTitleEnabled(true);
+	}
+
+	/**
+	 * set begin reading OnClickListener
+	 */
+	public void setBeginReading() {
+		beginReading.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Begin reading, go to first chapter
+				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+				intent.putExtra("storyID", storyID);
+				intent.putExtra("chapterID", focusedStory.getFirstChapterId());
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 }
