@@ -33,8 +33,8 @@ import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
- * Takes a storyID bundle, displays all the chapters related to that story.
- * Used for editing chapters.
+ * Takes a storyID bundle, displays all the chapters related to that story. Used
+ * for editing chapters.
  * 
  * @author alexanderwwong
  */
@@ -53,19 +53,19 @@ public class ViewBrowseChapters extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_chapters);
 
-		gc = SHController.getInstance(getBaseContext());
-		storyChapters = (ListView) findViewById(R.id.storyChapters);
+		// gc = SHController.getInstance(getBaseContext());
+		// storyChapters = (ListView) findViewById(R.id.storyChapters);
 
 		// Grab the story, pull all the available chapters
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.get("storyID");
-		story = gc.getCompleteStory(storyID);
+		// Bundle bundle = this.getIntent().getExtras();
+		// storyID = (UUID) bundle.get("storyID");
+		// story = gc.getCompleteStory(storyID);
 
 		// Setup the choices and choice adapters
-		chapterAdapter = new AdapterChapters(this,
-				R.layout.browse_chapter_item, data);
-		storyChapters.setAdapter(chapterAdapter);
-		storyChapters.setOnItemClickListener(new OnItemClickListener() {
+		// chapterAdapter = new AdapterChapters(this,
+		// R.layout.browse_chapter_item, data);
+		// storyChapters.setAdapter(chapterAdapter);
+		/*storyChapters.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -79,7 +79,7 @@ public class ViewBrowseChapters extends Activity {
 				intent.putExtra("Chapter", chapter);
 				startActivity(intent);
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -108,8 +108,50 @@ public class ViewBrowseChapters extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		setUpFields();
+		setOnItemClickListener();
 		data.clear();
 		data.addAll(gc.getAllChapters(storyID));
 		chapterAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * Initialize private fields needed
+	 */
+	public void setUpFields() {
+		// Grab GC and pull all chapters from story
+		gc = SHController.getInstance(this);
+		Bundle bundle = this.getIntent().getExtras();
+		storyID = (UUID) bundle.get("storyID");
+		story = gc.getCompleteStory(storyID);
+
+		// Set up activity field
+		storyChapters = (ListView) findViewById(R.id.storyChapters);
+
+		// Set adapter
+		chapterAdapter = new AdapterChapters(this,
+				R.layout.browse_chapter_item, data);
+		storyChapters.setAdapter(chapterAdapter);
+	}
+
+	/**
+	 * set chapter list OnItemClickListener
+	 */
+	public void setOnItemClickListener() {
+		storyChapters.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Go to edit that chapter
+				Chapter chapter = data.get(arg2);
+				Intent intent = new Intent(getBaseContext(),
+						EditChapterActivity.class);
+				intent.putExtra("isEditing", true);
+				intent.putExtra("addingNewChapt", false);
+				intent.putExtra("Story", story);
+				intent.putExtra("Chapter", chapter);
+				startActivity(intent);
+			}
+		});
 	}
 }
