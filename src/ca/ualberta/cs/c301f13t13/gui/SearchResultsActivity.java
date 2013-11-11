@@ -17,8 +17,10 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -37,11 +39,30 @@ public class SearchResultsActivity extends Activity {
 		setContentView(R.layout.activity_view_search_results);
 	}
 
+	// MENU INFORMATION
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.view_search_results, menu);
+		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.browse_stories:
+			Intent browse = new Intent(this, ViewBrowseStories.class);
+			startActivity(browse);
+			return true;
+		case R.id.add_story:
+			Intent add = new Intent(this, EditStoryActivity.class);
+			add.putExtra("isEditing", false);
+			startActivity(add);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
