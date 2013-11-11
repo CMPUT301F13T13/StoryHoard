@@ -52,34 +52,6 @@ public class ViewBrowseChapters extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_chapters);
-
-		// gc = SHController.getInstance(getBaseContext());
-		// storyChapters = (ListView) findViewById(R.id.storyChapters);
-
-		// Grab the story, pull all the available chapters
-		// Bundle bundle = this.getIntent().getExtras();
-		// storyID = (UUID) bundle.get("storyID");
-		// story = gc.getCompleteStory(storyID);
-
-		// Setup the choices and choice adapters
-		// chapterAdapter = new AdapterChapters(this,
-		// R.layout.browse_chapter_item, data);
-		// storyChapters.setAdapter(chapterAdapter);
-		/*storyChapters.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// Go to edit that chapter
-				Chapter chapter = data.get(arg2);
-				Intent intent = new Intent(getBaseContext(),
-						EditChapterActivity.class);
-				intent.putExtra("isEditing", true);
-				intent.putExtra("addingNewChapt", false);
-				intent.putExtra("Story", story);
-				intent.putExtra("Chapter", chapter);
-				startActivity(intent);
-			}
-		});*/
 	}
 
 	@Override
