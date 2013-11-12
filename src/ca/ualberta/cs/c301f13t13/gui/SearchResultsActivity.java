@@ -16,13 +16,21 @@
 
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
+import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
  * Search Results activity
@@ -35,6 +43,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 public class SearchResultsActivity extends Activity {
 	private String title_name;
 	private String story_type;
+	private GridView gridView;
+	private ArrayList<Story> gridArray = new ArrayList<Story>();
+	private AdapterStories customGridAdapter;
+	ObjectType viewType = ObjectType.CREATED_STORY;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +59,32 @@ public class SearchResultsActivity extends Activity {
 		story_type = bundle.getString("Type");
 		title_name = bundle.getString("Input_title");
 		
+		viewType = ObjectType.CREATED_STORY;
 
+		// Setup the grid view for the stories
+		gridView = (GridView) findViewById(R.id.gridStoriesView);
+		customGridAdapter = new AdapterStories(this,
+				R.layout.browse_story_item, gridArray);
+		gridView.setAdapter(customGridAdapter);
+
+		// Setup the grid view click listener
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// Handle going to view story activity
+				Intent intent = new Intent(getBaseContext(), ViewStory.class);
+				intent.putExtra("storyID", gridArray.get(arg2).getId());
+				startActivity(intent);
+			}
+		});	
+		
 	}
 
+	
+	
+	
+	
 	// MENU INFORMATION
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
