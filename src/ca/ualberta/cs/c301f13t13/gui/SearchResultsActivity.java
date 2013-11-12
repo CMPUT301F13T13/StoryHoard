@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -32,11 +33,20 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 public class SearchResultsActivity extends Activity {
+	private String title_name;
+	private String story_type;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_search_results);
+
+		// Check if we are editing the story or making a new story
+		Bundle bundle = this.getIntent().getExtras();
+		story_type = bundle.getString("Type");
+		title_name = bundle.getString("Input_title");
+		
+
 	}
 
 	// MENU INFORMATION
