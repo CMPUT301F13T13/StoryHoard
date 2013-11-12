@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,7 +115,7 @@ public class SearchActivity extends Activity{
 	}
 
 	
-	// Checks to see if note is empty
+	// Checks to see if story title is empty
 		private boolean valid_input(String user_input) {
 			int length = user_input.length();
 			if (length == 0) {
