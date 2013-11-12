@@ -51,8 +51,8 @@ import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
- * Views the chapter provided through the intent. Does not allow going 
- * backwards through the activity stack.
+ * Views the chapter provided through the intent. Does not allow going backwards
+ * through the activity stack.
  * 
  * @author Alexander Wong
  * 
@@ -74,7 +74,7 @@ public class ViewChapter extends Activity {
 	private TextView chapterContent;
 	private ListView chapterChoices;
 	private Button addPhotoButton;
-	
+
 	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
@@ -83,16 +83,15 @@ public class ViewChapter extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_chapter);
-
 		setUpFields();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		setNextChapterListener();
-		setAddPhotoListener();		
+		setAddPhotoListener();
 		updateData();
 	}
 
@@ -117,9 +116,9 @@ public class ViewChapter extends Activity {
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
-		chapterChoices.setAdapter(choiceAdapter);	
+		chapterChoices.setAdapter(choiceAdapter);
 	}
-	
+
 	/**
 	 * Gets the new chapter and updates the view's components.
 	 */
@@ -139,14 +138,14 @@ public class ViewChapter extends Activity {
 		} else {
 			choices.addAll(chapter.getChoices());
 		}
-		choiceAdapter.notifyDataSetChanged();		
-		
+		choiceAdapter.notifyDataSetChanged();
+
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
-		
+
 		photos.removeAllViews();
 		illustrations.removeAllViews();
-		
+
 		// Insert Photos
 		for (Media photo : photoList) {
 			photos.addView(util.insertImage(photo, this));
@@ -155,9 +154,9 @@ public class ViewChapter extends Activity {
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(util.insertImage(ill, this));
-		}		
+		}
 	}
-	
+
 	/**
 	 * Sets up the onClick listener for the button to add a new photo.
 	 */
@@ -165,36 +164,36 @@ public class ViewChapter extends Activity {
 		addPhotoButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(ViewChapter.this);
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						ViewChapter.this);
 				// Set dialog title
 				alert.setTitle("Choose method:");
 				// Options that user may choose to add photo
-				final String[] methods = { "Take Photo",
-				"Choose from Gallery" };
+				final String[] methods = { "Take Photo", "Choose from Gallery" };
 				alert.setSingleChoiceItems(methods, -1,
 						new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int item) {
-						switch (item) {
-						case 0:
-							takePhoto();
-							break;
-						case 1:
-							browseGallery();
-							break;
-						}
-						photoDialog.dismiss();
-					}
-				});
+							@Override
+							public void onClick(DialogInterface dialog, int item) {
+								switch (item) {
+								case 0:
+									takePhoto();
+									break;
+								case 1:
+									browseGallery();
+									break;
+								}
+								photoDialog.dismiss();
+							}
+						});
 				photoDialog = alert.create();
 				photoDialog.show();
 			}
-		});		
+		});
 	}
-	
+
 	/**
-	 * Sets up the onClick listener for the button to flip to the next
-	 * chapter (selecting a choice).
+	 * Sets up the onClick listener for the button to flip to the next chapter
+	 * (selecting a choice).
 	 */
 	public void setNextChapterListener() {
 		chapterChoices.setOnItemClickListener(new OnItemClickListener() {
@@ -203,57 +202,59 @@ public class ViewChapter extends Activity {
 					long arg3) {
 				// Go to the chapter in question
 				UUID nextChapter = choices.get(arg2).getNextChapter();
-				Intent intent = new Intent(getBaseContext(), 
-						ViewChapter.class);
+				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				intent.putExtra("storyID", storyID);
 				intent.putExtra("chapterID", nextChapter);
-				
+
 				photos.removeAllViews();
 				illustrations.removeAllViews();
-				
+
 				startActivity(intent);
 				finish();
 			}
-		});		
+		});
 	}
 
 	/**
 	 * Code for browsing gallery
 	 * 
-	 * CODE REUSE 
-	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
+	 * CODE REUSE URL:
+	 * http://stackoverflow.com/questions/6016000/how-to-open-phones
+	 * -gallery-through-code
 	 */
 	public void browseGallery() {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"), 
-				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);		
-	}	
-	
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
+	}
+
 	public void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		imageFileUri = util.getUri();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	}		
-	
+	}
+
 	/**
 	 * Adds an image into the gallery
 	 */
 	public void insertIntoGallery(Media image) {
-	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-	    File f = new File(image.getPath());
-	    Uri contentUri = Uri.fromFile(f);
-	    mediaScanIntent.setData(contentUri);
-	    this.sendBroadcast(mediaScanIntent);		
-	}	
-	
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		Intent mediaScanIntent = new Intent(
+				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		File f = new File(image.getPath());
+		Uri contentUri = Uri.fromFile(f);
+		mediaScanIntent.setData(contentUri);
+		this.sendBroadcast(mediaScanIntent);
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Media photo = new Media(chapter.getId(), imageFileUri.getPath(), 
-						Media.PHOTO);
+				Media photo = new Media(chapter.getId(),
+						imageFileUri.getPath(), Media.PHOTO);
 				gc.addObject(photo, ObjectType.MEDIA);
 				insertIntoGallery(photo);
 			} else if (resultCode == RESULT_CANCELED) {
@@ -273,6 +274,6 @@ public class ViewChapter extends Activity {
 			} else {
 				System.err.println("Error in taking a photo" + resultCode);
 			}
-		}		
+		}
 	}
 }
