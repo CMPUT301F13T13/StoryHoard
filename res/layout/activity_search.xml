@@ -13,7 +13,7 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/story_search"
+            android:id="@+id/story_name"
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:layout_weight="1"
@@ -43,7 +43,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/search_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/view_type_choices"

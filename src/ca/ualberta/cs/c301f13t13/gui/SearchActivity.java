@@ -22,7 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -34,23 +39,54 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity{
 	private Button searchButton;
+	private EditText title_input;
+	private String story_type;
+	private Spinner spinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		searchButton = (Button) findViewById(R.id.searchButton);
+		title_input = (EditText) findViewById(R.id.story_name);
+		spinner = (Spinner) findViewById(R.id.search_spinner);
+
+		
+		// Le spinner stuff
+
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {	 
+	            @Override
+	            public void onItemSelected(AdapterView<?> adapter, View v,
+	                    int position, long id) {
+	                // On selecting a spinner item
+	                String item = adapter.getItemAtPosition(position).toString();
+	 
+	                // Showing selected spinner item
+	                Toast.makeText(getApplicationContext(),
+	                        "the option chosen was : " + item, Toast.LENGTH_LONG).show();
+	            }
+	            @Override
+	            public void onNothingSelected(AdapterView<?> arg0) {
+	                // TODO Auto-generated method stub
+	            }
+	        });
+		
+		// Adding some stuff to pack in for the search
 		searchButton.setOnClickListener(new OnClickListener() {
-			@Override
+			/*
+			 * Save all text forms to first story Switch to first chapter
+			 * creation activity
+			 */
 			public void onClick(View v) {
+				String title = title_input.getText().toString();
 				Intent intent = new Intent(getBaseContext(),
 						SearchResultsActivity.class);
 				finish();
 				startActivity(intent);
 			}
-		});
+		});	
 	}
 
 	// MENU INFORMATION
@@ -79,4 +115,5 @@ public class SearchActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 }
