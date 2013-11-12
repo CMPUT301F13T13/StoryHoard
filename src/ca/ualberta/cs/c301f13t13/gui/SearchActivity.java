@@ -56,14 +56,7 @@ public class SearchActivity extends Activity{
 		// Le spinner stuff
 		onSpinnerClick();		
 		// When the search button is clicked
-		onSearchClick();	
-	}
-
-	/*
-	 * Save all text forms to first story Switch to first chapter
-	 * creation activity
-	 */
-	private void onSearchClick() {
+	
 		searchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String title = title_input.getText().toString();
@@ -74,6 +67,8 @@ public class SearchActivity extends Activity{
 				if (valid_input(title)) {	
 					Intent intent = new Intent(getBaseContext(),
 							SearchResultsActivity.class);
+					intent.putExtra("Input_title", title);
+					intent.putExtra("Type", story_type);
 					finish();
 					startActivity(intent);
 					// Invalid Input types
@@ -96,8 +91,10 @@ public class SearchActivity extends Activity{
 					show_alert.show();
 				}
 			}
-		});
+		});	
 	}
+
+
 
 	//When the spinner is clicked
 	private void onSpinnerClick() {
