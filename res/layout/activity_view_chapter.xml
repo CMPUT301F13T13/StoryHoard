@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_below="@+id/chapterContent">
 
         <LinearLayout
             android:id="@+id/horizontalPhotos"
@@ -41,20 +41,14 @@
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/horizontalSCPhotos"
-        android:orientation="horizontal"
-        android:paddingTop="20sp" >
-
-        <ListView
-            android:id="@+id/chapterChoices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </LinearLayout>
+	
+    <ListView
+        android:id="@+id/chapterChoices"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" 
+        android:layout_above="@+id/addPhotoButton"
+        android:layout_below="@+id/horizontalSCPhotos">
+    </ListView>
 
     <Button
         android:id="@+id/addPhotoButton"
