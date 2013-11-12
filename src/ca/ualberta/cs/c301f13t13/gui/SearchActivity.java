@@ -53,16 +53,18 @@ public class SearchActivity extends Activity{
 		searchButton = (Button) findViewById(R.id.searchButton);
 		title_input = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
-
 		// Le spinner stuff
-		onSpinnerClick();
-		
-		// Adding some stuff to pack in for the search
+		onSpinnerClick();		
+		// When the search button is clicked
+		onSearchClick();	
+	}
+
+	/*
+	 * Save all text forms to first story Switch to first chapter
+	 * creation activity
+	 */
+	private void onSearchClick() {
 		searchButton.setOnClickListener(new OnClickListener() {
-			/*
-			 * Save all text forms to first story Switch to first chapter
-			 * creation activity
-			 */
 			public void onClick(View v) {
 				String title = title_input.getText().toString();
 				title = title.trim();
@@ -94,7 +96,7 @@ public class SearchActivity extends Activity{
 					show_alert.show();
 				}
 			}
-		});	
+		});
 	}
 
 	//When the spinner is clicked
@@ -125,8 +127,8 @@ public class SearchActivity extends Activity{
 			}
 		}
 		
-	// MENU INFORMATION
-
+	
+		// MENU INFORMATION
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
