@@ -16,8 +16,11 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +30,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 /**
@@ -53,25 +55,8 @@ public class SearchActivity extends Activity{
 		title_input = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
 
-		
 		// Le spinner stuff
-
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {	 
-	            @Override
-	            public void onItemSelected(AdapterView<?> adapter, View v,
-	                    int position, long id) {
-	                // On selecting a spinner item
-	                String item = adapter.getItemAtPosition(position).toString();
-	 
-	                // Showing selected spinner item
-	                Toast.makeText(getApplicationContext(),
-	                        "the option chosen was : " + item, Toast.LENGTH_LONG).show();
-	            }
-	            @Override
-	            public void onNothingSelected(AdapterView<?> arg0) {
-	                // TODO Auto-generated method stub
-	            }
-	        });
+		onSpinnerClick();
 		
 		// Adding some stuff to pack in for the search
 		searchButton.setOnClickListener(new OnClickListener() {
@@ -81,14 +66,66 @@ public class SearchActivity extends Activity{
 			 */
 			public void onClick(View v) {
 				String title = title_input.getText().toString();
-				Intent intent = new Intent(getBaseContext(),
-						SearchResultsActivity.class);
-				finish();
-				startActivity(intent);
+				title = title.trim();
+				title= title.replaceAll("[\n\r]", "");
+				
+				// Correct Input: will save data to database and refresh activity.
+				if (valid_input(title)) {	
+					Intent intent = new Intent(getBaseContext(),
+							SearchResultsActivity.class);
+					finish();
+					startActivity(intent);
+					// Invalid Input types
+				} else{
+					AlertDialog.Builder alert = new AlertDialog.Builder(SearchActivity.this);
+					alert.setTitle("Whoopsies!")
+							.setMessage("Story title is empty/invalid")
+							.setCancelable(false)
+							// cannot dismiss this dialog
+							.setPositiveButton("Ok",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog,
+												int which) {
+											dialog.cancel();
+										}
+									}); // parenthesis mean an anonymous class
+					// Show alert dialog
+					AlertDialog show_alert = alert.create();
+					show_alert.show();
+				}
 			}
 		});	
 	}
 
+	//When the spinner is clicked
+	private void onSpinnerClick() {
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {	 
+	            @Override
+	            public void onItemSelected(AdapterView<?> adapter, View v,
+	                    int position, long id) {
+	                // On selecting a spinner item
+	                String item = adapter.getItemAtPosition(position).toString();
+	                story_type= item;
+	            }
+	            @Override
+	            public void onNothingSelected(AdapterView<?> arg0) {
+	                // TODO Auto-generated method stub
+	            }
+	        });
+	}
+
+	
+	// Checks to see if note is empty
+		private boolean valid_input(String user_input) {
+			int length = user_input.length();
+			if (length == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
 	// MENU INFORMATION
 
 	@Override
