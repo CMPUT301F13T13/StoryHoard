@@ -50,7 +50,6 @@ public class SearchResultsActivity extends Activity {
 	private SHController gc;
 	private TextView emptyList;
 	ObjectType viewType = ObjectType.CREATED_STORY;
-	
 
 
 	@Override
