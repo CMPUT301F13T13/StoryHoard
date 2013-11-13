@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 
 /**
  * Search Activity
@@ -40,43 +41,48 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
  * 
  */
 
-public class SearchActivity extends Activity{
+public class SearchActivity extends Activity {
 	private Button searchButton;
-	private EditText title_input;
-	private String story_type;
+	private EditText titleInput;
+	private ObjectType storyType;
 	private Spinner spinner;
+	private static final String DOWNLOADED = "Downloaded Stories";
+	private static final String CREATED = "My Stories";
+	private static final String PUBLISHED = "Published Stories";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		searchButton = (Button) findViewById(R.id.searchButton);
-		title_input = (EditText) findViewById(R.id.story_name);
-		spinner = (Spinner) findViewById(R.id.search_spinner);
+	}
 
-		// Le spinner stuff
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		searchButton = (Button) findViewById(R.id.searchButton);
+		titleInput = (EditText) findViewById(R.id.story_name);
+		spinner = (Spinner) findViewById(R.id.search_spinner);
 		onSpinnerClick();
-		
-		// Adding some stuff to pack in for the search
 		searchButton.setOnClickListener(new OnClickListener() {
-			/*
-			 * Save all text forms to first story Switch to first chapter
-			 * creation activity
-			 */
 			public void onClick(View v) {
-				String title = title_input.getText().toString();
+				String title = titleInput.getText().toString();
 				title = title.trim();
-				title= title.replaceAll("[\n\r]", "");
-				
-				// Correct Input: will save data to database and refresh activity.
-				if (valid_input(title)) {	
+				title = title.replaceAll("[\n\r]", "");
+
+				// Correct Input: will save data to database and refresh
+				// activity.
+				if (valid_input(title)) {
 					Intent intent = new Intent(getBaseContext(),
 							SearchResultsActivity.class);
+					intent.putExtra("Input_title", title);
+					intent.putExtra("Type", storyType);
 					finish();
 					startActivity(intent);
 					// Invalid Input types
-				} else{
-					AlertDialog.Builder alert = new AlertDialog.Builder(SearchActivity.this);
+				} else {
+					AlertDialog.Builder alert = new AlertDialog.Builder(
+							SearchActivity.this);
 					alert.setTitle("Whoopsies!")
 							.setMessage("Story title is empty/invalid")
 							.setCancelable(false)
@@ -84,7 +90,8 @@ public class SearchActivity extends Activity{
 							.setPositiveButton("Ok",
 									new DialogInterface.OnClickListener() {
 										@Override
-										public void onClick(DialogInterface dialog,
+										public void onClick(
+												DialogInterface dialog,
 												int which) {
 											dialog.cancel();
 										}
@@ -94,39 +101,44 @@ public class SearchActivity extends Activity{
 					show_alert.show();
 				}
 			}
-		});	
+		});
 	}
 
-	//When the spinner is clicked
+	// When the spinner is clicked
 	private void onSpinnerClick() {
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {	 
-	            @Override
-	            public void onItemSelected(AdapterView<?> adapter, View v,
-	                    int position, long id) {
-	                // On selecting a spinner item
-	                String item = adapter.getItemAtPosition(position).toString();
-	                story_type= item;
-	            }
-	            @Override
-	            public void onNothingSelected(AdapterView<?> arg0) {
-	                // TODO Auto-generated method stub
-	            }
-	        });
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapter, View v,
+					int position, long id) {
+				// On selecting a spinner item
+				String item = adapter.getItemAtPosition(position).toString();
+				if (item.equals(DOWNLOADED)) {
+					storyType = ObjectType.CACHED_STORY;
+				} else if (item.equals(CREATED)) {
+					storyType = ObjectType.CREATED_STORY;
+				} else if (item.equals(PUBLISHED)) {
+					storyType = ObjectType.PUBLISHED_STORY;
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
 	}
 
-	
 	// Checks to see if story title is empty
-		private boolean valid_input(String user_input) {
-			int length = user_input.length();
-			if (length == 0) {
-				return false;
-			} else {
-				return true;
-			}
+	private boolean valid_input(String user_input) {
+		int length = user_input.length();
+		if (length == 0) {
+			return false;
+		} else {
+			return true;
 		}
-		
-	// MENU INFORMATION
+	}
 
+	// MENU INFORMATION
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
