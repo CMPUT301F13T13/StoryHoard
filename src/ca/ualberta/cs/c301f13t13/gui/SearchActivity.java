@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 
 /**
  * Search Activity
@@ -43,8 +44,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 public class SearchActivity extends Activity{
 	private Button searchButton;
 	private EditText title_input;
-	private String story_type;
+	private ObjectType story_type;
 	private Spinner spinner;
+	private static final String DOWNLOADED = "Downloaded Stories";
+	private static final String CREATED = "My Stories";
+	private static final String PUBLISHED = "Published Stories";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,14 @@ public class SearchActivity extends Activity{
 	                    int position, long id) {
 	                // On selecting a spinner item
 	                String item = adapter.getItemAtPosition(position).toString();
-	                story_type= item;
+	                if (item.equals(DOWNLOADED)) {
+	                	story_type = ObjectType.CACHED_STORY;
+	                } else if (item.equals(CREATED)){
+	                	story_type = ObjectType.CREATED_STORY;
+	                } else if (item.equals(PUBLISHED)){
+	                	story_type = ObjectType.PUBLISHED_STORY;
+	                }
+
 	            }
 	            @Override
 	            public void onNothingSelected(AdapterView<?> arg0) {

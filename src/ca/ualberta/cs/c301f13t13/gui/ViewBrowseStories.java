@@ -108,7 +108,6 @@ public class ViewBrowseStories extends Activity {
 				startActivity(intent);
 			}
 		});
-
 	}
 
 	/**

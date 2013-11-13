@@ -29,6 +29,7 @@ import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
+import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
 /**
@@ -40,26 +41,39 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * 
  */
 public class SearchResultsActivity extends Activity {
-	private String title_name;
-	private String story_type;
+	private String titleName;
+	private ObjectType storyType;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
+	private SHController gc;
 	ObjectType viewType = ObjectType.CREATED_STORY;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_search_results);
-
+		setContentView(R.layout.activity_view_search_results);	
+	}
+	
+	@Override 
+	protected void onResume() {
+			super.onResume();
 		// Check if we are editing the story or making a new story
 		Bundle bundle = this.getIntent().getExtras();
-		story_type = bundle.getString("Type");
-		title_name = bundle.getString("Input_title");
-		
+		storyType = (ObjectType) bundle.get("Type");
+		titleName = bundle.getString("Input_title");
 		viewType = ObjectType.CREATED_STORY;
-
+		
+			ArrayList<Story> newStories = new ArrayList<Story>();
+			gridArray.clear();
+			gc = SHController.getInstance(this);
+			newStories = gc.searchStory(titleName, viewType);
+			
+			if (newStories.size() !=0 ) {
+				gridArray.addAll(newStories);
+			}
+			
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
@@ -77,7 +91,7 @@ public class SearchResultsActivity extends Activity {
 				startActivity(intent);
 			}
 		});	
-		customGridAdapter.notifyDataSetChanged();		
+		customGridAdapter.notifyDataSetChanged();			
 	}
 
 	// MENU INFORMATION
