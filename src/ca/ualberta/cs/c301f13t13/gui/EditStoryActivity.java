@@ -20,8 +20,6 @@ import java.util.UUID;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -103,10 +100,9 @@ public class EditStoryActivity extends Activity {
 					Intent intent = new Intent(EditStoryActivity.this,
 							EditChapterActivity.class);
 					intent.putExtra("isEditing", false);
-					intent.putExtra("addingNewChapt", false);
-					intent.putExtra("Story", newStory);
-					intent.putExtra("Chapter",
-							new Chapter(newStory.getId(), ""));
+					intent.putExtra("newStory", true);
+					intent.putExtra("storyID", newStory.getId());
+					intent.putExtra("story", newStory);
 					startActivity(intent);
 				}
 				finish();

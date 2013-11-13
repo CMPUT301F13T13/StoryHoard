@@ -68,9 +68,7 @@ public class ViewBrowseChapters extends Activity {
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
 			intent.putExtra("isEditing", false);
-			intent.putExtra("addingNewChapt", true);
-			intent.putExtra("Story", story);
-			intent.putExtra("Chapter", new Chapter(storyID, null));
+			intent.putExtra("storyID", story.getId());
 			startActivity(intent);
 			return true;
 		}
@@ -119,9 +117,8 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				intent.putExtra("isEditing", true);
-				intent.putExtra("addingNewChapt", false);
-				intent.putExtra("Story", story);
-				intent.putExtra("Chapter", chapter);
+				intent.putExtra("storyID", story.getId());
+				intent.putExtra("chapterID", chapter.getId());
 				startActivity(intent);
 			}
 		});
