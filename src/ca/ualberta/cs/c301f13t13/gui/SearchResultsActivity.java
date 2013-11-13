@@ -77,12 +77,9 @@ public class SearchResultsActivity extends Activity {
 				startActivity(intent);
 			}
 		});	
-		
-		customGridAdapter.notifyDataSetChanged();
-		
+		customGridAdapter.notifyDataSetChanged();		
 	}
 
-	
 	// MENU INFORMATION
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
