@@ -59,8 +59,8 @@ public class Media implements Serializable{
 		this.type = type;
 		if (path != null) {
 			this.path = path;
-			Bitmap bitmap = BitmapFactory.decodeFile(path);
-			bitmapString = Utilities.getStringFromBitmap(bitmap);
+//			Bitmap bitmap = BitmapFactory.decodeFile(path);
+//			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		} else {
 			this.path = new String();
 			bitmapString = new String();
@@ -83,8 +83,8 @@ public class Media implements Serializable{
 		this.type = type;
 		if (path != null) {
 			this.path = path;
-			Bitmap bitmap = BitmapFactory.decodeFile(path);
-			bitmapString = Utilities.getStringFromBitmap(bitmap);
+//			Bitmap bitmap = BitmapFactory.decodeFile(path);
+//			bitmapString = Utilities.getStringFromBitmap(bitmap);			
 		} else {
 			this.path = new String();
 			bitmapString = new String();
@@ -194,7 +194,7 @@ public class Media implements Serializable{
 	 * 
 	 * @param bitmap
 	 */
-	public void setBitmap(String bitmapString) {
+	public void setBitmapString(String bitmapString) {
 		this.bitmapString = bitmapString;
 	}
 	
