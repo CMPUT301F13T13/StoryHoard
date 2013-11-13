@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
@@ -47,7 +48,9 @@ public class SearchResultsActivity extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private SHController gc;
+	private TextView emptyList;
 	ObjectType viewType = ObjectType.CREATED_STORY;
+	
 
 
 	@Override
@@ -64,6 +67,8 @@ public class SearchResultsActivity extends Activity {
 		storyType = (ObjectType) bundle.get("Type");
 		titleName = bundle.getString("Input_title");
 		viewType = ObjectType.CREATED_STORY;
+		emptyList = (TextView) findViewById(R.id.empty);
+
 		
 			ArrayList<Story> newStories = new ArrayList<Story>();
 			gridArray.clear();
@@ -72,6 +77,7 @@ public class SearchResultsActivity extends Activity {
 			
 			if (newStories.size() !=0 ) {
 				gridArray.addAll(newStories);
+				emptyList.setText(" ");
 			}
 			
 		// Setup the grid view for the stories

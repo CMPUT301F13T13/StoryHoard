@@ -17,5 +17,15 @@
         android:layout_alignParentTop="true"
         android:numColumns="3" >
     </GridView>
+    
+     <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@android:id/list"
+        android:layout_alignTop="@android:id/list"
+        android:layout_marginTop="62dp"
+        android:text="@string/empty"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

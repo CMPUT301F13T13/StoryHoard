@@ -41,6 +41,8 @@
     <string name="add_chapter_illust">Add Illustration</string>
     <string name="add_photo">Add Photo</string>
     <string name="search_results">Search Results</string>
+    <string name="empty">No stories were found!</string>
+    
     
 
     <string-array name="view_type_choices">
