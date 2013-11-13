@@ -26,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
@@ -81,9 +80,6 @@ public class SearchResultsActivity extends Activity {
 		
 	}
 
-	
-	
-	
 	
 	// MENU INFORMATION
 	@Override
