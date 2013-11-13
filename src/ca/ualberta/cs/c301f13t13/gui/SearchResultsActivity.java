@@ -78,6 +78,8 @@ public class SearchResultsActivity extends Activity {
 			}
 		});	
 		
+		customGridAdapter.notifyDataSetChanged();
+		
 	}
 
 	
