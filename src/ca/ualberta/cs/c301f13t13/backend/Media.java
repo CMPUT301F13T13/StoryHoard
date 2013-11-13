@@ -135,7 +135,7 @@ public class Media implements Serializable{
 	 * @return bitmap
 	 */
 	public Bitmap getBitmap() {
-		return Utilities.getBitmapFromString(bitmapString);
+		return BitmapFactory.decodeFile(path);
 	}
 	
 	/**
