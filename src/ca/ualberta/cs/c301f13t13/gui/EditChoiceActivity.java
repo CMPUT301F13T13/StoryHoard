@@ -17,10 +17,10 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.os.Bundle;
-//import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,6 +32,7 @@ import ca.ualberta.cs.c301f13t13.backend.Choice;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
+//import android.util.Log;
 
 /**
  * Activity class for adding and editing a choice.
@@ -45,6 +46,8 @@ public class EditChoiceActivity extends Activity {
 	private ListView chapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
+	private UUID storyID;
+	private UUID fromChapterID;
 	private Story story;
 	private Chapter fromChapter;
 	private Chapter toChapter;
@@ -72,9 +75,11 @@ public class EditChoiceActivity extends Activity {
 	public void setUpFields() {
 		// Grab GC and necessary story and chapter info
 		Bundle bundle = this.getIntent().getExtras();
-		story = (Story) bundle.get("story");
-		fromChapter = (Chapter) bundle.get("chapter");
+		storyID = (UUID) bundle.get("storyID");
+		fromChapterID = (UUID) bundle.get("chapterID");
 		gc = SHController.getInstance(this);
+		story = gc.getCompleteStory(storyID);
+		fromChapter = gc.getCompleteChapter(fromChapterID);
 
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);

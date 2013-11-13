@@ -37,7 +37,7 @@ import android.content.Context;
 public class SHController {
 	// CONSTANTS
 	private Context context = null;
-	private static SHController self = null;  	// SELF
+	private static SHController self = null; // SELF
 	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
@@ -62,8 +62,8 @@ public class SHController {
 	 * published.
 	 * 
 	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, 
-	 *            or CREATED_STORY.
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
+	 *            CREATED_STORY.
 	 * @return Array list of all the stories the application asked for.
 	 */
 	public ArrayList<Story> getAllStories(ObjectType type) {
@@ -71,14 +71,14 @@ public class SHController {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Story criteria = null;
 		StoringManager sm = sf.getStoringManager(type);
-		
-		switch(type) {
-		case CACHED_STORY: 
-			criteria = new Story(null, null, null, null, "NOT" 
+
+		switch (type) {
+		case CACHED_STORY:
+			criteria = new Story(null, null, null, null, "NOT"
 					+ Utilities.getPhoneId(context));
 			break;
 		case CREATED_STORY:
-			criteria = new Story(null, null, null, null, 
+			criteria = new Story(null, null, null, null,
 					Utilities.getPhoneId(context));
 			break;
 		case PUBLISHED_STORY:
@@ -87,7 +87,7 @@ public class SHController {
 		default:
 			break;
 		}
-		
+
 		objects = sm.retrieve(criteria);
 		stories = Utilities.objectsToStories(objects);
 		return stories;
@@ -104,10 +104,10 @@ public class SHController {
 	public ArrayList<Chapter> getAllChapters(UUID storyId) {
 		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
 		ArrayList<Object> objects = new ArrayList<Object>();
-		
+
 		Chapter criteria = new Chapter(null, storyId, null);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
-		
+
 		objects = sm.retrieve(criteria);
 		chapters = Utilities.objectsToChapters(objects);
 
@@ -125,10 +125,10 @@ public class SHController {
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
 		ArrayList<Object> objects = new ArrayList<Object>();
-		
+
 		Choice criteria = new Choice(null, chapterId);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
-		
+
 		objects = sm.retrieve(criteria);
 		choices = Utilities.objectsToChoices(objects);
 		return choices;
@@ -147,15 +147,15 @@ public class SHController {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-		
+
 		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
-	
+
 	/**
-	 * Retrieves the first illustration of a chapter. Returns null
-	 * if the chapter has no illustrations.
+	 * Retrieves the first illustration of a chapter. Returns null if the
+	 * chapter has no illustrations.
 	 * 
 	 * @param chapterId
 	 *            Id of the chapter the illustrations are wanted from.
@@ -165,18 +165,18 @@ public class SHController {
 	public Media getFirstIllustration(UUID chapterId) {
 		ArrayList<Media> illustrations = new ArrayList<Media>();
 		ArrayList<Object> objects = new ArrayList<Object>();
-		Media ill = null; 
+		Media ill = null;
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-		
+
 		objects = sm.retrieve(criteria);
 		illustrations = Utilities.objectsToMedia(objects);
-		
-		if(illustrations.size() > 0) {
+
+		if (illustrations.size() > 0) {
 			ill = illustrations.get(0);
 		}
 		return ill;
-	}	
+	}
 
 	/**
 	 * Retrieves all the photos that are in a chapter.
@@ -191,7 +191,7 @@ public class SHController {
 		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-		
+
 		objects = sm.retrieve(criteria);
 		photos = Utilities.objectsToMedia(objects);
 		return photos;
@@ -204,8 +204,8 @@ public class SHController {
 	 *            Object to be inserted (must either be a Story, Chapter,
 	 *            Choice, or Media object).
 	 * @param type
-	 *            Will either be CHAPTER, CHOICE, MEDIA, 
-	 *            PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
+	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
+	 *            CACHED_STORY, CREATED_STORY
 	 */
 	public void addObject(Object object, ObjectType type) {
 		StoringManager sm = sf.getStoringManager(type);
@@ -213,17 +213,16 @@ public class SHController {
 	}
 
 	/**
-	 * Used to search for stories matching the given search criteria. 
-	 * Users can either search by specifying the title or author of the story. 
-	 * All stories that match will be retrieved.
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
 	 * 
 	 * @param title
 	 *            Title of the story user is looking for.
-	 *            
+	 * 
 	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, 
-	 *            CREATED_STORY
-	 *            
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
+	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
 	public ArrayList<Story> searchStory(String title, ObjectType type) {
@@ -233,11 +232,10 @@ public class SHController {
 		StoringManager sm = sf.getStoringManager(type);
 
 		if (type.equals(ObjectType.CREATED_STORY)) {
-			criteria = new Story(null, title, null, null, 
+			criteria = new Story(null, title, null, null,
 					Utilities.getPhoneId(context));
 		} else if (type.equals(ObjectType.CACHED_STORY)) {
-			criteria = new Story(null, title, null, null, 
-					"none");
+			criteria = new Story(null, title, null, null, "none");
 		}
 
 		objects = sm.retrieve(criteria);
@@ -308,15 +306,15 @@ public class SHController {
 	}
 
 	/**
-	 * Updates either a story, chapter, or choice object. Must specify what 
-	 * type of object it getting updated. Also, updates are happening to the 
-	 * database of the phone, not the server.
+	 * Updates either a story, chapter, or choice object. Must specify what type
+	 * of object it getting updated. Also, updates are happening to the database
+	 * of the phone, not the server.
 	 * 
 	 * @param object
 	 *            Object to be updated.
 	 * @param type
-	 *            Will either be CHAPTER, CHOICE, MEDIA, 
-	 *            PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
+	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
+	 *            CACHED_STORY, CREATED_STORY
 	 */
 	public void updateObject(Object object, ObjectType type) {
 		StoringManager sm = sf.getStoringManager(type);
