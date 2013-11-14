@@ -35,6 +35,7 @@ public class Chapter implements Serializable {
 	private UUID id;
 	private UUID storyId;
 	private String text;
+	private String randomChoice;
 	private ArrayList<Choice> choices;
 	private ArrayList<Media> illustrations;
 	private ArrayList<Media> photos;
@@ -51,6 +52,7 @@ public class Chapter implements Serializable {
 		this.text = text;
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
+		this.randomChoice = "no";
 		choices = new ArrayList<Choice>();
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
@@ -72,6 +74,27 @@ public class Chapter implements Serializable {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
+		this.randomChoice = "no";
+		illustrations = new ArrayList<Media>();
+		photos = new ArrayList<Media>();
+	}
+	/**
+	 * Initialize a new chapter with an id. Can also be used to make a chapter
+	 * from the chapter information retrieved from the database. Can also be
+	 * used to create a choice that will serve to hold search criteria.
+	 * 
+	 * @param id
+	 *            The unique id of the chapter
+	 * @param storyId
+	 *            The id of the story the chapter is from
+	 * @param text
+	 *            The chapter text that the user will be reading
+	 */
+	public Chapter(UUID id, UUID storyId, String text, String randomChoice) {
+		this.id = id;
+		this.text = text;
+		this.storyId = storyId;
+		this.randomChoice = randomChoice;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
@@ -104,6 +127,15 @@ public class Chapter implements Serializable {
 	public String getText() {
 
 		return this.text;
+	}
+	/**
+	 * Returns the random choice flag of the chapter.
+	 * 
+	 * @return randomChoice
+	 */
+	public String getRandomChoice() {
+
+		return this.randomChoice;
 	}
 
 	/**
@@ -163,6 +195,15 @@ public class Chapter implements Serializable {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+	/**
+	 * Sets the random choice flag of the chapter.
+	 * 
+	 * @param randomChoice
+	 *            
+	 */
+	public void setRandomChoice(String randomChoice) {
+		this.randomChoice = randomChoice;
 	}
 
 	/**
@@ -227,7 +268,7 @@ public class Chapter implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text
+		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + ", randomChoice=" + randomChoice
 				+ "]";
 
 	}
@@ -249,6 +290,9 @@ public class Chapter implements Serializable {
 
 		if (storyId != null) {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
+		}
+		if (randomChoice != null) {
+			info.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, randomChoice);
 		}
 
 		return info;

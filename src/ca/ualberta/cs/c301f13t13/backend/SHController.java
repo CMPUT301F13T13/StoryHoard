@@ -18,6 +18,7 @@ package ca.ualberta.cs.c301f13t13.backend;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import android.content.Context;
@@ -112,6 +113,25 @@ public class SHController {
 		chapters = Utilities.objectsToChapters(objects);
 
 		return chapters;
+	}
+	/**
+	 * Retrieves a random choice from the chapter.
+	 * 
+	 * @param chapterID
+	 *            Id of  the chapters ar.
+	 * 
+	 * @return a choice
+	 */
+	public Choice getRandomChoice(UUID chapterId) {
+		ArrayList<Choice> choices = getAllChoices(chapterId);
+		int max=0;
+		max =choices.size();
+		Random rand = new Random(); 
+		int num;
+		num=rand.nextInt(max);
+		Choice choice=choices.get(num);
+
+		return choice;
 	}
 
 	/**
@@ -254,7 +274,7 @@ public class SHController {
 	 */
 	public Chapter getCompleteChapter(UUID id) {
 		// Search criteria gets set
-		Chapter criteria = new Chapter(id, null, null);
+		Chapter criteria = new Chapter(id, null, null, null);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
 
 		// Get chapter

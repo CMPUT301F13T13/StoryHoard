@@ -87,6 +87,8 @@ public class ChapterManager implements StoringManager {
 		if (chapter.getText() != null) {
 			values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		}
+		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
+				chapter.getRandomChoice());
 
 		db.insert(ChapterTable.TABLE_NAME, null, values);
 	}
@@ -111,7 +113,8 @@ public class ChapterManager implements StoringManager {
 
 		String[] projection = { ChapterTable.COLUMN_NAME_CHAPTER_ID,
 				ChapterTable.COLUMN_NAME_STORY_ID,
-				ChapterTable.COLUMN_NAME_TEXT };
+				ChapterTable.COLUMN_NAME_TEXT,
+				ChapterTable.COLUMN_NAME_RANDOM_CHOICE };
 
 		// Setting search criteria
 		String selection = setSearchCriteria(criteria, selectionArgs);
@@ -135,7 +138,8 @@ public class ChapterManager implements StoringManager {
 			Chapter newChapter = new Chapter(UUID.fromString(cursor
 					.getString(0)), // chapter id
 					UUID.fromString(storyId), // story id
-					cursor.getString(2) // text
+					cursor.getString(2), // text
+					cursor.getString(3) // random choice
 			);
 			results.add(newChapter);
 			cursor.moveToNext();
@@ -161,6 +165,7 @@ public class ChapterManager implements StoringManager {
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
 				newC.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
+		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, newC.getRandomChoice());
 
 		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
 		String[] sArgs = { newC.getId().toString() };

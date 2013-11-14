@@ -87,12 +87,15 @@ public final class DBContract {
 		public static final String COLUMN_NAME_CHAPTER_ID = "chapter_id";
 		public static final String COLUMN_NAME_STORY_ID = "story_id";
 		public static final String COLUMN_NAME_TEXT = "text";
+		public static final String COLUMN_NAME_RANDOM_CHOICE = "random_Choice";
 
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
 				+ ChapterTable.TABLE_NAME + " (" + ChapterTable._ID
 				+ " INTEGER, " + ChapterTable.COLUMN_NAME_CHAPTER_ID
 				+ " TEXT PRIMARY KEY, " + ChapterTable.COLUMN_NAME_STORY_ID
-				+ " TEXT, " + ChapterTable.COLUMN_NAME_TEXT + " TEXT)";
+				+ " TEXT, " + ChapterTable.COLUMN_NAME_TEXT
+				+ " TEXT, " + ChapterTable.COLUMN_NAME_RANDOM_CHOICE
+				+ " TEXT)";
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
 				+ ChapterTable.TABLE_NAME;
