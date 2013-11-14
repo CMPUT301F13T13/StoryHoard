@@ -35,6 +35,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * Design Pattern: Singleton
  * 
  * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  * @see Chapter
  * @see StoringManager
@@ -139,7 +140,7 @@ public class ChapterManager implements StoringManager {
 					.getString(0)), // chapter id
 					UUID.fromString(storyId), // story id
 					cursor.getString(2), // text
-					cursor.getString(3) // random choice
+					cursor.getString(3) // random choice flag
 			);
 			results.add(newChapter);
 			cursor.moveToNext();

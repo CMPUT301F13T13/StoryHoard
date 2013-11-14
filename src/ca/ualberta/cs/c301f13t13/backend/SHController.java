@@ -118,7 +118,7 @@ public class SHController {
 	 * Retrieves a random choice from the chapter.
 	 * 
 	 * @param chapterID
-	 *            Id of  the chapters ar.
+	 *            Id of  the chapters that the choice is for.
 	 * 
 	 * @return a choice
 	 */

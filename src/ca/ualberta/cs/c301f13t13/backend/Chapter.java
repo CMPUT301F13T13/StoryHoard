@@ -89,6 +89,8 @@ public class Chapter implements Serializable {
 	 *            The id of the story the chapter is from
 	 * @param text
 	 *            The chapter text that the user will be reading
+	 * @param randomChoice
+	 *            A flag to indicate the random choice button 
 	 */
 	public Chapter(UUID id, UUID storyId, String text, String randomChoice) {
 		this.id = id;
