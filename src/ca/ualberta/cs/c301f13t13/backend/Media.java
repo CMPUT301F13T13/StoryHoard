@@ -25,8 +25,8 @@ import android.graphics.BitmapFactory;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
 
 /**
- * Role: A container to hold media information. The media can be a photo, an
- * illustration, audio, or video.
+ * Role: A container to hold media information. The media can be a photo or
+ * an illustration.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -42,8 +42,6 @@ public class Media {
 	// CONSTANTS
 	public static final String PHOTO = "photo";
 	public static final String ILLUSTRATION = "illustration";
-	public static final String SOUND = "sound";
-	public static final String VIDEO = "video";
 
 	/**
 	 * Initializes a new Media object without an id.
@@ -56,13 +54,12 @@ public class Media {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
+		bitmapString = new String();
 		if (path != null) {
 			this.path = path;
-//			Bitmap bitmap = BitmapFactory.decodeFile(path);
-//			bitmapString = Utilities.getStringFromBitmap(bitmap);
 		} else {
 			this.path = new String();
-			bitmapString = new String();
+			
 		}
 	}
 
@@ -80,13 +77,11 @@ public class Media {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
+		bitmapString = new String();
 		if (path != null) {
-			this.path = path;
-//			Bitmap bitmap = BitmapFactory.decodeFile(path);
-//			bitmapString = Utilities.getStringFromBitmap(bitmap);			
+			this.path = path;		
 		} else {
-			this.path = new String();
-			bitmapString = new String();
+			this.path = new String();	
 		}
 	}
 
@@ -173,19 +168,6 @@ public class Media {
 	 */
 	public void setPath(String path) {
 		this.path = path;
-		if (path != null) {
-			Bitmap bitmap = BitmapFactory.decodeFile(path);
-			bitmapString = Utilities.getStringFromBitmap(bitmap);
-		}
-	}
-
-	/**
-	 * Sets the media's bitmap.
-	 * 
-	 * @param bitmap
-	 */
-	public void setBitmap(Bitmap bitmap) {
-		bitmapString = Utilities.getStringFromBitmap(bitmap);
 	}
 
 	/**
@@ -193,8 +175,8 @@ public class Media {
 	 * 
 	 * @param bitmap
 	 */
-	public void setBitmapString(String bitmapString) {
-		this.bitmapString = bitmapString;
+	public void setBitmapString(Bitmap bitmap) {
+		this.bitmapString = Utilities.getStringFromBitmap(bitmap);
 	}
 	
 	/**

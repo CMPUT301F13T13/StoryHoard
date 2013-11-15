@@ -15,6 +15,8 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import com.google.gson.Gson;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -46,6 +48,7 @@ public class TestEditChapterActivity extends
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
 	private LinearLayout illustrations;
+	private static Gson gson = null;	
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);
@@ -57,12 +60,13 @@ public class TestEditChapterActivity extends
 	protected void setUp() throws Exception {
 		super.setUp();
 		
+		gson = new Gson();
 		Story story = new Story("title", "author", "es", "432432");
 		Intent intent = new Intent();
 		intent.putExtra("isEditing", false);
 		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("Story", story);
-		intent.putExtra("Chapter", new Chapter(story.getId(), null));
+		intent.putExtra("Story", gson.toJson(story));
+		intent.putExtra("Chapter", gson.toJson(new Chapter(story.getId(), null)));
 		
 		setActivityIntent(intent);
 		
