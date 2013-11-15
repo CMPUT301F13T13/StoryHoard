@@ -15,9 +15,6 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
@@ -25,7 +22,6 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
 
 /**

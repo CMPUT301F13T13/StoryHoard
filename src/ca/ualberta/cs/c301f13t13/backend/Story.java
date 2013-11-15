@@ -15,13 +15,11 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import android.graphics.Bitmap;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
@@ -32,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @author Stephanie Gil
  * @author Ashley Brown
  */
-public class Story implements Serializable {
+public class Story {
 
 	private UUID id;
 	private String author;

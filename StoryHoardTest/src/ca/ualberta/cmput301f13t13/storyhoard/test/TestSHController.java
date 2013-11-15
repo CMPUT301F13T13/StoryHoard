@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
@@ -33,7 +31,6 @@ import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 import ca.ualberta.cs.c301f13t13.backend.Utilities;
-import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
@@ -46,9 +43,9 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  */
 public class TestSHController extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	SHController gc = null;
-	private static Uri uri;
+	private SHController gc = null;
 	private static ViewBrowseStories activity;
+	private static final String path = "./mockImages/img1";
 	
 	public TestSHController() {
 		super(ViewBrowseStories.class);
@@ -56,16 +53,6 @@ public class TestSHController extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		Story story = new Story("title", "author", "es", "432432");
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("Story", story);
-		intent.putExtra("Chapter", new Chapter(story.getId(), null));
-
-		setActivityIntent(intent);
-		activity = getActivity();	
 		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
@@ -200,22 +187,20 @@ public class TestSHController extends
 		assertEquals(choices.size(), 2);
 	}
 	
-//	/**
-//	 * Tests using the controller to add media and then retrieve it 
-//	 * again.
-//	 */
-//	public void testAddGetAllMedia() {
-//		activity.takePhoto();	
-//		uri = activity.getImageFileUri();		
-//		Chapter chap = activity.getChapter();
-//		Media photo1 = new Media(chap.getId(), null, Media.PHOTO);
-//
-//		gc.addObject(photo1, ObjectType.MEDIA);
-//
-//		ArrayList<Media> photos = gc.getAllPhotos(chap.getId());
-//
-//		assertEquals(photos.size(), 2);
-//	}	
+	/**
+	 * Tests using the controller to add media and then retrieve it 
+	 * again.
+	 */
+	public void testAddGetAllMedia() {	
+		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
+		Media photo1 = new Media(chap.getId(), null, Media.PHOTO);
+
+		gc.addObject(photo1, ObjectType.MEDIA);
+
+		ArrayList<Media> photos = gc.getAllPhotos(chap.getId());
+
+		assertEquals(photos.size(), 2);
+	}	
 
 	/**
 	 * Tests using the controller to test for a variety of different stories
@@ -355,34 +340,31 @@ public class TestSHController extends
 	/**
 	 * Tests using the general controller to edit media objects.
 	 */
-//	public void testUpdateMediaLocally() {
-//		ArrayList<Media> medias = new ArrayList<Media>();
-//		UUID chapId = UUID.randomUUID();
-//
-//		// Insert some media
-//		Media m1 = new Media(chapId, null, Media.PHOTO);
-//
-//
-//		gc.addObject(m1, ObjectType.MEDIA);
-//		
-//		medias = gc.getAllPhotos(chapId);
-//		assertEquals(medias.size(), 2);
-//
-//		Media newM1 = medias.get(0);
-//		activity.takePhoto();
-//		newM1.setPath(activity.getImageFileUri().getPath());
-//		newM1.setType(Media.ILLUSTRATION);
-//
-//		gc.updateObject(newM1, ObjectType.MEDIA);
-//
-//		medias = gc.getAllPhotos(chapId);
-//		assertEquals(medias.size(), 1);
-//
-//		medias = gc.getAllIllustrations(chapId);
-//		assertEquals(medias.size(), 1);
-//		newM1 = medias.get(0);
-//		assertFalse(newM1.getPath() == null);
-//	}
+	public void testUpdateMediaLocally() {
+		ArrayList<Media> medias = new ArrayList<Media>();
+		UUID chapId = UUID.randomUUID();
+
+		// Insert some media
+		Media m1 = new Media(chapId, null, Media.PHOTO);
+
+		gc.addObject(m1, ObjectType.MEDIA);
+		
+		medias = gc.getAllPhotos(chapId);
+		assertEquals(medias.size(), 2);
+
+		Media newM1 = medias.get(0);
+		newM1.setType(Media.ILLUSTRATION);
+
+		gc.updateObject(newM1, ObjectType.MEDIA);
+
+		medias = gc.getAllPhotos(chapId);
+		assertEquals(medias.size(), 1);
+
+		medias = gc.getAllIllustrations(chapId);
+		assertEquals(medias.size(), 1);
+		newM1 = medias.get(0);
+		assertFalse(newM1.getPath() == null);
+	}
 
 	/**
 	 * Tests using the general controller to update a published story.
@@ -556,11 +538,10 @@ public class TestSHController extends
 		Choice choice2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
 		
 		fail("not yet implemented");
-//		Media m1 = new Media(chap1.getId(), 
-//				activity.getImageFileUri().getPath(), Media.PHOTO);
-//
-//		// add everything into database
-//		gc.addObject(m1, ObjectType.MEDIA);
+		Media m1 = new Media(chap1.getId(), path, Media.PHOTO);
+
+		// add everything into database
+		gc.addObject(m1, ObjectType.MEDIA);
 		gc.addObject(choice1, ObjectType.CHOICE);
 		gc.addObject(choice2, ObjectType.CHOICE);
 		gc.addObject(chap1, ObjectType.CHAPTER);

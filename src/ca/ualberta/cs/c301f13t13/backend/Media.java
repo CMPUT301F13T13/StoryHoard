@@ -16,7 +16,6 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.MediaTable;
  * @author Ashley Brown
  * 
  */
-public class Media implements Serializable{
+public class Media {
 	private UUID id;
 	private UUID chapterId;
 	private String path;

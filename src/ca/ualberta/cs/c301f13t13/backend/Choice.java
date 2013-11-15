@@ -16,7 +16,6 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChoiceTable;
  * 
  */
 
-public class Choice implements Serializable {
+public class Choice {
 	private UUID id;
 	private UUID currentChapter;
 	private UUID nextChapter;
