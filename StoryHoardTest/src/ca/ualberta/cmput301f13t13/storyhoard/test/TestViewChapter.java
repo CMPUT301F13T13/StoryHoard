@@ -16,12 +16,12 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.ObjectType;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.AdapterChoices;
-import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.AdapterChoices;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 
 import android.app.AlertDialog;
 import android.content.Intent;

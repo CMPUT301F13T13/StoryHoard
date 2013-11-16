@@ -18,7 +18,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseChapters;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseChapters;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;

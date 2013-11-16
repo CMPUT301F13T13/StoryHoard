@@ -20,9 +20,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
 
 /**
  * Test case for the activity to edit choices
@@ -52,8 +52,8 @@ public class TestEditChoiceActivity extends
 		Intent intent = new Intent();
 		intent.putExtra("isEditing", false);
 		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("story", story);
-		intent.putExtra("chapter", new Chapter(story.getId(), null));
+//		intent.putExtra("story", story);
+//		intent.putExtra("chapter", new Chapter(story.getId(), null));
 		
 		setActivityIntent(intent);
 		
