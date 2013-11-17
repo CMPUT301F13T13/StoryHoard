@@ -43,6 +43,7 @@ public class ViewStory extends Activity {
 	SHController gc;
 
 	private ImageView storyCover;
+	private ImageView topBorder;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
@@ -122,6 +123,7 @@ public class ViewStory extends Activity {
 
 		// Initialize the activity fields
 		storyCover = (ImageView) findViewById(R.id.storyImage);
+		topBorder = (ImageView) findViewById(R.id.topBorder);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
@@ -129,7 +131,7 @@ public class ViewStory extends Activity {
 
 		// Set up action bar
 		final ActionBar actionBar = getActionBar();
-		actionBar.setTitle("Story Metadata");
+		actionBar.setTitle("Story Information");
 		actionBar.setDisplayShowTitleEnabled(true);
 	}
 
