@@ -56,8 +56,8 @@ public class TestEditChapterActivity extends
 		super.setUp();
 		activity = getActivity();
 		app = (HolderApplication) activity.getApplication();
+				
 		Story story = new Story("title", "author", "es", "432432");
-
 		app.setEditing(false);
 		app.setStory(story);
 		app.setChapter(new Chapter(story.getId(), ""));
