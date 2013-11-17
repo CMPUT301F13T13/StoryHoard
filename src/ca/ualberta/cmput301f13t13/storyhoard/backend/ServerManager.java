@@ -74,7 +74,10 @@ public class ServerManager implements StoringManager{
 		if (crit.getId() != null) { 
 			
 			// search by id
-			stories.add(server.searchById(crit.getId().toString()));		
+			Story story = server.searchById(crit.getId().toString());
+			if (story != null) {
+				stories.add(story);
+			}
 		} else if (crit.getTitle() != null) {
 			
 			// search by keywords

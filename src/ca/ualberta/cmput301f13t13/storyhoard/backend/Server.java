@@ -112,14 +112,9 @@ public class Server {
 			// Now we expect to get a Story response
 			SimpleESResponse<Story> esResponse = 
 					gson.fromJson(json, simpleESResponseType);
-			// We get the recipe from it!
-			story = esResponse.getSource();
-			System.out.println(story.toString());
 			
-			// NOT SURE THIS IS RIGHT OR NEEDED
-			HttpEntity entity = response.getEntity();
-			InputStreamReader is = new InputStreamReader(entity.getContent());
-			is.close();
+			// We get the story from it!
+			story = esResponse.getSource();
 
 		} catch (ClientProtocolException e) {
 
@@ -131,50 +126,6 @@ public class Server {
 		}		
 		return story;
 	}
-	
-	/**
-	 * searches by keywords
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
-	 */ 
-	public ArrayList<Object> searchByKeywords(Story criteria, String selection) 
-				throws ClientProtocolException, IOException {
-		ArrayList<Object> stories = new ArrayList<Object>();
-		
-		HttpGet searchRequest = null;
-		searchRequest = new HttpGet(server + "_search?pretty=1&q=" + java.net.URLEncoder.encode(selection,"UTF-8"));
-		searchRequest.setHeader("Accept","application/json");
-		HttpResponse response = null;
-		
-		response = httpclient.execute(searchRequest);
-
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		String json = null;
-		json = getEntityContent(response);
-
-		Type elasticSearchResponseType = 
-				new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = 
-				gson.fromJson(json, elasticSearchResponseType);
-		System.err.println(esResponse);
-		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story story = r.getSource();
-			stories.add(story);
-		}
-		
-		// NOT SURE THIS IS RIGHT OR NEEDED
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is;
-		try {
-			is = new InputStreamReader(entity.getContent());
-			is.close();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		return stories;
-	}	
 
 	/**
 	 * advanced search (logical operators)

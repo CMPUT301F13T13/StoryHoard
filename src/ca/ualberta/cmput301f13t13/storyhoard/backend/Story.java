@@ -275,6 +275,7 @@ public class Story {
 		if (chapters.isEmpty()) {
 			// set first chapter id
 			firstChapterId = chapter.getId();
+			chapters.put(chapter.getId(), chapter);
 			return true;
 		}
 		chapters.put(chapter.getId(), chapter);

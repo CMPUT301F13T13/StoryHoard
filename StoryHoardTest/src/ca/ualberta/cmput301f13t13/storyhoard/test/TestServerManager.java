@@ -59,11 +59,7 @@ public class TestServerManager
 		
 		//chap.addPhoto(m);
 		chap.addChoice(c1);
-		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
-		
-		Gson gson = new Gson();
-		String jobj = gson.toJson(story);
 		
 		sm.insert(story);
 //		sm.remove(story);
