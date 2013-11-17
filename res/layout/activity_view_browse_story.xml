@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:hint="@string/story"
             android:textColor="#472312"
             android:textSize="30sp" />
@@ -42,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="15sp" />
 
         <TextView
@@ -51,7 +50,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:paddingLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#6c3f29"
             android:textSize="15sp" />
     </LinearLayout>
@@ -63,7 +61,6 @@
         android:layout_marginTop="15dp"
         android:paddingLeft="25dp"
         android:text="@string/story_description"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="15sp" />
 
     <TextView
