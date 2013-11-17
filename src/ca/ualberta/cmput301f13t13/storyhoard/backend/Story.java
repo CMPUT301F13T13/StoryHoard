@@ -153,15 +153,6 @@ public class Story {
 		return this.description;
 	}
 
-//	/**
-//	 * Returns the story's cover image.
-//	 * 
-//	 * @return
-//	 */
-//	public Bitmap getImage() {
-//		return this.image;
-//	}
-
 	/**
 	 * Returns the chapters of the story.
 	 * 
@@ -332,13 +323,14 @@ public class Story {
 			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
 	}
-	
+
 	/**
 	 * Converts a story object to an String.
 	 */
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title
-				+ ", description=" + description + "]";
+				+ ", description=" + description + ", first_chapId=" 
+				+ firstChapterId + ", phoneid=" + phoneId + "]";
 	}
 }

@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
@@ -59,7 +62,11 @@ public class TestServerManager
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
 		
+		Gson gson = new Gson();
+		String jobj = gson.toJson(story);
+		
 		sm.insert(story);
+//		sm.remove(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		

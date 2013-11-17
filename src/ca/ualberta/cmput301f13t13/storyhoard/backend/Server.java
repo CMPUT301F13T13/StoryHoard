@@ -31,7 +31,7 @@ public class Server {
 	private static HttpClient httpclient = null;		// Http Connector
 	private static Gson gson = null;					// JSON Utilities
 	private static Server self = null;
-	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
+	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
 	
 	protected Server() {
 		httpclient = new DefaultHttpClient();
