@@ -15,6 +15,7 @@
  */
 package ca.ualberta.cs.c301f13t13.gui;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
@@ -25,11 +26,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
@@ -56,7 +57,11 @@ public class ViewBrowseStories extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_stories);
+		setActionBar();
+		setGridView();
+	}
 
+	private void setActionBar() {
 		// Set up the action bar to show a dropdown list.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("StoryHoard");
@@ -90,7 +95,9 @@ public class ViewBrowseStories extends Activity {
 						return true;
 					}
 				});
+	}
 
+	private void setGridView() {
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
