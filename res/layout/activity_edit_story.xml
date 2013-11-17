@@ -37,11 +37,12 @@
 
         <EditText
             android:id="@+id/newStoryAuthor"
-            android:layout_width="match_parent"
+            android:layout_width="258dp"
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:inputType="text"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="#6c3f29"
             android:textSize="15sp" />
     </LinearLayout>
@@ -57,13 +58,17 @@
 
     <EditText
         android:id="@+id/newStoryDescription"
-        android:layout_width="match_parent"
+        android:layout_width="303dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:ems="10"
         android:hint="@string/new_description"
         android:inputType="textMultiLine"
         android:paddingLeft="25dp"
         android:textColor="#6c3f29"
-        android:textSize="15sp" />
+        android:textSize="15sp" >
+
+        <requestFocus />
+    </EditText>
 
 </LinearLayout>

@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="#6c3f29"
             android:textSize="15sp" />
     </LinearLayout>
@@ -71,6 +72,8 @@
         android:layout_weight="0.10"
         android:hint="@string/new_description"
         android:paddingLeft="25dp"
+        android:layout_marginEnd="10dp"
+        android:paddingRight="10dp"
         android:textColor="#6c3f29"
         android:textSize="15sp" />
 

@@ -91,61 +91,75 @@ public class EditStoryActivity extends Activity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.addImage:
-			// AlertDialog.Builder alert = new AlertDialog.Builder(context);
-			// // Set dialog title
-			// alert.setTitle("Choose method:");
-			// // Options that user may choose to add photo
-			// final String[] methods = { "Take Photo",
-			// "Choose from Gallery" };
-			// alert.setSingleChoiceItems(methods, -1,
-			// new DialogInterface.OnClickListener() {
-			// @Override
-			// public void onClick(DialogInterface dialog, int item) {
-			// switch (item) {
-			// case 0:
-			// // Take a photo
-			// break;
-			// case 1:
-			// // Choose from gallery
-			// break;
-			// }
-			// imageDialog.dismiss();
-			// }
-			// });
-			// imageDialog = alert.create();
-			// imageDialog.show();
-			Toast.makeText(getBaseContext(),
-					"Not implemented this iteration", Toast.LENGTH_SHORT)
-					.show();
+			addImage();
 			return true;
 		case R.id.addfirstChapter:
-			/*
-			 * Save all text forms to first story Switch to first chapter
-			 * creation activity
-			 */
-			String title = newTitle.getText().toString();
-			String author = newAuthor.getText().toString();
-			String description = newDescription.getText().toString();
-			if (isEditing) {
-				newStory.setAuthor(author);
-				newStory.setTitle(title);
-				newStory.setDescription(description);
-				gc.updateObject(newStory, ObjectType.CREATED_STORY);
-			} else {
-				newStory = new Story(title, author, description, Utilities
-						.getPhoneId(getBaseContext()));
-				Intent intent = new Intent(EditStoryActivity.this,
-						EditChapterActivity.class);
-				intent.putExtra("isEditing", false);
-				intent.putExtra("newStory", true);
-				intent.putExtra("storyID", newStory.getId());
-				intent.putExtra("story", newStory);
-				startActivity(intent);
-			}
-			finish();
+			saveChanges();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+
+
+	private void addImage() {
+		// AlertDialog.Builder alert = new AlertDialog.Builder(context);
+		// // Set dialog title
+		// alert.setTitle("Choose method:");
+		// // Options that user may choose to add photo
+		// final String[] methods = { "Take Photo",
+		// "Choose from Gallery" };
+		// alert.setSingleChoiceItems(methods, -1,
+		// new DialogInterface.OnClickListener() {
+		// @Override
+		// public void onClick(DialogInterface dialog, int item) {
+		// switch (item) {
+		// case 0:
+		// // Take a photo
+		// break;
+		// case 1:
+		// // Choose from gallery
+		// break;
+		// }
+		// imageDialog.dismiss();
+		// }
+		// });
+		// imageDialog = alert.create();
+		// imageDialog.show();
+		Toast.makeText(getBaseContext(),
+				"Not implemented this iteration", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+
+
+
+	private void saveChanges() {
+		/*
+		 * Save all text forms to first story Switch to first chapter
+		 * creation activity
+		 */
+		String title = newTitle.getText().toString();
+		String author = newAuthor.getText().toString();
+		String description = newDescription.getText().toString();
+		if (isEditing) {
+			newStory.setAuthor(author);
+			newStory.setTitle(title);
+			newStory.setDescription(description);
+			gc.updateObject(newStory, ObjectType.CREATED_STORY);
+		} else {
+			newStory = new Story(title, author, description, Utilities
+					.getPhoneId(getBaseContext()));
+			Intent intent = new Intent(EditStoryActivity.this,
+					EditChapterActivity.class);
+			intent.putExtra("isEditing", false);
+			intent.putExtra("newStory", true);
+			intent.putExtra("storyID", newStory.getId());
+			intent.putExtra("story", newStory);
+			startActivity(intent);
+		}
+		finish();
 	}
 }
