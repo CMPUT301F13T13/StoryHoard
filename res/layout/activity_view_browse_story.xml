@@ -60,7 +60,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="25dp"
         android:text="@string/story_description"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -71,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_weight="1"
+        android:layout_weight="0.15"
         android:hint="@string/new_description"
         android:paddingLeft="25dp"
         android:textColor="#6c3f29"
@@ -83,7 +83,7 @@
         android:layout_height="10dp"
         android:layout_gravity="center"
         android:layout_marginBottom="25dp"
-        android:layout_weight="0.23"
+        android:layout_weight="0.05"
         android:text="@string/view_first_chapter" />
 
 </LinearLayout>

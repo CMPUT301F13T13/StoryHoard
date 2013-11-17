@@ -2,13 +2,12 @@
 
     <item
         android:id="@+id/addNewStory"
-        android:orderInCategory="100"
-        android:showAsAction="never"
+        android:icon="@drawable/add"
+        android:showAsAction="withText"
         android:title="@string/add_new_story"/>
     <item
         android:id="@+id/searchStories"
-        android:orderInCategory="101"
-        android:showAsAction="never"
+        android:icon="@drawable/download"
+        android:showAsAction="withText"
         android:title="@string/search_stories"/>
-
 </menu>
