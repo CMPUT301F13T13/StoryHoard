@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name="ca.ualberta.cs.c301f13t13.gui.ViewStory"
+            android:uiOptions="splitActionBarWhenNarrow"
             android:label="@string/view_browse_story" >
         </activity>
         <activity
