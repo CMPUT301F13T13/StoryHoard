@@ -61,8 +61,6 @@ public class TestEditStoryActivity extends
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
 		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
-
-		addfirstChapter = (Button) activity.findViewById(id.addFirstChapter);			
 	}
 	
 	public void testPreConditions() {

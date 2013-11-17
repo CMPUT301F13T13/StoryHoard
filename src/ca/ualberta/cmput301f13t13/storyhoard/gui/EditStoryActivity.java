@@ -96,8 +96,6 @@ public class EditStoryActivity extends Activity {
 	}
 
 
-
-
 	private void addImage() {
 		// AlertDialog.Builder alert = new AlertDialog.Builder(context);
 		// // Set dialog title
@@ -126,8 +124,6 @@ public class EditStoryActivity extends Activity {
 				"Not implemented this iteration", Toast.LENGTH_SHORT)
 				.show();
 	}
-
-
 
 
 	private void saveChanges() {
