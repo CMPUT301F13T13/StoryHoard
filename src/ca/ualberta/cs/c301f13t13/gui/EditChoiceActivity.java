@@ -17,7 +17,6 @@
 package ca.ualberta.cs.c301f13t13.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -29,6 +28,7 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.HolderApplication;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -41,13 +41,11 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * 
  */
 public class EditChoiceActivity extends Activity {
-
+	HolderApplication app;
 	private EditText choiceText;
 	private ListView chapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
-	private UUID storyID;
-	private UUID fromChapterID;
 	private Story story;
 	private Chapter fromChapter;
 	private Chapter toChapter;
@@ -56,6 +54,7 @@ public class EditChoiceActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_edit_choice);
 	}
 
@@ -74,13 +73,9 @@ public class EditChoiceActivity extends Activity {
 	 */
 	public void setUpFields() {
 		// Grab GC and necessary story and chapter info
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.get("storyID");
-		fromChapterID = (UUID) bundle.get("chapterID");
 		gc = SHController.getInstance(this);
-		story = gc.getCompleteStory(storyID);
-		fromChapter = gc.getCompleteChapter(fromChapterID);
-
+		story = app.getStory();
+		fromChapter = app.getChapter();
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);

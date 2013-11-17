@@ -18,7 +18,6 @@ package ca.ualberta.cs.c301f13t13.gui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,12 +36,11 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.HolderApplication;
 import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
-
-//import android.view.Menu; *Not sure if needed
 
 /**
  * Add Chapter Activity
@@ -58,10 +56,10 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  */
 
 public class EditChapterActivity extends Activity {
-	private boolean isEditing;
-	private boolean newStory;
+	HolderApplication app;
 	private Story story;
 	private Chapter chapter;
+	
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
 	private Button addIllust;
@@ -73,7 +71,6 @@ public class EditChapterActivity extends Activity {
 	private AlertDialog illustDialog;
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
-	// private LinearLayout photos;
 	private GUIMediaUtilities util;
 	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
@@ -82,35 +79,32 @@ public class EditChapterActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_edit_chapter);
+		setUpFields();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		setUpFields();
 		setSaveButtonListener();
 		setAddChoiceListener();
 		setAddIllustrationListener();
-		updateData();
+		updateICData();
 	}
 
 	/**
 	 * Updates the view components depending on the chapter data.
 	 */
-	private void updateData() {
+	private void updateICData() {
 		// Set the chapter text, if new Chapter will simply be blank
-		chapterContent.setText(chapter.getText());
 		choices.clear();
 		choices.addAll(gc.getAllChoices(chapter.getId()));
 		choiceAdapter.notifyDataSetChanged();
-
 		// Getting illustrations
 		illList = gc.getAllIllustrations(chapter.getId());
-
 		// Clean up illustrations layout
 		illustrations.removeAllViews();
-
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(util.insertImage(ill,
@@ -122,43 +116,30 @@ public class EditChapterActivity extends Activity {
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
 	private void setUpFields() {
+		gc = SHController.getInstance(getBaseContext());
 		util = new GUIMediaUtilities();
+		
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
-		gc = SHController.getInstance(getBaseContext());
-
-		// Get the story that chapter is being added to
-		Bundle bundle = this.getIntent().getExtras();
-		isEditing = bundle.getBoolean("isEditing");
-		UUID storyID = (UUID) bundle.get("storyID");
-		try {
-			newStory = bundle.getBoolean("newStory");
-		} finally {
-			if (newStory != true) {
-				newStory = false;
-			}
-		}
-		if (newStory) {
-			story = (Story) bundle.get("story");
-		} else {
-			story = gc.getCompleteStory(storyID);
-		}
-		if (isEditing) {
-			UUID chapterID = (UUID) bundle.get("chapterID");
-			chapter = story.getChapter(chapterID);
-		} else {
-			chapter = new Chapter(storyID, "");
-		}
-
 
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		viewChoices.setAdapter(choiceAdapter);
+		
+		story = app.getStory();
+		if (app.isEditing()) {
+			// Editing an existing chapter
+			chapter = app.getChapter();
+			chapterContent.setText(chapter.getText());
+		} else {
+			// Create a new chapter from the story's ID
+			chapter = new Chapter(story.getId(), "");
+		}
 	}
 
 	/**
@@ -170,11 +151,11 @@ public class EditChapterActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				chapter.setText(chapterContent.getText().toString());
-				if (isEditing) {
+				if (app.isEditing()) {
 					gc.updateObject(chapter, ObjectType.CHAPTER);
 				} else {
 					story.addChapter(chapter);
-					if (newStory) {
+					if (app.isFirstStory()) {
 						gc.addObject(story, ObjectType.CREATED_STORY);
 					}
 					gc.addObject(chapter, ObjectType.CHAPTER);
@@ -192,11 +173,11 @@ public class EditChapterActivity extends Activity {
 		addChoice.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (isEditing) {
+				if (app.isEditing()) {
 					Intent intent = new Intent(getBaseContext(),
 							EditChoiceActivity.class);
-					intent.putExtra("chapterID", chapter.getId());
-					intent.putExtra("storyID", story.getId());
+					app.setChapter(chapter);
+					app.setStory(story);
 					startActivity(intent);
 				} else {
 					Toast.makeText(getBaseContext(),
@@ -214,7 +195,7 @@ public class EditChapterActivity extends Activity {
 		addIllust.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (!isEditing) {
+				if (!app.isEditing()) {
 					Toast.makeText(getBaseContext(),
 							"Save chapter before adding first illustration",
 							Toast.LENGTH_SHORT).show();

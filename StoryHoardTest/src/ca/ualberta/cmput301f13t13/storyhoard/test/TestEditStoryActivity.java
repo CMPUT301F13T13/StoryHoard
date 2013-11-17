@@ -17,15 +17,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
-import ca.ualberta.cs.c301f13t13.gui.EditStoryActivity;
-
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
+import ca.ualberta.cmput301f13t13.storyhoard.R.id;
+import ca.ualberta.cs.c301f13t13.gui.EditStoryActivity;
 
 /**
  * Tests the EditStoryActivity class.
@@ -39,14 +36,9 @@ public class TestEditStoryActivity extends
 	private EditText newDescription;
 	private Button addfirstChapter;
 	private Button addStoryImage;
-//	private Story newStory;
-	private SHController gc;
-	private boolean isEditing;
-	private AlertDialog imageDialog;
 	
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -64,7 +56,6 @@ public class TestEditStoryActivity extends
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
 		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
 		addfirstChapter = (Button) activity.findViewById(id.addFirstChapter);
-		addStoryImage = (Button) activity.findViewById(id.addStoryImage);			
 	}
 	
 	public void testPreConditions() {
@@ -74,5 +65,23 @@ public class TestEditStoryActivity extends
 		assertTrue(newDescription != null);
 		assertTrue(addfirstChapter != null);
 		assertTrue(addStoryImage != null);
+	}
+	
+	public void testSetTitle() {
+		String title = "My Title";
+		newTitle.setText(title);
+		assertTrue(newTitle.getText().toString().equals(title));
+	}
+	
+	public void testSetAuthor() {
+		String author = "The Best Author Ever";
+		newAuthor.setText(author);
+		assertTrue(newAuthor.getText().toString().equals(author));
+	}
+	
+	public void testSetDescription() {
+		String desc = "This is the story of a new description.";
+		newDescription.setText(desc);
+		assertTrue(newDescription.getText().toString().equals(desc));
 	}
 }
