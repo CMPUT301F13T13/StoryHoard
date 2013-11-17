@@ -15,13 +15,8 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -29,7 +24,6 @@ import ca.ualberta.cs.c301f13t13.gui.AdapterChoices;
 import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;

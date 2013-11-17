@@ -16,7 +16,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
@@ -76,5 +75,4 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		assertTrue(storyDescription != null);
 		assertTrue(beginReading != null);
 	}
-
 }

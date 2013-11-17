@@ -42,6 +42,7 @@ public class TestChapterManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();

@@ -15,8 +15,6 @@
  */                                          
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import org.junit.Before;
-
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
@@ -60,7 +58,6 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 		  nextActivity .finish();
 		}
 	
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 	}

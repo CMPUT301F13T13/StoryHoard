@@ -15,6 +15,7 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -42,7 +43,7 @@ public class TestEditChapterActivity extends
 	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
-	private LinearLayout illustrations;
+	private LinearLayout illustrations;	
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);

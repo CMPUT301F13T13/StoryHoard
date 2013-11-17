@@ -20,14 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.Media;
-import ca.ualberta.cs.c301f13t13.backend.ServerManager;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**
@@ -39,6 +33,7 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 public class TestServerManager 
 		extends ActivityInstrumentationTestCase2<ViewBrowseStories>{
 	private static ServerManager sm = null;
+	private static final String path = "./mockImages/img1";
 	
 	public TestServerManager() {
 		super(ViewBrowseStories.class);
@@ -57,9 +52,9 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+		Media m = new Media(chap.getId(), path, Media.PHOTO);
 		
-//		chap.addPhoto(m);
+		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
@@ -87,11 +82,9 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+		Media m = new Media(chap.getId(), path, Media.PHOTO);
 		
-		// generate bitmap 
-		
-//		chap.addPhoto(m);
+		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
@@ -123,11 +116,9 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-//		Media m = new Media(chap.getId(), Uri.parse("http://hi"), Media.PHOTO);
+		Media m = new Media(chap.getId(), path, Media.PHOTO);
 		
-		// generate bitmap 
-		
-//		chap.addPhoto(m);
+		chap.addPhoto(m);
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);

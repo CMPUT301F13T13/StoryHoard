@@ -20,13 +20,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
-import ca.ualberta.cs.c301f13t13.backend.DBContract;
-import ca.ualberta.cs.c301f13t13.backend.DBHelper;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
+import ca.ualberta.cs.c301f13t13.backend.*;
 import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
 
 /**

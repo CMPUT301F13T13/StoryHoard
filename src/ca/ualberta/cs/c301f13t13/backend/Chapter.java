@@ -16,7 +16,6 @@
 
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -31,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.ChapterTable;
  * @author Stephanie Gil
  * 
  */
-public class Chapter implements Serializable {
+public class Chapter{
 	private UUID id;
 	private UUID storyId;
 	private String text;

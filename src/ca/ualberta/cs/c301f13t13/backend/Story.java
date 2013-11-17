@@ -15,13 +15,11 @@
  */
 package ca.ualberta.cs.c301f13t13.backend;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import android.graphics.Bitmap;
 import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
 
 /**
@@ -32,7 +30,7 @@ import ca.ualberta.cs.c301f13t13.backend.DBContract.StoryTable;
  * @author Stephanie Gil
  * @author Ashley Brown
  */
-public class Story implements Serializable {
+public class Story {
 
 	private UUID id;
 	private String author;
@@ -269,14 +267,27 @@ public class Story implements Serializable {
 	// Other methods
 
 	/**
-	 * Adds a chapter onto the story object.
+	 * Adds a chapter onto the story object. If the story
+	 * has no chapters when the new chapter is added, the
+	 * firstChapterId will also be set for the story.
+	 * 
+	 * If the story needs to be updated in the database
+	 * (due to now having a firstChapterId), then it will
+	 * return true so the front end will know to use the
+	 * StoryManager to update the story data.
+	 * 
+	 * If the story already had its firstChapterId set, then
+	 * there is no need to update it in the database, therefore
+	 * the function will return False.
 	 */
-	public void addChapter(Chapter chapter) {
+	public Boolean addChapter(Chapter chapter) {
 		if (chapters.isEmpty()) {
 			// set first chapter id
 			firstChapterId = chapter.getId();
+			return true;
 		}
 		chapters.put(chapter.getId(), chapter);
+		return false;
 	}
 
 	/**
