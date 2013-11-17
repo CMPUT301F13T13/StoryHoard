@@ -33,8 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="hu"
-            android:textColor="#472312" />
+            android:hint="@string/story"
+            android:textColor="#472312"
+            android:textSize="30sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -56,7 +57,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:paddingLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#6c3f29" />
     </LinearLayout>
 
     <TextView
@@ -75,7 +77,8 @@
         android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:hint="@string/new_description"
-        android:paddingLeft="25dp" />
+        android:paddingLeft="25dp"
+        android:textColor="#6c3f29" />
 
     <Button
         android:id="@+id/viewFirstChapter"
