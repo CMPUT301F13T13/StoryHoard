@@ -27,25 +27,20 @@ import org.apache.http.client.ClientProtocolException;
 
 /**
  * 
- * Role: Interacts with the server by inserting, retrieving, updating, and
- * deleting story objects.
+ * Role: Uses functions from the ESClient to add, remove, update, and 
+ * search for stories that have been published onto the server.
  * 
- * CODE REUSE: This code was taken directly from 
- * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
- * Date: Nov. 4th, 2013 
- * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
- * 
- * @author Abram Hindle
- * @author Chenlei Zhang
- * @author Ashley Brown
  * @author Stephanie Gil
+ * 
+ * @see ESClient
+ * @see StoringManager
  */
 public class ServerManager implements StoringManager{
-	private static Server server = null;
+	private static ESClient server = null;
 	private static ServerManager self = null;
 	
 	protected ServerManager() {
-		server = new Server();
+		server = new ESClient();
 	}
 	
 	public static ServerManager getInstance() {

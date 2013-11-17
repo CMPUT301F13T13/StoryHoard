@@ -50,7 +50,7 @@ public class TestServerManager
 	/**
 	 * Tests uploading and retrieving a story from the server.
 	 */
-	public void testUploadRetrieveStory() {
+	public void testAddLoadDeleteStory() {
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -62,7 +62,6 @@ public class TestServerManager
 		story.addChapter(chap);
 		
 		sm.insert(story);
-//		sm.remove(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
@@ -82,64 +81,39 @@ public class TestServerManager
 		assertEquals(stories.size(), 0);
 	}
 	
-//	/**
-//	 * Tests updating a story on the server.
-//	 */
-//	public void testUpdateStory() {
-//		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-//				Utilities.getPhoneId(getActivity()));
-//		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-//		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-//		Media m = new Media(chap.getId(), path, Media.PHOTO);
-//		
-//		chap.addPhoto(m);
-//		chap.addChoice(c1);
-//		story.setFirstChapterId(chap.getId());
-//		story.addChapter(chap);
-//		
-//		sm.insert(story);
-//		ArrayList<Object> stories = sm.retrieve(story);
-//		assertEquals(stories.size(), 1);
-//		
-//		Story newStory = (Story) stories.get(0);
-//		newStory.setTitle("new title");
-//		newStory.setAuthor("new author");
-//		newStory.addChapter(new Chapter(newStory.getId(), "my text"));
-//		
-//		sm.update(newStory);
-//		stories = sm.retrieve(story);
-//		assertEquals(stories.size(), 1);
-//		
-//		HashMap<UUID, Chapter> chaps = newStory.getChapters();
-//		assertEquals(chaps.size(), 2);
-//		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
-//		assertFalse(newStory.getTitle().equals(story.getTitle()));
-//	}
-//	
-//	/**
-//	 * Tests deleting a story from the server.
-//	 */
-//	public void testDeleteStory() {
-//		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-//				Utilities.getPhoneId(getActivity()));
-//		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-//		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-//		Media m = new Media(chap.getId(), path, Media.PHOTO);
-//		
-//		chap.addPhoto(m);
-//		chap.addChoice(c1);
-//		story.setFirstChapterId(chap.getId());
-//		story.addChapter(chap);
-//		
-//		sm.insert(story);
-//		ArrayList<Object> stories = sm.retrieve(story);
-//		assertEquals(stories.size(), 1);
-//		
-////		sm.deletePublished(story);
-//		stories = sm.retrieve(story);
-//		assertEquals(stories.size(), 0);
-//	}
-//	
+	/**
+	 * Tests updating a story on the server.
+	 */
+	public void testUpdateStory() {
+		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
+				Utilities.getPhoneId(getActivity()));
+		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
+		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
+
+		chap.addChoice(c1);
+		story.setFirstChapterId(chap.getId());
+		story.addChapter(chap);
+		
+		sm.insert(story);
+		ArrayList<Object> stories = sm.retrieve(story);
+		assertEquals(stories.size(), 1);
+		
+		Story newStory = (Story) stories.get(0);
+		newStory.setTitle("new title");
+		newStory.setAuthor("new author");
+		newStory.addChapter(new Chapter(newStory.getId(), "my text"));
+		
+		sm.update(newStory);
+		stories = sm.retrieve(newStory);
+		assertEquals(stories.size(), 1);
+		newStory = (Story) stories.get(0);
+		
+		HashMap<UUID, Chapter> chaps = newStory.getChapters();
+		assertEquals(chaps.size(), 2);
+		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
+		assertFalse(newStory.getTitle().equals(story.getTitle()));
+	}
+
 //	/**
 //	 * Tests loading all created stories, and makes sure the results don't
 //	 * include any stories not created by author.
