@@ -57,9 +57,9 @@
 
     <EditText
         android:id="@+id/newStoryDescription"
+       	android:layout_above="@+id/addFirstChapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayoutStory"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/description"
@@ -67,25 +67,11 @@
         android:hint="@string/new_description"
         android:inputType="textMultiLine" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutStory"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/addFirstChapter"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/addStoryImage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_story_image" />
-
-        <Button
-            android:id="@+id/addFirstChapter"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_first_chapter" />
-    </LinearLayout>
+        android:text="@string/add_first_chapter" />
 
 </RelativeLayout>

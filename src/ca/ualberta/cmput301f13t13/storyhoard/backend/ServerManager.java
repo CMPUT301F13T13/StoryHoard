@@ -116,12 +116,19 @@ public class ServerManager implements StoringManager{
 
 
 	/**
-	 * update a field in a recipe
+	 * update a story on the server
 	 */
 	@Override
 	public void update(Object object) { 
-		remove(object);
-		insert(object);
+		Story story = (Story) object;
+		
+		try {
+			server.deleteStory(story);
+			server.insertStory(story);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 
 	/**
@@ -129,7 +136,12 @@ public class ServerManager implements StoringManager{
 	 */
 //	@Override
 	public void remove(Object object) { 
-		remove(object);
+		try {
+			server.deleteStory((Story) object);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 		

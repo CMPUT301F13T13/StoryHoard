@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,8 +48,7 @@ public class Server {
 	/**
 	 * delete an entry specified by the id
 	 */
-	public void deleteStory(Object object) throws IOException {
-		Story story = (Story) object;
+	public void deleteStory(Story story) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(server 
 				+ story.getId().toString());
 		httpDelete.addHeader("Accept","application/json");

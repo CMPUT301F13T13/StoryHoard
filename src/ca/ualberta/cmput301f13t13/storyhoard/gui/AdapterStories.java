@@ -76,7 +76,7 @@ public class AdapterStories extends ArrayAdapter<Story> {
 		// Implement this when stories actually have pictures
 		// holder.imageItem.setImageBitmap(item.getImage());
 		holder.imageItem.setImageBitmap((Bitmap) BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.ic_launcher));
+				context.getResources(), R.drawable.book));
 		return row;
 
 	}

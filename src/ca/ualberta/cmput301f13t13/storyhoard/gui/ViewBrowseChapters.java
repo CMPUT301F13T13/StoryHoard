@@ -16,7 +16,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +27,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
@@ -40,9 +41,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  */
 
 public class ViewBrowseChapters extends Activity {
-
+	HolderApplication app;
 	private SHController gc;
-	private UUID storyID;
 	private Story story;
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
@@ -51,6 +51,7 @@ public class ViewBrowseChapters extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_chapters);
 	}
 
@@ -67,8 +68,8 @@ public class ViewBrowseChapters extends Activity {
 			// Go to the add new chapter page for the specified story
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
-			intent.putExtra("isEditing", false);
-			intent.putExtra("storyID", story.getId());
+			app.setEditing(false);
+			app.setStory(story);
 			startActivity(intent);
 			return true;
 		}
@@ -81,7 +82,7 @@ public class ViewBrowseChapters extends Activity {
 		setUpFields();
 		setOnItemClickListener();
 		data.clear();
-		data.addAll(gc.getAllChapters(storyID));
+		data.addAll(gc.getAllChapters(story.getId()));
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -91,13 +92,9 @@ public class ViewBrowseChapters extends Activity {
 	public void setUpFields() {
 		// Grab GC and pull all chapters from story
 		gc = SHController.getInstance(this);
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.get("storyID");
-		story = gc.getCompleteStory(storyID);
-
+		story = app.getStory();
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
-
 		// Set adapter
 		chapterAdapter = new AdapterChapters(this,
 				R.layout.browse_chapter_item, data);
@@ -113,12 +110,11 @@ public class ViewBrowseChapters extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// Go to edit that chapter
-				Chapter chapter = data.get(arg2);
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
-				intent.putExtra("isEditing", true);
-				intent.putExtra("storyID", story.getId());
-				intent.putExtra("chapterID", chapter.getId());
+				app.setEditing(true);
+				app.setStory(story);
+				app.setChapter(data.get(arg2));
 				startActivity(intent);
 			}
 		});

@@ -38,7 +38,7 @@ import android.content.Context;
 public class SHController {
 	// CONSTANTS
 	private Context context = null;
-	private static SHController self = null; // SELF
+	private static SHController self = null;   
 	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
@@ -334,13 +334,25 @@ public class SHController {
 	}
 
 	/**
+	 * Chooses a random story from within the stories that are 
+	 * published. If there are no published stories available,
+	 * it will return null.
+	 * 
+	 */
+	public Story getRandomStory() {
+		Story story = null;
+		
+		return story;
+	}
+	
+	/**
 	 * Updates either a story, chapter, or choice object. Must specify what type
 	 * of object it getting updated. Also, updates are happening to the database
 	 * of the phone, not the server.
 	 * 
 	 * @param object
 	 *            Object to be updated.
-	 * @param type
+	 * @param type 
 	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
 	 *            CACHED_STORY, CREATED_STORY
 	 */

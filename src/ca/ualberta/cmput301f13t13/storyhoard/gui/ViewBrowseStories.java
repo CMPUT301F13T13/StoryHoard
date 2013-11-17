@@ -29,8 +29,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
@@ -42,19 +43,20 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class ViewBrowseStories extends Activity {
-
+	HolderApplication app;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private SHController gc;
-	ObjectType viewType = ObjectType.CREATED_STORY;
-
+	private ObjectType viewType = ObjectType.CREATED_STORY;
+	
 	/**
 	 * Create the View Browse Stories activity
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_stories);
 
 		// Set up the action bar to show a dropdown list.
@@ -104,7 +106,7 @@ public class ViewBrowseStories extends Activity {
 					long arg3) {
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				intent.putExtra("storyID", gridArray.get(arg2).getId());
+				app.setStory(gridArray.get(arg2));
 				startActivity(intent);
 			}
 		});
@@ -130,7 +132,8 @@ public class ViewBrowseStories extends Activity {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
 			// Pass it a boolean to indicate it is not editing
-			intent.putExtra("isEditing", false);
+			app.setFirstStory(true);
+			app.setEditing(false);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
