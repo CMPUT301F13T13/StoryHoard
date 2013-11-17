@@ -21,11 +21,11 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the Choice class in the StoryHoard

@@ -16,17 +16,17 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.HolderApplication;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
+
 
 /**
  * Tests the editChapterActivity

@@ -17,12 +17,18 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.UUID;
 
+
+import ca.ualberta.cmput301f13t13.storyhoard.R.id;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
-import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cs.c301f13t13.gui.EditStoryActivity;
+
+
 
 /**
  * Tests the EditStoryActivity class.
@@ -55,7 +61,8 @@ public class TestEditStoryActivity extends
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
 		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
-		addfirstChapter = (Button) activity.findViewById(id.addFirstChapter);
+
+		addfirstChapter = (Button) activity.findViewById(id.addFirstChapter);			
 	}
 	
 	public void testPreConditions() {
@@ -64,7 +71,6 @@ public class TestEditStoryActivity extends
 		assertTrue(newAuthor != null);
 		assertTrue(newDescription != null);
 		assertTrue(addfirstChapter != null);
-		assertTrue(addStoryImage != null);
 	}
 	
 	public void testSetTitle() {

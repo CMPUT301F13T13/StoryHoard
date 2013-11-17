@@ -16,10 +16,10 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.ObjectType;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.ViewStory;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
