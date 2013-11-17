@@ -3,12 +3,10 @@
 
     <item
         android:id="@+id/addImage"
-        android:icon="@drawable/publish"
         android:showAsAction="ifRoom"
         android:title="add Image"/>
     <item
         android:id="@+id/addfirstChapter"
-        android:icon="@drawable/download"
         android:showAsAction="ifRoom"
         android:title="add First Chapter"/>
 

@@ -22,6 +22,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,7 +46,6 @@ public class EditStoryActivity extends Activity {
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	private Button addfirstChapter;
 	private Button addStoryImage;
 	private Story newStory;
 	private SHController gc;
@@ -65,7 +66,6 @@ public class EditStoryActivity extends Activity {
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
-		addfirstChapter = (Button) findViewById(R.id.addFirstChapter);
 		addStoryImage = (Button) findViewById(R.id.addStoryImage);
 
 		// Check if we are editing the story or making a new story
@@ -76,38 +76,7 @@ public class EditStoryActivity extends Activity {
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
-			addfirstChapter.setText("Save Metadata");
 		}
-
-		addfirstChapter.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				/*
-				 * Save all text forms to first story Switch to first chapter
-				 * creation activity
-				 */
-				String title = newTitle.getText().toString();
-				String author = newAuthor.getText().toString();
-				String description = newDescription.getText().toString();
-				if (isEditing) {
-					newStory.setAuthor(author);
-					newStory.setTitle(title);
-					newStory.setDescription(description);
-					gc.updateObject(newStory, ObjectType.CREATED_STORY);
-				} else {
-					newStory = new Story(title, author, description, Utilities
-							.getPhoneId(getBaseContext()));
-					Intent intent = new Intent(EditStoryActivity.this,
-							EditChapterActivity.class);
-					intent.putExtra("isEditing", false);
-					intent.putExtra("newStory", true);
-					intent.putExtra("storyID", newStory.getId());
-					intent.putExtra("story", newStory);
-					startActivity(intent);
-				}
-				finish();
-			}
-		});
 
 		/*
 		 * IMPLEMENTATION NOT READY TO GO YET. COMMENTING OUT AND TOASTING NON
@@ -144,5 +113,49 @@ public class EditStoryActivity extends Activity {
 						.show();
 			}
 		});
+	}
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_edit_story, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.addImage:
+			return true;
+		case R.id.addfirstChapter:
+			/*
+			 * Save all text forms to first story Switch to first chapter
+			 * creation activity
+			 */
+			String title = newTitle.getText().toString();
+			String author = newAuthor.getText().toString();
+			String description = newDescription.getText().toString();
+			if (isEditing) {
+				newStory.setAuthor(author);
+				newStory.setTitle(title);
+				newStory.setDescription(description);
+				gc.updateObject(newStory, ObjectType.CREATED_STORY);
+			} else {
+				newStory = new Story(title, author, description, Utilities
+						.getPhoneId(getBaseContext()));
+				Intent intent = new Intent(EditStoryActivity.this,
+						EditChapterActivity.class);
+				intent.putExtra("isEditing", false);
+				intent.putExtra("newStory", true);
+				intent.putExtra("storyID", newStory.getId());
+				intent.putExtra("story", newStory);
+				startActivity(intent);
+			}
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
