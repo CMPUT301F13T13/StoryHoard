@@ -33,24 +33,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="@string/new_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="30sp" />
+            android:hint="hu"
+            android:textColor="#472312" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/storyAuthor"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/new_author"
-        android:paddingLeft="20dp" />
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/storyAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_author"
+            android:paddingLeft="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:paddingLeft="20dp"
+        android:paddingLeft="25dp"
         android:text="@string/story_description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -61,7 +75,7 @@
         android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:hint="@string/new_description"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="25dp" />
 
     <Button
         android:id="@+id/viewFirstChapter"
