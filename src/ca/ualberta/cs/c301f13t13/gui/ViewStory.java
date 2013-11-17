@@ -123,7 +123,6 @@ public class ViewStory extends Activity {
 
 		// Initialize the activity fields
 		storyCover = (ImageView) findViewById(R.id.storyImage);
-		topBorder = (ImageView) findViewById(R.id.topBorder);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
