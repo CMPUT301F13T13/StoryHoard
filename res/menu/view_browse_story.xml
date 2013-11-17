@@ -1,13 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+        <item
+        android:id="@+id/editStoryMetaData"
+        android:orderInCategory="101"
+        android:showAsAction="ifRoom"
+        android:title="Edit Story"/>
+        
     <item
         android:id="@+id/editExistingStory"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
-        android:title="Edit story"/>
-    <item
-        android:id="@+id/editStoryMetaData"
-        android:orderInCategory="101"
         android:showAsAction="ifRoom"
         android:title="Settings"/>
 

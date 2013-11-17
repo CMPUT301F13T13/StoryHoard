@@ -34,7 +34,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
         android:paddingLeft="25dp" >
 
@@ -70,7 +70,7 @@
         android:id="@+id/storyDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_weight="0.10"
         android:hint="@string/new_description"
         android:paddingLeft="25dp"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="25dp"
         android:text="@string/view_first_chapter" />
 
 </LinearLayout>
