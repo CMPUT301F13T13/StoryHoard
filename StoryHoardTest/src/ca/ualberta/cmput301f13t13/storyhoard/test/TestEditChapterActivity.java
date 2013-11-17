@@ -15,19 +15,18 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import android.app.AlertDialog;
-import android.content.Intent;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
 
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.AdapterChoices;
-import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
 
 /**
  * Tests the editChapterActivity
@@ -37,15 +36,14 @@ import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
  */
 public class TestEditChapterActivity extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
+	HolderApplication app;
 	private EditChapterActivity activity;
 	private Button saveButton;
 	private Button addIllust;
 	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
-	private AdapterChoices choiceAdapter;
-	private AlertDialog illustDialog;
-	private LinearLayout illustrations;
+	private LinearLayout illustrations;	
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);
@@ -56,17 +54,14 @@ public class TestEditChapterActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		Story story = new Story("title", "author", "es", "432432");
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("Story", story);
-		intent.putExtra("Chapter", new Chapter(story.getId(), null));
-		
-		setActivityIntent(intent);
-		
 		activity = getActivity();
+		app = (HolderApplication) activity.getApplication();
+				
+		Story story = new Story("title", "author", "es", "432432");
+		app.setEditing(false);
+		app.setStory(story);
+		app.setChapter(new Chapter(story.getId(), ""));
+		
 		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
 		saveButton = (Button) activity.findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) activity.findViewById(R.id.addNewChoice);

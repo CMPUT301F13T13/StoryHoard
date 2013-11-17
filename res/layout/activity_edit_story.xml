@@ -61,7 +61,6 @@
         android:layout_width="303dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:ems="10"
         android:hint="@string/new_description"
         android:inputType="textMultiLine"
         android:paddingLeft="25dp"
@@ -70,5 +69,6 @@
 
         <requestFocus />
     </EditText>
+   
 
 </LinearLayout>

@@ -19,11 +19,9 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.*;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -36,9 +34,9 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestMediaManager extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
-	private static Uri uri;
 	private MediaManager mm = null;
-	private static EditChapterActivity activity;
+	private static final String path = "./mockImages/img1";
+	private static final String path2 = "./mockImages/img2";
 	
 	public TestMediaManager() {
 		super(EditChapterActivity.class);
@@ -51,28 +49,17 @@ public class TestMediaManager extends
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
-		mm = MediaManager.getInstance(getActivity());
-		
-		Story story = new Story("title", "author", "es", "432432");
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("Story", story);
-		intent.putExtra("Chapter", new Chapter(story.getId(), null));
-		
-		setActivityIntent(intent);
-		
-		activity = getActivity();
-		activity.takePhoto();
-		uri = activity.getImageFileUri();		
+		mm = MediaManager.getInstance(getActivity());	
 	}
 
 	/**
 	 * Tests adding and loading an image.
 	 */
 	public void testAddLoadImage() {
-		Chapter chap = activity.getChapter();
+		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
 		Media mockMedia = new Media(null, chap.getId(), null, null);
+		
+		mm.insert(mockMedia);
 
 		ArrayList<Object> objects = mm.retrieve(mockMedia);
 		assertEquals(objects.size(), 1);
@@ -85,11 +72,9 @@ public class TestMediaManager extends
 	 * Tests getting all photos, and all illustrations belonging to a chapter.
 	 */
 	public void testGetAllMedia() {
-		activity.takePhoto();
-		Uri uri2 = activity.getImageFileUri();
 		UUID chapId = UUID.randomUUID();
 		
-		Media m2 = new Media(chapId, uri2.getPath(), Media.PHOTO);
+		Media m2 = new Media(chapId, path, Media.PHOTO);
 
 		mm.insert(m2);
 
@@ -106,7 +91,11 @@ public class TestMediaManager extends
 	 * Tests updating a chapter's media.
 	 */
 	public void testUpdateMedia() {
-		Chapter chap = activity.getChapter();
+		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
+		
+		Media mockMedia = new Media(null, chap.getId(), null, null);
+		mm.insert(mockMedia);
+		
 		Media criteria = new Media(null, chap.getId(), null, null);
 		
 		ArrayList<Object> objects = mm.retrieve(criteria);
@@ -114,12 +103,8 @@ public class TestMediaManager extends
 
 		Media newM1 = (Media) objects.get(0);
 
-		newM1.setType(Media.ILLUSTRATION);
-		
-		activity.takePhoto();
-		Uri uri2 = activity.getImageFileUri();
-		
-		newM1.setPath(uri2.getPath());
+		newM1.setType(Media.ILLUSTRATION);		
+		newM1.setPath(path2);
 
 		mm.update(newM1);
 
@@ -129,6 +114,6 @@ public class TestMediaManager extends
 		newM1 = (Media) objects.get(0);
 
 		assertFalse(newM1.getType().equals(Media.PHOTO));
-		assertFalse(newM1.getPath().equals(uri.getPath()));
+		assertFalse(newM1.getPath().equals(path));
 	}
 }

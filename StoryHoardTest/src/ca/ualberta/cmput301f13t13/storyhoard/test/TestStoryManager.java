@@ -18,8 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
 
-import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.*;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**

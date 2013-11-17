@@ -15,18 +15,15 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.EditChapterActivity;
-import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
 
 /**
  * Test case for the activity to edit choices
@@ -36,6 +33,7 @@ import ca.ualberta.cs.c301f13t13.gui.EditChoiceActivity;
  */
 public class TestEditChoiceActivity extends
 		ActivityInstrumentationTestCase2<EditChoiceActivity> {
+	HolderApplication app;
 	private EditText choiceText;
 	private ListView chapters;
 	
@@ -52,14 +50,12 @@ public class TestEditChoiceActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+		app = (HolderApplication) getActivity().getApplication();
 		Story story = new Story("title", "author", "es", "432432");
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("addingNewChapt", true);
-		intent.putExtra("story", story);
-		intent.putExtra("chapter", new Chapter(story.getId(), null));
-		
-		setActivityIntent(intent);
+
+		app.setEditing(false);
+		app.setStory(story);
+		app.setChapter(new Chapter(story.getId(), null));
 		
 		mActivity = (EditChoiceActivity) getActivity();
 		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
@@ -70,5 +66,5 @@ public class TestEditChoiceActivity extends
 		assertTrue(mActivity != null);
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
-	}
+	} 
 }
