@@ -17,38 +17,28 @@ package ca.ualberta.cs.c301f13t13.gui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cs.c301f13t13.backend.Chapter;
 import ca.ualberta.cs.c301f13t13.backend.Choice;
+import ca.ualberta.cs.c301f13t13.backend.HolderApplication;
 import ca.ualberta.cs.c301f13t13.backend.Media;
 import ca.ualberta.cs.c301f13t13.backend.ObjectType;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
 
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
@@ -58,8 +48,7 @@ import ca.ualberta.cs.c301f13t13.backend.Utilities;
  * 
  */
 public class ViewChapter extends Activity {
-	private UUID storyID;
-	private UUID chapterID;
+	HolderApplication app;
 	private SHController gc;
 	private GUIMediaUtilities util;
 	private Chapter chapter;
@@ -82,6 +71,7 @@ public class ViewChapter extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_chapter);
 		setUpFields();
 	}
@@ -99,10 +89,6 @@ public class ViewChapter extends Activity {
 	 * Initializes the private fields needed.
 	 */
 	public void setUpFields() {
-		// Grab the necessary UUIDs and GC
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.get("storyID");
-		chapterID = (UUID) bundle.get("chapterID");
 		gc = SHController.getInstance(this);
 		util = new GUIMediaUtilities();
 
@@ -123,7 +109,7 @@ public class ViewChapter extends Activity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		chapter = gc.getCompleteChapter(chapterID);
+		chapter = app.getChapter();
 		choices.clear();
 		// Check for no chapter text
 		if (chapter.getText().equals("")) {
@@ -201,15 +187,11 @@ public class ViewChapter extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// Go to the chapter in question
-				UUID nextChapter = choices.get(arg2).getNextChapter();
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				intent.putExtra("storyID", storyID);
-				intent.putExtra("chapterID", nextChapter);
-
+				app.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
+				startActivity(intent);
 				photos.removeAllViews();
 				illustrations.removeAllViews();
-
-				startActivity(intent);
 				finish();
 			}
 		});

@@ -26,9 +26,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cs.c301f13t13.backend.Chapter;
+import ca.ualberta.cs.c301f13t13.backend.HolderApplication;
 import ca.ualberta.cs.c301f13t13.backend.SHController;
 import ca.ualberta.cs.c301f13t13.backend.Story;
 
@@ -39,20 +40,18 @@ import ca.ualberta.cs.c301f13t13.backend.Story;
  * 
  */
 public class ViewStory extends Activity {
-	Story focusedStory;
-	SHController gc;
-
-	private ImageView storyCover;
-	private ImageView topBorder;
+	HolderApplication app;
+	private Story story;
+	private SHController gc;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
-	private UUID storyID;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_story);
 	}
 
@@ -61,25 +60,25 @@ public class ViewStory extends Activity {
 		super.onResume();
 		setUpFields();
 		setBeginReading();
-		focusedStory = gc.getCompleteStory(storyID);
-		//storyCover.setImageBitmap(focusedStory.getImage());
+		story = app.getStory();
+		// storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
-		if (focusedStory.getTitle().equals("")) {
+		if (story.getTitle().equals("")) {
 			storyTitle.setText("<No Title>");
 		} else {
-			storyTitle.setText(focusedStory.getTitle());
+			storyTitle.setText(story.getTitle());
 		}
 		// Check no author
-		if (focusedStory.getAuthor().equals("")) {
+		if (story.getAuthor().equals("")) {
 			storyAuthor.setText("<No Author>");
 		} else {
-			storyAuthor.setText(focusedStory.getAuthor());
+			storyAuthor.setText(story.getAuthor());
 		}
 		// Check no description
-		if (focusedStory.getDescription().equals("")) {
+		if (story.getDescription().equals("")) {
 			storyDescription.setText("<No Description>");
 		} else {
-			storyDescription.setText(focusedStory.getDescription());
+			storyDescription.setText(story.getDescription());
 		}
 	}
 
@@ -93,17 +92,14 @@ public class ViewStory extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		Intent intent;
+		app.setEditing(true);
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
-			// Handle editing the story content, like chapters and choices
 			intent = new Intent(this, ViewBrowseChapters.class);
-			intent.putExtra("storyID", storyID);
 			startActivity(intent);
 			return true;
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);
-			intent.putExtra("isEditing", true);
-			intent.putExtra("storyID", focusedStory.getId());
 			startActivity(intent);
 			return true;
 		default:
@@ -115,15 +111,9 @@ public class ViewStory extends Activity {
 	 * Initialize private fields
 	 */
 	public void setUpFields() {
-		// Grab GC and story info
-		gc = SHController.getInstance(this);
-		Bundle bundle = this.getIntent().getExtras();
-		storyID = (UUID) bundle.getSerializable("storyID");
-		focusedStory = gc.getCompleteStory(storyID);
-
+		gc = SHController.getInstance(getBaseContext());
+		
 		// Initialize the activity fields
-		storyCover = (ImageView) findViewById(R.id.storyImage);
-		topBorder = (ImageView) findViewById(R.id.topBorder);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
@@ -144,8 +134,9 @@ public class ViewStory extends Activity {
 			public void onClick(View v) {
 				// Begin reading, go to first chapter
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				intent.putExtra("storyID", storyID);
-				intent.putExtra("chapterID", focusedStory.getFirstChapterId());
+				UUID firstChapterID = story.getFirstChapterId();
+				Chapter chapter = gc.getCompleteChapter(firstChapterID);
+				app.setChapter(chapter);
 				startActivity(intent);
 				finish();
 			}
