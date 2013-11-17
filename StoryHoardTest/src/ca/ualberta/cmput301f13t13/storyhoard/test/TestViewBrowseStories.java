@@ -22,9 +22,9 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.AdapterStories;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.AdapterStories;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
  * Test case for the activity to view all stories
