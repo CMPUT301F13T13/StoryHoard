@@ -73,9 +73,9 @@ public class ServerManager implements StoringManager{
 			if (story != null) {
 				stories.add(story);
 			}
-		} else if (crit.getTitle() != null) {
+		} else {
 			
-			// search by keywords
+			// search for multiple stories
 			try {
 				ArrayList<String> sargs = new ArrayList<String>();
 				HashMap<String, String> storyData = crit.getSearchCriteria();
@@ -95,10 +95,7 @@ public class ServerManager implements StoringManager{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
-			
-		} else {
-			// get all stories
-		}
+		} 
 		
 		return stories;
 	}
@@ -137,6 +134,10 @@ public class ServerManager implements StoringManager{
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";
 		Story story = (Story) object;
+		
+		if (story.getTitle() == null) {
+			return selection;
+		}
 		
 		String allWords = story.getTitle();
 		

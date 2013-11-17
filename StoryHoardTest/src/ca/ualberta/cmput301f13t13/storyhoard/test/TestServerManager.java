@@ -43,8 +43,15 @@ public class TestServerManager
 	}
 
 	public void setUp() throws Exception {
-		// clean up server
 		sm = ServerManager.getInstance();
+		
+		// clean up server
+		Story mockCriteria = new Story(null, null, null, null, null);
+		sm.retrieve(mockCriteria);
+		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
+		for (Object story: mockStories) {
+			sm.remove(story);
+		}		
 	}
 
 	/**
@@ -112,30 +119,32 @@ public class TestServerManager
 		assertEquals(chaps.size(), 2);
 		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
 		assertFalse(newStory.getTitle().equals(story.getTitle()));
+		
+		sm.remove(newStory);
 	}
 
-//	/**
-//	 * Tests loading all created stories, and makes sure the results don't
-//	 * include any stories not created by author.
-//	 */
-//	public void testGetAllPublishedStories() {
-//		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
-//				Utilities.getPhoneId(getActivity()));
-//		sm.insert(mockStory1);
-//		Story mockStory2 = new Story("My Frog", "Dr. Phil",
-//				"my chubby frog", Utilities.getPhoneId(getActivity()));
-//		sm.insert(mockStory2);
-//		Story mockStory3 = new Story("My Hen", "Dr. Farmer",
-//				"my chubby hen", Utilities.getPhoneId(getActivity()));
-//		sm.insert(mockStory3);
-//
-//		// setting search criteria
-//		Story mockCriteria = new Story(null, null, null, null, 
-//				Utilities.getPhoneId(getActivity()));
-//		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
-//		assertEquals(mockStories.size(), 3);
-//
-//	}
+	/**
+	 * Tests loading all created stories, and makes sure the results don't
+	 * include any stories not created by author.
+	 */
+	public void testGetAllPublishedStories() {		
+		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(getActivity()));
+		sm.insert(mockStory1);
+		Story mockStory2 = new Story("My Frog", "Dr. Phil",
+				"my chubby frog", Utilities.getPhoneId(getActivity()));
+		sm.insert(mockStory2);
+		Story mockStory3 = new Story("My Hen", "Dr. Farmer",
+				"my chubby hen", Utilities.getPhoneId(getActivity()));
+		sm.insert(mockStory3);
+
+		// setting search criteria
+		Story mockCriteria = new Story(null, null, null, null, 
+				Utilities.getPhoneId(getActivity()));
+		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
+		assertEquals(mockStories.size(), 3);
+
+	}
 //	
 //	/**
 //	 * Tests publishing story, caching it, then loading it from server.
