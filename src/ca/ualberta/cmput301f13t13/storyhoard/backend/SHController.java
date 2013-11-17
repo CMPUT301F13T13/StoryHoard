@@ -194,7 +194,8 @@ public class SHController {
 
 		if (illustrations.size() > 0) {
 			ill = illustrations.get(0);
-		}
+		} 
+		
 		return ill;
 	}
 
@@ -241,7 +242,7 @@ public class SHController {
 	 *            Title of the story user is looking for.
 	 * 
 	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, CREATED_STORY
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
 	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
@@ -251,12 +252,7 @@ public class SHController {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
 
-		if (type.equals(ObjectType.CREATED_STORY)) {
-			criteria = new Story(null, title, null, null,
-					Utilities.getPhoneId(context));
-		} else if (type.equals(ObjectType.CACHED_STORY)) {
-			criteria = new Story(null, title, null, null, "none");
-		}
+		criteria = new Story(null, title, null, null, "none");
 
 		objects = sm.retrieve(criteria);
 		stories = Utilities.objectsToStories(objects);
@@ -276,11 +272,17 @@ public class SHController {
 		// Search criteria gets set
 		Chapter criteria = new Chapter(id, null, null, null);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
-
+		Chapter chapter;
+		
 		// Get chapter
 		ArrayList<Object> objects = sm.retrieve(criteria);
-		Chapter chapter = (Chapter) objects.get(0);
-
+		
+		if (objects.size() == 1) {
+			chapter = (Chapter) objects.get(0);
+		} else {
+			return null;  // chapter doesn't exist
+		}
+		
 		// Get chapter choices
 		chapter.setChoices(getAllChoices(id));
 
@@ -307,7 +309,13 @@ public class SHController {
 		Story criteria = new Story(id, null, null, null, null);
 		StoringManager sm = sf.getStoringManager(ObjectType.CACHED_STORY);
 		ArrayList<Object> objects = sm.retrieve(criteria);
-		Story story = (Story) objects.get(0);
+		Story story;
+		
+		if (objects.size() == 1) {
+			story = (Story) objects.get(0);
+		} else {
+			return null;   // story doesn't exist
+		}
 
 		// Get all chapters
 		ArrayList<Chapter> chapters = getAllChapters(id);

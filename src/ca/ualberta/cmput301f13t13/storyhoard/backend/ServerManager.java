@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,14 +28,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -54,14 +50,11 @@ import com.google.gson.reflect.TypeToken;
  * @author Stephanie Gil
  */
 public class ServerManager implements StoringManager{
-	private static HttpClient httpclient = null;		// Http Connector
-	private static Gson gson = null;					// JSON Utilities
+	private static Server server = null;
 	private static ServerManager self = null;
-	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
 	
 	protected ServerManager() {
-		httpclient = new DefaultHttpClient();
-		gson = new Gson();
+		server = new Server();
 	}
 	
 	public static ServerManager getInstance() {
@@ -76,52 +69,7 @@ public class ServerManager implements StoringManager{
 	 */	
 	@Override
 	public void insert(Object object){
-		Story story = (Story) object;
-		HttpPost httpPost = new HttpPost(server + story.getId().toString());
-
-		StringEntity stringentity = null;
-		try {
-			stringentity = new StringEntity(gson.toJson(story));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		httpPost.setHeader("Accept","application/json");
-
-		httpPost.setEntity(stringentity);
-		HttpResponse response = null;
-		try {
-			response = httpclient.execute(httpPost);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-		
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is = null;
-		try {
-			is = new InputStreamReader(entity.getContent());
-		} catch (IllegalStateException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		BufferedReader br = new BufferedReader(is);
-		
-		String output;
-		System.err.println("Output from Server -> ");
-		try {
-			while ((output = br.readLine()) != null) {
-				System.err.println(output);
-			}
-			entity.consumeContent();
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		server.insertStory((Story) object);
 	}
 	
 	/**
@@ -133,14 +81,27 @@ public class ServerManager implements StoringManager{
 		ArrayList<Object> stories = new ArrayList<Object>();
 		
 		if (crit.getId() == null && crit.getTitle() == null) {
+			
 			// get all stories
 		} else if (crit.getId() != null){
+			
 			// search by id
-			stories.add(searchById(crit.getId().toString()));		
+			stories.add(server.searchById(crit.getId().toString()));		
 		} else {
+			
 			// search by keyword
 			try {
-				stories = searchByKeywords(crit);
+				ArrayList<String> sargs = new ArrayList<String>();
+				HashMap<String, String> storyData = crit.getSearchCriteria();
+				
+				// setting selection string
+				for (String key: storyData.keySet()) {
+					sargs.add(storyData.get(key));
+				}
+				
+				String selection = setSearchCriteria(criteria, sargs);	
+				
+				stories = server.searchByKeywords(crit, selection);
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -153,223 +114,25 @@ public class ServerManager implements StoringManager{
 		return stories;
 	}
 
-	/**
-	 * search by story id
-	 */
-	public Story searchById(String id) {
-		Story story = null;
-		try{
-			HttpGet getRequest = new HttpGet(server + id + "?pretty=1");
-
-			getRequest.addHeader("Accept","application/json");
-
-			HttpResponse response = httpclient.execute(getRequest);
-
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-
-			// We have to tell GSON what type we expect
-			Type simpleESResponseType = 
-					new TypeToken<SimpleESResponse<Story>>(){}.getType();
-			// Now we expect to get a Story response
-			SimpleESResponse<Story> esResponse = 
-					gson.fromJson(json, simpleESResponseType);
-			// We get the recipe from it!
-			story = esResponse.getSource();
-			System.out.println(story.toString());
-			
-			// NOT SURE THIS IS RIGHT OR NEEDED
-			HttpEntity entity = response.getEntity();
-			InputStreamReader is = new InputStreamReader(entity.getContent());
-			is.close();
-
-		} catch (ClientProtocolException e) {
-
-			e.printStackTrace();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}		
-		return story;
-	}
-	
-	/**
-	 * searches by keywords
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
-	 */ 
-	public ArrayList<Object> searchByKeywords(Story criteria) 
-				throws ClientProtocolException, IOException {
-		ArrayList<Object> stories = new ArrayList<Object>();
-		HashMap<String, String> storyData = criteria.getSearchCriteria();
-		ArrayList<String> sargs = new ArrayList<String>();
-		
-		// setting selection string
-		for (String key: storyData.keySet()) {
-			sargs.add(storyData.get(key));
-		}
-		String selection = setSearchCriteria(criteria, sargs);
-		
-		HttpGet searchRequest = null;
-		searchRequest = new HttpGet(server + "_search?pretty=1&q=" + java.net.URLEncoder.encode(selection,"UTF-8"));
-		searchRequest.setHeader("Accept","application/json");
-		HttpResponse response = null;
-		
-		response = httpclient.execute(searchRequest);
-
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		String json = null;
-		json = getEntityContent(response);
-
-		Type elasticSearchResponseType = 
-				new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = 
-				gson.fromJson(json, elasticSearchResponseType);
-		System.err.println(esResponse);
-		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story story = r.getSource();
-			stories.add(story);
-		}
-		
-		// NOT SURE THIS IS RIGHT OR NEEDED
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is;
-		try {
-			is = new InputStreamReader(entity.getContent());
-			is.close();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		return stories;
-	}	
-
-	/**
-	 * advanced search (logical operators)
-	 */
-	public ArrayList<Object> searchStories(Story criteria) 
-				throws ClientProtocolException, IOException {
-		ArrayList<Object> stories = new ArrayList<Object>();
-		
-		String selection = setSearchCriteria(criteria, null);
-		
-		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
-		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\"" 
-				+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
-		StringEntity stringentity = new StringEntity(query);
-
-		searchRequest.setHeader("Accept","application/json");
-		searchRequest.setEntity(stringentity);
-
-		HttpResponse response = httpclient.execute(searchRequest);
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		String json = getEntityContent(response);
-
-		Type elasticSearchSearchResponseType 
-				= new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = gson.fromJson(json, 
-				elasticSearchSearchResponseType);
-		System.err.println(esResponse);
-		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story story = r.getSource();
-			stories.add(story);
-		}
-		
-		return stories;
-	}	
 
 	/**
 	 * update a field in a recipe
 	 */
 	@Override
 	public void update(Object object) { 
-		// retrieve current story with id
-		// delete
-		// re insert
-		
-//		Story story = (Story) object;
-//		
-//		HttpPost updateRequest = new HttpPost(server + "/1/_update");
-//
-//		ArrayList<Object> stories = new ArrayList<Object>();
-//		HashMap<String, String> storyData = story.getSearchCriteria();
-//		ArrayList<String> sargs = new ArrayList<String>();
-//		
-//		// setting selection string
-//		for (String key: storyData.keySet()) {
-//			sargs.add(storyData.get(key));
-//		}
-//		String selection = setSearchCriteria(story, sargs);
-//		
-//		String query = 	"{\"script\" : \"ctx._source." + str + "}";
-//		StringEntity stringentity = new StringEntity(query);
-//		
-//		updateRequest.setHeader("Accept","application/json");
-//		updateRequest.setEntity(stringentity);
-//
-//		HttpResponse response = httpclient.execute(updateRequest);
-//		String status = response.getStatusLine().toString();
-//		System.out.println(status);
-//
-//		String json = getEntityContent(response);
-//		
-//		// NOT SURE THIS IS RIGHT OR NEEDED
-//		HttpEntity entity = response.getEntity();
-//		InputStreamReader is = new InputStreamReader(entity.getContent());
-//		is.close();
+		remove(object);
+		insert(object);
 	}	
 
 	/**
-	 * delete an entry specified by the id
+	 * remove a story from server
 	 */
-	public void deleteStory(Object object) throws IOException {
-		Story story = (Story) object;
-		HttpDelete httpDelete = new HttpDelete(server 
-				+ story.getId().toString());
-		httpDelete.addHeader("Accept","application/json");
-
-		HttpResponse response = httpclient.execute(httpDelete);
-
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is = new InputStreamReader(entity.getContent());
-		BufferedReader br = new BufferedReader(is);
-		String output;
-		System.err.println("Output from Server -> ");
-		while ((output = br.readLine()) != null) {
-			System.err.println(output);
-		}
-		
-		entity.consumeContent();
-		
-		is.close();
+//	@Override
+	public void remove(Object object) { 
+		remove(object);
 	}
-
-	/**
-	 * get the http response and return json string
-	 */
-	String getEntityContent(HttpResponse response) throws IOException {
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(response.getEntity().getContent()));
-		String output;
-		System.err.println("Output from Server -> ");
-		String json = "";
-		while ((output = br.readLine()) != null) {
-			System.err.println(output);
-			json += output;
-		}
-		System.err.println("JSON:"+json);
-		return json;
-	}
-
+		
+		
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";
