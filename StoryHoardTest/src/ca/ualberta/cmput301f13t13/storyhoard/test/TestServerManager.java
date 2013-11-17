@@ -145,20 +145,4 @@ public class TestServerManager
 		assertEquals(mockStories.size(), 3);
 
 	}
-//	
-//	/**
-//	 * Tests publishing story, caching it, then loading it from server.
-//	 */
-//	public void testPublishCacheLoadStory() {
-//		fail("Not yet implemented");
-//
-//		Story mockStory = new Story("My Monkey", "TS ELLIOT",
-//				"monkey is in the server", Utilities.getPhoneId(getActivity()));
-//		
-//		sm.insert(mockStory);
-//		sm.insert(mockStory);
-//
-//		ArrayList<Object> pubStories = sm.retrieve(mockStory);
-//		assertEquals(pubStories.size(), 1);
-//	}
 }

@@ -127,8 +127,7 @@ public class ServerManager implements StoringManager{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-		
+	}	
 		
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
