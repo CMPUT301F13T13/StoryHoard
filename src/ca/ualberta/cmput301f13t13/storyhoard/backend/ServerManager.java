@@ -15,24 +15,15 @@
  * 
  */
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.google.gson.Gson;
 
 /**
  * 
@@ -80,16 +71,13 @@ public class ServerManager implements StoringManager{
 		Story crit = (Story) criteria;
 		ArrayList<Object> stories = new ArrayList<Object>();
 		
-		if (crit.getId() == null && crit.getTitle() == null) {
-			
-			// get all stories
-		} else if (crit.getId() != null){
+		if (crit.getId() != null) { 
 			
 			// search by id
 			stories.add(server.searchById(crit.getId().toString()));		
-		} else {
+		} else if (crit.getTitle() != null) {
 			
-			// search by keyword
+			// search by keywords
 			try {
 				ArrayList<String> sargs = new ArrayList<String>();
 				HashMap<String, String> storyData = crit.getSearchCriteria();
@@ -101,14 +89,17 @@ public class ServerManager implements StoringManager{
 				
 				String selection = setSearchCriteria(criteria, sargs);	
 				
-				stories = server.searchByKeywords(crit, selection);
+				stories = server.searchStories(crit, selection);
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}			
+			
+		} else {
+			// get all stories
 		}
 		
 		return stories;
@@ -139,7 +130,6 @@ public class ServerManager implements StoringManager{
 		try {
 			server.deleteStory((Story) object);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
