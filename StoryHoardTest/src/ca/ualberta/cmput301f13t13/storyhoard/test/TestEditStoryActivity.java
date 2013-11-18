@@ -19,10 +19,8 @@ import java.util.UUID;
 
 
 import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -41,7 +39,6 @@ public class TestEditStoryActivity extends
 	private EditText newAuthor;
 	private EditText newDescription;
 	private Button addfirstChapter;
-	private Button addStoryImage;
 	
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);

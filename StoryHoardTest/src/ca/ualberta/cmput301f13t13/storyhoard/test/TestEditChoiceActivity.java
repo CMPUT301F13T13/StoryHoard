@@ -15,7 +15,6 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.ListView;

@@ -5,10 +5,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,10 +17,8 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
@@ -61,7 +57,7 @@ public class GUIMediaUtilities {
 	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
-	public View insertImage(Media ill, Context context) {
+	public static View insertImage(Media ill, Context context) {
 		Bitmap bm = Utilities.decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
 				220, 220);
 		LinearLayout layout = new LinearLayout(context);
