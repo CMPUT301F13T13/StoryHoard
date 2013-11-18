@@ -65,14 +65,13 @@ public class SearchResultsActivity extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		storyType = (ObjectType) bundle.get("Type");
 		titleName = bundle.getString("Input_title");
-		viewType = ObjectType.CREATED_STORY;
 		emptyList = (TextView) findViewById(R.id.empty);
 
 		
 			ArrayList<Story> newStories = new ArrayList<Story>();
 			gridArray.clear();
 			gc = SHController.getInstance(this);
-			newStories = gc.searchStory(titleName, viewType);
+			newStories = gc.searchStory(titleName, storyType);
 			
 			if (newStories.size() !=0 ) {
 				gridArray.addAll(newStories);
