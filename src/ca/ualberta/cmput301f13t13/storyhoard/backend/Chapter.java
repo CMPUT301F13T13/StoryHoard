@@ -265,16 +265,6 @@ public class Chapter{
 	}
 
 	/**
-	 * Converts a chapter object to a string.
-	 */
-	@Override
-	public String toString() {
-		return "Chapter [id=" + id + ", storyId=" + storyId + ", text=" + text + ", randomChoice=" + randomChoice
-				+ "]";
-
-	}
-
-	/**
 	 * Returns the information of the chapter (id, storyId) that could be used
 	 * in searching for a chapter in the database. This information is returned
 	 * in a HashMap where the keys are the corresponding Chapter Table column

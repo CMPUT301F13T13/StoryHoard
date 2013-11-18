@@ -181,15 +181,4 @@ public class Choice {
 
 		return info;
 	}
-	
-	/**
-	 * Returns choice as a string 
-	 * 
-	 * @return String
-	 */
-	@Override
-	public String toString() {
-		return "Choice [id=" + id + ", Current Chapter=" + currentChapter
-				+ ", Next Chapter=" + nextChapter + ", Text=" + text + "]";
-	}
 }

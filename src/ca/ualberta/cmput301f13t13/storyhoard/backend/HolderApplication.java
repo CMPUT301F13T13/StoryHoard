@@ -6,6 +6,7 @@ import android.app.Application;
  * This is a subclass of the application, which allows passing back
  * and forth objects, relying on the fact that Application is persistent
  * throughout the application's life cycle
+ * 
  * @author alexanderwong
  *
  */

@@ -25,7 +25,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
 /**
  * Role: A container to hold story information. This includes id, author, 
  * title, description, the id of the first chapter, a collection of
- * chapters belonging to it, the id of the phone it was created on.
+ * chapters belonging to it, the id of the phone it was created on. Note 
+ * that all id's are stored as UUID's.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -329,15 +330,5 @@ public class Story {
 		for (String keyword : words) {
 			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
-	}
-
-	/**
-	 * Converts a story object to an String.
-	 */
-	@Override
-	public String toString() {
-		return "Story [id=" + id + ", author=" + author + ", title=" + title
-				+ ", description=" + description + ", first_chapId=" 
-				+ firstChapterId + ", phoneid=" + phoneId + "]";
 	}
 }

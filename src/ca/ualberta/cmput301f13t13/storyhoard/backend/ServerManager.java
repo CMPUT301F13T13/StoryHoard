@@ -27,11 +27,14 @@ import org.apache.http.client.ClientProtocolException;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 
-
 /**
- * 
  * Role: Uses functions from the ESClient to add, remove, update, and 
- * search for stories that have been published onto the esclient.
+ * search for stories that have been published onto the server. All 
+ * operations except for retrieving stories are performed on a different
+ * thread than the main UI thread.
+ * 
+ * </br> 
+ * Design Pattern: Singleton
  * 
  * @author Stephanie Gil
  * 
@@ -39,14 +42,20 @@ import android.os.StrictMode;
  * @see StoringManager
  */
 public class ServerManager implements StoringManager {
-	public static enum Task {INSERT, UPDATE, RETRIEVE, REMOVE};
 	private static ESClient esclient = null;
 	private static ServerManager self = null;
 
+	/**
+	 * Initializes a new ServerManager.
+	 */
 	protected ServerManager() {
 		esclient = new ESClient();
 	}
 
+	/**
+	 * Returns an instance of a ServerManager (singleton).
+	 * @return
+	 */
 	public static ServerManager getInstance() {
 		if (self == null) {
 			self = new ServerManager();
@@ -55,7 +64,21 @@ public class ServerManager implements StoringManager {
 	}	
 
 	/**
-	 * Consumes the POST/Insert operation of the service
+	 * Inserts a story object onto the server.The insertStory from the ESClient 
+	 * class, here the story is prepared (all its images are first turned into 
+	 * strings to be stored), and this method also sets up a new thread for the
+	 * task.
+	 * 
+	 * </br>
+	 * Eg. Story myStory = new Story(UUID, "My Cow", "John Blaine", "a little
+	 * 								 cow", phoneId).
+	 * </br>
+	 * ServerManager sm = ServerManager.getInstance(context);
+	 * </br>
+	 * sm.insert(myStory);
+	 * 
+	 * @param object
+	 * 			Story object to be inserted.
 	 */	
 	@Override
 	public void insert(Object object){
@@ -77,6 +100,23 @@ public class ServerManager implements StoringManager {
 		}.execute(object);
 	}
 
+	/**
+	 * Due to performance issues, Media objects don't actually hold Bitmaps.
+	 * A path to the location of the file is instead saved and used to 
+	 * retrieve bitmaps whenever needed. Media objects can also hold the
+	 * bitmaps after the have been converted to a string (Base64). 
+	 * </br>
+	 * Before a Story can be inserted into the server, all the images 
+	 * belonging to the story's chapters must have their bitmap strings
+	 * set. This is only done when the story is published to avoid doing
+	 * the expensive conversion unnecessarily (local stories only need to 
+	 * know the path).
+	 * </br>
+	 * 
+	 * This function takes care of setting all the Medias' bitmap strings.
+	 * 
+	 * @param story
+	 */
 	private void prepareStory(Story story) {
 
 		// get any media associated with the chapters of the story
@@ -101,14 +141,28 @@ public class ServerManager implements StoringManager {
 	}
 
 	/**
-	 * Consumes the Get operation of the service
+	 * Retrieves stories from the server. Calls the delegateSearch method
+	 * to determine whether it is a search by id, get all, or search by 
+	 * keywords. It also sets the permission for the main UI thread to
+	 * do networking. The actual interaction with the server is done by
+	 * calling the corresponding methods in ESClient (done in the 
+	 * delegateSearch method).
+	 * 
+	 * </br> An example call
+	 * </br> Searching for a specific story by id.
+	 * </br> Story criteria = new Story(UUID, null, null, null, null). OR
+	 * </br> Searching for stories by keywords.
+	 * </br> Story criteria = new Story(null, "love", null, null, null). OR
+	 * </br> Searching for all available published stories.
+	 * </br> Story criteria = new Story(null, null, null, null, null).
+	 * </br></br> Retrieving story/stories.
+	 * </br> ServerManager sm = ServerManager.getInstance(context);
+	 * </br> ArrayList<Object> objs = sm.retrieve(criteria);
+	 * 
+	 * @param criteria
 	 */
 	@Override
 	public ArrayList<Object> retrieve(Object criteria) {
-        /*
-         * set policy to allow for internet activity to happen within the
-         * android application
-         */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -116,6 +170,28 @@ public class ServerManager implements StoringManager {
 		return delegateSearch(criteria);
 	}
 
+	/**
+	 * Calls the correct retrieval method in ESCLient depending on
+	 * what search criteria is given. You can either search by Id,
+	 * by keywords in the title, or search for all published stories.
+	 * Note that this method is always called by the retrieve method,
+	 * never on its own outside of this class.
+	 * 
+	 * </br> An example call
+	 * </br> Searching for a specific story by id.
+	 * </br> Story criteria = new Story(UUID, null, null, null, null). OR
+	 * </br> Searching for stories by keywords.
+	 * </br> Story criteria = new Story(null, "love", null, null, null). OR
+	 * </br> Searching for all available published stories.
+	 * </br> Story criteria = new Story(null, null, null, null, null).
+	 * </br></br> Retrieving story/stories.
+	 * </br> ServerManager sm = ServerManager.getInstance(context);
+	 * </br> ArrayList<Object> objs = sm.delegateSearch(criteria);
+	 * 
+	 * @param object
+	 * 			Story object holding search criteria.
+	 * @return matching stories
+	 */
 	private ArrayList<Object> delegateSearch(Object object) {
 		Story crit = (Story) object;
 		ArrayList<Object> stories = new ArrayList<Object>();
@@ -153,7 +229,19 @@ public class ServerManager implements StoringManager {
 	}
 	
 	/**
-	 * update a story on the esclient
+	 * Updates a story on the server. This is done by first deleting the
+	 * story matching the object to be updated's id, and then re-inserting
+	 * it. This method sets up a new thread to do the updating on, and uses
+	 * ESClient methods to remove and insert the story.
+	 * 
+	 * </br> Example call.
+	 * </br> Story newStory = new Story(exisitingUUID, "new title", 
+	 * 									"new author", null, null);
+	 * </br> ServerManager sm = ServerManager.getInstance(context);
+	 * </br> sm.update(newStory);
+	 * 
+	 * @param object
+	 * 			Story with updates/new data that you want to publish.
 	 */
 	@Override
 	public void update(Object object) { 
@@ -181,9 +269,17 @@ public class ServerManager implements StoringManager {
 	}	
 
 	/**
-	 * remove a story from esclient
+	 * Removes a story from the server. It deletes the story with
+	 * the matching id of the story passed to it.
+	 * 
+	 * </br> Example call.
+	 * </br> Story criteria = (UUID, null, null, null, null);
+	 * </br> ServerManager sm = ServerManager.getInstance(context);
+	 * </br> sm.remove(criteria);
+	 * 
+	 * @param object
+	 * 			Story with id of the story you want to delete from server. 
 	 */
-	//	@Override
 	public void remove(Object object) { 
 		new AsyncTask<Object, Void, Void>()
 		{
@@ -207,6 +303,23 @@ public class ServerManager implements StoringManager {
 		}.execute(object);			
 	}	
 
+	/**
+	 * Sets the selection string for doing a keyword search of story title.
+	 * The argument args is not needed when dealing with the server, it is
+	 * used with the classes that implement StoringManager and interact with
+	 * the database.
+	 * 
+	 * </br> Example. Story crit = new Story(null, "ham butter eggs", null,
+	 * 										null, null);
+	 * </br> String selection = setSearchCriteria(crit, null);
+	 * 
+	 * </br> selection holds "ham AND butter AND eggs".
+	 * 
+	 * </br> If the story's title is null, then an empty selection string
+	 * will be returned.
+	 * 
+	 * @param object
+	 */
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";

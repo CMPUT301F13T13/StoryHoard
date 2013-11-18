@@ -20,18 +20,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Role: Holds elastic search results. More complex than the simple elastic
- * search results.
+ * Role: Holds a collection of the SimpleESResponses. Needed when
+ * doing an advanced elastic search which involves logical operators
+ * in the query.
  * 
+ * </br>
+ * Eg. Where story title has "dog AND cow OR hen"
+ * 
+ * </br>
  * CODE REUSE: This code was taken directly from 
+ * </br>
  * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ElasticSearchSearchResponse.java 
+ * </br>
  * Date: Nov. 4th, 2013 
+ * </br>
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
  * @author Abram Hindle
  * @author Chenlei Zhang
  * @author Ashley Brown
  * @author Stephanie Gil
+ * 
+ * @see SimpleESResponse
+ * @see ESClient
  */
 public class ElasticSearchResponse<T> {
 	int took;

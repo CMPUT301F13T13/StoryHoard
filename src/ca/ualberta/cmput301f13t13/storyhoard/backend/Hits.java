@@ -20,16 +20,21 @@ import java.util.Collection;
 
 /**
  * Role: Hits object for the elastic search.
- * 
+ * </br>
  * CODE REUSE: This code was taken directly from 
+ * </br>
  * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/Hits.java
+ * </br>
  * Date: Nov. 4th, 2013 
+ * </br>
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
 
  * @author Abram Hindle
  * @author Chenlei Zhang
  * @author Ashley Brown
  * @author Stephanie Gil
+ * 
+ * @see SimpleESResponse
  */
 public class Hits<T> {
 	    int total;

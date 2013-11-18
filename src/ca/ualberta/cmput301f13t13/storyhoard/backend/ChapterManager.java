@@ -32,6 +32,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
  * Model class, meaning it can hold SHViews and notify them if they need to be
  * updated.
  * 
+ * </br>
  * Design Pattern: Singleton
  * 
  * @author Stephanie Gil

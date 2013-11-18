@@ -220,14 +220,4 @@ public class Media {
 
 		return info;
 	}
-
-	
-	/**
-	 * Converts a chapter object to a string.
-	 */
-	@Override
-	public String toString() {
-		return "Media [id=" + id + ", chapter_id=" + chapterId + ", uri="
-				+ path + ", type=" + type + "]";
-	}
 }

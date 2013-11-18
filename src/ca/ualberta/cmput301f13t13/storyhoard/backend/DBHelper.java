@@ -21,11 +21,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * 
  * Purpose: Creates and sets up the database to be used using the information
  * about the database provided in the contract class (DbHelper). Also keeps the
  * tables updated.
  * 
+ * </br>
  * Design Pattern: Singleton
  * 
  * @author Ashley Brown

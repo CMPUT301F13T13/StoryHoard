@@ -18,16 +18,24 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 /**
  * 
- * Role: A simple elastic search response.
+ * Role: A simple elastic search response. It will hold the response
+ * from the server, where _source is the content, in this case, a story
+ * object. 
  * 
+ * </br>
  * CODE REUSE: This code was taken directly from 
+ * </br>
  * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+ * </br>
  * Date: Nov. 4th, 2013 
+ * </br>
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
  * @author Abram Hindle
  * @author Chenlei Zhang
  * @author Stephanie Gil
+ * 
+ * @see ESClient
  */
 public class SimpleESResponse<T> {
     String _index;

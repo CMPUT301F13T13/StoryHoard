@@ -35,6 +35,7 @@ import android.util.Base64;
  * Class meant for general functions that can be used by any class.
  * 
  * @author Stephanie Gil
+ * @author Ashley Brown
  * 
  */
 public class Utilities {
@@ -159,7 +160,6 @@ public class Utilities {
 		String PhoneId = Settings.Secure.getString(context.getContentResolver(), 
 				Settings.Secure.ANDROID_ID);
 		return PhoneId;
-
 	}
 
 	/**

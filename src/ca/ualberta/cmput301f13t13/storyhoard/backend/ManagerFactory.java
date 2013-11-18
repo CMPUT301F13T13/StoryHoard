@@ -21,6 +21,7 @@ import android.content.Context;
  * Role: Creates the correct object from the classes that implement the
  * StoringManager interface.
  * 
+ * </br>
  * Design Pattern: Factory Class
  * 
  * @author Stephanie Gil
@@ -29,15 +30,45 @@ import android.content.Context;
 public class ManagerFactory {
 	private Context context;
 
+	/**
+	 * Instantiates a new ManagerFactory
+	 * 
+	 * @param context
+	 */
 	protected ManagerFactory(Context context) {
 		this.context = context;
 	}
 
 	/**
 	 * Depending on the type of StoringManager needed, returns the correct
-	 * singleton object.
+	 * singleton object. There are five different types of objects that could
+	 * be returned.
+	 * 
+	 * </br>
+	 * <ul>
+	 * <li> A ServerManager object (deals with all things server related).</li>
+	 * <li> A ChapterManager object, deals with manipulating chapters. </li>
+	 * <li> A ServerManager object (deals with all things server related).</li>
+	 * <li> A ChapterManager object, deals with manipulating chapters. </li>
+	 * <li> A ServerManager object (deals with all things server related).</li>
+	 * </ul>
+	 * 
+	 * </br> 
+	 * Eg. If you are wanting to manipulate a chapter object, you would 
+	 * 	   call: </br>
+	 * 
+	 * ManagerFactory mf = new ManagerFactory();
+	 * </br>
+	 * StoringManager sm = mf.getStoringManager(CHAPTER);
+	 * </br>
+	 * You can now use sm as a chapterManager, although because it is a 
+	 * StoringManager right now, you can only use methods defined in 
+	 * the StoringManager interface.
 	 * 
 	 * @param type
+	 * 			Will either be PUBLISHED_STORY, CHAPTER, CHOICE, MEDIA
+	 * 			or CREATED_STORY and CACHED_STORY which actually use
+	 * 			the same StoringManager (StoryManager).
 	 * @return StoringManager
 	 */
 	public StoringManager getStoringManager(ObjectType type) {

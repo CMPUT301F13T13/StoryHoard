@@ -23,9 +23,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import android.provider.BaseColumns;
 
 /**
+ * Purpose: Defines the tables of the database that will be created for the 
+ * application.
  * 
- * Purpose: Defines the tables that will be created for the application.
- * 
+ * </br>
  * Design Rationale: To have a class devoted to the actual structure of the
  * database and its tables. Makes working with the Database more organized and
  * cleaner, and if we need to change a column or something, we only need to
