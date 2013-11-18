@@ -3,7 +3,7 @@
     
  <item
         android:id="@+id/addPhoto"
-        android:showAsAction="ifRoom"
-        android:title="Save Changes"/>
+        android:showAsAction="always"
+        android:title="add Photo"/>
  
 </menu>

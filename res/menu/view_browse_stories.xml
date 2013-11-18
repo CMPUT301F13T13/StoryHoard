@@ -1,13 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/addNewStory"
-        android:icon="@drawable/add"
-        android:showAsAction="withText"
-        android:title="@string/add_new_story"/>
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/searchStories"
-        android:icon="@drawable/download"
-        android:showAsAction="withText"
-        android:title="@string/search_stories"/>
+        android:showAsAction="always"
+        android:title="search stories"/>
+    <item
+        android:id="@+id/lucky"
+        android:showAsAction="always"
+        android:title="Explore"/>
+    <item
+        android:id="@+id/addNewStory"
+        android:icon="@drawable/add"
+        android:showAsAction="always"
+        android:title="@string/add_new_story"/>
+
 </menu>

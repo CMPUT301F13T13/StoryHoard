@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg2"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -20,7 +21,7 @@
             android:ems="10"
             android:hint="@string/story"
             android:scrollbars="vertical"
-            android:textColor="#0C43A8"
+            android:textColor="#fff190"
             android:textSize="20sp"
             android:textStyle="bold" >
         </EditText>
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="@string/type"
-                android:textColor="#0C43A8"
+                android:textColor="#fff190"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

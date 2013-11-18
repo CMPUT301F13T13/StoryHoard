@@ -5,16 +5,15 @@
 
     <HorizontalScrollView
         android:id="@+id/horizontalSCIllustraions"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
         <LinearLayout
             android:id="@+id/horizontalIllustraions"
-            android:layout_width="match_parent"
-            android:layout_height="466dp"
-            android:background="@drawable/image_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
@@ -33,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/chapterContent" >
+        android:layout_below="@+id/chapterContent">
 
         <LinearLayout
             android:id="@+id/horizontalPhotos"
@@ -42,13 +41,13 @@
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
+	
     <ListView
         android:id="@+id/chapterChoices"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="fill_parent" 
         android:layout_above="@+id/addPhotoButton"
-        android:layout_below="@+id/horizontalSCPhotos" >
+        android:layout_below="@+id/horizontalSCPhotos">
     </ListView>
 
     <Button
