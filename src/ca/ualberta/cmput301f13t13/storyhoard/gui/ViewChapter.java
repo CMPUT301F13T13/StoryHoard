@@ -80,7 +80,6 @@ public class ViewChapter extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		setNextChapterListener();
 		setAddPhotoListener();
 		updateData();
@@ -110,7 +109,7 @@ public class ViewChapter extends Activity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		chapter = app.getChapter();
+		chapter = gc.getCompleteChapter(app.getChapter().getId());
 		choices.clear();
 		// Check for no chapter text
 		if (chapter.getText().equals("")) {
@@ -132,12 +131,10 @@ public class ViewChapter extends Activity {
 
 		photos.removeAllViews();
 		illustrations.removeAllViews();
-
 		// Insert Photos
 		for (Media photo : photoList) {
 			photos.addView(util.insertImage(photo, this));
 		}
-
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(util.insertImage(ill, this));

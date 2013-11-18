@@ -19,10 +19,10 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
@@ -32,8 +32,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
- * Activity for editing the story metadata (title, author, description,
- * and cover image).
+ * Activity for editing the story metadata (title, author, description, and
+ * cover image).
  * 
  * @author Alexander Wong
  * 
@@ -43,7 +43,6 @@ public class EditStoryActivity extends Activity {
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	private Button addfirstChapter;
 	private Story newStory;
 	private SHController gc;
 
@@ -62,7 +61,6 @@ public class EditStoryActivity extends Activity {
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
-		addfirstChapter = (Button) findViewById(R.id.addFirstChapter);
 
 		// Check if we are editing the story or making a new story
 		if (app.isEditing()) {
@@ -70,38 +68,89 @@ public class EditStoryActivity extends Activity {
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
-			addfirstChapter.setText("Save Story Details");
 		}
+	}
 
-		addfirstChapter.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				/*
-				 * Save all text forms to first story Switch to first chapter
-				 * creation activity
-				 */
-				String title = newTitle.getText().toString();
-				String author = newAuthor.getText().toString();
-				String description = newDescription.getText().toString();
-				if (app.isEditing()) {
-					newStory.setAuthor(author);
-					newStory.setTitle(title);
-					newStory.setDescription(description);
-					app.setStory(newStory);
-					gc.updateObject(newStory, ObjectType.CREATED_STORY);
-				} else {
-					newStory = new Story(title, author, description, 
-							Utilities.getPhoneId(getBaseContext()));
-					Intent intent = new Intent(EditStoryActivity.this,
-							EditChapterActivity.class);
+	
+	
 
-					app.setEditing(false);
-					app.setFirstStory(true);
-					app.setStory(newStory);
-					startActivity(intent);
-				}
-				finish();
-			}
-		});
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_edit_story, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.addImage:
+			addImage();
+			return true;
+		case R.id.addfirstChapter:
+			saveChanges();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
+
+
+	private void addImage() {
+		// AlertDialog.Builder alert = new AlertDialog.Builder(context);
+		// // Set dialog title
+		// alert.setTitle("Choose method:");
+		// // Options that user may choose to add photo
+		// final String[] methods = { "Take Photo",
+		// "Choose from Gallery" };
+		// alert.setSingleChoiceItems(methods, -1,
+		// new DialogInterface.OnClickListener() {
+		// @Override
+		// public void onClick(DialogInterface dialog, int item) {
+		// switch (item) {
+		// case 0:
+		// // Take a photo
+		// break;
+		// case 1:
+		// // Choose from gallery
+		// break;
+		// }
+		// imageDialog.dismiss();
+		// }
+		// });
+		// imageDialog = alert.create();
+		// imageDialog.show();
+		Toast.makeText(getBaseContext(),
+				"Not implemented this iteration", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+
+
+
+	private void saveChanges() {
+		String title = newTitle.getText().toString();
+		String author = newAuthor.getText().toString();
+		String description = newDescription.getText().toString();
+		if (app.isEditing()) {
+			newStory.setAuthor(author);
+			newStory.setTitle(title);
+			newStory.setDescription(description);
+			app.setStory(newStory);
+			gc.updateObject(newStory, ObjectType.CREATED_STORY);
+		} else {
+			newStory = new Story(title, author, description, 
+					Utilities.getPhoneId(getBaseContext()));
+			Intent intent = new Intent(EditStoryActivity.this,
+					EditChapterActivity.class);
+
+			app.setEditing(false);
+			app.setFirstStory(true);
+			app.setStory(newStory);
+			startActivity(intent);
+		}
+		finish();
 	}
 }

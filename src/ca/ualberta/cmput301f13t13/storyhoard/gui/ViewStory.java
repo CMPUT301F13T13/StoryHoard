@@ -115,6 +115,8 @@ public class ViewStory extends Activity {
 		gc = SHController.getInstance(getBaseContext());
 		
 		// Initialize the activity fields
+		/**storyCover = (ImageView) findViewById(R.id.storyImage);
+		 * So I think it looks better without the image view**/
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);

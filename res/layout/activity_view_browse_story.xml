@@ -6,14 +6,6 @@
     android:baselineAligned="false"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/topBorder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:contentDescription="topborder"
-        android:src="@drawable/top_border" />
-
     <!--
           <ImageView
         android:id="@+id/storyImage"
@@ -33,8 +25,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="hu"
-            android:textColor="#472312" />
+            android:layout_marginTop="80dp"
+            android:hint="@string/story"
+            android:textColor="#472312"
+            android:textSize="30sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -48,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/storyAuthor"
@@ -56,33 +50,39 @@
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:paddingLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:paddingRight="10dp"
+            android:textColor="#6c3f29"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="25dp"
         android:text="@string/story_description"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/storyDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
+        android:layout_marginTop="2dp"
+        android:layout_weight="0.10"
         android:hint="@string/new_description"
-        android:paddingLeft="25dp" />
+        android:paddingLeft="25dp"
+        android:layout_marginEnd="10dp"
+        android:paddingRight="10dp"
+        android:textColor="#6c3f29"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/viewFirstChapter"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_gravity="bottom"
-        android:layout_weight="0.23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="25dp"
         android:text="@string/view_first_chapter" />
 
 </LinearLayout>

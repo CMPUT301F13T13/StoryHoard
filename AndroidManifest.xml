@@ -7,11 +7,11 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="18" />
-    
-	<uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>    
-	<uses-permission android:name="android.permission.INTERNET"/>
-    
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication"
         android:allowBackup="true"
@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory"
-            android:label="@string/view_browse_story" >
+            android:label="@string/view_browse_story"
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter"
@@ -37,7 +38,8 @@
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity"
-            android:label="@string/add_new_story" >
+            android:label="@string/add_new_story"
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity"
