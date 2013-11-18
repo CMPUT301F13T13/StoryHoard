@@ -17,12 +17,10 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.gui.GUIMediaUtilities;
 
 import android.content.Context;
 
@@ -221,8 +219,12 @@ public class SHController {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
 
-		criteria = new Story(null, title, null, null, "none");
-
+		if (type == ObjectType.CREATED_STORY) {
+			criteria = new Story(null, title, null, null, Utilities.getPhoneId(context));
+		} else {
+			criteria = new Story(null, title, null, null, "not");
+		}
+		
 		objects = sm.retrieve(criteria);
 		stories = Utilities.objectsToStories(objects);
 		return stories;

@@ -16,11 +16,11 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -55,7 +55,27 @@ public class ServerManager implements StoringManager{
 	 */	
 	@Override
 	public void insert(Object object){
-		server.insertStory((Story) object);
+		// get any media associated with the chapters of the story
+		Story story = (Story) object;
+		HashMap<UUID, Chapter> chaps = story.getChapters();
+		
+		for (UUID key : chaps.keySet()) {
+			Chapter chap = chaps.get(key);
+			ArrayList<Media> photos = chap.getPhotos();
+			
+			for (Media photo : photos) {
+				photo.setBitmapString(photo.getBitmap());
+			}
+			chap.setPhotos(photos);
+			
+			ArrayList<Media> ills = chap.getIllustrations();
+			for (Media ill : ills) {
+				ill.setBitmapString(ill.getBitmap());
+			}
+			chap.setIllustrations(ills);
+		}
+		
+		server.insertStory(story);
 	}
 	
 	/**

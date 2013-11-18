@@ -54,12 +54,11 @@ public class Media {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
-		bitmapString = new String();
+		bitmapString = "";
 		if (path != null) {
 			this.path = path;
 		} else {
-			this.path = new String();
-			
+			this.path = "";
 		}
 	}
 
@@ -77,11 +76,11 @@ public class Media {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
-		bitmapString = new String();
+		bitmapString = "";
 		if (path != null) {
 			this.path = path;		
 		} else {
-			this.path = new String();	
+			this.path = "";	
 		}
 	}
 
