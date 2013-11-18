@@ -55,9 +55,15 @@ public class Story {
 	public Story(String title, String author, String description, 
 			      String phoneId) {
 		this.id = UUID.randomUUID();
-		this.author = author;
-		this.title = title;
-		this.description = description;
+		if (author != null) {
+			this.author = author.trim();
+		}
+		if (title != null) {
+			this.title = title.trim();
+		}
+		if (description != null) {
+			this.description = description.trim();
+		}
 		this.phoneId = phoneId;
 		this.firstChapterId = null;
 		chapters = new HashMap<UUID, Chapter>();
@@ -153,15 +159,6 @@ public class Story {
 		return this.description;
 	}
 
-//	/**
-//	 * Returns the story's cover image.
-//	 * 
-//	 * @return
-//	 */
-//	public Bitmap getImage() {
-//		return this.image;
-//	}
-
 	/**
 	 * Returns the chapters of the story.
 	 * 
@@ -216,7 +213,7 @@ public class Story {
 	 * @param title
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = title.trim();
 	}
 
 	/**
@@ -225,7 +222,7 @@ public class Story {
 	 * @param author
 	 */
 	public void setAuthor(String author) {
-		this.author = author;
+		this.author = author.trim();
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class Story {
 	 * @param description
 	 */
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = description.trim();
 	}
 
 	/**
@@ -284,6 +281,7 @@ public class Story {
 		if (chapters.isEmpty()) {
 			// set first chapter id
 			firstChapterId = chapter.getId();
+			chapters.put(chapter.getId(), chapter);
 			return true;
 		}
 		chapters.put(chapter.getId(), chapter);
@@ -332,13 +330,14 @@ public class Story {
 			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
 	}
-	
+
 	/**
 	 * Converts a story object to an String.
 	 */
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", author=" + author + ", title=" + title
-				+ ", description=" + description + "]";
+				+ ", description=" + description + ", first_chapId=" 
+				+ firstChapterId + ", phoneid=" + phoneId + "]";
 	}
 }

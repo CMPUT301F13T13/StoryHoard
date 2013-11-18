@@ -16,38 +16,37 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
+
+import android.os.AsyncTask;
+import android.os.StrictMode;
 
 
 /**
  * 
- * Role: Interacts with the server by inserting, retrieving, updating, and
- * deleting story objects.
+ * Role: Uses functions from the ESClient to add, remove, update, and 
+ * search for stories that have been published onto the esclient.
  * 
- * CODE REUSE: This code was taken directly from 
- * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
- * Date: Nov. 4th, 2013 
- * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
- * 
- * @author Abram Hindle
- * @author Chenlei Zhang
- * @author Ashley Brown
  * @author Stephanie Gil
+ * 
+ * @see ESClient
+ * @see StoringManager
  */
-public class ServerManager implements StoringManager{
-	private static Server server = null;
+public class ServerManager implements StoringManager {
+	public static enum Task {INSERT, UPDATE, RETRIEVE, REMOVE};
+	private static ESClient esclient = null;
 	private static ServerManager self = null;
-	
+
 	protected ServerManager() {
-		server = new Server();
+		esclient = new ESClient();
 	}
-	
+
 	public static ServerManager getInstance() {
 		if (self == null) {
 			self = new ServerManager();
@@ -60,95 +59,172 @@ public class ServerManager implements StoringManager{
 	 */	
 	@Override
 	public void insert(Object object){
-		server.insertStory((Story) object);
+		new AsyncTask<Object, Void, Void>()
+		{
+			@Override
+			protected Void doInBackground(Object... params)
+			{
+				Story story = (Story) params[0];
+				prepareStory(story);
+				esclient.insertStory(story);
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+			}
+		}.execute(object);
 	}
-	
+
+	private void prepareStory(Story story) {
+
+		// get any media associated with the chapters of the story
+		HashMap<UUID, Chapter> chaps = story.getChapters();
+
+		for (UUID key : chaps.keySet()) {
+			Chapter chap = chaps.get(key);
+			ArrayList<Media> photos = chap.getPhotos();
+
+			for (Media photo : photos) {
+				photo.setBitmapString(photo.getBitmap());
+			}
+			chap.setPhotos(photos);
+
+			ArrayList<Media> ills = chap.getIllustrations();
+			for (Media ill : ills) {
+				ill.setBitmapString(ill.getBitmap());
+			}
+			chap.setIllustrations(ills);
+		}
+		story.setChapters(chaps);
+	}
+
 	/**
 	 * Consumes the Get operation of the service
 	 */
 	@Override
 	public ArrayList<Object> retrieve(Object criteria) {
-		Story crit = (Story) criteria;
+        /*
+         * set policy to allow for internet activity to happen within the
+         * android application
+         */
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
+		return delegateSearch(criteria);
+	}
+
+	private ArrayList<Object> delegateSearch(Object object) {
+		Story crit = (Story) object;
 		ArrayList<Object> stories = new ArrayList<Object>();
-		
+
 		if (crit.getId() != null) { 
-			
+
 			// search by id
-			stories.add(server.searchById(crit.getId().toString()));		
-		} else if (crit.getTitle() != null) {
-			
-			// search by keywords
+			Story story = esclient.searchById(crit.getId().toString());
+			if (story != null) {
+				stories.add(story);
+			}
+		} else {
+
+			// search for multiple stories
 			try {
 				ArrayList<String> sargs = new ArrayList<String>();
 				HashMap<String, String> storyData = crit.getSearchCriteria();
-				
+
 				// setting selection string
 				for (String key: storyData.keySet()) {
 					sargs.add(storyData.get(key));
 				}
-				
-				String selection = setSearchCriteria(criteria, sargs);	
-				
-				stories = server.searchStories(crit, selection);
+
+				String selection = setSearchCriteria(crit, sargs);	
+
+				stories = esclient.searchStories(crit, selection);
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
-			
-		} else {
-			// get all stories
-		}
-		
+		} 
+
 		return stories;
 	}
-
-
+	
 	/**
-	 * update a story on the server
+	 * update a story on the esclient
 	 */
 	@Override
 	public void update(Object object) { 
-		Story story = (Story) object;
-		
-		try {
-			server.deleteStory(story);
-			server.insertStory(story);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new AsyncTask<Object, Void, Void>()
+		{
+			@Override
+			protected Void doInBackground(Object... params)
+			{
+				Story story = (Story) params[0];
+
+				try {
+					esclient.deleteStory(story);
+					esclient.insertStory(story);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+			}
+		}.execute(object);		
 	}	
 
 	/**
-	 * remove a story from server
+	 * remove a story from esclient
 	 */
-//	@Override
+	//	@Override
 	public void remove(Object object) { 
-		try {
-			server.deleteStory((Story) object);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-		
-		
+		new AsyncTask<Object, Void, Void>()
+		{
+			@Override
+			protected Void doInBackground(Object... params)
+			{
+				Story story = (Story) params[0];
+				
+				try {
+					esclient.deleteStory(story);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+			}
+		}.execute(object);			
+	}	
+
 	@Override
 	public String setSearchCriteria(Object object, ArrayList<String> args) {
 		String selection = "";
 		Story story = (Story) object;
-		
+
+		if (story.getTitle() == null) {
+			return selection;
+		}
+
 		String allWords = story.getTitle();
-		
+
 		// split keywords and clean them
 		List<String> words = Arrays.asList(allWords.split("\\s+"));
-		
+
 		if (words.size() > 0) {
 			selection += words.get(0);
 		}
-		
+
 		for (int i = 1; i < words.size(); ++i) {
 			selection += " AND " + words.get(i);
 		}

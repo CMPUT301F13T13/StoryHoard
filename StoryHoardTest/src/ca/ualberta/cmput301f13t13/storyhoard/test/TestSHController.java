@@ -29,6 +29,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
@@ -42,24 +43,24 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see SHController
  */
 public class TestSHController extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private SHController gc = null;
 	private static ViewBrowseStories activity;
 	private static final String path = "./mockImages/img1";
-	
+
 	public TestSHController() {
 		super(ViewBrowseStories.class);
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		activity.deleteDatabase(DBContract.DATABASE_NAME);
-		
-		gc = SHController.getInstance(getActivity());
+
+		gc = SHController.getInstance(getActivity());				
 	}
 
 	/**
@@ -117,11 +118,9 @@ public class TestSHController extends
 	 * stories.
 	 */
 	public void testGetAllPublishedStories() {
-		fail("not yet implemented");
-
 		ArrayList<Story> stories = new ArrayList<Story>();
 		UUID chapId = UUID.randomUUID();
-		
+
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
@@ -139,9 +138,13 @@ public class TestSHController extends
 
 		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 
-		assertTrue(stories.contains(s1));
-		assertTrue(stories.contains(s2));
-		assertTrue(stories.contains(s3));
+		assertEquals(stories.size(), 3);
+		
+		// clean up server
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(s1);
+		sm.remove(s2);
+		sm.remove(s3);
 	}
 
 	/**
@@ -186,7 +189,7 @@ public class TestSHController extends
 
 		assertEquals(choices.size(), 2);
 	}
-	
+
 	/**
 	 * Tests using the controller to add media and then retrieve it 
 	 * again.
@@ -212,29 +215,23 @@ public class TestSHController extends
 		// Insert some stories
 		Story s1 = new Story("Lily the cow", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s1.setFirstChapterId(UUID.randomUUID());
 		Story s2 = new Story("Bob the hen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s2.setFirstChapterId(UUID.randomUUID());
 		Story s3 = new Story("Bob the cow", "me", "D: none", 
 				"34532432423");
-		s3.setFirstChapterId(UUID.randomUUID());
 		Story s4 = new Story("sad cow", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s4.setFirstChapterId(UUID.randomUUID());
 		Story s5 = new Story("sad cow", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s5.setFirstChapterId(UUID.randomUUID());
 		Story s6 = new Story("sad hen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s6.setFirstChapterId(UUID.randomUUID());
 
 		gc.addObject(s1, ObjectType.CACHED_STORY);
 		gc.addObject(s2, ObjectType.CREATED_STORY);
 		gc.addObject(s3, ObjectType.CREATED_STORY);
-//		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
-//		gc.addObject(s5, ObjectType.PUBLISHED_STORY);
-//		gc.addObject(s6, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s4, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s5, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s6, ObjectType.PUBLISHED_STORY);
 
 		// title are null (should retrieve all created stories)
 		stories = gc.searchStory(null, ObjectType.CREATED_STORY);
@@ -249,8 +246,15 @@ public class TestSHController extends
 		assertEquals(stories.size(), 1);
 
 		// title has sad
-//		stories = gc.searchStory("sad", ObjectType.PUBLISHED_STORY);
-//		assertEquals(stories.size(), 3);
+		stories = gc.searchStory("sad", ObjectType.PUBLISHED_STORY);
+		assertEquals(stories.size(), 3);
+		
+		// clean up server
+		// clean up server
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(s4);
+		sm.remove(s5);
+		sm.remove(s6);
 	}
 
 	/**
@@ -348,7 +352,7 @@ public class TestSHController extends
 		Media m1 = new Media(chapId, null, Media.PHOTO);
 
 		gc.addObject(m1, ObjectType.MEDIA);
-		
+
 		medias = gc.getAllPhotos(chapId);
 		assertEquals(medias.size(), 2);
 
@@ -371,7 +375,7 @@ public class TestSHController extends
 	 */
 	public void testUpdatePublished() {
 		ArrayList<Story> stories = new ArrayList<Story>();
-		
+
 		fail("not yet implemented");
 
 		// Insert some stories
@@ -384,7 +388,7 @@ public class TestSHController extends
 		newS.setAuthor("Mr. Blubbers");
 		newS.setTitle("The very long night");
 		newS.setDescription("There once was a blubber");
-		
+
 		Chapter chap = new Chapter(s1.getId(), "there is a time...");
 		newS.addChapter(chap);
 		newS.setFirstChapterId(chap.getId());
@@ -392,15 +396,19 @@ public class TestSHController extends
 		gc.updateObject(newS, ObjectType.PUBLISHED_STORY);
 		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 		assertEquals(stories.size(), 1);
-		
+
 		newS = stories.get(0);
 		assertFalse(newS.getAuthor().equals(s1.getAuthor()));
 		assertFalse(newS.getTitle().equals(s1.getTitle()));
 		assertFalse(newS.getDescription().equals(s1.getDescription()));
-		
+
 		HashMap<UUID, Chapter> chaps = newS.getChapters();
 		assertEquals(chaps.size(), 1);		
 		assertTrue(chaps.get(newS.getFirstChapterId()) != null);
+		
+		// clean up server
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(s1);
 	}
 	/**
 	 * Tests getting a random choice,
@@ -424,8 +432,8 @@ public class TestSHController extends
 		assertEquals(choice.getId(), choice1.getId());
 		//assertEquals(choice.getId(), choice2.getId());
 		//assertEquals(choice.getId(), choice3.getId());
-		
-		
+
+
 	}
 	/**
 	 * Tests getting a complete chapter, but the chapters don't contain any
@@ -536,7 +544,7 @@ public class TestSHController extends
 		Choice choice1 = new Choice(chap1.getId(), chap2.getId(),
 				"choice texters");
 		Choice choice2 = new Choice(chap1.getId(), UUID.randomUUID(), "hi");
-		
+
 		fail("not yet implemented");
 		Media m1 = new Media(chap1.getId(), path, Media.PHOTO);
 
@@ -554,7 +562,7 @@ public class TestSHController extends
 		// checking media
 		ArrayList<Media> medias = newChap.getPhotos();
 		assertEquals(medias.size(), 1);
-		
+
 		// checking choices
 		ArrayList<Choice> choices = newChap.getChoices();
 		assertEquals(choices.size(), 2);
@@ -577,5 +585,45 @@ public class TestSHController extends
 		} else {
 			fail("error in retrieving chapter choices: getCompleteChapter");
 		}
+	}
+
+	/**
+	 * Tests retrieving a random story from published stories.
+	 */
+	public void testRandomStory() {
+		Story s1 = new Story("sad cow", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("sad hen", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		
+		gc.addObject(s1, ObjectType.PUBLISHED_STORY);
+		gc.addObject(s2, ObjectType.PUBLISHED_STORY);
+		
+		Story random = gc.getRandomStory();
+		assertTrue(random != null);
+		
+		// clean up server
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(s1);
+		sm.remove(s2);
+	}
+
+
+	/**
+	 * Tests caching a story.
+	 */
+	public void testCacheLoadStory() {
+		Story mockStory = new Story("My Monkey", "TS ELLIOT",
+				"monkey is in the server", Utilities.getPhoneId(getActivity()));
+		Chapter chap = new Chapter(mockStory.getId(), "l");
+		chap.addChoice(new Choice(chap.getId(), UUID.randomUUID(), "hi"));
+
+		// TODO add a media to chapter
+		mockStory.addChapter(chap);
+
+		gc.addObject(mockStory, ObjectType.CACHED_STORY);
+
+		Story story = gc.getCompleteStory(mockStory.getId());
+		assertTrue(story != null);	
 	}
 }
