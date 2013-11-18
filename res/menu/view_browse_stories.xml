@@ -10,7 +10,7 @@
         android:title="search stories"/>
     <item
         android:id="@+id/lucky"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="Explore"/>
     <item
         android:id="@+id/addNewStory"
