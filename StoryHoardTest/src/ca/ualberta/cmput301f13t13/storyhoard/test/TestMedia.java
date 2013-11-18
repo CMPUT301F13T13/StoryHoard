@@ -33,8 +33,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "./mockImages/img1";
-	private static final String path2 = "./mockImages/img2";
+	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img1;
+	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
 	
 	public TestMedia() {
 		super(ViewBrowseStories.class);
@@ -59,8 +59,6 @@ public class TestMedia extends
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		fail("not yet implemented");
-		
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 		
 		UUID id = photo.getId();

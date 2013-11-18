@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
@@ -114,25 +115,6 @@ public class SHController {
 
 		return chapters;
 	}
-	/**
-	 * Retrieves a random choice from the chapter.
-	 * 
-	 * @param chapterID
-	 *            Id of  the chapters that the choice is for.
-	 * 
-	 * @return a choice
-	 */
-	public Choice getRandomChoice(UUID chapterId) {
-		ArrayList<Choice> choices = getAllChoices(chapterId);
-		int max=0;
-		max =choices.size();
-		Random rand = new Random(); 
-		int num;
-		num=rand.nextInt(max);
-		Choice choice=choices.get(num);
-
-		return choice;
-	}
 
 	/**
 	 * Retrieves all the choices that are in a chapter.
@@ -219,21 +201,6 @@ public class SHController {
 	}
 
 	/**
-	 * Adds either a story, chapter, or choice.
-	 * 
-	 * @param object
-	 *            Object to be inserted (must either be a Story, Chapter,
-	 *            Choice, or Media object).
-	 * @param type
-	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
-	 *            CACHED_STORY, CREATED_STORY
-	 */
-	public void addObject(Object object, ObjectType type) {
-		StoringManager sm = sf.getStoringManager(type);
-		sm.insert(object);
-	}
-
-	/**
 	 * Used to search for stories matching the given search criteria. Users can
 	 * either search by specifying the title or author of the story. All stories
 	 * that match will be retrieved.
@@ -252,8 +219,12 @@ public class SHController {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
 
-		criteria = new Story(null, title, null, null, "none");
-
+		if (type == ObjectType.CREATED_STORY) {
+			criteria = new Story(null, title, null, null, Utilities.getPhoneId(context));
+		} else {
+			criteria = new Story(null, title, null, null, "not");
+		}
+		
 		objects = sm.retrieve(criteria);
 		stories = Utilities.objectsToStories(objects);
 		return stories;
@@ -334,6 +305,42 @@ public class SHController {
 	}
 
 	/**
+	 * Caches a published story by going through all of its elements
+	 * and adding them to the database. It also saves the images of
+	 * the chapters in the sd card and saves the path to them in the
+	 * chapter's info.
+	 */
+	public void cacheStory(Story story) {		
+		MediaManager mm = MediaManager.getInstance(context);
+		
+		addObject(story, ObjectType.CACHED_STORY);
+		
+		// empty story
+		if (story.getFirstChapterId() == null) {
+			return;
+		}
+		
+		// save all other elements
+		for (Chapter chap : story.getChapters().values()) {
+			addObject(chap, ObjectType.CHAPTER);
+			
+			for (Choice choice : chap.getChoices()) {
+				addObject(choice, ObjectType.CHOICE);
+			}
+			for (Media photo : chap.getPhotos()) {
+				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
+				photo.setPath(path);
+				addObject(photo, ObjectType.MEDIA);
+			}
+			for (Media ill : chap.getIllustrations()) {
+				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
+				ill.setPath(path);
+				addObject(ill, ObjectType.MEDIA);
+			}	
+		}
+	}
+	
+	/**
 	 * Chooses a random story from within the stories that are 
 	 * published. If there are no published stories available,
 	 * it will return null.
@@ -341,9 +348,38 @@ public class SHController {
 	 */
 	public Story getRandomStory() {
 		Story story = null;
+		ArrayList<Story> stories = getAllStories(ObjectType.PUBLISHED_STORY);
+		Random rand = new Random(); 
+		int index = rand.nextInt(stories.size());
+		
+		if (stories.size() < 1) {
+			return null;
+		}
+		
+		story = stories.get(index);
 		
 		return story;
 	}
+	
+	/**
+	 * Retrieves a random choice from the chapter.
+	 * 
+	 * @param chapterID
+	 *            Id of  the chapters that the choice is for.
+	 * 
+	 * @return a choice
+	 */
+	public Choice getRandomChoice(UUID chapterId) {
+		ArrayList<Choice> choices = getAllChoices(chapterId);
+		int max = 0;
+		max = choices.size();
+		Random rand = new Random(); 
+		int num;
+		num = rand.nextInt(max);
+		Choice choice=choices.get(num);
+
+		return choice;
+	}	
 	
 	/**
 	 * Updates either a story, chapter, or choice object. Must specify what type
@@ -360,4 +396,19 @@ public class SHController {
 		StoringManager sm = sf.getStoringManager(type);
 		sm.update(object);
 	}
+	
+	/**
+	 * Adds either a story, chapter, or choice.
+	 * 
+	 * @param object
+	 *            Object to be inserted (must either be a Story, Chapter,
+	 *            Choice, or Media object).
+	 * @param type
+	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
+	 *            CACHED_STORY, CREATED_STORY
+	 */
+	public void addObject(Object object, ObjectType type) {
+		StoringManager sm = sf.getStoringManager(type);
+		sm.insert(object);
+	}	
 }

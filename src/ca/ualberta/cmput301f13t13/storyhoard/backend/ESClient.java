@@ -1,4 +1,17 @@
 /**
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  * 
  */
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
@@ -24,23 +37,34 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * @author Owner
- *
+ * 
+ * Role: Interacts with the server by inserting, retrieving, updating, and
+ * deleting story objects.
+ * 
+ * CODE REUSE: This code was taken directly from 
+ * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+ * Date: Nov. 4th, 2013 
+ * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
+ * 
+ * @author Abram Hindle
+ * @author Chenlei Zhang
+ * @author Ashley Brown
+ * @author Stephanie Gil
  */
-public class Server {
+public class ESClient {
 	private static HttpClient httpclient = null;		// Http Connector
 	private static Gson gson = null;					// JSON Utilities
-	private static Server self = null;
-	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/";
+	private static ESClient self = null;
+	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
 	
-	protected Server() {
+	protected ESClient() {
 		httpclient = new DefaultHttpClient();
 		gson = new Gson();
 	}
 	
-	public static Server getInstance() {
+	public static ESClient getInstance() {
 		if (self == null) {
-			self = new Server();
+			self = new ESClient();
 		}
 		return self;
 	}	
@@ -62,7 +86,7 @@ public class Server {
 		InputStreamReader is = new InputStreamReader(entity.getContent());
 		BufferedReader br = new BufferedReader(is);
 		String output;
-		System.err.println("Output from Server -> ");
+		System.err.println("Output from ESClient -> ");
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
 		}
@@ -79,7 +103,7 @@ public class Server {
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader(response.getEntity().getContent()));
 		String output;
-		System.err.println("Output from Server -> ");
+		System.err.println("Output from ESClient -> ");
 		String json = "";
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
@@ -112,14 +136,9 @@ public class Server {
 			// Now we expect to get a Story response
 			SimpleESResponse<Story> esResponse = 
 					gson.fromJson(json, simpleESResponseType);
-			// We get the recipe from it!
-			story = esResponse.getSource();
-			System.out.println(story.toString());
 			
-			// NOT SURE THIS IS RIGHT OR NEEDED
-			HttpEntity entity = response.getEntity();
-			InputStreamReader is = new InputStreamReader(entity.getContent());
-			is.close();
+			// We get the story from it!
+			story = esResponse.getSource();
 
 		} catch (ClientProtocolException e) {
 
@@ -131,50 +150,6 @@ public class Server {
 		}		
 		return story;
 	}
-	
-	/**
-	 * searches by keywords
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
-	 */ 
-	public ArrayList<Object> searchByKeywords(Story criteria, String selection) 
-				throws ClientProtocolException, IOException {
-		ArrayList<Object> stories = new ArrayList<Object>();
-		
-		HttpGet searchRequest = null;
-		searchRequest = new HttpGet(server + "_search?pretty=1&q=" + java.net.URLEncoder.encode(selection,"UTF-8"));
-		searchRequest.setHeader("Accept","application/json");
-		HttpResponse response = null;
-		
-		response = httpclient.execute(searchRequest);
-
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-
-		String json = null;
-		json = getEntityContent(response);
-
-		Type elasticSearchResponseType = 
-				new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-		ElasticSearchResponse<Story> esResponse = 
-				gson.fromJson(json, elasticSearchResponseType);
-		System.err.println(esResponse);
-		for (SimpleESResponse<Story> r : esResponse.getHits()) {
-			Story story = r.getSource();
-			stories.add(story);
-		}
-		
-		// NOT SURE THIS IS RIGHT OR NEEDED
-		HttpEntity entity = response.getEntity();
-		InputStreamReader is;
-		try {
-			is = new InputStreamReader(entity.getContent());
-			is.close();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		return stories;
-	}	
 
 	/**
 	 * advanced search (logical operators)
@@ -184,12 +159,16 @@ public class Server {
 		ArrayList<Object> stories = new ArrayList<Object>();
 		
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
-		String query = 	"{\"query\" : {\"query_string\" : {\"default_field\"" 
-				+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
-		StringEntity stringentity = new StringEntity(query);
 
+		if (criteria.getTitle() != null) {
+			// searching by keywords in title
+			String query = 	"{\"query\" : {\"query_string\" : {\"default_field\"" 
+					+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
+			StringEntity stringentity = new StringEntity(query);
+			searchRequest.setEntity(stringentity);
+		}
+		
 		searchRequest.setHeader("Accept","application/json");
-		searchRequest.setEntity(stringentity);
 
 		HttpResponse response = httpclient.execute(searchRequest);
 		String status = response.getStatusLine().toString();
@@ -246,7 +225,7 @@ public class Server {
 		BufferedReader br = new BufferedReader(is);
 		
 		String output;
-		System.err.println("Output from Server -> ");
+		System.err.println("Output from ESClient -> ");
 		try {
 			while ((output = br.readLine()) != null) {
 				System.err.println(output);

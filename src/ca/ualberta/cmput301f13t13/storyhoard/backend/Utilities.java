@@ -18,6 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -102,33 +104,6 @@ public class Utilities {
 	}
 
 	/**
-	 * Creates a new File to put an image in and a path and Uri to it.
-	 * 
-	 * CODE REUSE:
-	 * CameraTest demo code from CMPUT 301 Lab. 
-	 * 
-	 * Date: Nov. 2, 2013
-	 * 
-	 * Authors: Abram Hindle, Chenlei Zhang
-	 */
-	public static Uri createImageUri() {
-		Uri imageFileUri;
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
-		File folderF = new File(folder);
-		if (!folderF.exists()) {
-			folderF.mkdir();
-		}
-
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis()) + "jpg";
-		File imageFile = new File(imageFilePath);
-		imageFileUri = Uri.fromFile(imageFile);
-
-		return imageFileUri;
-	}
-
-	/**
 	 * This functions converts Bitmap picture to a string which can be
 	 * JSONified.
 	 * 
@@ -143,7 +118,7 @@ public class Utilities {
 		final int COMPRESSION_QUALITY = 100;
 		String encodedImage;
 		ByteArrayOutputStream byteArrayBitmapStream 
-				= new ByteArrayOutputStream();
+		= new ByteArrayOutputStream();
 		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 
 				COMPRESSION_QUALITY, byteArrayBitmapStream);
 		byte[] b = byteArrayBitmapStream.toByteArray();
@@ -186,7 +161,7 @@ public class Utilities {
 		return PhoneId;
 
 	}
-	
+
 	/**
 	 * Calculates size for bitmap.
 	 * 
@@ -212,7 +187,7 @@ public class Utilities {
 
 		return inSampleSize;   
 	}	
-	
+
 	/**
 	 * CODE REUSE
 	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
@@ -220,7 +195,7 @@ public class Utilities {
 	 * Author: Andr.oid Eric
 	 */	
 	public static Bitmap decodeSampledBitmapFromUri(Uri uri, 
-				int reqWidth, int reqHeight) {
+			int reqWidth, int reqHeight) {
 		Bitmap bm = null;
 
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -238,4 +213,35 @@ public class Utilities {
 
 		return bm;  
 	}	
+
+	/**
+	 * Saves a bitmap to a location on the phone's sd card. Returns
+	 * the path of where the image was saved to.
+	 * 
+	 */
+	public static String saveImageToSD(Bitmap bmp) {
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+		if (!folderF.exists()) {
+			folderF.mkdir();
+		}
+
+		String imageFilePath = folder + "/"
+				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
+		File imageFile = new File(imageFilePath);
+
+		FileOutputStream fout;
+		try {
+			fout = new FileOutputStream(imageFile);
+			bmp.compress(Bitmap.CompressFormat.JPEG, 85, fout);
+
+			fout.flush();
+			fout.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return imageFilePath;
+	}
 }

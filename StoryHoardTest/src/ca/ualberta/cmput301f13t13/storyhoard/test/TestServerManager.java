@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
@@ -40,38 +43,49 @@ public class TestServerManager
 	}
 
 	public void setUp() throws Exception {
-		// clean up server
 		sm = ServerManager.getInstance();
+		
+		// clean up server
+		Story mockCriteria = new Story(null, null, null, null, null);
+		sm.retrieve(mockCriteria);
+		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
+		for (Object story: mockStories) {
+			sm.remove(story);
+		}		
 	}
 
 	/**
 	 * Tests uploading and retrieving a story from the server.
 	 */
-	public void testUploadRetrieveStory() {
+	public void testAddLoadDeleteStory() {
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), path, Media.PHOTO);
+		//Media m = new Media(chap.getId(), path, Media.PHOTO);
 		
-		chap.addPhoto(m);
+		//chap.addPhoto(m);
 		chap.addChoice(c1);
-		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
 		
 		sm.insert(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
-		Story newStory = (Story) stories.get(0);
+		story = (Story) stories.get(0);
 		
-		HashMap<UUID, Chapter> chaps = newStory.getChapters();
+		HashMap<UUID, Chapter> chaps = story.getChapters();
 		assertEquals(chaps.size(), 1);
-		Chapter nChap = chaps.get(newStory.getFirstChapterId());
+		Chapter nChap = chaps.get(story.getFirstChapterId());
 		ArrayList<Choice> choices = nChap.getChoices();
 		assertEquals(choices.size(), 1);
-		ArrayList<Media> photos = nChap.getPhotos();
-		assertEquals(photos.size(), 1);
+//		ArrayList<Media> photos = nChap.getPhotos();
+//		assertEquals(photos.size(), 1);
+		
+		// delete
+		sm.remove(story);
+		stories = sm.retrieve(story);
+		assertEquals(stories.size(), 0);
 	}
 	
 	/**
@@ -82,9 +96,7 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), path, Media.PHOTO);
-		
-		chap.addPhoto(m);
+
 		chap.addChoice(c1);
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
@@ -99,44 +111,23 @@ public class TestServerManager
 		newStory.addChapter(new Chapter(newStory.getId(), "my text"));
 		
 		sm.update(newStory);
-		stories = sm.retrieve(story);
+		stories = sm.retrieve(newStory);
 		assertEquals(stories.size(), 1);
+		newStory = (Story) stories.get(0);
 		
 		HashMap<UUID, Chapter> chaps = newStory.getChapters();
 		assertEquals(chaps.size(), 2);
 		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
 		assertFalse(newStory.getTitle().equals(story.getTitle()));
+		
+		sm.remove(newStory);
 	}
-	
-	/**
-	 * Tests deleting a story from the server.
-	 */
-	public void testDeleteStory() {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		Media m = new Media(chap.getId(), path, Media.PHOTO);
-		
-		chap.addPhoto(m);
-		chap.addChoice(c1);
-		story.setFirstChapterId(chap.getId());
-		story.addChapter(chap);
-		
-		sm.insert(story);
-		ArrayList<Object> stories = sm.retrieve(story);
-		assertEquals(stories.size(), 1);
-		
-//		sm.deletePublished(story);
-		stories = sm.retrieve(story);
-		assertEquals(stories.size(), 0);
-	}
-	
+
 	/**
 	 * Tests loading all created stories, and makes sure the results don't
 	 * include any stories not created by author.
 	 */
-	public void testGetAllPublishedStories() {
+	public void testGetAllPublishedStories() {		
 		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
 		sm.insert(mockStory1);
@@ -153,21 +144,5 @@ public class TestServerManager
 		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 3);
 
-	}
-	
-	/**
-	 * Tests publishing story, caching it, then loading it from server.
-	 */
-	public void testPublishCacheLoadStory() {
-		fail("Not yet implemented");
-
-		Story mockStory = new Story("My Monkey", "TS ELLIOT",
-				"monkey is in the server", Utilities.getPhoneId(getActivity()));
-		
-		sm.insert(mockStory);
-		sm.insert(mockStory);
-
-		ArrayList<Object> pubStories = sm.retrieve(mockStory);
-		assertEquals(pubStories.size(), 1);
 	}
 }

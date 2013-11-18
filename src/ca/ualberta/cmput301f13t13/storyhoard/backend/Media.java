@@ -54,12 +54,11 @@ public class Media {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
-		bitmapString = new String();
+		bitmapString = "";
 		if (path != null) {
 			this.path = path;
 		} else {
-			this.path = new String();
-			
+			this.path = "";
 		}
 	}
 
@@ -77,11 +76,11 @@ public class Media {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
-		bitmapString = new String();
+		bitmapString = "";
 		if (path != null) {
 			this.path = path;		
 		} else {
-			this.path = new String();	
+			this.path = "";	
 		}
 	}
 
@@ -140,6 +139,16 @@ public class Media {
 	public String getBitmapString() {
 		return bitmapString;
 	}	
+	
+	/**
+	 * Returns the media's bitmap, but does so by converting the bitmap
+	 * from string to bitmap.
+	 * 
+	 * @return bitmap 
+	 */
+	public Bitmap getBitmapFromString() {
+		return Utilities.getBitmapFromString(bitmapString);
+	}	
 
 	// SETTERS
 
@@ -171,7 +180,7 @@ public class Media {
 	}
 
 	/**
-	 * Sets the media's bitmapString.
+	 * Sets the media's bitmapString from a bitmap.
 	 * 
 	 * @param bitmap
 	 */
@@ -212,6 +221,7 @@ public class Media {
 		return info;
 	}
 
+	
 	/**
 	 * Converts a chapter object to a string.
 	 */
