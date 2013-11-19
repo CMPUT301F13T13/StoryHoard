@@ -1,9 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/browse_stories"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-
+        android:showAsAction="always"
+        android:title="@string/browse_stories"/>  
+     <item
+        android:id="@+id/add_story"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/add_new_story"/>
 </menu>

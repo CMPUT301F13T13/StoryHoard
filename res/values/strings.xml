@@ -41,6 +41,8 @@
     <string name="add_chapter_illust">Add Illustration</string>
     <string name="add_photo">Add Photo</string>
     <string name="search_results">Search Results</string>
+    <string name="empty">No stories were found!</string>
+    
     
 
     <string-array name="view_type_choices">
@@ -75,5 +77,8 @@
     <string name="no_text">No text</string>
     <string name="choiceText">Choice Text</string>
     <string name="title_activity_view_search_results">ViewSearchResults</string>
+    <string name= "browse_stories">Browse stories</string>
+    <string name="publish_story">Publish Story</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>

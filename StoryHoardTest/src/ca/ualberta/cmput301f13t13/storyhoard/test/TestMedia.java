@@ -18,11 +18,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
-import ca.ualberta.cs.c301f13t13.backend.*;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the Media class in the StoryHoard 
@@ -34,8 +33,9 @@ import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final Uri uri = Uri.parse("https://cow");
-
+	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img1;
+	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
+	
 	public TestMedia() {
 		super(ViewBrowseStories.class);
 	}
@@ -44,20 +44,11 @@ public class TestMedia extends
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		fail("not yet implemented");
-		
 		// Make photo
 		try {
-			Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
+			Media photo = new Media(UUID.randomUUID(), path, 
+					Media.PHOTO);
 			assertTrue(photo.getBitmap() != null);
-		} catch (Exception e) {
-			fail("error creating a new media object");
-		}
-
-		// Make illustration
-		try {
-			Media ill = new Media(UUID.randomUUID(), uri, Media.ILLUSTRATION);
-			assertTrue(ill.getBitmap() != null);
 		} catch (Exception e) {
 			fail("error creating a new media object");
 		}
@@ -68,10 +59,8 @@ public class TestMedia extends
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		fail("not yet implemented");
+		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 		
-		Media photo = new Media(UUID.randomUUID(), uri, Media.PHOTO);
-
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
 		String type = photo.getType();
@@ -80,12 +69,12 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
-		photo.setUri(Uri.parse("https://dog"));
-
+		photo.setPath(path2);
+		
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertNotSame(type, photo.getType());
 		assertTrue(photo.getBitmap() != null);
-		assertTrue(photo.getUri() != uri);
+		assertFalse(photo.getPath().equals(path));
 	}
 }

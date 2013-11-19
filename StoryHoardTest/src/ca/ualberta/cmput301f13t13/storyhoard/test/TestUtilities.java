@@ -19,14 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.Media;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
-import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -40,14 +39,12 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestUtilities extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-
+	private static final String path = "./mockImages/img1";
+	
 	public TestUtilities() {
 		super(ViewBrowseStories.class);
 	}
 
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 	/**
 	 * Tests the get phoneId returns a string of phoneid 
 	 */
@@ -119,14 +116,11 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void testObjectsToMedia() {
-		fail("not yet implemented");
-		Media media = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
+		Media media = new Media(UUID.randomUUID(), path,
 				Media.PHOTO);
-		Media media2 = new Media(UUID.randomUUID(), Uri.parse("https://blah"),
-				Media.ILLUSTRATION);
+
 		ArrayList<Object> objects = new ArrayList<Object>();
 		objects.add(media);
-		objects.add(media2);
 		ArrayList<Media> medias = Utilities.objectsToMedia(objects);
 		try {
 			ArrayList<Media> as = medias;

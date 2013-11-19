@@ -15,20 +15,15 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.Media;
-import ca.ualberta.cs.c301f13t13.backend.SHController;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.gui.AdapterChoices;
-import ca.ualberta.cs.c301f13t13.gui.ViewChapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.AdapterChoices;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -61,6 +56,10 @@ public class TestViewChapter extends
 	public void setUp() throws Exception {
 		Story story = new Story("title", "author", "es", "432432");
 		Chapter chap = new Chapter(story.getId(), null);
+		
+		SHController gc = SHController.getInstance(getActivity());
+		gc.addObject(story, ObjectType.CACHED_STORY);
+		gc.addObject(chap, ObjectType.CACHED_STORY);
 		Intent intent = new Intent();
 		
 		intent.putExtra("storyID", story.getId());
@@ -70,8 +69,6 @@ public class TestViewChapter extends
 	}
 
 	public void testPreConditions() {
-		fail("not yet implemented");
-		
 		activity = getActivity();
 		
 		// Setup the activity fields

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/publishStory"
+        android:showAsAction="ifRoom"
+        android:title="@string/publish_story"/>
+    <item
+        android:id="@+id/addfirstChapter"
+        android:showAsAction="ifRoom"
+        android:title="@string/save_changes"/>
+
+</menu>

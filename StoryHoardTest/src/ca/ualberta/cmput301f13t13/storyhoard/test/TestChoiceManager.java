@@ -20,14 +20,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cs.c301f13t13.backend.Chapter;
-import ca.ualberta.cs.c301f13t13.backend.Choice;
-import ca.ualberta.cs.c301f13t13.backend.ChoiceManager;
-import ca.ualberta.cs.c301f13t13.backend.DBContract;
-import ca.ualberta.cs.c301f13t13.backend.DBHelper;
-import ca.ualberta.cs.c301f13t13.backend.Story;
-import ca.ualberta.cs.c301f13t13.backend.Utilities;
-import ca.ualberta.cs.c301f13t13.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
  * Class meant for the testing of the ChoiceManager class in the StoryHoard
@@ -121,7 +115,7 @@ public class TestChoiceManager extends
 		cm.insert(mockChoice3);
 
 		// Looking for all choices belonging to chapter id 1
-		Choice criteria = new Choice(null, chapId1);
+		Choice criteria = new Choice(null, chapId1, null);
 
 		ArrayList<Object> mockChoices = cm.retrieve(criteria);
 		assertTrue(mockChoices.size() == 2);

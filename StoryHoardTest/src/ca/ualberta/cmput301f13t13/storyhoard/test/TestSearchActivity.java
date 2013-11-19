@@ -15,15 +15,13 @@
  */                                          
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import org.junit.Before;
-
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cs.c301f13t13.gui.SearchActivity;
-import ca.ualberta.cs.c301f13t13.gui.SearchResultsActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.SearchActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.SearchResultsActivity;
 
 /**
  * Test case for the searching stories activity
@@ -60,7 +58,6 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 		  nextActivity .finish();
 		}
 	
-	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
