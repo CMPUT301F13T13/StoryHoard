@@ -28,9 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChoiceTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve choice
- * objects. It implements the StoringManager interface and inherits from the
- * Model class, meaning it can hold SHViews and notify them if they need to be
- * updated.
+ * objects. It implements the StoringManager interface.
  * 
  * </br>
  * Design Pattern: Singleton

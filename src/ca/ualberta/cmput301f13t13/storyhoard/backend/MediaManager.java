@@ -27,9 +27,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve media
- * objects. It implements the StoringManager interface and inherits from the
- * Model class, meaning it can hold SHViews and notify them if they need to be
- * updated.
+ * objects. It implements the StoringManager interface.
  * 
  * </br>
  * Design Pattern: Singleton
@@ -81,9 +79,7 @@ public class MediaManager implements StoringManager{
 		ContentValues values = new ContentValues();
 		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
 		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (media.getChapterId()).toString());
-		if (media.getPath() != null) {
-			values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getPath()));
-		}
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getPath()));
 		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
 
 		db.insert(MediaTable.TABLE_NAME, null, values);	

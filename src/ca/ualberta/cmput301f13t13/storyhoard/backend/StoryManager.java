@@ -28,10 +28,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve story
- * objects. It implements the StoringManager interface and inherits from the
- * Model class, meaning it can hold SHViews and notify them if they need to be
- * updated.
+ * objects. It implements the StoringManager interface.
  * 
+ * </br>
  * Design Pattern: Singleton
  * 
  * @author Stephanie Gil
@@ -68,7 +67,14 @@ public class StoryManager implements StoringManager {
 	}
 
 	/**
-	 * Saves a new story locally (in the database).
+	 * Saves a new story locally (in the database). You can insert
+	 * a story that has any field empty except for its ID.
+	 * 
+	 * </br> Example Call.
+	 * </br> Story story = new Story("The boat", "Bob Week", 
+	 * 				"The boat that could", phoneId);
+	 * </br> StoryManager sm = new StoryManager.getInstance();
+	 * </br> sm.insert(story);
 	 */
 	@Override
 	public void insert(Object object) {
@@ -82,17 +88,11 @@ public class StoryManager implements StoringManager {
 		values.put(StoryTable.COLUMN_NAME_STORY_ID, 
 				(story.getId()).toString());
 		values.put(StoryTable.COLUMN_NAME_TITLE, story.getTitle());
-		if (story.getAuthor() != null) {
-			values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
-		}
-		if (story.getDescription() != null) {
-			values.put(StoryTable.COLUMN_NAME_DESCRIPTION,
-					story.getDescription());
-		}
-		if (story.getFirstChapterId() != null) {
-			values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
-					chapterId.toString());
-		}
+		values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
+		values.put(StoryTable.COLUMN_NAME_DESCRIPTION,
+				story.getDescription());
+		values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
+				chapterId.toString());
 		values.put(StoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
 
 		db.insert(StoryTable.TABLE_NAME, null, values);
