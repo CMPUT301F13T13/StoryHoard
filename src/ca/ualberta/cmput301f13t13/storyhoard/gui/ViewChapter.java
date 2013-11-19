@@ -15,16 +15,12 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,7 +34,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 
 /**
@@ -48,10 +43,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
  * @author Alexander Wong
  * 
  */
-public class ViewChapter extends Activity {
+public class ViewChapter extends MediaActivity {
 	HolderApplication app;
 	private SHController gc;
-	private GUIMediaUtilities util;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayList<Media> photoList;
@@ -65,14 +59,9 @@ public class ViewChapter extends Activity {
 	private ListView chapterChoices;
 	private Button addPhotoButton;
 
-	private Uri imageFileUri;
-	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
-	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_chapter);
 		setUpFields();
 	}
@@ -89,8 +78,8 @@ public class ViewChapter extends Activity {
 	 * Initializes the private fields needed.
 	 */
 	public void setUpFields() {
+		app = (HolderApplication) this.getApplication();
 		gc = SHController.getInstance(this);
-		util = new GUIMediaUtilities();
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
@@ -133,11 +122,11 @@ public class ViewChapter extends Activity {
 		illustrations.removeAllViews();
 		// Insert Photos
 		for (Media photo : photoList) {
-			photos.addView(util.insertImage(photo, this));
+			photos.addView(GUIMediaUtilities.insertImage(photo, this));
 		}
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(util.insertImage(ill, this));
+			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
 		}
 	}
 
@@ -160,10 +149,10 @@ public class ViewChapter extends Activity {
 							public void onClick(DialogInterface dialog, int item) {
 								switch (item) {
 								case 0:
-									takePhoto();
+									takePhoto(Media.PHOTO);
 									break;
 								case 1:
-									browseGallery();
+									browseGallery(Media.PHOTO);
 									break;
 								}
 								photoDialog.dismiss();
@@ -193,67 +182,5 @@ public class ViewChapter extends Activity {
 				finish();
 			}
 		});
-	}
-
-	/**
-	 * Code for browsing gallery
-	 * 
-	 * CODE REUSE URL:
-	 * http://stackoverflow.com/questions/6016000/how-to-open-phones
-	 * -gallery-through-code
-	 */
-	public void browseGallery() {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
-	}
-
-	public void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		imageFileUri = util.getUri();
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	}
-
-	/**
-	 * Adds an image into the gallery
-	 */
-	public void insertIntoGallery(Media image) {
-		Intent mediaScanIntent = new Intent(
-				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-		File f = new File(image.getPath());
-		Uri contentUri = Uri.fromFile(f);
-		mediaScanIntent.setData(contentUri);
-		this.sendBroadcast(mediaScanIntent);
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Media photo = new Media(chapter.getId(),
-						imageFileUri.getPath(), Media.PHOTO);
-				gc.addObject(photo, ObjectType.MEDIA);
-				insertIntoGallery(photo);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
-
-		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				imageFileUri = intent.getData();
-				String path = util.getRealPathFromURI(imageFileUri, this);
-				Media photo = new Media(chapter.getId(), path, Media.PHOTO);
-				gc.addObject(photo, ObjectType.MEDIA);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
-		}
 	}
 }

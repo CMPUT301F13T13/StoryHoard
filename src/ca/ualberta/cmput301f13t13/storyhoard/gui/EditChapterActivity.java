@@ -16,16 +16,13 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -56,7 +53,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * author: Alexander Wong
  */
 
-public class EditChapterActivity extends Activity {
+public class EditChapterActivity extends MediaActivity {
 	HolderApplication app;
 	private Story story;
 	private Chapter chapter;
@@ -72,7 +69,7 @@ public class EditChapterActivity extends Activity {
 	private AlertDialog illustDialog;
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
-	private GUIMediaUtilities util;
+
 	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
@@ -108,7 +105,7 @@ public class EditChapterActivity extends Activity {
 		illustrations.removeAllViews();
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(util.insertImage(ill,
+			illustrations.addView(GUIMediaUtilities.insertImage(ill,
 					EditChapterActivity.this));
 		}
 	}
@@ -118,7 +115,6 @@ public class EditChapterActivity extends Activity {
 	 */
 	private void setUpFields() {
 		gc = SHController.getInstance(getBaseContext());
-		util = new GUIMediaUtilities();
 		
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
@@ -214,10 +210,10 @@ public class EditChapterActivity extends Activity {
 							public void onClick(DialogInterface dialog, int item) {
 								switch (item) {
 								case 0:
-									takePhoto();
+									takePhoto(Media.ILLUSTRATION);
 									break;
 								case 1:
-									browseGallery();
+									browseGallery(Media.ILLUSTRATION);
 									break;
 								}
 								illustDialog.dismiss();
@@ -227,80 +223,6 @@ public class EditChapterActivity extends Activity {
 				illustDialog.show();
 			}
 		});
-	}
-
-	/**
-	 * Code for browsing gallery
-	 * 
-	 * CODE REUSE URL:
-	 * http://stackoverflow.com/questions/6016000/how-to-open-phones
-	 * -gallery-through-code
-	 */
-	private void browseGallery() {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-				BROWSE_GALLERY_ACTIVITY_REQUEST_CODE);
-	}
-
-	/**
-	 * Code for taking a photo
-	 * 
-	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
-	 * Campbell License: Unlicense Date: Nov. 7, 2013
-	 */
-	public void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		imageFileUri = util.getUri();
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-	}
-
-	/**
-	 * Adds an image into the gallery
-	 */
-	public void insertIntoGallery(Media image) {
-		Intent mediaScanIntent = new Intent(
-				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-		File f = new File(image.getPath());
-		Uri contentUri = Uri.fromFile(f);
-		mediaScanIntent.setData(contentUri);
-		this.sendBroadcast(mediaScanIntent);
-	}
-
-	/**
-	 * Activity results for taking photos and browsing gallery.
-	 * 
-	 * CODE REUSE LonelyTweeter Camera Code from Lab Author: Joshua Charles
-	 * Campbell License: Unlicense Date: Nov. 7, 2013
-	 */
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Media ill = new Media(chapter.getId(), imageFileUri.getPath(),
-						Media.ILLUSTRATION);
-				gc.addObject(ill, ObjectType.MEDIA);
-				insertIntoGallery(ill);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
-
-		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				imageFileUri = intent.getData();
-				String path = util.getRealPathFromURI(imageFileUri, this);
-				Media ill = new Media(chapter.getId(), path, Media.ILLUSTRATION);
-				gc.addObject(ill, ObjectType.MEDIA);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
-		}
 	}
 
 	public Uri getImageFileUri() {

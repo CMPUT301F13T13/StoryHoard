@@ -311,7 +311,6 @@ public class SHController {
 	 * chapter's info.
 	 */
 	public void cacheStory(Story story) {		
-		MediaManager mm = MediaManager.getInstance(context);
 		
 		addObject(story, ObjectType.CACHED_STORY);
 		

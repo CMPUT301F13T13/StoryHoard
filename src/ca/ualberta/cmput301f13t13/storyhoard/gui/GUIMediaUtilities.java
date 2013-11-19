@@ -56,7 +56,7 @@ public class GUIMediaUtilities {
 	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
-	public View insertImage(Media ill, Context context) {
+	public static View insertImage(Media ill, Context context) {
 		Bitmap bm = Utilities.decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
 				220, 220);
 		LinearLayout layout = new LinearLayout(context);
