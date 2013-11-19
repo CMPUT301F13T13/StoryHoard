@@ -108,6 +108,7 @@ public class Story {
 	 *            Story author
 	 * @param description
 	 *            Story description
+	 * @param chapterId
 	 * @param phoneId
 	 *            The android id of the phone the story was made on
 	 */
@@ -117,7 +118,7 @@ public class Story {
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		if (firstChapterId != null) {
+		if (chapterId != null) {
 			this.firstChapterId = UUID.fromString(chapterId);
 		}
 		this.chapters = new HashMap<UUID, Chapter>();
@@ -303,7 +304,7 @@ public class Story {
 		HashMap<String, String> info = new HashMap<String, String>();
 
 		if (id != null) {
-			info.put(OwnStoryTable.COLUMN_NAME_STORY_ID, id.toString());
+			info.put(DBContract.COLUMN_NAME_STORY_ID, id.toString());
 		}
 
 		if (title != null) {
@@ -311,7 +312,7 @@ public class Story {
 		}
 
 		if (phoneId != null) {
-			info.put(OwnStoryTable.COLUMN_NAME_PHONE_ID, phoneId);
+			info.put(DBContract.COLUMN_NAME_PHONE_ID, phoneId);
 		}
 
 		return info;
@@ -330,7 +331,7 @@ public class Story {
 		words = Arrays.asList(title.split("\\s+"));
 		
 		for (String keyword : words) {
-			info.put(OwnStoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
+			info.put(DBContract.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
 	}
 }

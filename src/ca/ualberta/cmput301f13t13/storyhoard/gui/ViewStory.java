@@ -52,13 +52,13 @@ public class ViewStory extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_story);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		app = (HolderApplication) this.getApplication();
 		setUpFields();
 		setBeginReading();
 		story = app.getStory();

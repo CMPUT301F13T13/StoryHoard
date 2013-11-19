@@ -16,6 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -113,12 +114,14 @@ public class ViewBrowseStories extends Activity {
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == ObjectType.PUBLISHED_STORY) {
-					gc.cacheStory(story);
+					UUID newStoryId = gc.cacheStory(story);
+					story = gc.getCompleteStory(newStoryId, ObjectType.CACHED_STORY);
 				}
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
+				
 				app.setStory(story);
-				app.setStoryType(viewType);
+				app.setStoryType(ObjectType.CACHED_STORY);
 				startActivity(intent);
 			}
 		});

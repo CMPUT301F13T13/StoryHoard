@@ -40,6 +40,12 @@ public final class DBContract {
 
 	public static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "StoryHoard.Db";
+	public static final String COLUMN_NAME_STORY_ID = "story_id";
+	public static final String COLUMN_NAME_TITLE = "title";
+	public static final String COLUMN_NAME_AUTHOR = "author";
+	public static final String COLUMN_NAME_DESCRIPTION = "description";
+	public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
+	public static final String COLUMN_NAME_PHONE_ID = "phone_id";
 
 	public DBContract() {
 	}
@@ -54,22 +60,16 @@ public final class DBContract {
 		}
 
 		public static final String TABLE_NAME = "own_story_table";
-		public static final String COLUMN_NAME_STORY_ID = "story_id";
-		public static final String COLUMN_NAME_TITLE = "title";
-		public static final String COLUMN_NAME_AUTHOR = "author";
-		public static final String COLUMN_NAME_DESCRIPTION = "description";
-		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
-		public static final String COLUMN_NAME_PHONE_ID = "phone_id";
 
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
 				+ OwnStoryTable.TABLE_NAME + " (" + OwnStoryTable._ID + " INTEGER,"
-				+ OwnStoryTable.COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
-				+ OwnStoryTable.COLUMN_NAME_TITLE + " TEXT, "
-				+ OwnStoryTable.COLUMN_NAME_AUTHOR + " TEXT, "
-				+ OwnStoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, "
-				+ OwnStoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
-				+ OwnStoryTable.COLUMN_NAME_PHONE_ID + " TEXT)";
+				+ COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
+				+ COLUMN_NAME_TITLE + " TEXT, "
+				+ COLUMN_NAME_AUTHOR + " TEXT, "
+				+ COLUMN_NAME_DESCRIPTION + " TEXT, "
+				+ COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
+				+ COLUMN_NAME_PHONE_ID + " TEXT)";
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
 				+ OwnStoryTable.TABLE_NAME;
@@ -85,22 +85,16 @@ public final class DBContract {
 		}
 
 		public static final String TABLE_NAME = "cached_story_table";
-		public static final String COLUMN_NAME_STORY_ID = "story_id";
-		public static final String COLUMN_NAME_TITLE = "title";
-		public static final String COLUMN_NAME_AUTHOR = "author";
-		public static final String COLUMN_NAME_DESCRIPTION = "description";
-		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
-		public static final String COLUMN_NAME_PHONE_ID = "phone_id";
 
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
 				+ CachedStoryTable.TABLE_NAME + " (" + CachedStoryTable._ID + " INTEGER,"
-				+ CachedStoryTable.COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
-				+ CachedStoryTable.COLUMN_NAME_TITLE + " TEXT, "
-				+ CachedStoryTable.COLUMN_NAME_AUTHOR + " TEXT, "
-				+ CachedStoryTable.COLUMN_NAME_DESCRIPTION + " TEXT, "
-				+ CachedStoryTable.COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
-				+ CachedStoryTable.COLUMN_NAME_PHONE_ID + " TEXT)";
+				+ COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
+				+ COLUMN_NAME_TITLE + " TEXT, "
+				+ COLUMN_NAME_AUTHOR + " TEXT, "
+				+ COLUMN_NAME_DESCRIPTION + " TEXT, "
+				+ COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
+				+ COLUMN_NAME_PHONE_ID + " TEXT)";
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
 				+ CachedStoryTable.TABLE_NAME;
