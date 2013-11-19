@@ -99,7 +99,7 @@ public class SHController {
 	 * @return ArrayList of the chapter's choices.
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
-		Choice criteria = new Choice(null, chapterId);
+		Choice criteria = new Choice(null, chapterId, null, null);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);		
@@ -264,7 +264,9 @@ public class SHController {
 	 * the chapters in the sd card and saves the path to them in the
 	 * chapter's info.
 	 */
-	public void cacheStory(Story story) {		
+	public void cacheStory(Story story) {
+		HashMap<UUID, UUID> idMappings = new HashMap<UUID,UUID>();
+		story.setId(UUID.randomUUID());
 		
 		addObject(story, ObjectType.CACHED_STORY);
 		
@@ -273,23 +275,38 @@ public class SHController {
 			return;
 		}
 		
-		// save all other elements
+		// Mapping old and new ids, saving new chaps, update media
 		for (Chapter chap : story.getChapters().values()) {
+			UUID oldId = chap.getId();
+			chap.setId(UUID.randomUUID());
+			idMappings.put(oldId, chap.getId());
+			chap.setStoryId(story.getId());
 			addObject(chap, ObjectType.CHAPTER);
 			
-			for (Choice choice : chap.getChoices()) {
-				addObject(choice, ObjectType.CHOICE);
-			}
 			for (Media photo : chap.getPhotos()) {
+				photo.setChapterId(chap.getId());
 				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
 				photo.setPath(path);
 				addObject(photo, ObjectType.MEDIA);
 			}
 			for (Media ill : chap.getIllustrations()) {
+				ill.setChapterId(chap.getId());
 				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
 				ill.setPath(path);
 				addObject(ill, ObjectType.MEDIA);
 			}	
+		}
+		
+		// updating choices, need idMappings
+		for (Chapter chap : story.getChapters().values()) {				
+			for (Choice choice : chap.getChoices()) {
+				UUID currChap = choice.getCurrentChapter();
+				UUID nextChap = choice.getNextChapter();
+				choice.setId(UUID.randomUUID());
+				choice.setCurrentChapter(idMappings.get(currChap));
+				choice.setCurrentChapter(idMappings.get(nextChap));
+				addObject(choice, ObjectType.CHOICE);
+			}
 		}
 	}
 	

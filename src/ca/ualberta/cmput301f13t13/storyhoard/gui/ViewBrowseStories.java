@@ -118,6 +118,7 @@ public class ViewBrowseStories extends Activity {
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				app.setStory(story);
+				app.setStoryType(viewType);
 				startActivity(intent);
 			}
 		});

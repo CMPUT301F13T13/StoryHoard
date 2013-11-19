@@ -66,7 +66,7 @@ public class TestChoice
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Choice criteria = new Choice(null, null);
+		Choice criteria = new Choice(null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 
 		assertTrue(info.size() == 0);
@@ -75,7 +75,7 @@ public class TestChoice
 		UUID choiceId = UUID.randomUUID();
 		UUID chapId = UUID.randomUUID();
 
-		criteria = new Choice(choiceId, chapId);
+		criteria = new Choice(choiceId, chapId, null);
 		info = criteria.getSearchCriteria();
 
 		assertTrue(info.size() == 2);

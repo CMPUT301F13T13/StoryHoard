@@ -17,6 +17,7 @@ public class HolderApplication extends Application {
 	private boolean firstStory;
 	private Story story;
 	private Chapter chapter;
+	private ObjectType storyType;
 	
 	
 	public boolean isEditing() {
@@ -43,6 +44,12 @@ public class HolderApplication extends Application {
 	public void setChapter(Chapter chapter) {
 		this.chapter = chapter;
 	}
+	public ObjectType getStoryType() {
+		return this.storyType;
+	}
+	public void setStoryType(ObjectType type) {
+		this.storyType = type;
+	}
 	/**
 	 * Returns the UUID of the chapter
 	 * @return UUID
@@ -65,4 +72,5 @@ public class HolderApplication extends Application {
 		}
 		return storyID;
 	}
+	
 }

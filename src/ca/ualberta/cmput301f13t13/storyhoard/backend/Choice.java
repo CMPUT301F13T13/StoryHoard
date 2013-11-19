@@ -75,6 +75,7 @@ public class Choice {
 	 * 
 	 * @param id
 	 * @param chapterIdFrom
+	 * @param chapterIdTo TODO
 	 */
 	public Choice(UUID id, UUID chapterIdFrom) {
 		this.id = id;
@@ -177,6 +178,11 @@ public class Choice {
 		if (currentChapter != null) {
 			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
 					currentChapter.toString());
+		}
+		
+		if (nextChapter != null) {
+			info.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
+					nextChapter.toString());
 		}
 
 		return info;

@@ -117,7 +117,9 @@ public class Story {
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		this.firstChapterId = UUID.fromString(chapterId);
+		if (firstChapterId != null) {
+			this.firstChapterId = UUID.fromString(chapterId);
+		}
 		this.chapters = new HashMap<UUID, Chapter>();
 		this.phoneId = phoneId;
 	}

@@ -119,7 +119,14 @@ public class EditStoryActivity extends Activity {
 			newStory.setTitle(title);
 			newStory.setDescription(description);
 			app.setStory(newStory);
-			gc.updateObject(newStory, ObjectType.CREATED_STORY);
+			
+			// May not be needed...
+			if (app.getStoryType().equals(ObjectType.CREATED_STORY)) {
+				gc.updateObject(newStory, ObjectType.CREATED_STORY);
+			} else {
+				gc.updateObject(newStory, ObjectType.CACHED_STORY);
+			}
+//			gc.updateObject(newStory, ObjectType.CREATED_STORY);
 		} else {
 			newStory = new Story(title, author, description, 
 					Utilities.getPhoneId(getBaseContext()));
