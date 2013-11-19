@@ -5,10 +5,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,10 +17,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
