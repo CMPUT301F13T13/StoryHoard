@@ -37,14 +37,12 @@ import android.content.Context;
  * 
  */
 public class SHController {
-	// CONSTANTS
-	private Context context = null;
+
 	private static SHController self = null;   
 	private static ManagerFactory sf = null;
 
 	protected SHController(Context context) {
 		sf = new ManagerFactory(context);
-		this.context = context;
 	}
 
 	/**
@@ -69,29 +67,10 @@ public class SHController {
 	 * @return Array list of all the stories the application asked for.
 	 */
 	public ArrayList<Story> getAllStories(ObjectType type) {
-		ArrayList<Story> stories = new ArrayList<Story>();
-		ArrayList<Object> objects = new ArrayList<Object>();
-		Story criteria = null;
+		Story criteria = new Story(null, null, null, null, null);
 		StoringManager sm = sf.getStoringManager(type);
-
-		switch (type) {
-		case CACHED_STORY:
-			criteria = new Story(null, null, null, null, "NOT"
-					+ Utilities.getPhoneId(context));
-			break;
-		case CREATED_STORY:
-			criteria = new Story(null, null, null, null,
-					Utilities.getPhoneId(context));
-			break;
-		case PUBLISHED_STORY:
-			criteria = new Story(null, null, null, null, null);
-			break;
-		default:
-			break;
-		}
-
-		objects = sm.retrieve(criteria);
-		stories = Utilities.objectsToStories(objects);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -104,15 +83,10 @@ public class SHController {
 	 * @return ArrayList of the chapters.
 	 */
 	public ArrayList<Chapter> getAllChapters(UUID storyId) {
-		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-		ArrayList<Object> objects = new ArrayList<Object>();
-
 		Chapter criteria = new Chapter(null, storyId, null);
-		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
-
-		objects = sm.retrieve(criteria);
-		chapters = Utilities.objectsToChapters(objects);
-
+		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);		
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Chapter> chapters = Utilities.objectsToChapters(objects);
 		return chapters;
 	}
 
@@ -125,14 +99,11 @@ public class SHController {
 	 * @return ArrayList of the chapter's choices.
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
-		ArrayList<Choice> choices = new ArrayList<Choice>();
-		ArrayList<Object> objects = new ArrayList<Object>();
-
 		Choice criteria = new Choice(null, chapterId);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);		
 
-		objects = sm.retrieve(criteria);
-		choices = Utilities.objectsToChoices(objects);
 		return choices;
 	}
 
@@ -145,13 +116,10 @@ public class SHController {
 	 * @return ArrayList of the illustrations.
 	 */
 	public ArrayList<Media> getAllIllustrations(UUID chapterId) {
-		ArrayList<Media> illustrations = new ArrayList<Media>();
-		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-
-		objects = sm.retrieve(criteria);
-		illustrations = Utilities.objectsToMedia(objects);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Media> illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
 
@@ -165,19 +133,15 @@ public class SHController {
 	 * @return ArrayList of the illustrations.
 	 */
 	public Media getFirstIllustration(UUID chapterId) {
-		ArrayList<Media> illustrations = new ArrayList<Media>();
-		ArrayList<Object> objects = new ArrayList<Object>();
 		Media ill = null;
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-
-		objects = sm.retrieve(criteria);
-		illustrations = Utilities.objectsToMedia(objects);
-
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Media> illustrations = Utilities.objectsToMedia(objects);
+		
 		if (illustrations.size() > 0) {
 			ill = illustrations.get(0);
 		} 
-		
 		return ill;
 	}
 
@@ -190,13 +154,10 @@ public class SHController {
 	 * @return ArrayList of the photos.
 	 */
 	public ArrayList<Media> getAllPhotos(UUID chapterId) {
-		ArrayList<Media> photos = new ArrayList<Media>();
-		ArrayList<Object> objects = new ArrayList<Object>();
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
 		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-
-		objects = sm.retrieve(criteria);
-		photos = Utilities.objectsToMedia(objects);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Media> photos = Utilities.objectsToMedia(objects);
 		return photos;
 	}
 
@@ -215,18 +176,10 @@ public class SHController {
 	 */
 	public ArrayList<Story> searchStory(String title, ObjectType type) {
 		Story criteria = null;
-		ArrayList<Object> objects = new ArrayList<Object>();
-		ArrayList<Story> stories = new ArrayList<Story>();
 		StoringManager sm = sf.getStoringManager(type);
-
-		if (type == ObjectType.CREATED_STORY) {
-			criteria = new Story(null, title, null, null, Utilities.getPhoneId(context));
-		} else {
-			criteria = new Story(null, title, null, null, "not");
-		}
-		
-		objects = sm.retrieve(criteria);
-		stories = Utilities.objectsToStories(objects);
+		criteria = new Story(null, title, null, null, null);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
@@ -268,7 +221,8 @@ public class SHController {
 
 	/**
 	 * Retrieves a complete story (including chapters, and any photos,
-	 * illustrations, and choices belonging to the chapters).
+	 * illustrations, and choices belonging to the chapters). Returns
+	 * null if the story doesn't exist.
 	 * 
 	 * @param id
 	 *            Story id of the story wanted.

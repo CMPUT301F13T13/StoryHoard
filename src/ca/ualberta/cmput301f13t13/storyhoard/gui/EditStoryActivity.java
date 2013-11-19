@@ -97,7 +97,8 @@ public class EditStoryActivity extends Activity {
 		if (app.isEditing()) {
 			// publish new story somehow
 			saveChanges();
-			gc.addObject(newStory, ObjectType.PUBLISHED_STORY);
+			gc.addObject(gc.getCompleteStory(newStory.getId()), 
+					ObjectType.PUBLISHED_STORY);
 			Toast.makeText(getBaseContext(),
 					"Story published to server", Toast.LENGTH_SHORT)
 					.show();

@@ -50,7 +50,7 @@ public class MediaManager implements StoringManager{
 	}
 	
 	/**
-	 * Returns an instance of a StoryManager. Used to implement
+	 * Returns an instance of a OwnStoryManager. Used to implement
 	 * the singleton design pattern.
 	 * 
 	 * @param context

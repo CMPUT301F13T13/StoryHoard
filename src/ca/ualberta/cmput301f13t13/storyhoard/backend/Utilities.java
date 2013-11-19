@@ -16,7 +16,6 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,11 +24,8 @@ import java.util.ArrayList;
 import android.content.Context;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Base64;
 
 /**
  * Class meant for general functions that can be used by any class.
@@ -148,7 +144,6 @@ public class Utilities {
 			fout.flush();
 			fout.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

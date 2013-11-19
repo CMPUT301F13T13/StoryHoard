@@ -23,7 +23,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
- * Class meant for the testing of the StoryManager class in the StoryHoard
+ * Class meant for the testing of the OwnStoryManager class in the StoryHoard
  * application.
  * 
  * @author Stephanie Gil
@@ -32,7 +32,7 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestStoryManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private ArrayList<Object> mockStories;
-	private StoryManager sm = null;
+	private OwnStoryManager sm = null;
 
 	public TestStoryManager() {
 		super(ViewBrowseStories.class);
@@ -46,7 +46,7 @@ public class TestStoryManager extends
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
-		sm = StoryManager.getInstance(getActivity());
+		sm = OwnStoryManager.getInstance(getActivity());
 	}
 
 	/**

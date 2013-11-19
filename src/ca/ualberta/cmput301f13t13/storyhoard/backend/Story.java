@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
 
 /**
  * Role: A container to hold story information. This includes id, author, 
@@ -272,14 +272,14 @@ public class Story {
 	 * If the story needs to be updated in the database
 	 * (due to now having a firstChapterId), then it will
 	 * return true so the front end will know to use the
-	 * StoryManager to update the story data.
+	 * OwnStoryManager to update the story data.
 	 * 
 	 * If the story already had its firstChapterId set, then
 	 * there is no need to update it in the database, therefore
 	 * the function will return False.
 	 */
 	public Boolean addChapter(Chapter chapter) {
-		if (chapters.isEmpty()) {
+		if (firstChapterId == null) {
 			// set first chapter id
 			firstChapterId = chapter.getId();
 			chapters.put(chapter.getId(), chapter);
@@ -301,7 +301,7 @@ public class Story {
 		HashMap<String, String> info = new HashMap<String, String>();
 
 		if (id != null) {
-			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
+			info.put(OwnStoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
 
 		if (title != null) {
@@ -309,7 +309,7 @@ public class Story {
 		}
 
 		if (phoneId != null) {
-			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
+			info.put(OwnStoryTable.COLUMN_NAME_PHONE_ID, phoneId);
 		}
 
 		return info;
@@ -328,7 +328,7 @@ public class Story {
 		words = Arrays.asList(title.split("\\s+"));
 		
 		for (String keyword : words) {
-			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
+			info.put(OwnStoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
 	}
 }

@@ -67,23 +67,25 @@ public class ManagerFactory {
 	 * 
 	 * @param type
 	 * 			Will either be PUBLISHED_STORY, CHAPTER, CHOICE, MEDIA
-	 * 			or CREATED_STORY and CACHED_STORY which actually use
-	 * 			the same StoringManager (StoryManager).
+	 * 			CREATED_STORY, or CACHED_STORY.
 	 * @return StoringManager
 	 */
 	public StoringManager getStoringManager(ObjectType type) {
 		switch (type) {
 		case PUBLISHED_STORY:
 			return ServerManager.getInstance();
+		case CREATED_STORY:
+			return OwnStoryManager.getInstance(context);	
+		case CACHED_STORY:
+			return CachedStoryManager.getInstance(context);
 		case CHAPTER:
 			return ChapterManager.getInstance(context);
 		case CHOICE:
 			return ChoiceManager.getInstance(context);
 		case MEDIA:
 			return MediaManager.getInstance(context);
-		default: // cached or created story
-			return StoryManager.getInstance(context);
 		}
+		return null;
 	}
 
 }
