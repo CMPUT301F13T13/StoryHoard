@@ -268,8 +268,6 @@ public class SHController {
 		HashMap<UUID, UUID> idMappings = new HashMap<UUID,UUID>();
 		story.setId(UUID.randomUUID());
 		
-		addObject(story, ObjectType.CACHED_STORY);
-		
 		// empty story
 		if (story.getFirstChapterId() == null) {
 			return;
@@ -304,10 +302,13 @@ public class SHController {
 				UUID nextChap = choice.getNextChapter();
 				choice.setId(UUID.randomUUID());
 				choice.setCurrentChapter(idMappings.get(currChap));
-				choice.setCurrentChapter(idMappings.get(nextChap));
+				choice.setNextChapter(idMappings.get(nextChap));
 				addObject(choice, ObjectType.CHOICE);
 			}
 		}
+		
+		story.setFirstChapterId(idMappings.get(story.getFirstChapterId()));
+		addObject(story, ObjectType.CACHED_STORY);
 	}
 	
 	/**

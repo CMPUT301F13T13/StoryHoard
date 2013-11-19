@@ -26,8 +26,8 @@ import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
 
 /**
- * Role: Interacts with the database to store, update, and retrieve story
- * objects. It implements the StoringManager interface.
+ * Role: Provides the necessary methods for any class extending it to interact 
+ * with the database to store, update, and retrieve story objects. 
  * 
  * </br>
  * Design Pattern: Singleton
@@ -36,7 +36,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
  * @author Ashley Brown
  * 
  * @see Story
- * @see StoringManager
+ * @see OwnStoryManager
+ * @see CachedStoryManager
  */
 public abstract class StoryManagerHelper {
 	protected ContentValues values;
@@ -44,7 +45,10 @@ public abstract class StoryManagerHelper {
 	protected String[] sArgs;
 	protected String[] projection;
 	
-	
+	/**
+	 * Sets up the ContentValues for inserting or updating the database.
+	 * @param object
+	 */
 	protected void setContentValues(Object object) {
 		Story story = (Story) object;
 		UUID chapterId = story.getFirstChapterId();
@@ -62,18 +66,6 @@ public abstract class StoryManagerHelper {
 				chapterId.toString());
 		}
 		values.put(OwnStoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
-	}
-
-	/**
-	 * Sets up the selection and selection arguments for an 
-	 * update.
-	 * 
-	 * @param newObject
-	 */
-	protected void setUpForUpdate(Object newObject) {
-		Story newS = (Story) newObject;
-		selection = OwnStoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
-		sArgs = new String[]{ newS.getId().toString() };
 	}
 
 	protected void setUpSearch(Object criteria) {
@@ -196,7 +188,9 @@ public abstract class StoryManagerHelper {
 	 */
 	protected void update(Object newObject, String tableName, DBHelper helper) {
 		setContentValues(newObject);
-		setUpForUpdate(newObject);
+		Story newS = (Story) newObject;
+		selection = OwnStoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
+		sArgs = new String[]{ newS.getId().toString() };
 		SQLiteDatabase db = helper.getReadableDatabase();
 		db.update(tableName, values, selection, 
 				sArgs);
