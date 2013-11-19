@@ -105,7 +105,7 @@ public class EditChapterActivity extends MediaActivity {
 		illustrations.removeAllViews();
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(GUIMediaUtilities.insertImage(ill,
+			illustrations.addView(insertImage(ill,
 					EditChapterActivity.this));
 		}
 	}

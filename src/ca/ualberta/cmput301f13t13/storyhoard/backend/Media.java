@@ -16,11 +16,13 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
 
@@ -147,7 +149,7 @@ public class Media {
 	 * @return bitmap 
 	 */
 	public Bitmap getBitmapFromString() {
-		return Utilities.getBitmapFromString(bitmapString);
+		return getBitmapFromString(bitmapString);
 	}	
 
 	// SETTERS
@@ -185,7 +187,7 @@ public class Media {
 	 * @param bitmap
 	 */
 	public void setBitmapString(Bitmap bitmap) {
-		this.bitmapString = Utilities.getStringFromBitmap(bitmap);
+		this.bitmapString = getStringFromBitmap(bitmap);
 	}
 	
 	/**
@@ -220,4 +222,45 @@ public class Media {
 
 		return info;
 	}
+	
+	/**
+	 * This functions converts Bitmap picture to a string which can be
+	 * JSONified.
+	 * 
+	 * CODE REUSE:
+	 * This code is taken straight from:
+	 * 
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
+	 * Date: Nov. 4th, 2013
+	 * Author: Manav
+	 */
+	private String getStringFromBitmap(Bitmap bitmapPicture) {
+		final int COMPRESSION_QUALITY = 100;
+		String encodedImage;
+		ByteArrayOutputStream byteArrayBitmapStream 
+		= new ByteArrayOutputStream();
+		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 
+				COMPRESSION_QUALITY, byteArrayBitmapStream);
+		byte[] b = byteArrayBitmapStream.toByteArray();
+		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+		return encodedImage;
+	}	
+
+	/**
+	 * This functions converts a string to a Bitmap picture.
+	 * 
+	 * CODE REUSE:
+	 * This code is taken straight from:
+	 * 
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
+	 * Date: Nov. 4th, 2013
+	 * Author: Manav
+	 */
+	private Bitmap getBitmapFromString(String string) {
+
+		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
+		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 
+				0, decodedString.length);
+		return decodedByte;
+	}	
 }

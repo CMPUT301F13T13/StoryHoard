@@ -104,46 +104,7 @@ public class Utilities {
 		return medias;
 	}
 
-	/**
-	 * This functions converts Bitmap picture to a string which can be
-	 * JSONified.
-	 * 
-	 * CODE REUSE:
-	 * This code is taken straight from:
-	 * 
-	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
-	 * Date: Nov. 4th, 2013
-	 * Author: Manav
-	 */
-	public static String getStringFromBitmap(Bitmap bitmapPicture) {
-		final int COMPRESSION_QUALITY = 100;
-		String encodedImage;
-		ByteArrayOutputStream byteArrayBitmapStream 
-		= new ByteArrayOutputStream();
-		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 
-				COMPRESSION_QUALITY, byteArrayBitmapStream);
-		byte[] b = byteArrayBitmapStream.toByteArray();
-		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-		return encodedImage;
-	}	
 
-	/**
-	 * This functions converts a string to a Bitmap picture.
-	 * 
-	 * CODE REUSE:
-	 * This code is taken straight from:
-	 * 
-	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
-	 * Date: Nov. 4th, 2013
-	 * Author: Manav
-	 */
-	public static Bitmap getBitmapFromString(String string) {
-
-		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
-		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 
-				0, decodedString.length);
-		return decodedByte;
-	}
 
 	/**
 	 * This functions gets the id of the device and returns it as a string
@@ -162,57 +123,6 @@ public class Utilities {
 		return PhoneId;
 	}
 
-	/**
-	 * Calculates size for bitmap.
-	 * 
-	 * CODE REUSE
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
-	 * Date: Nov. 7, 2013
-	 * Author: Andr.oid Eric
-	 */		
-	public static int calculateInSampleSize(BitmapFactory.Options options, 
-			int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-			if (width > height) {
-				inSampleSize = Math.round((float)height / (float)reqHeight);   
-			} else {
-				inSampleSize = Math.round((float)width / (float)reqWidth);   
-			}   
-		}
-
-		return inSampleSize;   
-	}	
-
-	/**
-	 * CODE REUSE
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
-	 * Date: Nov. 7, 2013
-	 * Author: Andr.oid Eric
-	 */	
-	public static Bitmap decodeSampledBitmapFromUri(Uri uri, 
-			int reqWidth, int reqHeight) {
-		Bitmap bm = null;
-
-		// First decode with inJustDecodeBounds=true to check dimensions
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(uri.getPath(), options);
-
-		// Calculate inSampleSize
-		options.inSampleSize = Utilities.calculateInSampleSize(options, 
-				reqWidth, reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		bm = BitmapFactory.decodeFile(uri.getPath(), options); 
-
-		return bm;  
-	}	
 
 	/**
 	 * Saves a bitmap to a location on the phone's sd card. Returns

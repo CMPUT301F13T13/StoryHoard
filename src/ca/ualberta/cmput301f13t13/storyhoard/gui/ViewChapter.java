@@ -122,11 +122,11 @@ public class ViewChapter extends MediaActivity {
 		illustrations.removeAllViews();
 		// Insert Photos
 		for (Media photo : photoList) {
-			photos.addView(GUIMediaUtilities.insertImage(photo, this));
+			photos.addView(insertImage(photo, this));
 		}
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(GUIMediaUtilities.insertImage(ill, this));
+			illustrations.addView(insertImage(ill, this));
 		}
 	}
 
