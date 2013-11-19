@@ -84,8 +84,8 @@ public class EditStoryActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.addImage:
-			addImage();
+		case R.id.publishStory:
+			publishStory();
 			return true;
 		case R.id.addfirstChapter:
 			saveChanges();
@@ -96,32 +96,9 @@ public class EditStoryActivity extends Activity {
 	}
 
 
-	private void addImage() {
-		// AlertDialog.Builder alert = new AlertDialog.Builder(context);
-		// // Set dialog title
-		// alert.setTitle("Choose method:");
-		// // Options that user may choose to add photo
-		// final String[] methods = { "Take Photo",
-		// "Choose from Gallery" };
-		// alert.setSingleChoiceItems(methods, -1,
-		// new DialogInterface.OnClickListener() {
-		// @Override
-		// public void onClick(DialogInterface dialog, int item) {
-		// switch (item) {
-		// case 0:
-		// // Take a photo
-		// break;
-		// case 1:
-		// // Choose from gallery
-		// break;
-		// }
-		// imageDialog.dismiss();
-		// }
-		// });
-		// imageDialog = alert.create();
-		// imageDialog.show();
+	private void publishStory() {
 		Toast.makeText(getBaseContext(),
-				"Not implemented this iteration", Toast.LENGTH_SHORT)
+				"Publishing Stories not yet implemented", Toast.LENGTH_SHORT)
 				.show();
 	}
 

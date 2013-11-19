@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
@@ -110,9 +109,16 @@ public class ViewBrowseStories extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				Story story = gridArray.get(arg2);
+				// Handle cacheing the story if it's a published story, 
+				// currently breaks downloaded stories
+				//if (viewType == ObjectType.PUBLISHED_STORY) {
+				if (false) {
+					gc.cacheStory(story);
+				}
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				app.setStory(gridArray.get(arg2));
+				app.setStory(story);
 				startActivity(intent);
 			}
 		});
