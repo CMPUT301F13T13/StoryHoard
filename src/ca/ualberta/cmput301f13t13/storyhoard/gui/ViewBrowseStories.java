@@ -110,10 +110,9 @@ public class ViewBrowseStories extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Story story = gridArray.get(arg2);
-				// Handle cacheing the story if it's a published story, 
+				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
-				//if (viewType == ObjectType.PUBLISHED_STORY) {
-				if (false) {
+				if (viewType == ObjectType.PUBLISHED_STORY) {
 					gc.cacheStory(story);
 				}
 				// Handle going to view story activity

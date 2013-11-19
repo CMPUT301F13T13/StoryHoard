@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
@@ -70,8 +69,6 @@ public class EditStoryActivity extends Activity {
 			newDescription.setText(newStory.getDescription());
 		}
 	}
-
-	
 	
 
 	@Override
@@ -97,9 +94,18 @@ public class EditStoryActivity extends Activity {
 
 
 	private void publishStory() {
-		Toast.makeText(getBaseContext(),
-				"Publishing Stories not yet implemented", Toast.LENGTH_SHORT)
-				.show();
+		if (app.isEditing()) {
+			// publish new story somehow
+			saveChanges();
+			gc.addObject(newStory, ObjectType.PUBLISHED_STORY);
+			Toast.makeText(getBaseContext(),
+					"Story published to server", Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			Toast.makeText(getBaseContext(),
+					"Create a story before publishing", Toast.LENGTH_SHORT)
+					.show();
+		}
 	}
 
 

@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
+import java.util.UUID;
+
 import android.app.Application;
 
 /**
@@ -41,6 +43,26 @@ public class HolderApplication extends Application {
 	public void setChapter(Chapter chapter) {
 		this.chapter = chapter;
 	}
-	
-	
+	/**
+	 * Returns the UUID of the chapter
+	 * @return UUID
+	 */
+	public UUID chapterID() {
+		UUID chapterID = null;
+		if (this.chapter!=null) {
+			chapterID = this.chapter.getId();
+		}
+		return chapterID;
+	}
+	/**
+	 * Returns the UUID of the story.
+	 * @return UUID
+	 */
+	public UUID storyID() {
+		UUID storyID = null;
+		if (this.story!=null) {
+			storyID = this.story.getId();
+		}
+		return storyID;
+	}
 }

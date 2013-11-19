@@ -16,6 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,8 +29,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
@@ -98,8 +99,16 @@ public class ViewChapter extends MediaActivity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		chapter = gc.getCompleteChapter(app.getChapter().getId());
+		UUID chapterID = app.chapterID();
+		chapter = gc.getCompleteChapter(chapterID);
 		choices.clear();
+
+		// Check to see if the chapter exists, else terminate
+		if (chapter == null) {
+			Toast.makeText(getBaseContext(), "Chapter does not exist", Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
 		// Check for no chapter text
 		if (chapter.getText().equals("")) {
 			chapterContent.setText("<No Chapter Content>");
