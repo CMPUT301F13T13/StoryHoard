@@ -19,7 +19,9 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.util.ArrayList;
 
 /**
- * Interface for storing objects locally (to the database).
+ * Interface for storing, updating, and retrieving objects locally 
+ * (to the database). The classes that implement this interface must be in
+ * charge of opening a connection to the database and interacting with it.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -33,23 +35,23 @@ import java.util.ArrayList;
 public interface StoringManager {
 
 	/**
-	 * Inserts an object into a storage place.
+	 * Inserts an object into the database.
 	 * 
 	 * @param object
 	 */
 	public void insert(Object object);
 
 	/**
-	 * Retrieves an object from a storage place.
+	 * Retrieves an object(s) from the database.
 	 * 
 	 * @param criteria
 	 * 
-	 * @return object
+	 * @return objects
 	 */
 	public ArrayList<Object> retrieve(Object criteria);
 
 	/**
-	 * Updates an object in the storage place.
+	 * Updates an object in the database.
 	 * 
 	 * @param newObject
 	 */

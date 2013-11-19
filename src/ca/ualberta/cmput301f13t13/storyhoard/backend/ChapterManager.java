@@ -28,9 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve chapter
- * objects. It implements the StoringManager interface and inherits from the
- * Model class, meaning it can hold SHViews and notify them if they need to be
- * updated.
+ * objects. It implements the StoringManager interface.
  * 
  * </br>
  * Design Pattern: Singleton
@@ -86,9 +84,7 @@ public class ChapterManager implements StoringManager {
 				(chapter.getId()).toString());
 		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
 				chapter.getStoryId().toString());
-		if (chapter.getText() != null) {
-			values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
-		}
+		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
 				chapter.getRandomChoice());
 
