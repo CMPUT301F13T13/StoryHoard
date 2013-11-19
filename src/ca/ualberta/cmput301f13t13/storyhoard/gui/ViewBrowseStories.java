@@ -115,8 +115,9 @@ public class ViewBrowseStories extends Activity {
 				// currently breaks downloaded stories
 				if (viewType == ObjectType.PUBLISHED_STORY) {
 					UUID newStoryId = gc.cacheStory(story);
-					story = gc.getCompleteStory(newStoryId, ObjectType.CACHED_STORY);
+					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
 				}
+				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				
@@ -152,6 +153,15 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
+			intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.lucky:
+			Story story = gc.getRandomStory();
+			UUID newId = gc.cacheStory(story);
+			story = gc.getStory(newId, ObjectType.CACHED_STORY);
+			app.setStory(story);
+			app.setStoryType(ObjectType.CACHED_STORY);
 			intent = new Intent(this, SearchActivity.class);
 			startActivity(intent);
 			return true;

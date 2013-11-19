@@ -183,6 +183,28 @@ public class SHController {
 		return stories;
 	}
 
+	
+	/**
+	 * Used to search for stories matching the id given.
+	 * 
+	 * @param id
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public Story getStory(UUID id, ObjectType type) {
+		Story criteria = null;
+		StoringManager sm = sf.getStoringManager(type);
+		criteria = new Story(id, null, null, null, null);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		if (objects.size() < 1) {
+			return null;
+		}
+		return (Story) objects.get(0);
+	}
+	
 	/**
 	 * Retrieves a complete chapter (including any photos, illustrations, and
 	 * choices).
