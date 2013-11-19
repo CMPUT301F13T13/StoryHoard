@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/addImage"
+        android:id="@+id/publishStory"
         android:showAsAction="ifRoom"
-        android:title="add Image"/>
+        android:title="@string/publish_story"/>
     <item
         android:id="@+id/addfirstChapter"
         android:showAsAction="ifRoom"
-        android:title="Save Changes"/>
+        android:title="@string/save_changes"/>
 
 </menu>

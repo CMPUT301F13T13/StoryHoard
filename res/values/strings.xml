@@ -78,5 +78,7 @@
     <string name="choiceText">Choice Text</string>
     <string name="title_activity_view_search_results">ViewSearchResults</string>
     <string name= "browse_stories">Browse stories</string>
+    <string name="publish_story">Publish Story</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>
