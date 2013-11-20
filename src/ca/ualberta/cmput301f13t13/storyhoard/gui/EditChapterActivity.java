@@ -231,6 +231,7 @@ public class EditChapterActivity extends MediaActivity {
 	 * Set onClick listener for setting random choice
 	 */
 	public void setRandomChoice() {
+		//If the chapter has been set to random choice, check box
 		if (chapter.getRandomChoice() == "yes") {
 			randChoiceCheck.setChecked(true);
 		}
