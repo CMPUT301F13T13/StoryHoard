@@ -16,6 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -55,9 +56,7 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_stories);
-		setActionBar();
 		setGridView();
 	}
 
@@ -113,12 +112,15 @@ public class ViewBrowseStories extends Activity {
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == ObjectType.PUBLISHED_STORY) {
-					gc.cacheStory(story);
+					UUID newStoryId = gc.cacheStory(story);
+					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
 				}
+				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
+				
 				app.setStory(story);
-				app.setStoryType(viewType);
+				app.setStoryType(ObjectType.CACHED_STORY);
 				startActivity(intent);
 			}
 		});
@@ -152,6 +154,15 @@ public class ViewBrowseStories extends Activity {
 			intent = new Intent(this, SearchActivity.class);
 			startActivity(intent);
 			return true;
+		case R.id.lucky:
+			Story story = gc.getRandomStory();
+			UUID newId = gc.cacheStory(story);
+			story = gc.getStory(newId, ObjectType.CACHED_STORY);
+			app.setStory(story);
+			app.setStoryType(ObjectType.CACHED_STORY);
+			intent = new Intent(getBaseContext(), ViewStory.class);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -160,6 +171,8 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		app = (HolderApplication) this.getApplication();
+		setActionBar();
 		refreshStories();
 	}
 

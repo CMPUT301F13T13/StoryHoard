@@ -23,7 +23,6 @@ import java.util.UUID;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
 
 /**
  * Role: Provides the necessary methods for any class extending it to interact 
@@ -55,28 +54,28 @@ public abstract class StoryManagerHelper {
 
 		// Insert story
 		values = new ContentValues();
-		values.put(OwnStoryTable.COLUMN_NAME_STORY_ID, 
+		values.put(DBContract.COLUMN_NAME_STORY_ID, 
 				(story.getId()).toString());
-		values.put(OwnStoryTable.COLUMN_NAME_TITLE, story.getTitle());
-		values.put(OwnStoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
-		values.put(OwnStoryTable.COLUMN_NAME_DESCRIPTION,
+		values.put(DBContract.COLUMN_NAME_TITLE, story.getTitle());
+		values.put(DBContract.COLUMN_NAME_AUTHOR, story.getAuthor());
+		values.put(DBContract.COLUMN_NAME_DESCRIPTION,
 				story.getDescription());
 		if (chapterId != null) {
-			values.put(OwnStoryTable.COLUMN_NAME_FIRST_CHAPTER, 
+			values.put(DBContract.COLUMN_NAME_FIRST_CHAPTER, 
 				chapterId.toString());
 		}
-		values.put(OwnStoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
+		values.put(DBContract.COLUMN_NAME_PHONE_ID, story.getPhoneId());
 	}
 
 	protected void setUpSearch(Object criteria) {
 		sArgs = null;
 		projection = new String[]{ 
-				OwnStoryTable.COLUMN_NAME_STORY_ID,
-				OwnStoryTable.COLUMN_NAME_TITLE, 
-				OwnStoryTable.COLUMN_NAME_AUTHOR,
-				OwnStoryTable.COLUMN_NAME_DESCRIPTION,
-				OwnStoryTable.COLUMN_NAME_FIRST_CHAPTER,
-				OwnStoryTable.COLUMN_NAME_PHONE_ID };
+				DBContract.COLUMN_NAME_STORY_ID,
+				DBContract.COLUMN_NAME_TITLE, 
+				DBContract.COLUMN_NAME_AUTHOR,
+				DBContract.COLUMN_NAME_DESCRIPTION,
+				DBContract.COLUMN_NAME_FIRST_CHAPTER,
+				DBContract.COLUMN_NAME_PHONE_ID };
 
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -98,7 +97,8 @@ public abstract class StoryManagerHelper {
 			String storyId = cursor.getString(0);
 
 			Story story = new Story(
-					storyId, cursor.getString(1), // title
+					storyId, 
+					cursor.getString(1), // title
 					cursor.getString(2), // author
 					cursor.getString(3), // description
 					cursor.getString(4), // first chapter id
@@ -189,7 +189,7 @@ public abstract class StoryManagerHelper {
 	protected void update(Object newObject, String tableName, DBHelper helper) {
 		setContentValues(newObject);
 		Story newS = (Story) newObject;
-		selection = OwnStoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
+		selection = DBContract.COLUMN_NAME_STORY_ID + " LIKE ?";
 		sArgs = new String[]{ newS.getId().toString() };
 		SQLiteDatabase db = helper.getReadableDatabase();
 		db.update(tableName, values, selection, 

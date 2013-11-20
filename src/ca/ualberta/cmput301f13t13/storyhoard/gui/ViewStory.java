@@ -52,37 +52,23 @@ public class ViewStory extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_story);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		app = (HolderApplication) this.getApplication();
 		setUpFields();
 		setBeginReading();
-		story = app.getStory();
-		// storyCover.setImageBitmap(focusedStory.getImage());
-		// Check no title
-		if (story.getTitle().equals("")) {
-			storyTitle.setText("<No Title>");
-		} else {
-			storyTitle.setText(story.getTitle());
-		}
-		// Check no author
-		if (story.getAuthor().equals("")) {
-			storyAuthor.setText("<No Author>");
-		} else {
-			storyAuthor.setText(story.getAuthor());
-		}
-		// Check no description
-		if (story.getDescription().equals("")) {
-			storyDescription.setText("<No Description>");
-		} else {
-			storyDescription.setText(story.getDescription());
-		}
 	}
 
+    @Override
+    public void onBackPressed() {
+            super.onBackPressed();
+            this.finish();
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_browse_story, menu);
@@ -126,6 +112,27 @@ public class ViewStory extends Activity {
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Story Information");
 		actionBar.setDisplayShowTitleEnabled(true);
+		
+		story = app.getStory();
+		// storyCover.setImageBitmap(focusedStory.getImage());
+		// Check no title
+		if (story.getTitle().equals("")) {
+			storyTitle.setText("<No Title>");
+		} else {
+			storyTitle.setText(story.getTitle());
+		}
+		// Check no author
+		if (story.getAuthor().equals("")) {
+			storyAuthor.setText("<No Author>");
+		} else {
+			storyAuthor.setText(story.getAuthor());
+		}
+		// Check no description
+		if (story.getDescription().equals("")) {
+			storyDescription.setText("<No Description>");
+		} else {
+			storyDescription.setText(story.getDescription());
+		}
 	}
 
 	/**

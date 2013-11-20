@@ -54,13 +54,14 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-
+		
+		activity = this.getActivity();
 		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		DBHelper helper = DBHelper.getInstance(activity);
 		helper.close();
 		activity.deleteDatabase(DBContract.DATABASE_NAME);
 
-		gc = SHController.getInstance(getActivity());				
+		gc = SHController.getInstance(activity);				
 	}
 
 	/**
@@ -79,7 +80,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 		s3.setFirstChapterId(UUID.randomUUID());
 
-		gc.addObject(s1, ObjectType.CACHED_STORY);
+		gc.addObject(s1, ObjectType.CREATED_STORY);
 		gc.addObject(s2, ObjectType.CACHED_STORY);
 		gc.addObject(s3, ObjectType.CACHED_STORY);
 
@@ -106,7 +107,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 		gc.addObject(s1, ObjectType.CREATED_STORY);
 		gc.addObject(s2, ObjectType.CREATED_STORY);
-		gc.addObject(s3, ObjectType.CREATED_STORY);
+		gc.addObject(s3, ObjectType.CACHED_STORY);
 
 		stories = gc.getAllStories(ObjectType.CREATED_STORY);
 
@@ -119,18 +120,14 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	 */
 	public void testGetAllPublishedStories() {
 		ArrayList<Story> stories = new ArrayList<Story>();
-		UUID chapId = UUID.randomUUID();
 
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s1.setFirstChapterId(chapId);
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s2.setFirstChapterId(chapId);
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		s3.setFirstChapterId(chapId);
 
 		gc.addObject(s1, ObjectType.PUBLISHED_STORY);
 		gc.addObject(s2, ObjectType.PUBLISHED_STORY);
@@ -138,7 +135,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 		stories = gc.getAllStories(ObjectType.PUBLISHED_STORY);
 
-		assertEquals(stories.size(), 3);
+		assertTrue(stories.size() > 3);
 		
 		// clean up server
 		ServerManager sm = ServerManager.getInstance();
@@ -202,7 +199,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 		ArrayList<Media> photos = gc.getAllPhotos(chap.getId());
 
-		assertEquals(photos.size(), 2);
+		assertEquals(photos.size(), 1);
 	}	
 
 	/**
@@ -471,8 +468,8 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		gc.addObject(s1, ObjectType.CREATED_STORY);
 		gc.addObject(s2, ObjectType.CREATED_STORY);
 
-		Story myStory1 = gc.getCompleteStory(s1.getId());
-		Story myStory2 = gc.getCompleteStory(s2.getId());
+		Story myStory1 = gc.getCompleteStory(s1.getId(), ObjectType.CREATED_STORY);
+		Story myStory2 = gc.getCompleteStory(s2.getId(), ObjectType.CREATED_STORY);
 
 		assertTrue(myStory1 != null);
 		assertTrue(myStory2 != null);
@@ -616,14 +613,15 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		Story mockStory = new Story("My Monkey", "TS ELLIOT",
 				"monkey is in the server", Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(mockStory.getId(), "l");
-		chap.addChoice(new Choice(chap.getId(), UUID.randomUUID(), "hi"));
+		Chapter chap2 = new Chapter(mockStory.getId(), "2");
+		chap.addChoice(new Choice(chap.getId(), chap2.getId(), "hi"));
 
 		// TODO add a media to chapter
 		mockStory.addChapter(chap);
 
-		gc.addObject(mockStory, ObjectType.CACHED_STORY);
+		gc.cacheStory(mockStory);
 
-		Story story = gc.getCompleteStory(mockStory.getId());
+		Story story = gc.getCompleteStory(mockStory.getId(), ObjectType.CACHED_STORY);
 		assertTrue(story != null);	
 	}
 }

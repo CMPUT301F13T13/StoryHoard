@@ -183,6 +183,28 @@ public class SHController {
 		return stories;
 	}
 
+	
+	/**
+	 * Used to search for stories matching the id given.
+	 * 
+	 * @param id
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public Story getStory(UUID id, ObjectType type) {
+		Story criteria = null;
+		StoringManager sm = sf.getStoringManager(type);
+		criteria = new Story(id, null, null, null, null);
+		ArrayList<Object> objects = sm.retrieve(criteria);
+		if (objects.size() < 1) {
+			return null;
+		}
+		return (Story) objects.get(0);
+	}
+	
 	/**
 	 * Retrieves a complete chapter (including any photos, illustrations, and
 	 * choices).
@@ -229,10 +251,10 @@ public class SHController {
 	 * 
 	 * @return The complete story.
 	 */
-	public Story getCompleteStory(UUID id) {
+	public Story getCompleteStory(UUID id, ObjectType type) {
 		// Search criteria gets set
 		Story criteria = new Story(id, null, null, null, null);
-		StoringManager sm = sf.getStoringManager(ObjectType.CACHED_STORY);
+		StoringManager sm = sf.getStoringManager(type);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		Story story;
 		
@@ -262,33 +284,38 @@ public class SHController {
 	 * Caches a published story by going through all of its elements
 	 * and adding them to the database. It also saves the images of
 	 * the chapters in the sd card and saves the path to them in the
-	 * chapter's info.
+	 * chapter's info. Returns the new story's UUID.
 	 */
-	public void cacheStory(Story story) {
-		HashMap<UUID, UUID> idMappings = new HashMap<UUID,UUID>();
+	public UUID cacheStory(Story story) {
+		ArrayList<UUID> oldIds = new ArrayList<UUID>();
+		ArrayList<UUID> newIds = new ArrayList<UUID>();
 		story.setId(UUID.randomUUID());
 		
 		// empty story
 		if (story.getFirstChapterId() == null) {
-			return;
+			addObject(story, ObjectType.CACHED_STORY);
+			return story.getId();
 		}
 		
 		// Mapping old and new ids, saving new chaps, update media
 		for (Chapter chap : story.getChapters().values()) {
 			UUID oldId = chap.getId();
 			chap.setId(UUID.randomUUID());
-			idMappings.put(oldId, chap.getId());
+			oldIds.add(oldId);
+			newIds.add(chap.getId());
 			chap.setStoryId(story.getId());
 			addObject(chap, ObjectType.CHAPTER);
 			
 			for (Media photo : chap.getPhotos()) {
 				photo.setChapterId(chap.getId());
+				photo.setId(UUID.randomUUID());
 				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
 				photo.setPath(path);
 				addObject(photo, ObjectType.MEDIA);
 			}
 			for (Media ill : chap.getIllustrations()) {
 				ill.setChapterId(chap.getId());
+				ill.setId(UUID.randomUUID());
 				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
 				ill.setPath(path);
 				addObject(ill, ObjectType.MEDIA);
@@ -301,14 +328,18 @@ public class SHController {
 				UUID currChap = choice.getCurrentChapter();
 				UUID nextChap = choice.getNextChapter();
 				choice.setId(UUID.randomUUID());
-				choice.setCurrentChapter(idMappings.get(currChap));
-				choice.setNextChapter(idMappings.get(nextChap));
+				int index = oldIds.indexOf(currChap);
+				choice.setCurrentChapter(newIds.get(index));
+				index = oldIds.indexOf(nextChap);
+				choice.setNextChapter(newIds.get(index));
 				addObject(choice, ObjectType.CHOICE);
 			}
 		}
 		
-		story.setFirstChapterId(idMappings.get(story.getFirstChapterId()));
+		int index = oldIds.indexOf(story.getFirstChapterId());
+		story.setFirstChapterId(newIds.get(index));
 		addObject(story, ObjectType.CACHED_STORY);
+		return story.getId();
 	}
 	
 	/**
@@ -328,7 +359,7 @@ public class SHController {
 		}
 		
 		story = stories.get(index);
-		
+		 
 		return story;
 	}
 	
