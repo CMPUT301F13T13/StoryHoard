@@ -132,7 +132,6 @@ public class EditStoryActivity extends Activity {
 					Utilities.getPhoneId(getBaseContext()));
 			Intent intent = new Intent(EditStoryActivity.this,
 					EditChapterActivity.class);
-
 			app.setEditing(false);
 			app.setFirstStory(true);
 			app.setStory(newStory);
