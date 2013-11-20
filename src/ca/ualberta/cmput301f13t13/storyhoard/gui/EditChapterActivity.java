@@ -214,39 +214,43 @@ public class EditChapterActivity extends MediaActivity {
 			startActivity(browse);
 			return true;
 		case R.id.addIllus:
-			if (!app.isEditing()) {
-				Toast.makeText(getBaseContext(),
-						"Save chapter before adding first illustration",
-						Toast.LENGTH_SHORT).show();
-			}
-			AlertDialog.Builder alert = new AlertDialog.Builder(
-					EditChapterActivity.this);
-			// Set dialog title
-			alert.setTitle("Choose method:");
-			// Options that user may choose to add illustration
-			final String[] methods = { "Take Photo", "Choose from Gallery" };
-			alert.setSingleChoiceItems(methods, -1,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int item) {
-							switch (item) {
-							case 0:
-								takePhoto(Media.ILLUSTRATION);
-								break;
-							case 1:
-								browseGallery(Media.ILLUSTRATION);
-								break;
-							}
-							illustDialog.dismiss();
-						}
-					});
-			illustDialog = alert.create();
-			illustDialog.show();
+			addIllustration();
 			return true;
 		case R.id.Save:
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void addIllustration() {
+		if (!app.isEditing()) {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first illustration",
+					Toast.LENGTH_SHORT).show();
+		}
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				EditChapterActivity.this);
+		// Set dialog title
+		alert.setTitle("Choose method:");
+		// Options that user may choose to add illustration
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.ILLUSTRATION);
+							break;
+						case 1:
+							browseGallery(Media.ILLUSTRATION);
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
+		illustDialog = alert.create();
+		illustDialog.show();
 	}
 }
