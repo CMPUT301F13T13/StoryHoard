@@ -237,12 +237,13 @@ public class EditChapterActivity extends MediaActivity {
 		}
 		
 		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				//If checked, set random choice on chapter
-				if (((CheckBox)v).isChecked()) {
+				if (randChoiceCheck.isChecked()) {
 					chapter.setRandomChoice("yes");
+				} else {
+					chapter.setRandomChoice("no");
 				}
 			}
 		});
