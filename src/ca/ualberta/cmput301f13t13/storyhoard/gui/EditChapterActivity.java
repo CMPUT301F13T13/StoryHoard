@@ -89,6 +89,7 @@ public class EditChapterActivity extends MediaActivity {
 		setSaveButtonListener();
 		setAddChoiceListener();
 		setAddIllustrationListener();
+		setRandomChoice();
 		updateICData();
 	}
 
@@ -230,6 +231,10 @@ public class EditChapterActivity extends MediaActivity {
 	 * Set onClick listener for setting random choice
 	 */
 	public void setRandomChoice() {
+		if (chapter.getRandomChoice() == "yes") {
+			randChoiceCheck.setChecked(true);
+		}
+		
 		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
 
 			@Override
