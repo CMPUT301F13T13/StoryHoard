@@ -293,6 +293,7 @@ public class SHController {
 		
 		// empty story
 		if (story.getFirstChapterId() == null) {
+			addObject(story, ObjectType.CACHED_STORY);
 			return story.getId();
 		}
 		
@@ -358,7 +359,7 @@ public class SHController {
 		}
 		
 		story = stories.get(index);
-		
+		 
 		return story;
 	}
 	

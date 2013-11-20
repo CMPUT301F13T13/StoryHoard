@@ -23,7 +23,6 @@ import java.util.UUID;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
 
 /**
  * Role: Provides the necessary methods for any class extending it to interact 

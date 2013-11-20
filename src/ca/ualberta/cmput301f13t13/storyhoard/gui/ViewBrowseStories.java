@@ -56,9 +56,7 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_stories);
-		setActionBar();
 		setGridView();
 	}
 
@@ -162,7 +160,7 @@ public class ViewBrowseStories extends Activity {
 			story = gc.getStory(newId, ObjectType.CACHED_STORY);
 			app.setStory(story);
 			app.setStoryType(ObjectType.CACHED_STORY);
-			intent = new Intent(this, SearchActivity.class);
+			intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 			return true;
 		default:
@@ -173,6 +171,8 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		app = (HolderApplication) this.getApplication();
+		setActionBar();
 		refreshStories();
 	}
 

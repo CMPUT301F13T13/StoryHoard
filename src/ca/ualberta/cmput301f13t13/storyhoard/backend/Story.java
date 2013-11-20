@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
-
 /**
  * Role: A container to hold story information. This includes id, author, 
  * title, description, the id of the first chapter, a collection of
