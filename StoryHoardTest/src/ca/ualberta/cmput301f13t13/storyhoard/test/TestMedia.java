@@ -18,6 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
@@ -33,7 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img1;
+	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard/" + R.drawable.img1;
 	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
 	
 	public TestMedia() {
@@ -44,6 +46,9 @@ public class TestMedia extends
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
+		Uri uri = Uri.parse(path);
+		Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
+		assertTrue(bm != null);
 		// Make photo
 		try {
 			Media photo = new Media(UUID.randomUUID(), path, 
