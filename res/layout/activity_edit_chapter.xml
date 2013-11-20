@@ -33,13 +33,13 @@
             android:layout_above="@+id/randChoiceCheck"
             android:layout_below="@+id/editHorizontalSCIllustrations"
             android:hint="@string/add_chapter_edit_text" />
-        
-        <CheckBox 
+
+        <CheckBox
             android:id="@+id/randChoiceCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/chapterEditText"
             android:layout_above="@+id/chapterAddIllust"
+            android:onClick="onCheckBoxClicked"
             android:text="@string/set_random_choice" />
         
         <Button
