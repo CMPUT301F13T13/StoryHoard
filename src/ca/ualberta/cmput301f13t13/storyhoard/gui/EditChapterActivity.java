@@ -26,12 +26,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
@@ -57,7 +57,7 @@ public class EditChapterActivity extends MediaActivity {
 	HolderApplication app;
 	private Story story;
 	private Chapter chapter;
-	
+
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
 	private Button addIllust;
@@ -69,6 +69,7 @@ public class EditChapterActivity extends MediaActivity {
 	private AlertDialog illustDialog;
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
+	private CheckBox randChoiceCheck;
 
 	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
@@ -88,6 +89,7 @@ public class EditChapterActivity extends MediaActivity {
 		setSaveButtonListener();
 		setAddChoiceListener();
 		setAddIllustrationListener();
+		setRandomChoice();
 		updateICData();
 	}
 
@@ -105,8 +107,7 @@ public class EditChapterActivity extends MediaActivity {
 		illustrations.removeAllViews();
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(insertImage(ill,
-					EditChapterActivity.this));
+			illustrations.addView(insertImage(ill, EditChapterActivity.this));
 		}
 	}
 
@@ -115,19 +116,20 @@ public class EditChapterActivity extends MediaActivity {
 	 */
 	private void setUpFields() {
 		gc = SHController.getInstance(getBaseContext());
-		
+
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		addIllust = (Button) findViewById(R.id.chapterAddIllust);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
+		randChoiceCheck = (CheckBox) findViewById(R.id.randChoiceCheck);
 
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		viewChoices.setAdapter(choiceAdapter);
-		
+
 		story = app.getStory();
 		if (app.isEditing()) {
 			// Editing an existing chapter
@@ -221,6 +223,28 @@ public class EditChapterActivity extends MediaActivity {
 						});
 				illustDialog = alert.create();
 				illustDialog.show();
+			}
+		});
+	}
+
+	/**
+	 * Set onClick listener for setting random choice
+	 */
+	public void setRandomChoice() {
+		//If the chapter has been set to random choice, check box
+		if (chapter.getRandomChoice() == "yes") {
+			randChoiceCheck.setChecked(true);
+		}
+		
+		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//If checked, set random choice on chapter
+				if (randChoiceCheck.isChecked()) {
+					chapter.setRandomChoice("yes");
+				} else {
+					chapter.setRandomChoice("no");
+				}
 			}
 		});
 	}
