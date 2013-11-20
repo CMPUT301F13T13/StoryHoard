@@ -99,7 +99,7 @@ public class SHController {
 	 * @return ArrayList of the chapter's choices.
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
-		Choice criteria = new Choice(null, chapterId, null, null);
+		Choice criteria = new Choice(null, chapterId);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);		
