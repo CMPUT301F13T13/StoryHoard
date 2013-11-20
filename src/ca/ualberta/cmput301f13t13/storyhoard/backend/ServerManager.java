@@ -25,6 +25,7 @@ import java.util.UUID;
 import org.apache.http.client.ClientProtocolException;
 
 import android.os.AsyncTask;
+import android.os.Message;
 import android.os.StrictMode;
 
 /**
@@ -88,6 +89,7 @@ public class ServerManager implements StoringManager {
 			protected Void doInBackground(Object... params)
 			{
 				Story story = (Story) params[0];
+				Message m;
 				prepareStory(story);
 				esclient.insertStory(story);
 				return null;
