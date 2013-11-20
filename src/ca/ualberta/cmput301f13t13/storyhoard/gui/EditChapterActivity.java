@@ -232,7 +232,7 @@ public class EditChapterActivity extends MediaActivity {
 	 */
 	public void setRandomChoice() {
 		//If the chapter has been set to random choice, check box
-		if (chapter.getRandomChoice() == "yes") {
+		if (chapter.getRandomChoice().equals("yes")) {
 			randChoiceCheck.setChecked(true);
 		}
 		
