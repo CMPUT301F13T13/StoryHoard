@@ -54,7 +54,7 @@ public class ViewChapter extends MediaActivity {
 	private AdapterChoices choiceAdapter;
 	private AlertDialog photoDialog;
 	private LinearLayout illustrations;
-	private LinearLayout photos;
+	// private LinearLayout photos;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
@@ -87,7 +87,7 @@ public class ViewChapter extends MediaActivity {
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 		addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
-		photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
+		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
@@ -126,12 +126,12 @@ public class ViewChapter extends MediaActivity {
 
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
-
-		photos.removeAllViews();
+		
+		// photos.removeAllViews();
 		illustrations.removeAllViews();
 		// Insert Photos
 		for (Media photo : photoList) {
-			photos.addView(insertImage(photo, this));
+			illustrations.addView(insertImage(photo, this));
 		}
 		// Insert Illustrations
 		for (Media ill : illList) {
@@ -186,7 +186,7 @@ public class ViewChapter extends MediaActivity {
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				app.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
 				startActivity(intent);
-				photos.removeAllViews();
+				//photos.removeAllViews();
 				illustrations.removeAllViews();
 				finish();
 			}
