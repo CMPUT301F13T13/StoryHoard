@@ -114,13 +114,14 @@ public class ViewBrowseStories extends Activity {
 				if (viewType == ObjectType.PUBLISHED_STORY) {
 					UUID newStoryId = gc.cacheStory(story);
 					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
+					app.setStoryType(ObjectType.CACHED_STORY);
+				} else {
+					app.setStoryType(viewType);
 				}
 				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				
 				app.setStory(story);
-				app.setStoryType(ObjectType.CACHED_STORY);
 				startActivity(intent);
 			}
 		});
