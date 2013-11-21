@@ -23,7 +23,7 @@ import java.util.UUID;
 import android.test.ActivityInstrumentationTestCase2;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ChapterManager;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;

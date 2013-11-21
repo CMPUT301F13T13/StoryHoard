@@ -342,7 +342,7 @@ public class Chapter extends StoryPart {
 		
 		// Get all its photos
 		mCriteria = new Media(null, getId(), null, Media.PHOTO);
-		objects = mm.retrieve(criteria);
+		objects = mm.retrieve(mCriteria);
 		ArrayList<Media> photos = Utilities.objectsToMedia(objects);
 		
 		setPhotos(photos);	

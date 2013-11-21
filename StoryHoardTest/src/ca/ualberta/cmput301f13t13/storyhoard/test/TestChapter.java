@@ -41,6 +41,16 @@ public class TestChapter
 		super(ViewBrowseStories.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+
+	
 	/**
 	 * Tests creating a chapter two ways.
 	 */
@@ -125,20 +135,45 @@ public class TestChapter
 	 * tests adding itself to the database
 	 */
 	public void testAddSelf() {
-		
+		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
+				"opt1");
+		mockChoice.addSelf(getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
+		ArrayList<Object> objs = cm.retrieve(mockChoice);
+		assertEquals(objs.size(), 1);
 	}
 	
 	/**
 	 * tests updating itself in the database
 	 */
 	public void testUpdateSelf() {
-		
+		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
+				"opt1");
+		mockChoice.addSelf(getActivity());
+		mockChoice.setText("new text");
+		mockChoice.updateSelf(getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
+		ArrayList<Object> objs = cm.retrieve(mockChoice);
+		assertEquals(objs.size(), 1);		
+		assertTrue(((Choice)objs.get(0)).getText().equals("new text"));
 	}
 	
 	/**
-	 * tests getting all componnents of a chapter (media + choices)
+	 * tests getting all components of a chapter (media + choices)
 	 */
 	public void testGetFullContent() {
+		Chapter chap = new Chapter(UUID.randomUUID(), "chap1");
+		Choice mockChoice = new Choice(chap.getId(), chap.getId(), "opt1");
+		Media m = new Media(chap.getId(), null, Media.PHOTO);
+		chap.addPhoto(m);
+		chap.addChoice(mockChoice);
 		
+		chap.addSelf(getActivity());
+		
+		Chapter newChap = new Chapter(chap.getId(), chap.getStoryId(), "newchap1");
+		newChap.setFullContent(getActivity());
+		
+		assertEquals(newChap.getChoices().size(), 1);
+		assertEquals(newChap.getPhotos().size(), 1);
 	}
 }
