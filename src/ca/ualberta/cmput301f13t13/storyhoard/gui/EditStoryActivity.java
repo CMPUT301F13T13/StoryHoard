@@ -138,9 +138,16 @@ public class EditStoryActivity extends Activity {
 			newStory.setDescription(description);
 			lifedata.setStory(newStory);
 			
-			newStory.updateSelf(this);
+			// May not be needed...
+			if (lifedata.getStoryType().equals(ObjectType.CREATED_STORY)) {
+				gc.updateObject(newStory, ObjectType.CREATED_STORY);
+			} else {
+				gc.updateObject(newStory, ObjectType.CACHED_STORY);
+			}
+//			gc.updateObject(newStory, ObjectType.CREATED_STORY);
 		} else {
-			newStory.addSelf(this);
+			newStory = new Story(title, author, description, 
+					Utilities.getPhoneId(getBaseContext()));
 			Intent intent = new Intent(EditStoryActivity.this,
 					EditChapterActivity.class);
 

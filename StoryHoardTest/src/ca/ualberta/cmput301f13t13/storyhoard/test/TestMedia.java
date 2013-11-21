@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
@@ -43,25 +44,100 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/drawable/img1.jpg";
-	private static String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
-
+	private static String path;
+	private static String path2;
+	
 	public TestMedia() {
 		super(ViewBrowseStories.class);
 	}
 
 	public void setUp() throws Exception {
 		super.setUp();
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
+	
 	/**
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
+		path = createPath("img1.jpg");
+		// Make photo
+		try {
+			@SuppressWarnings("unused")
+			Media photo = new Media(UUID.randomUUID(), path, 
+					Media.PHOTO);
+			Bitmap bm = BitmapFactory.decodeFile(path);
+			assertTrue(bm != null);
+		} catch (Exception e) {
+			fail("error creating a new media object");
+		}
+	}
 
+	/**
+	 * Tests the setters and getters of a Media object.
+	 */
+	@SuppressWarnings("unused")
+	public void testSettersGetters() {
+		path = createPath("img1.jpg");
+		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
+
+		UUID id = photo.getId();
+		UUID chapterId = photo.getChapterId();
+		String type = photo.getType();
+		Bitmap bm = photo.getBitmap();
+
+		photo.setId(UUID.randomUUID());
+		photo.setChapterId(UUID.randomUUID());
+		photo.setType(Media.ILLUSTRATION);
+
+		path2 = createPath("img2.jpg");
+		photo.setPath(path2);
+
+		assertNotSame(id, photo.getId());
+		assertNotSame(chapterId, photo.getChapterId());
+		assertNotSame(type, photo.getType());
+		assertTrue(photo.getBitmap() != null);
+		assertFalse(photo.getPath().equals(path));
+	}
+	
+	/**
+	 * tests adding itself to the database
+	 */
+	public void testAddSelf() {
+		Media media = new Media(UUID.randomUUID(), null, Media.PHOTO);
+		media.addSelf(getActivity());
+		MediaManager mm = MediaManager.getInstance(getActivity());
+		ArrayList<Object> objs = mm.retrieve(media);
+		assertEquals(objs.size(), 1);
+	}
+	
+	/**
+	 * tests updating itself in the database
+	 */
+	public void testUpdateSelf() {
+		path = createPath("img1.jpg");
+		Media media = new Media(UUID.randomUUID(), path, Media.PHOTO);
+		media.addSelf(getActivity());
+		MediaManager mm = MediaManager.getInstance(getActivity());	
+		media.setType(Media.ILLUSTRATION);
+		media.updateSelf(getActivity());
+		ArrayList<Object> objs = mm.retrieve(new Media(media.getId(), null, null, null));
+		assertEquals(objs.size(), 1);		
+		assertTrue(((Media)objs.get(0)).getType().equals(Media.ILLUSTRATION));
+	}
+	
+	/**
+	 * Creates a new bitmap, save sit on to SD card and sets path to it.
+	 */
+	public String createPath(String fname) {
 		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
 		File mFile1 = Environment.getExternalStorageDirectory();
 
-		String fileName = "img1.jpg";
+		String fileName = fname;
 
 		File mFile2 = new File(mFile1,fileName);
 		try {
@@ -83,52 +159,16 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 			e.printStackTrace();
 		}
 
-		String sdPath = mFile1.getAbsolutePath().toString()+"/"+fileName;
+		String path = mFile1.getAbsolutePath().toString()+"/"+fileName;
 
-		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+sdPath); 
+		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+path); 
 
-		File temp=new File(sdPath);
+		File temp=new File(path);
 
 		if(!temp.exists()){
-			Log.e("file","no image file at location :"+sdPath);
+			Log.e("file","no image file at location :"+path);
 		}
-
-		bm = BitmapFactory.decodeFile(sdPath);
-		// Make photo
-		try {
-			Media photo = new Media(UUID.randomUUID(), sdPath, 
-					Media.PHOTO);
-			//			bm = photo.getBitmap();
-			bm = BitmapFactory.decodeFile(path);
-			assertTrue(bm != null);
-		} catch (Exception e) {
-			fail("error creating a new media object");
-		}
-	}
-
-	/**
-	 * Tests the setters and getters of a Media object.
-	 */
-	@SuppressWarnings("unused")
-	public void testSettersGetters() {
-		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
-
-		UUID id = photo.getId();
-		UUID chapterId = photo.getChapterId();
-		String type = photo.getType();
-		Bitmap bm = photo.getBitmap();
-
-		photo.setId(UUID.randomUUID());
-		photo.setChapterId(UUID.randomUUID());
-		photo.setType(Media.ILLUSTRATION);
-
-		path2 = Utilities.saveImageToSD(bm);
-		photo.setPath(path2);
-
-		assertNotSame(id, photo.getId());
-		assertNotSame(chapterId, photo.getChapterId());
-		assertNotSame(type, photo.getType());
-		assertTrue(photo.getBitmap() != null);
-		assertFalse(photo.getPath().equals(path));
+		
+		return path;
 	}
 }

@@ -120,4 +120,25 @@ public class TestChapter
 		assertTrue(mockChapter.getIllustrations() != null);
 		assertTrue(mockChapter.getRandomChoice());
 	}
+	
+	/**
+	 * tests adding itself to the database
+	 */
+	public void testAddSelf() {
+		
+	}
+	
+	/**
+	 * tests updating itself in the database
+	 */
+	public void testUpdateSelf() {
+		
+	}
+	
+	/**
+	 * tests getting all componnents of a chapter (media + choices)
+	 */
+	public void testGetFullContent() {
+		
+	}
 }

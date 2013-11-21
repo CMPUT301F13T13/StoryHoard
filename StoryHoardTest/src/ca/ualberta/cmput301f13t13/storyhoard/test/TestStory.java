@@ -135,4 +135,25 @@ public class TestStory extends
 		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);
 	}
+	
+	/**
+	 * tests adding itself to the database
+	 */
+	public void testAddSelf() {
+		
+	}
+	
+	/**
+	 * tests updating itself in the database
+	 */
+	public void testUpdateSelf() {
+		
+	}
+	
+	/**
+	 * tests getting all componnents of a chapter (media + choices)
+	 */
+	public void testGetFullContent() {
+		
+	}	
 }
