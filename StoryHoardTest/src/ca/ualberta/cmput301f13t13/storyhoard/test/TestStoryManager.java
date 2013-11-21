@@ -32,7 +32,7 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestStoryManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private ArrayList<Object> mockStories;
-	private OwnStoryManager sm = null;
+	private StoryManager sm = null;
 
 	public TestStoryManager() {
 		super(ViewBrowseStories.class);
@@ -46,7 +46,7 @@ public class TestStoryManager extends
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
-		sm = OwnStoryManager.getInstance(getActivity());
+		sm = StoryManager.getInstance(getActivity());
 	}
 
 	/**

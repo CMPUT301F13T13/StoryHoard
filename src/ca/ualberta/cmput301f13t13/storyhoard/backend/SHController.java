@@ -69,7 +69,12 @@ public class SHController {
 	 * @return Array list of all the stories the application asked for.
 	 */
 	public ArrayList<Story> getAllStories(ObjectType type) {
-		Story criteria = new Story(null, null, null, null, null);
+		Story criteria;
+		if (type == ObjectType.CACHED_STORY) {
+			criteria = new Story(null, null, null, null, "not");
+		} else {
+			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
+		}
 		StoringManager sm = sf.getStoringManager(type);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		ArrayList<Story> stories = Utilities.objectsToStories(objects);

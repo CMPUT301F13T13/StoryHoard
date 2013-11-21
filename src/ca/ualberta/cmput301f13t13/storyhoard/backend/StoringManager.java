@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @author Stephanie Gil
  * @author Ashley Brown
  * 
- * @see OwnStoryManager
+ * @see StoryManager
  * @see ChapterManager
  * @see ChoiceManager
  * @see MediaManager

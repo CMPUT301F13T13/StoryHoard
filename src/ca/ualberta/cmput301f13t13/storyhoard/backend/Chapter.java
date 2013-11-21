@@ -293,6 +293,9 @@ public class Chapter extends StoryPart {
 		return info;
 	}
 
+	/**
+	 * Updates itself in the database
+	 */
 	public void updateSelf(Context context) {
 		ChapterManager cm = ChapterManager.getInstance(context);
 		cm.update(this);
@@ -307,6 +310,9 @@ public class Chapter extends StoryPart {
 		}
 	}
 
+	/**
+	 * Adds itself to the database
+	 */
 	public void addSelf(Context context) {
 		ChapterManager cm = ChapterManager.getInstance(context);
 		cm.insert(this);
@@ -321,6 +327,10 @@ public class Chapter extends StoryPart {
 		}
 	}
 
+	/**
+	 * Gets the full content (choices + media) of the chapter and sets
+	 * the corresponding fields.
+	 */
 	@Override
 	public void setFullContent(Context context) {
 		

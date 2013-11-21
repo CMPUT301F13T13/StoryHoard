@@ -312,13 +312,8 @@ public class Story extends StoryPart {
 
 	@Override
 	public void updateSelf(Context context) {
-		if (getPhoneId().equals(Utilities.getPhoneId(context))) {
-			OwnStoryManager osm = OwnStoryManager.getInstance(context);
-			osm.update(this);
-		} else {
-			CachedStoryManager csm = CachedStoryManager.getInstance(context);
-			csm.update(this);
-		}
+		StoryManager sm = StoryManager.getInstance(context);
+		sm.update(this);
 	
 		// updating all its chapters
 		for (Chapter chap : getChapters().values()) {
@@ -328,14 +323,9 @@ public class Story extends StoryPart {
 	
 	@Override
 	public void addSelf(Context context) {
-		if (getPhoneId().equals(Utilities.getPhoneId(context))) {
-			OwnStoryManager osm = OwnStoryManager.getInstance(context);
-			osm.insert(this);
-		} else {
-			CachedStoryManager csm = CachedStoryManager.getInstance(context);
-			csm.insert(this);
-		}
-		
+		StoryManager sm = StoryManager.getInstance(context);
+		sm.insert(this);
+
 		// adding all its chapters
 		for (Chapter chap : getChapters().values()) {
 			chap.addSelf(context);	

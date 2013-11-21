@@ -35,7 +35,7 @@ import android.database.sqlite.SQLiteDatabase;
  * @author Ashley Brown
  * 
  * @see Story
- * @see OwnStoryManager
+ * @see StoryManager
  * @see CachedStoryManager
  */
 public abstract class StoryManagerHelper {

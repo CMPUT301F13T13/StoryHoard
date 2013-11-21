@@ -74,18 +74,15 @@ public class ManagerFactory {
 		switch (type) {
 		case PUBLISHED_STORY:
 			return ServerManager.getInstance();
-		case CREATED_STORY:
-			return OwnStoryManager.getInstance(context);	
-		case CACHED_STORY:
-			return CachedStoryManager.getInstance(context);
 		case CHAPTER:
 			return ChapterManager.getInstance(context);
 		case CHOICE:
 			return ChoiceManager.getInstance(context);
 		case MEDIA:
 			return MediaManager.getInstance(context);
+		default:
+			return StoryManager.getInstance(context);	
 		}
-		return null;
 	}
 
 }

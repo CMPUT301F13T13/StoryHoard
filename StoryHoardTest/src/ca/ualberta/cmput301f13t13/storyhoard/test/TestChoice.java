@@ -28,6 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
@@ -50,6 +51,8 @@ public class TestChoice
 	protected void setUp() throws Exception {
 		super.setUp();
 		
+		LifecycleData lifedata = LifecycleData.getInstance();
+		lifedata.setEditing(false);
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();

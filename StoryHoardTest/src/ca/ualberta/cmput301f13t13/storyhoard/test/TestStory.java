@@ -16,12 +16,19 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
@@ -40,6 +47,15 @@ public class TestStory extends
 		super(ViewBrowseStories.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+	
 	/**
 	 * Tests creating a story without chapters.
 	 */
@@ -139,20 +155,45 @@ public class TestStory extends
 	 * tests adding itself to the database
 	 */
 	public void testAddSelf() {
-		
+		Story story = new Story("the mouse", "me", "little mousey", 
+				Utilities.getPhoneId(getActivity()));
+		story.addSelf(getActivity());
+		StoryManager sm = StoryManager.getInstance(getActivity());
+		ArrayList<Object> objs = sm.retrieve(story);
+		assertEquals(objs.size(), 1);
 	}
 	
 	/**
 	 * tests updating itself in the database
 	 */
 	public void testUpdateSelf() {
-		
+		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
+				"opt1");
+		mockChoice.addSelf(getActivity());
+		mockChoice.setText("new text");
+		mockChoice.updateSelf(getActivity());
+		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
+		ArrayList<Object> objs = cm.retrieve(mockChoice);
+		assertEquals(objs.size(), 1);		
+		assertTrue(((Choice)objs.get(0)).getText().equals("new text"));
 	}
 	
 	/**
-	 * tests getting all componnents of a chapter (media + choices)
+	 * tests getting all components of a chapter (media + choices)
 	 */
 	public void testGetFullContent() {
+		Chapter chap = new Chapter(UUID.randomUUID(), "chap1");
+		Choice mockChoice = new Choice(chap.getId(), chap.getId(), "opt1");
+		Media m = new Media(chap.getId(), null, Media.PHOTO);
+		chap.addPhoto(m);
+		chap.addChoice(mockChoice);
 		
-	}	
+		chap.addSelf(getActivity());
+		
+		Chapter newChap = new Chapter(chap.getId(), chap.getStoryId(), "newchap1");
+		newChap.setFullContent(getActivity());
+		
+		assertEquals(newChap.getChoices().size(), 1);
+		assertEquals(newChap.getPhotos().size(), 1);
+	}
 }
