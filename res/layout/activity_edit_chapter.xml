@@ -34,20 +34,10 @@
             android:hint="@string/add_chapter_edit_text" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/choicesSubLayout"
-        style="@android:style/ButtonBar"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <ListView
-            android:id="@+id/chapterEditChoices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-        </ListView>
-    </RelativeLayout>
+    <ListView
+        android:id="@+id/chapterEditChoices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
