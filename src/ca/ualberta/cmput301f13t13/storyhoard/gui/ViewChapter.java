@@ -45,7 +45,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
  * 
- * @author Alexander Wong
+ * @author Alexander Wong and Kim Wu
  * 
  */
 public class ViewChapter extends MediaActivity {
@@ -62,7 +62,6 @@ public class ViewChapter extends MediaActivity {
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
-	private Button addPhotoButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,6 @@ public class ViewChapter extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setNextChapterListener();
-		setAddPhotoListener();
 		updateData();
 	}
 
@@ -89,7 +87,6 @@ public class ViewChapter extends MediaActivity {
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
-		addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
 		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
@@ -144,39 +141,6 @@ public class ViewChapter extends MediaActivity {
 		}
 	}
 
-	/**
-	 * Sets up the onClick listener for the button to add a new photo.
-	 */
-	public void setAddPhotoListener() {
-		addPhotoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						ViewChapter.this);
-				// Set dialog title
-				alert.setTitle("Choose method:");
-				// Options that user may choose to add photo
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto(Media.PHOTO);
-									break;
-								case 1:
-									browseGallery(Media.PHOTO);
-									break;
-								}
-								photoDialog.dismiss();
-							}
-						});
-				photoDialog = alert.create();
-				photoDialog.show();
-			}
-		});
-	}
 
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
@@ -211,17 +175,38 @@ public class ViewChapter extends MediaActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
-		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.addPhoto:
-			intent = new Intent(this, EditStoryActivity.class);
-			// Pass it a boolean to indicate it is not editing
-			app.setFirstStory(true);
-			app.setEditing(false);
-			startActivity(intent);
+			addPhoto();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void addPhoto() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				ViewChapter.this);
+		// Set dialog title
+		alert.setTitle("Choose method:");
+		// Options that user may choose to add photo
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.PHOTO);
+							break;
+						case 1:
+							browseGallery(Media.PHOTO);
+							break;
+						}
+						photoDialog.dismiss();
+					}
+				});
+		photoDialog = alert.create();
+		photoDialog.show();
 	}
 }
