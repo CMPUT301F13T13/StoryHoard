@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
 
@@ -36,7 +36,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
  */
 public class TestEditChapterActivity extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
-	HolderApplication app;
+	private LifecycleData lifedata;
 	private EditChapterActivity activity;
 	private Button saveButton;
 	private Button addIllust;
@@ -56,12 +56,12 @@ public class TestEditChapterActivity extends
 		super.setUp();
 
 		activity = getActivity();
-		app = (HolderApplication) activity.getApplication();
+		lifedata = LifecycleData.getInstance();
 				
 		Story story = new Story("title", "author", "es", "432432");
-		app.setEditing(false);
-		app.setStory(story);
-		app.setChapter(new Chapter(story.getId(), ""));
+		lifedata.setEditing(false);
+		lifedata.setStory(story);
+		lifedata.setChapter(new Chapter(story.getId(), ""));
 		
 		
 		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);

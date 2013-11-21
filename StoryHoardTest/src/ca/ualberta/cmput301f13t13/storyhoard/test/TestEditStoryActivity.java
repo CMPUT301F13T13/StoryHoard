@@ -22,7 +22,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
 
 
@@ -52,7 +52,7 @@ public class TestEditStoryActivity extends
 		intent.putExtra("storyId", UUID.randomUUID());
 		
 		setActivityIntent(intent);	
-		HolderApplication app = (HolderApplication) getActivity().getApplication();
+		LifecycleData lifedata = LifecycleData.getInstance();
 		
 		activity = getActivity();
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
