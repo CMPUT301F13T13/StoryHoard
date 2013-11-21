@@ -162,6 +162,9 @@ public class ViewChapter extends MediaActivity {
 			}
 		});
 	}
+	/**
+	 * MENU
+	 */
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,16 +172,12 @@ public class ViewChapter extends MediaActivity {
 		return true;
 	}
 
-	/**
-	 * MENU
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.addPhoto:
 			addPhoto();
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
