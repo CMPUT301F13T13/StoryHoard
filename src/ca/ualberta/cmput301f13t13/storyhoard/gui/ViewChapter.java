@@ -33,7 +33,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 
@@ -45,7 +45,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
  * 
  */
 public class ViewChapter extends MediaActivity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private SHController gc;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -79,7 +79,7 @@ public class ViewChapter extends MediaActivity {
 	 * Initializes the private fields needed.
 	 */
 	public void setUpFields() {
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
 		gc = SHController.getInstance(this);
 
 		// Setup the activity fields
@@ -99,7 +99,7 @@ public class ViewChapter extends MediaActivity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		UUID chapterID = app.chapterID();
+		UUID chapterID = lifedata.getChapterID();
 		chapter = gc.getCompleteChapter(chapterID);
 		choices.clear();
 
@@ -187,7 +187,7 @@ public class ViewChapter extends MediaActivity {
 					long arg3) {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				app.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
+				lifedata.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
 				startActivity(intent);
 				//photos.removeAllViews();
 				illustrations.removeAllViews();

@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -26,10 +27,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
@@ -41,7 +41,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class EditChoiceActivity extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private EditText choiceText;
 	private ListView chapters;
 	private AdapterChapters chapterAdapter;
@@ -54,7 +54,7 @@ public class EditChoiceActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_edit_choice);
 	}
 
@@ -65,7 +65,8 @@ public class EditChoiceActivity extends Activity {
 		setAddChoiceListener();
 
 		data.clear();
-		data.addAll(gc.getAllChapters(story.getId()));
+		UUID mystory = story.getId();
+		data.addAll(gc.getAllChapters(mystory));
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -75,8 +76,8 @@ public class EditChoiceActivity extends Activity {
 	public void setUpFields() {
 		// Grab GC and necessary story and chapter info
 		gc = SHController.getInstance(this);
-		story = app.getStory();
-		fromChapter = app.getChapter();
+		story = lifedata.getStory();
+		fromChapter = lifedata.getChapter();
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);

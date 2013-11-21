@@ -27,9 +27,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
@@ -41,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  */
 
 public class ViewBrowseChapters extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private SHController gc;
 	private Story story;
 	private ListView storyChapters;
@@ -51,7 +50,7 @@ public class ViewBrowseChapters extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_view_browse_chapters);
 	}
 
@@ -68,8 +67,8 @@ public class ViewBrowseChapters extends Activity {
 			// Go to the add new chapter page for the specified story
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
-			app.setEditing(false);
-			app.setStory(story);
+			lifedata.setEditing(false);
+			lifedata.setStory(story);
 			startActivity(intent);
 			return true;
 		}
@@ -92,7 +91,7 @@ public class ViewBrowseChapters extends Activity {
 	public void setUpFields() {
 		// Grab GC and pull all chapters from story
 		gc = SHController.getInstance(this);
-		story = app.getStory();
+		story = lifedata.getStory();
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
 		// Set adapter
@@ -112,9 +111,9 @@ public class ViewBrowseChapters extends Activity {
 				// Go to edit that chapter
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
-				app.setEditing(true);
-				app.setStory(story);
-				app.setChapter(data.get(arg2));
+				lifedata.setEditing(true);
+				lifedata.setStory(story);
+				lifedata.setChapter(data.get(arg2));
 				startActivity(intent);
 			}
 		});

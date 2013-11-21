@@ -28,9 +28,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
@@ -41,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class ViewStory extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private Story story;
 	private SHController gc;
 	private TextView storyTitle;
@@ -52,13 +51,13 @@ public class ViewStory extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_view_browse_story);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		app = (HolderApplication) this.getApplication();
 		setUpFields();
 		setBeginReading();
 	}
@@ -79,7 +78,7 @@ public class ViewStory extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		Intent intent;
-		app.setEditing(true);
+		lifedata.setEditing(true);
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
 			intent = new Intent(this, ViewBrowseChapters.class);
@@ -113,7 +112,7 @@ public class ViewStory extends Activity {
 		actionBar.setTitle("Story Information");
 		actionBar.setDisplayShowTitleEnabled(true);
 		
-		story = app.getStory();
+		story = lifedata.getStory();
 		// storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
 		if (story.getTitle().equals("")) {
@@ -146,7 +145,7 @@ public class ViewStory extends Activity {
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				UUID firstChapterID = story.getFirstChapterId();
 				Chapter chapter = gc.getCompleteChapter(firstChapterID);
-				app.setChapter(chapter);
+				lifedata.setChapter(chapter);
 				startActivity(intent);
 				finish();
 			}
