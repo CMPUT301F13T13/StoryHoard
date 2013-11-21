@@ -19,6 +19,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -97,4 +98,11 @@ public class TestEditChapterActivity extends
 		String content = chapterContent.getText().toString();
 		assertTrue(content.equals("chapter"));
 	}
+	
+	@UiThreadTest
+	public void testSetChapterContent() {
+		String title = "My chap";
+		chapterContent.setText(title);
+		assertTrue(chapterContent.getText().toString().equals(title));
+	}	
 }

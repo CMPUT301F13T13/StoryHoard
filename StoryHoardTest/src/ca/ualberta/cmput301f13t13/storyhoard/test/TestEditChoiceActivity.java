@@ -16,6 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
@@ -66,4 +67,11 @@ public class TestEditChoiceActivity extends
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
 	} 
+	
+	@UiThreadTest
+	public void testSetChoiceText() {
+		String title = "My choice";
+		choiceText.setText(title);
+		assertTrue(choiceText.getText().toString().equals(title));
+	}	
 }
