@@ -19,6 +19,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.ualberta.cmput301f13t13.storyhoard.backend.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
@@ -26,6 +27,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
+import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
@@ -39,7 +41,6 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestUtilities extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "./mockImages/img1";
 	
 	public TestUtilities() {
 		super(ViewBrowseStories.class);
@@ -116,8 +117,7 @@ public class TestUtilities extends
 	 */
 	@SuppressWarnings("unused")
 	public void testObjectsToMedia() {
-		Media media = new Media(UUID.randomUUID(), path,
-				Media.PHOTO);
+		Media media = new Media(UUID.randomUUID(), null, Media.PHOTO);
 
 		ArrayList<Object> objects = new ArrayList<Object>();
 		objects.add(media);
@@ -127,5 +127,14 @@ public class TestUtilities extends
 		} catch (Exception e) {
 			fail("converstion from objects to medias failed");
 		}
+	}
+	
+	/** 
+	 * Tests getting the phoneid
+	 */
+	public void testSaveImageToSD() {
+		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);
+		String path = Utilities.saveImageToSD(bmp);
+		assertNotNull(path);
 	}
 }
