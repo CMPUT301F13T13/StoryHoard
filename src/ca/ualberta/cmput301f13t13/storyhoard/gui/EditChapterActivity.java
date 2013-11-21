@@ -61,8 +61,6 @@ public class EditChapterActivity extends MediaActivity {
 	private Chapter chapter;
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private Button saveButton;
-	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private SHController gc;
@@ -86,7 +84,6 @@ public class EditChapterActivity extends MediaActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		setSaveButtonListener();
 		updateICData();
 	}
 
@@ -115,7 +112,6 @@ public class EditChapterActivity extends MediaActivity {
 		gc = SHController.getInstance(getBaseContext());
 
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
-		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
 
@@ -135,29 +131,6 @@ public class EditChapterActivity extends MediaActivity {
 		}
 	}
 
-	/**
-	 * Sets the onClick listener for saving.
-	 */
-	private void setSaveButtonListener() {
-		// Save the chapter to the database, or update if editing
-		saveButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				chapter.setText(chapterContent.getText().toString());
-				if (app.isEditing()) {
-					gc.updateObject(chapter, ObjectType.CHAPTER);
-				} else {
-					story.addChapter(chapter);
-					if (app.isFirstStory()) {
-						gc.addObject(story, ObjectType.CREATED_STORY);
-					}
-					gc.addObject(chapter, ObjectType.CHAPTER);
-				}
-				finish();
-			}
-		});
-	}
-	
 	
 
 	public Uri getImageFileUri() {
@@ -187,6 +160,7 @@ public class EditChapterActivity extends MediaActivity {
 			addIllustration();
 			return true;
 		case R.id.Save:
+			saveChapter();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -235,5 +209,19 @@ public class EditChapterActivity extends MediaActivity {
 					"Save chapter before adding first choice",
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	private void saveChapter() {
+		chapter.setText(chapterContent.getText().toString());
+		if (app.isEditing()) {
+			gc.updateObject(chapter, ObjectType.CHAPTER);
+		} else {
+			story.addChapter(chapter);
+			if (app.isFirstStory()) {
+				gc.addObject(story, ObjectType.CREATED_STORY);
+			}
+			gc.addObject(chapter, ObjectType.CHAPTER);
+		}
+		finish();
 	}
 }
