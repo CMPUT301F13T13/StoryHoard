@@ -18,7 +18,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.io.File;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
@@ -106,7 +106,7 @@ public abstract class MediaActivity extends Activity {
 			Intent intent) {
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				Chapter chapter = ((HolderApplication) this.getApplication()).getChapter();
+				Chapter chapter = LifecycleData.getInstance().getChapter();
 				Media photo = new Media(chapter.getId(),
 						imageFileUri.getPath(), imageType);
 				SHController gc = SHController.getInstance(this);
@@ -121,7 +121,7 @@ public abstract class MediaActivity extends Activity {
 		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				Uri imageFileUri = intent.getData();
-				Chapter chapter = ((HolderApplication) this.getApplication()).getChapter();
+				Chapter chapter = LifecycleData.getInstance().getChapter();
 				String path = getRealPathFromURI(imageFileUri, this);
 				SHController gc = SHController.getInstance(this);
 				Media photo = new Media(chapter.getId(), path, imageType);

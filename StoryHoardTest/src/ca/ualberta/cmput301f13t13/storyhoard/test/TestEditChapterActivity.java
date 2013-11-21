@@ -54,6 +54,7 @@ public class TestEditChapterActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+
 		activity = getActivity();
 		app = (HolderApplication) activity.getApplication();
 				
@@ -61,6 +62,7 @@ public class TestEditChapterActivity extends
 		app.setEditing(false);
 		app.setStory(story);
 		app.setChapter(new Chapter(story.getId(), ""));
+		
 		
 		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
 		saveButton = (Button) activity.findViewById(R.id.chapterSaveButton);
@@ -78,5 +80,8 @@ public class TestEditChapterActivity extends
 		assertTrue(viewChoices != null);
 		assertTrue(addIllust != null);
 		assertTrue(illustrations != null);
+	}
+	public void testAssertTrue() {
+		assertTrue(true);
 	}
 }
