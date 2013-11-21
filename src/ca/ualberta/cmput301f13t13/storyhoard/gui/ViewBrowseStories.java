@@ -39,7 +39,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 /**
  * Class which displays all stories in a grid, handles different view types.
  * 
- * @author alexanderwong
+ * @author alexanderwong and Kim Wu
  * 
  */
 public class ViewBrowseStories extends Activity {

@@ -22,6 +22,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,7 +37,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
@@ -105,7 +109,8 @@ public class ViewChapter extends MediaActivity {
 
 		// Check to see if the chapter exists, else terminate
 		if (chapter == null) {
-			Toast.makeText(getBaseContext(), "Chapter does not exist", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getBaseContext(), "Chapter does not exist",
+					Toast.LENGTH_SHORT).show();
 			finish();
 			return;
 		}
@@ -126,7 +131,7 @@ public class ViewChapter extends MediaActivity {
 
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
-		
+
 		// photos.removeAllViews();
 		illustrations.removeAllViews();
 		// Insert Photos
@@ -184,12 +189,39 @@ public class ViewChapter extends MediaActivity {
 					long arg3) {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				app.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
+				app.setChapter(gc.getCompleteChapter(choices.get(arg2)
+						.getNextChapter()));
 				startActivity(intent);
-				//photos.removeAllViews();
+				// photos.removeAllViews();
 				illustrations.removeAllViews();
 				finish();
 			}
 		});
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_chapter, menu);
+		return true;
+	}
+
+	/**
+	 * MENU
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		Intent intent;
+		switch (item.getItemId()) {
+		case R.id.addPhoto:
+			intent = new Intent(this, EditStoryActivity.class);
+			// Pass it a boolean to indicate it is not editing
+			app.setFirstStory(true);
+			app.setEditing(false);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
