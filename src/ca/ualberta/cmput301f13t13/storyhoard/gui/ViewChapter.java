@@ -45,7 +45,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
  * 
- * @author Alexander Wong and Kim Wu
+ * @author Alexander Wong 
+ * @author Kim Wu
  * 
  */
 public class ViewChapter extends MediaActivity {
