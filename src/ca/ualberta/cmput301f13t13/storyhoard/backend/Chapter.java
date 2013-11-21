@@ -32,7 +32,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
  * @author Stephanie Gil
  * 
  */
-public class Chapter{
+public class Chapter extends StoryPart {
 	private UUID id;
 	private UUID storyId;
 	private String text;
@@ -319,5 +319,32 @@ public class Chapter{
 		for (Choice choice : choices) {
 			choice.addSelf(context);
 		}
+	}
+
+	@Override
+	public void setFullContent(Context context) {
+		
+		// Get all its choices
+		Choice criteria = new Choice(null, getId());
+		ChoiceManager cm = ChoiceManager.getInstance(context);
+		ArrayList<Object> objects = cm.retrieve(criteria);
+		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);
+		
+		setChoices(choices);
+		
+		// Get all its illustrations
+		MediaManager mm = MediaManager.getInstance(context);
+		Media mCriteria = new Media(null, getId(), null, Media.ILLUSTRATION);
+		objects = mm.retrieve(mCriteria);
+		ArrayList<Media> illustrations = Utilities.objectsToMedia(objects);
+		
+		setIllustrations(illustrations);
+		
+		// Get all its photos
+		mCriteria = new Media(null, getId(), null, Media.PHOTO);
+		objects = mm.retrieve(criteria);
+		ArrayList<Media> photos = Utilities.objectsToMedia(objects);
+		
+		setPhotos(photos);	
 	}
 }

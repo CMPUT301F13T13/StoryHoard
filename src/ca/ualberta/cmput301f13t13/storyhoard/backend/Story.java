@@ -15,6 +15,7 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ import android.content.Context;
  * @author Stephanie Gil
  * @author Ashley Brown
  */
-public class Story {
+public class Story extends StoryPart {
 	private UUID id;
 	private String author;
 	private String title;
@@ -290,24 +291,44 @@ public class Story {
 		chapters.put(chapter.getId(), chapter);
 		return false;
 	}
+	
+	@Override
+	public void setFullContent(Context context) {
+		HashMap<UUID, Chapter> chapHash = new HashMap<UUID, Chapter>();
+		ChapterManager cm = ChapterManager.getInstance(context);
+		Chapter criteria = new Chapter(null, getId(), null);		
+		ArrayList<Object> objects = cm.retrieve(criteria);
+		ArrayList<Chapter> chapters = Utilities.objectsToChapters(objects);
 
+		// Get all choices
+		for (Chapter chap : chapters) {
+			chap.setFullContent(context);
+			chapHash.put(chap.getId(), chap);
+		}
+
+		// add chapters to story
+		setChapters(chapHash);
+	}	
+
+	@Override
 	public void updateSelf(Context context) {
-		if (phoneId.equals(Utilities.getPhoneId(context))) {
+		if (getPhoneId().equals(Utilities.getPhoneId(context))) {
 			OwnStoryManager osm = OwnStoryManager.getInstance(context);
 			osm.update(this);
 		} else {
 			CachedStoryManager csm = CachedStoryManager.getInstance(context);
 			csm.update(this);
 		}
-		
+	
 		// updating all its chapters
-		for (Chapter chap : chapters.values()) {
+		for (Chapter chap : getChapters().values()) {
 			chap.updateSelf(context);	
 		}
 	}
 	
+	@Override
 	public void addSelf(Context context) {
-		if (phoneId.equals(Utilities.getPhoneId(context))) {
+		if (getPhoneId().equals(Utilities.getPhoneId(context))) {
 			OwnStoryManager osm = OwnStoryManager.getInstance(context);
 			osm.insert(this);
 		} else {
@@ -316,9 +337,14 @@ public class Story {
 		}
 		
 		// adding all its chapters
-		for (Chapter chap : chapters.values()) {
+		for (Chapter chap : getChapters().values()) {
 			chap.addSelf(context);	
 		}		
+	}
+	
+	public void publish() {
+		ServerManager sm = ServerManager.getInstance();
+		sm.update(this);
 	}
 	
 	/**
