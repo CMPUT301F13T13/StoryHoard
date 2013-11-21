@@ -17,14 +17,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.UUID;
 
-
-import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
-
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
+import ca.ualberta.cmput301f13t13.storyhoard.R.id;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
 
 
 
@@ -52,7 +51,8 @@ public class TestEditStoryActivity extends
 		intent.putExtra("isEditing", false);
 		intent.putExtra("storyId", UUID.randomUUID());
 		
-		setActivityIntent(intent);		
+		setActivityIntent(intent);	
+		HolderApplication app = (HolderApplication) getActivity().getApplication();
 		
 		activity = getActivity();
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
