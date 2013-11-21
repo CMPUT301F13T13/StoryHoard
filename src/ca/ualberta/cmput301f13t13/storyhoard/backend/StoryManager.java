@@ -108,7 +108,7 @@ public class StoryManager extends StoryManagerHelper implements StoringManager {
 	@Override
 	public ArrayList<Object> retrieve(Object criteria) {
 		Story story = (Story) criteria;
-		if (story.getPhoneId().equals(phoneId)) {
+		if (story.getPhoneId() != null) {
 			return super.retrieve(story, OwnStoryTable.TABLE_NAME, helper);
 		} else {
 			return super.retrieve(story, CachedStoryTable.TABLE_NAME, helper);

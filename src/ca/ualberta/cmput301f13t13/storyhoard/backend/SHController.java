@@ -71,7 +71,7 @@ public class SHController {
 	public ArrayList<Story> getAllStories(ObjectType type) {
 		Story criteria;
 		if (type == ObjectType.CACHED_STORY) {
-			criteria = new Story(null, null, null, null, "not");
+			criteria = new Story(null, null, null, null, null);
 		} else {
 			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
 		}
