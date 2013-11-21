@@ -73,20 +73,21 @@ public class TestChapter
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Chapter criteria = new Chapter(null, null, null);
+		Chapter criteria = new Chapter(null, null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 0);
+		assertEquals(info.size(), 0);
 
 		// not empty arguments
 		UUID id = UUID.randomUUID();
 		UUID sId = UUID.randomUUID();
-		criteria = new Chapter(id, sId, null);
+		criteria = new Chapter(id, sId, null, true);
 		info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 2);
+		assertEquals(info.size(), 3);
 		assertTrue(info.get("chapter_id").equals(id.toString()));
 		assertTrue(info.get("story_id").equals(sId.toString()));
+		assertTrue(info.get("random_Choice").equals("true"));
 	}
 
 	/**

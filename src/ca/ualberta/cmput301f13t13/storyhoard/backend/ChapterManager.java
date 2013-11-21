@@ -137,7 +137,7 @@ public class ChapterManager implements StoringManager {
 					.getString(0)), // chapter id
 					UUID.fromString(storyId), // story id
 					cursor.getString(2), // text
-					cursor.getString(3) // random choice flag
+					Boolean.valueOf(cursor.getString(3)) // random choice flag
 			);
 			results.add(newChapter);
 			cursor.moveToNext();

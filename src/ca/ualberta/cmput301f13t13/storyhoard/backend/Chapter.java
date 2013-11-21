@@ -90,7 +90,7 @@ public class Chapter{
 	 * @param randomChoice
 	 *            A flag to indicate the random choice button 
 	 */
-	public Chapter(UUID id, UUID storyId, String text, String randomChoice) {
+	public Chapter(UUID id, UUID storyId, String text, Boolean randomChoice) {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
