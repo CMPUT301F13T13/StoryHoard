@@ -115,10 +115,10 @@ public class TestChoiceManager extends
 		cm.insert(mockChoice3);
 
 		// Looking for all choices belonging to chapter id 1
-		Choice criteria = new Choice(null, chapId1, null);
+		Choice criteria = new Choice(null, chapId1, null, null);
 
 		ArrayList<Object> mockChoices = cm.retrieve(criteria);
-		assertTrue(mockChoices.size() == 2);
+		assertEquals(mockChoices.size(), 2);
 		assertTrue(hasChoice(mockChoices, mockChoice));
 		assertTrue(hasChoice(mockChoices, mockChoice2));
 		assertFalse(hasChoice(mockChoices, mockChoice3));

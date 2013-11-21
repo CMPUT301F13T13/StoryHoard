@@ -75,7 +75,7 @@ public class Choice {
 	 * 
 	 * @param id
 	 * @param chapterIdFrom
-	 * @param chapterIdTo TODO
+	 * @param chapterIdTo 
 	 */
 	public Choice(UUID id, UUID chapterIdFrom) {
 		this.id = id;
