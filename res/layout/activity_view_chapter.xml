@@ -50,19 +50,9 @@
         android:id="@+id/chapterChoices"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/addPhotoButton"
         android:layout_below="@+id/horizontalSCPhotos"
         android:background="@drawable/choices_bg" >
     </ListView>
-
-    <Button
-        android:id="@+id/addPhotoButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#808080"
-        android:text="@string/add_photo" >
-    </Button>
 
 
 
