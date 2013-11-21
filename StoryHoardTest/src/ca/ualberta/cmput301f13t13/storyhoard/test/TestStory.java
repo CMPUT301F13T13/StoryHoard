@@ -97,9 +97,9 @@ public class TestStory extends
 		criteria = new Story(null, "john", "the cow", "went home",
 				Utilities.getPhoneId(this.getActivity()));
 		info = criteria.getSearchCriteria();
-		String test = info.get("title");
+
 		assertEquals(info.size(), 2);
-		assertTrue(info.get("title").equals("%john%"));
+		assertTrue(info.get("title").equals("john"));
 		assertTrue(info.get("phone_id").equals(criteria.getPhoneId()));
 	}
 
