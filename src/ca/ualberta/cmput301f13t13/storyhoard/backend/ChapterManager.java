@@ -42,6 +42,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 public class ChapterManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static ChapterManager self = null;
+	private static ContentValues values;
 
 	/**
 	 * Initializes a new ChapterManager object.
@@ -75,19 +76,8 @@ public class ChapterManager implements StoringManager {
 	 */
 	@Override
 	public void insert(Object object) {
-		Chapter chapter = (Chapter) object;
 		SQLiteDatabase db = helper.getWritableDatabase();
-
-		// Insert chapter
-		ContentValues values = new ContentValues();
-		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID,
-				(chapter.getId()).toString());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
-				chapter.getStoryId().toString());
-		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
-		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
-				chapter.getRandomChoice());
-
+		setContentValues(object);
 		db.insert(ChapterTable.TABLE_NAME, null, values);
 	}
 
@@ -137,7 +127,7 @@ public class ChapterManager implements StoringManager {
 					.getString(0)), // chapter id
 					UUID.fromString(storyId), // story id
 					cursor.getString(2), // text
-					cursor.getString(3) // random choice flag
+					Boolean.valueOf(cursor.getString(3)) // random choice flag
 			);
 			results.add(newChapter);
 			cursor.moveToNext();
@@ -154,21 +144,31 @@ public class ChapterManager implements StoringManager {
 	 */
 	@Override
 	public void update(Object newObject) {
+		setContentValues(newObject);
 		Chapter newC = (Chapter) newObject;
 		SQLiteDatabase db = helper.getReadableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, 
-				newC.getId().toString());
-		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
-				newC.getStoryId().toString());
-		values.put(ChapterTable.COLUMN_NAME_TEXT, newC.getText());
-		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, newC.getRandomChoice());
-
 		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
 		String[] sArgs = { newC.getId().toString() };
 
 		db.update(ChapterTable.TABLE_NAME, values, selection, sArgs);
+	}
+	
+	/**
+	 * Sets the content values to be used in the sql query.
+	 * 
+	 * @param object
+	 */
+	private void setContentValues(Object object) {
+		Chapter chapter = (Chapter) object;
+		// Insert chapter
+		values = new ContentValues();
+		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID,
+				(chapter.getId()).toString());
+		values.put(ChapterTable.COLUMN_NAME_STORY_ID, 
+				chapter.getStoryId().toString());
+		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
+		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
+				chapter.getRandomChoice().toString());
 	}
 
 	/**

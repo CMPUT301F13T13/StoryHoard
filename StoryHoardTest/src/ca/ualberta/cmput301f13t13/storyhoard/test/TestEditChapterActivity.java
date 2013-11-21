@@ -16,14 +16,18 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 
+import java.util.UUID;
+
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
 
@@ -36,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
  */
 public class TestEditChapterActivity extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
-	HolderApplication app;
+	private LifecycleData lifedata;
 	private EditChapterActivity activity;
 	private Button saveButton;
 	private Button addIllust;
@@ -54,13 +58,16 @@ public class TestEditChapterActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		activity = getActivity();
-		app = (HolderApplication) activity.getApplication();
+		lifedata = LifecycleData.getInstance();
 				
 		Story story = new Story("title", "author", "es", "432432");
-		app.setEditing(false);
-		app.setStory(story);
-		app.setChapter(new Chapter(story.getId(), ""));
+		lifedata.setEditing(true);
+		lifedata.setStory(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		lifedata.setChapter(chapter);
+		activity = getActivity();
 		
 		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
 		saveButton = (Button) activity.findViewById(R.id.chapterSaveButton);
@@ -70,6 +77,10 @@ public class TestEditChapterActivity extends
 		illustrations = (LinearLayout) activity.findViewById(R.id.editHorizontalIllustrations);
 	}
 
+	/**
+	 * Tests that all the gui elements have been instantiated and are
+	 * not null.
+	 */
 	public void testPreconditions() {
 		assertTrue(activity != null);
 		assertTrue(chapterContent != null);
@@ -79,4 +90,19 @@ public class TestEditChapterActivity extends
 		assertTrue(addIllust != null);
 		assertTrue(illustrations != null);
 	}
+	
+	/**
+	 * Tests the content / text of the chapter is right.
+	 */
+	public void testChapterContent() {
+		String content = chapterContent.getText().toString();
+		assertTrue(content.equals("chapter"));
+	}
+	
+	@UiThreadTest
+	public void testSetChapterContent() {
+		String title = "My chap";
+		chapterContent.setText(title);
+		assertTrue(chapterContent.getText().toString().equals(title));
+	}	
 }

@@ -130,8 +130,10 @@ public class ESClient {
 	 * @return json string of the response
 	 */
 	String getEntityContent(HttpResponse response) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(response
-				.getEntity().getContent()));
+		HttpEntity entity =  response.getEntity();
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		BufferedReader br = new BufferedReader(is);
+
 		String output;
 		System.err.println("Output from ESClient -> ");
 		String json = "";
@@ -140,6 +142,9 @@ public class ESClient {
 			json += output;
 		}
 		System.err.println("JSON:" + json);
+		entity.consumeContent();
+		is.close();
+		br.close();
 		return json;
 	}
 
@@ -147,10 +152,13 @@ public class ESClient {
 	 * Searches for a story on the server by the story id. An exception will be
 	 * thrown if no story with a matching id is found on the server. </br>
 	 * 
+	 * </br>
+	 * </br> Example call
 	 * UUID id = 5231b533-ba17-4787-98a3-f2df37de2aD7;
-	 * 
-	 * </br> Eg. searchById(id.toString());
-	 * 
+	 * </br>
+	 *  Story myStory = searchById(id.toString());
+	 *  </br> myStory is the story that was searched for, or null if it 
+	 *  didn't exist.
 	 * @param id
 	 *            Will be a 128-bit value UUID value that was converted to a
 	 *            String.

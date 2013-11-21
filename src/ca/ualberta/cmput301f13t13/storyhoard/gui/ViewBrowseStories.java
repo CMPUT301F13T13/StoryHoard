@@ -31,10 +31,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
@@ -43,7 +44,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class ViewBrowseStories extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
@@ -113,15 +114,20 @@ public class ViewBrowseStories extends Activity {
 				// currently breaks downloaded stories
 				if (viewType == ObjectType.PUBLISHED_STORY) {
 					UUID newStoryId = gc.cacheStory(story);
-					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
-					app.setStoryType(ObjectType.CACHED_STORY);
+					if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
+						story = gc.getStory(newStoryId, ObjectType.CREATED_STORY);
+						lifedata.setStoryType(ObjectType.CREATED_STORY);
+					} else {
+						story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
+						lifedata.setStoryType(ObjectType.CACHED_STORY);
+					}
 				} else {
-					app.setStoryType(viewType);
+					lifedata.setStoryType(viewType);
 				}
 				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				app.setStory(story);
+				lifedata.setStory(story);
 				startActivity(intent);
 			}
 		});
@@ -147,8 +153,8 @@ public class ViewBrowseStories extends Activity {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
 			// Pass it a boolean to indicate it is not editing
-			app.setFirstStory(true);
-			app.setEditing(false);
+			lifedata.setFirstStory(true);
+			lifedata.setEditing(false);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
@@ -158,9 +164,14 @@ public class ViewBrowseStories extends Activity {
 		case R.id.lucky:
 			Story story = gc.getRandomStory();
 			UUID newId = gc.cacheStory(story);
-			story = gc.getStory(newId, ObjectType.CACHED_STORY);
-			app.setStory(story);
-			app.setStoryType(ObjectType.CACHED_STORY);
+			if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
+				story = gc.getStory(newId, ObjectType.CREATED_STORY);
+				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			} else {
+				story = gc.getStory(newId, ObjectType.CACHED_STORY);
+				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			}
+			lifedata.setStory(story);
 			intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 			return true;
@@ -172,7 +183,7 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
 		setActionBar();
 		refreshStories();
 	}

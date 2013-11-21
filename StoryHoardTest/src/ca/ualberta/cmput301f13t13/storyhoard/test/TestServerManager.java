@@ -43,15 +43,15 @@ public class TestServerManager
 	}
 
 	public void setUp() throws Exception {
-		sm = ServerManager.getInstance();
-		
+		super.setUp();
+		sm = ServerManager.getInstance();	
 		// clean up server
 		Story mockCriteria = new Story(null, null, null, null, null);
 		sm.retrieve(mockCriteria);
 		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
 		for (Object story: mockStories) {
 			sm.remove(story);
-		}		
+		}
 	}
 
 	/**
@@ -61,26 +61,24 @@ public class TestServerManager
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		//Media m = new Media(chap.getId(), path, Media.PHOTO);
-		
-		//chap.addPhoto(m);
+		Chapter chap2 = new Chapter(story.getId(), "he lughe");
+		Choice c1 = new Choice(chap.getId(), chap2.getId(), "hit me!");
+
 		chap.addChoice(c1);
 		story.addChapter(chap);
+		story.addChapter(chap2);
 		
-		sm.insert(story);
+		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
 		story = (Story) stories.get(0);
 		
 		HashMap<UUID, Chapter> chaps = story.getChapters();
-		assertEquals(chaps.size(), 1);
+		assertEquals(chaps.size(), 2);
 		Chapter nChap = chaps.get(story.getFirstChapterId());
 		ArrayList<Choice> choices = nChap.getChoices();
 		assertEquals(choices.size(), 1);
-//		ArrayList<Media> photos = nChap.getPhotos();
-//		assertEquals(photos.size(), 1);
 		
 		// delete
 		sm.remove(story);
@@ -101,7 +99,7 @@ public class TestServerManager
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
 		
-		sm.insert(story);
+		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
@@ -130,19 +128,25 @@ public class TestServerManager
 	public void testGetAllPublishedStories() {		
 		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory1);
+		sm.update(mockStory1);
 		Story mockStory2 = new Story("My Frog", "Dr. Phil",
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory2);
+		sm.update(mockStory2);
 		Story mockStory3 = new Story("My Hen", "Dr. Farmer",
 				"my chubby hen", Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory3);
+		sm.update(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, 
-				Utilities.getPhoneId(getActivity()));
+		Story mockCriteria = new Story(null, null, null, null, null);
 		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 3);
-
+		
+		// clean up server
+		Story erase = new Story(null, null, null, null, null);
+		sm.retrieve(mockCriteria);
+		ArrayList<Object> objs = sm.retrieve(erase);
+		for (Object story: objs) {
+			sm.remove(story);
+		}
 	}
 }

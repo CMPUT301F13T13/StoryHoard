@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.content.Context;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 
 /**
@@ -34,7 +36,7 @@ public class Chapter{
 	private UUID id;
 	private UUID storyId;
 	private String text;
-	private String randomChoice;
+	private Boolean randomChoice;
 	private ArrayList<Choice> choices;
 	private ArrayList<Media> illustrations;
 	private ArrayList<Media> photos;
@@ -51,16 +53,15 @@ public class Chapter{
 		this.text = text;
 		this.storyId = storyId;
 		this.id = UUID.randomUUID();
-		this.randomChoice = "no";
+		this.randomChoice = false;
 		choices = new ArrayList<Choice>();
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
 
 	/**
-	 * Initialize a new chapter with an id. Can also be used to make a chapter
-	 * from the chapter information retrieved from the database. Can also be
-	 * used to create a choice that will serve to hold search criteria.
+	 * Initialize a new chapter with an id. Can also be
+	 * used to create a chapter that will serve to hold search criteria.
 	 * 
 	 * @param id
 	 *            The unique id of the chapter
@@ -73,7 +74,7 @@ public class Chapter{
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		this.randomChoice = "no";
+		this.randomChoice = false;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
@@ -91,11 +92,13 @@ public class Chapter{
 	 * @param randomChoice
 	 *            A flag to indicate the random choice button 
 	 */
-	public Chapter(UUID id, UUID storyId, String text, String randomChoice) {
+	public Chapter(UUID id, UUID storyId, String text, Boolean randomChoice) {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		this.randomChoice = randomChoice;
+		if (randomChoice != null) {
+			this.randomChoice = Boolean.valueOf(randomChoice);
+		}
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
@@ -134,7 +137,7 @@ public class Chapter{
 	 * 
 	 * @return randomChoice
 	 */
-	public String getRandomChoice() {
+	public Boolean getRandomChoice() {
 
 		return this.randomChoice;
 	}
@@ -203,7 +206,7 @@ public class Chapter{
 	 * @param randomChoice
 	 *            
 	 */
-	public void setRandomChoice(String randomChoice) {
+	public void setRandomChoice(Boolean randomChoice) {
 		this.randomChoice = randomChoice;
 	}
 
@@ -283,9 +286,38 @@ public class Chapter{
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
 		}
 		if (randomChoice != null) {
-			info.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, randomChoice);
+			info.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
+					randomChoice.toString());
 		}
 
 		return info;
+	}
+
+	public void updateSelf(Context context) {
+		ChapterManager cm = ChapterManager.getInstance(context);
+		cm.update(this);
+		for (Media photo : photos) {
+			photo.updateSelf(context);
+		}
+		for (Media ill : illustrations) {
+			ill.updateSelf(context);
+		}
+		for (Choice choice : choices) {
+			choice.updateSelf(context);
+		}
+	}
+
+	public void addSelf(Context context) {
+		ChapterManager cm = ChapterManager.getInstance(context);
+		cm.insert(this);
+		for (Media photo : photos) {
+			photo.addSelf(context);
+		}
+		for (Media ill : illustrations) {
+			ill.addSelf(context);
+		}
+		for (Choice choice : choices) {
+			choice.addSelf(context);
+		}
 	}
 }

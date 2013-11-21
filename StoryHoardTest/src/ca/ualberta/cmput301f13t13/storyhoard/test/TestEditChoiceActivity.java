@@ -16,11 +16,12 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
 
@@ -32,7 +33,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
  */
 public class TestEditChoiceActivity extends
 		ActivityInstrumentationTestCase2<EditChoiceActivity> {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private EditText choiceText;
 	private ListView chapters;
 	
@@ -49,12 +50,12 @@ public class TestEditChoiceActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		app = (HolderApplication) getActivity().getApplication();
+		lifedata = LifecycleData.getInstance();
 		Story story = new Story("title", "author", "es", "432432");
 
-		app.setEditing(false);
-		app.setStory(story);
-		app.setChapter(new Chapter(story.getId(), null));
+		lifedata.setEditing(false);
+		lifedata.setStory(story);
+		lifedata.setChapter(new Chapter(story.getId(), null));
 		
 		mActivity = (EditChoiceActivity) getActivity();
 		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
@@ -66,4 +67,11 @@ public class TestEditChoiceActivity extends
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
 	} 
+	
+	@UiThreadTest
+	public void testSetChoiceText() {
+		String title = "My choice";
+		choiceText.setText(title);
+		assertTrue(choiceText.getText().toString().equals(title));
+	}	
 }

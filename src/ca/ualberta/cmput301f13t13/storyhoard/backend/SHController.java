@@ -40,9 +40,11 @@ public class SHController {
 
 	private static SHController self = null;   
 	private static ManagerFactory sf = null;
+	private Context context = null;
 
 	protected SHController(Context context) {
 		sf = new ManagerFactory(context);
+		this.context = context;
 	}
 
 	/**
@@ -99,7 +101,7 @@ public class SHController {
 	 * @return ArrayList of the chapter's choices.
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
-		Choice criteria = new Choice(null, chapterId, null, null);
+		Choice criteria = new Choice(null, chapterId);
 		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
 		ArrayList<Object> objects = sm.retrieve(criteria);
 		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);		
@@ -287,58 +289,20 @@ public class SHController {
 	 * chapter's info. Returns the new story's UUID.
 	 */
 	public UUID cacheStory(Story story) {
-		ArrayList<UUID> oldIds = new ArrayList<UUID>();
-		ArrayList<UUID> newIds = new ArrayList<UUID>();
-		story.setId(UUID.randomUUID());
-		
-		// empty story
-		if (story.getFirstChapterId() == null) {
-			addObject(story, ObjectType.CACHED_STORY);
-			return story.getId();
-		}
-		
-		// Mapping old and new ids, saving new chaps, update media
-		for (Chapter chap : story.getChapters().values()) {
-			UUID oldId = chap.getId();
-			chap.setId(UUID.randomUUID());
-			oldIds.add(oldId);
-			newIds.add(chap.getId());
-			chap.setStoryId(story.getId());
-			addObject(chap, ObjectType.CHAPTER);
-			
-			for (Media photo : chap.getPhotos()) {
-				photo.setChapterId(chap.getId());
-				photo.setId(UUID.randomUUID());
-				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
-				photo.setPath(path);
-				addObject(photo, ObjectType.MEDIA);
+		// authors own story
+		if (story.getPhoneId().equals(Utilities.getPhoneId(context))) {
+			if (getStory(story.getId(), ObjectType.CREATED_STORY) != null) {
+				story.updateSelf(context);
+			} else {
+				story.addSelf(context);
 			}
-			for (Media ill : chap.getIllustrations()) {
-				ill.setChapterId(chap.getId());
-				ill.setId(UUID.randomUUID());
-				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
-				ill.setPath(path);
-				addObject(ill, ObjectType.MEDIA);
-			}	
-		}
-		
-		// updating choices, need idMappings
-		for (Chapter chap : story.getChapters().values()) {				
-			for (Choice choice : chap.getChoices()) {
-				UUID currChap = choice.getCurrentChapter();
-				UUID nextChap = choice.getNextChapter();
-				choice.setId(UUID.randomUUID());
-				int index = oldIds.indexOf(currChap);
-				choice.setCurrentChapter(newIds.get(index));
-				index = oldIds.indexOf(nextChap);
-				choice.setNextChapter(newIds.get(index));
-				addObject(choice, ObjectType.CHOICE);
+		} else {
+			if (getStory(story.getId(), ObjectType.CACHED_STORY) != null) {
+				story.updateSelf(context);
+			} else {
+				story.addSelf(context);
 			}
-		}
-		
-		int index = oldIds.indexOf(story.getFirstChapterId());
-		story.setFirstChapterId(newIds.get(index));
-		addObject(story, ObjectType.CACHED_STORY);
+		}		
 		return story.getId();
 	}
 	

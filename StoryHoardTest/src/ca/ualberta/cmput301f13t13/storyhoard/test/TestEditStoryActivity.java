@@ -17,14 +17,15 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.UUID;
 
-
-import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
-
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.Button;
+import android.test.UiThreadTest;
 import android.widget.EditText;
+import ca.ualberta.cmput301f13t13.storyhoard.R.id;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
 
 
 
@@ -35,10 +36,10 @@ import android.widget.EditText;
 public class TestEditStoryActivity extends
 		ActivityInstrumentationTestCase2<EditStoryActivity> {
 	private EditStoryActivity activity;
+	private LifecycleData lifedata;
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	private Button addfirstChapter;
 	
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
@@ -47,14 +48,16 @@ public class TestEditStoryActivity extends
 	@Override
 	public void setUp() throws Exception{
 		super.setUp();
-		
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("storyId", UUID.randomUUID());
-		
-		setActivityIntent(intent);		
-		
+		lifedata = LifecycleData.getInstance();
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(true);
+		lifedata.setStory(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		lifedata.setChapter(chapter);
 		activity = getActivity();
+		
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
 		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
@@ -65,21 +68,23 @@ public class TestEditStoryActivity extends
 		assertTrue(newTitle != null);
 		assertTrue(newAuthor != null);
 		assertTrue(newDescription != null);
-		assertTrue(addfirstChapter != null);
 	}
 	
+	@UiThreadTest
 	public void testSetTitle() {
 		String title = "My Title";
 		newTitle.setText(title);
 		assertTrue(newTitle.getText().toString().equals(title));
 	}
 	
+	@UiThreadTest
 	public void testSetAuthor() {
 		String author = "The Best Author Ever";
 		newAuthor.setText(author);
 		assertTrue(newAuthor.getText().toString().equals(author));
 	}
 	
+	@UiThreadTest
 	public void testSetDescription() {
 		String desc = "This is the story of a new description.";
 		newDescription.setText(desc);

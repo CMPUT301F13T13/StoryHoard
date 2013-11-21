@@ -28,15 +28,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
@@ -57,7 +57,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  */
 
 public class EditChapterActivity extends MediaActivity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
 
@@ -69,6 +69,7 @@ public class EditChapterActivity extends MediaActivity {
 	private AlertDialog illustDialog;
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
+	private CheckBox randChoiceCheck;
 
 	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
@@ -77,7 +78,7 @@ public class EditChapterActivity extends MediaActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_edit_chapter);
 		setUpFields();
 	}
@@ -85,6 +86,8 @@ public class EditChapterActivity extends MediaActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		setRandomChoice();
 		updateICData();
 	}
 
@@ -115,31 +118,22 @@ public class EditChapterActivity extends MediaActivity {
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
+		randChoiceCheck = (CheckBox) findViewById(R.id.randChoiceCheck);
 
 		// Setup the adapter
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		viewChoices.setAdapter(choiceAdapter);
 
-		story = app.getStory();
-		if (app.isEditing()) {
+		story = lifedata.getStory();
+		if (lifedata.isEditing()) {
 			// Editing an existing chapter
-			chapter = app.getChapter();
+			chapter = lifedata.getChapter();
 			chapterContent.setText(chapter.getText());
 		} else {
 			// Create a new chapter from the story's ID
 			chapter = new Chapter(story.getId(), "");
 		}
-	}
-
-	
-
-	public Uri getImageFileUri() {
-		return this.imageFileUri;
-	}
-
-	public Chapter getChapter() {
-		return this.chapter;
 	}
 
 	// MENU INFORMATION
@@ -168,8 +162,30 @@ public class EditChapterActivity extends MediaActivity {
 		}
 	}
 
+	/**
+	 * Set onClick listener for setting random choice
+	 */
+	public void setRandomChoice() {
+		//If the chapter has been set to random choice, check box
+		if (chapter.getRandomChoice().equals("yes")) {
+			randChoiceCheck.setChecked(true);
+		}
+		
+		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//If checked, set random choice on chapter
+				if (randChoiceCheck.isChecked()) {
+					chapter.setRandomChoice(true);
+				} else {
+					chapter.setRandomChoice(false);
+				}
+			}
+		});
+	}
+
 	private void addIllustration() {
-		if (!app.isEditing()) {
+		if (!lifedata.isEditing()) {
 			Toast.makeText(getBaseContext(),
 					"Save chapter before adding first illustration",
 					Toast.LENGTH_SHORT).show();
@@ -199,11 +215,11 @@ public class EditChapterActivity extends MediaActivity {
 		illustDialog.show();
 	}
 	private void addChoice() {
-		if (app.isEditing()) {
+		if (lifedata.isEditing()) {
 			Intent intent = new Intent(getBaseContext(),
 					EditChoiceActivity.class);
-			app.setChapter(chapter);
-			app.setStory(story);
+			lifedata.setChapter(chapter);
+			lifedata.setStory(story);
 			startActivity(intent);
 		} else {
 			Toast.makeText(getBaseContext(),
@@ -214,11 +230,11 @@ public class EditChapterActivity extends MediaActivity {
 
 	private void saveChapter() {
 		chapter.setText(chapterContent.getText().toString());
-		if (app.isEditing()) {
+		if (lifedata.isEditing()) {
 			gc.updateObject(chapter, ObjectType.CHAPTER);
 		} else {
 			story.addChapter(chapter);
-			if (app.isFirstStory()) {
+			if (lifedata.isFirstStory()) {
 				gc.addObject(story, ObjectType.CREATED_STORY);
 			}
 			gc.addObject(chapter, ObjectType.CHAPTER);

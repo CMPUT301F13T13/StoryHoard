@@ -18,13 +18,14 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
@@ -38,7 +39,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
  * 
  */
 public class EditStoryActivity extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
@@ -48,7 +49,15 @@ public class EditStoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
+		
+        try {
+	          Class.forName("android.os.AsyncTask");
+	        } catch (ClassNotFoundException e) {
+	          e.printStackTrace();
+	        }
+
+		lifedata = LifecycleData.getInstance();
+
 		setContentView(R.layout.activity_edit_story);
 
 		final ActionBar actionBar = getActionBar();
@@ -62,8 +71,8 @@ public class EditStoryActivity extends Activity {
 		newDescription = (EditText) findViewById(R.id.newStoryDescription);
 
 		// Check if we are editing the story or making a new story
-		if (app.isEditing()) {
-			newStory = app.getStory();
+		if (lifedata.isEditing()) {
+			newStory = lifedata.getStory();
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
@@ -94,11 +103,10 @@ public class EditStoryActivity extends Activity {
 
 
 	private void publishStory() {
-		if (app.isEditing()) {
+		if (lifedata.isEditing()) {
 			// publish new story somehow
 			saveChanges();
-			gc.addObject(gc.getCompleteStory(newStory.getId(), app.getStoryType()),
-					ObjectType.PUBLISHED_STORY);
+			new Update().execute();
 			Toast.makeText(getBaseContext(),
 					"Story published to server", Toast.LENGTH_SHORT)
 					.show();
@@ -106,6 +114,16 @@ public class EditStoryActivity extends Activity {
 			Toast.makeText(getBaseContext(),
 					"Create a story before publishing", Toast.LENGTH_SHORT)
 					.show();
+		}		
+	}
+	
+	private class Update extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected Void doInBackground(Void... params) {
+			// publish or update story 
+			gc.updateObject(gc.getCompleteStory(newStory.getId(), lifedata.getStoryType()),
+					ObjectType.PUBLISHED_STORY);
+			return null;
 		}
 	}
 
@@ -114,14 +132,14 @@ public class EditStoryActivity extends Activity {
 		String title = newTitle.getText().toString();
 		String author = newAuthor.getText().toString();
 		String description = newDescription.getText().toString();
-		if (app.isEditing()) {
+		if (lifedata.isEditing()) {
 			newStory.setAuthor(author);
 			newStory.setTitle(title);
 			newStory.setDescription(description);
-			app.setStory(newStory);
+			lifedata.setStory(newStory);
 			
 			// May not be needed...
-			if (app.getStoryType().equals(ObjectType.CREATED_STORY)) {
+			if (lifedata.getStoryType().equals(ObjectType.CREATED_STORY)) {
 				gc.updateObject(newStory, ObjectType.CREATED_STORY);
 			} else {
 				gc.updateObject(newStory, ObjectType.CACHED_STORY);
@@ -132,9 +150,10 @@ public class EditStoryActivity extends Activity {
 					Utilities.getPhoneId(getBaseContext()));
 			Intent intent = new Intent(EditStoryActivity.this,
 					EditChapterActivity.class);
-			app.setEditing(false);
-			app.setFirstStory(true);
-			app.setStory(newStory);
+
+			lifedata.setEditing(false);
+			lifedata.setFirstStory(true);
+			lifedata.setStory(newStory);
 			startActivity(intent);
 		}
 		finish();

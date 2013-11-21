@@ -15,12 +15,20 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
@@ -34,26 +42,65 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see Media
  */
 public class TestMedia extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard/" + R.drawable.img1;
-	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
-	
+ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	private static String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/drawable/img1.jpg";
+	private static String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
+
 	public TestMedia() {
 		super(ViewBrowseStories.class);
 	}
 
+	public void setUp() throws Exception {
+		super.setUp();
+	}
 	/**
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		Uri uri = Uri.parse(path);
-		Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
-		assertTrue(bm != null);
+
+		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
+		File mFile1 = Environment.getExternalStorageDirectory();
+
+		String fileName = "img1.jpg";
+
+		File mFile2 = new File(mFile1,fileName);
+		try {
+			FileOutputStream outStream;
+
+			outStream = new FileOutputStream(mFile2);
+
+			bm.compress(Bitmap.CompressFormat.JPEG, 75, outStream);
+
+			outStream.flush();
+
+			outStream.close();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String sdPath = mFile1.getAbsolutePath().toString()+"/"+fileName;
+
+		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+sdPath); 
+
+		File temp=new File(sdPath);
+
+		if(!temp.exists()){
+			Log.e("file","no image file at location :"+sdPath);
+		}
+
+		bm = BitmapFactory.decodeFile(sdPath);
 		// Make photo
 		try {
-			Media photo = new Media(UUID.randomUUID(), path, 
+			Media photo = new Media(UUID.randomUUID(), sdPath, 
 					Media.PHOTO);
-			assertTrue(photo.getBitmap() != null);
+			//			bm = photo.getBitmap();
+			bm = BitmapFactory.decodeFile(path);
+			assertTrue(bm != null);
 		} catch (Exception e) {
 			fail("error creating a new media object");
 		}
@@ -65,7 +112,7 @@ public class TestMedia extends
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
-		
+
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
 		String type = photo.getType();
@@ -74,8 +121,10 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
+
+		path2 = Utilities.saveImageToSD(bm);
 		photo.setPath(path2);
-		
+
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertNotSame(type, photo.getType());
