@@ -88,8 +88,15 @@ public class ServerManager implements StoringManager {
 			protected Void doInBackground(Object... params)
 			{
 				Story story = (Story) params[0];
-				prepareStory(story);
-				esclient.insertStory(story);
+				String id = story.getId().toString();
+				
+				// story not yet in server
+				if (esclient.searchById(id) == null) {
+					prepareStory(story);
+					esclient.insertStory(story);
+				} else {    // story already in server
+					update(story);
+				}
 				return null;
 			}
 

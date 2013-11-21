@@ -43,15 +43,15 @@ public class TestServerManager
 	}
 
 	public void setUp() throws Exception {
-		sm = ServerManager.getInstance();
-		
+		super.setUp();
+		sm = ServerManager.getInstance();	
 		// clean up server
 		Story mockCriteria = new Story(null, null, null, null, null);
 		sm.retrieve(mockCriteria);
 		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
 		for (Object story: mockStories) {
 			sm.remove(story);
-		}		
+		}
 	}
 
 	/**
@@ -143,6 +143,14 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 3);
+		
+		// clean up server
+		Story erase = new Story(null, null, null, null, null);
+		sm.retrieve(mockCriteria);
+		ArrayList<Object> objs = sm.retrieve(erase);
+		for (Object story: objs) {
+			sm.remove(story);
+		}
 
 	}
 }

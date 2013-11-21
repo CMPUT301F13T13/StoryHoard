@@ -121,7 +121,7 @@ public class ViewChapter extends MediaActivity {
 					+ "\n\n<No Choices>");
 		} else {
 			choices.addAll(chapter.getChoices());
-			if (chapter.getRandomChoice() == "yes") {
+			if (chapter.getRandomChoice() == true) {
 				choices.add(gc.getRandomChoice(chapterID));
 			}
 		}
