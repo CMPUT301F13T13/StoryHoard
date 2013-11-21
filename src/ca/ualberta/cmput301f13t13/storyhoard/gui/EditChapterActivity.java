@@ -224,12 +224,4 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		});
 	}
-
-	public Uri getImageFileUri() {
-		return this.imageFileUri;
-	}
-
-	public Chapter getChapter() {
-		return this.chapter;
-	}
 }
