@@ -63,6 +63,7 @@ public class EditChoiceActivity extends Activity {
 		super.onResume();
 		setUpFields();
 		setAddChoiceListener();
+
 		data.clear();
 		data.addAll(gc.getAllChapters(story.getId()));
 		chapterAdapter.notifyDataSetChanged();
@@ -79,8 +80,8 @@ public class EditChoiceActivity extends Activity {
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
-		
-		//Set up adapter
+
+		// Set up adapter
 		chapterAdapter = new AdapterChapters(this,
 				R.layout.browse_chapter_item, data);
 		chapters.setAdapter(chapterAdapter);
@@ -101,6 +102,7 @@ public class EditChoiceActivity extends Activity {
 						.getId(), text);
 				gc.addObject(addedChoice, ObjectType.CHOICE);
 				finish();
+
 			}
 		});
 	}

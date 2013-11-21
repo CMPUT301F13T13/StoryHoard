@@ -3,19 +3,18 @@
     <item
         android:id="@+id/info"
         android:icon="@drawable/info"
-        android:showAsAction="never"/>
+        android:showAsAction="always"/>
     <item
         android:id="@+id/searchStories"
         android:showAsAction="always"
         android:title="search stories"/>
     <item
         android:id="@+id/lucky"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="Explore"/>
     <item
         android:id="@+id/addNewStory"
         android:icon="@drawable/add"
         android:showAsAction="always"
         android:title="@string/add_new_story"/>
-
 </menu>
