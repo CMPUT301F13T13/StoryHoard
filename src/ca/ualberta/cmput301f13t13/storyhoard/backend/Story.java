@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import android.content.Context;
+
 /**
  * Role: A container to hold story information. This includes id, author, 
  * title, description, the id of the first chapter, a collection of
@@ -30,7 +32,6 @@ import java.util.UUID;
  * @author Ashley Brown
  */
 public class Story {
-
 	private UUID id;
 	private String author;
 	private String title;
@@ -290,6 +291,36 @@ public class Story {
 		return false;
 	}
 
+	public void updateSelf(Context context) {
+		if (phoneId.equals(Utilities.getPhoneId(context))) {
+			OwnStoryManager osm = OwnStoryManager.getInstance(context);
+			osm.update(this);
+		} else {
+			CachedStoryManager csm = CachedStoryManager.getInstance(context);
+			csm.update(this);
+		}
+		
+		// updating all its chapters
+		for (Chapter chap : chapters.values()) {
+			chap.updateSelf(context);	
+		}
+	}
+	
+	public void addSelf(Context context) {
+		if (phoneId.equals(Utilities.getPhoneId(context))) {
+			OwnStoryManager osm = OwnStoryManager.getInstance(context);
+			osm.insert(this);
+		} else {
+			CachedStoryManager csm = CachedStoryManager.getInstance(context);
+			csm.insert(this);
+		}
+		
+		// adding all its chapters
+		for (Chapter chap : chapters.values()) {
+			chap.addSelf(context);	
+		}		
+	}
+	
 	/**
 	 * Returns the information of the story (id, title, author, PhoneId) that
 	 * could be used in searching for a story in the database. This information

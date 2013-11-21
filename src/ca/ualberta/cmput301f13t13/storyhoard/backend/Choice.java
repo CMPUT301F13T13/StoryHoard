@@ -19,6 +19,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.content.Context;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChoiceTable;
 
 /**
@@ -186,5 +188,15 @@ public class Choice {
 		}
 
 		return info;
+	}
+
+	public void updateSelf(Context context) {
+		ChoiceManager cm = ChoiceManager.getInstance(context);
+		cm.update(this);
+	}
+
+	public void addSelf(Context context) {
+		ChoiceManager cm = ChoiceManager.getInstance(context);
+		cm.insert(this);
 	}
 }

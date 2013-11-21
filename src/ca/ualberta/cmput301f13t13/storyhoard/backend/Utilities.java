@@ -132,8 +132,9 @@ public class Utilities {
 			folderF.mkdir();
 		}
 
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
+		String imageFilePath;
+		imageFilePath = folder + "/"
+					+ String.valueOf(System.currentTimeMillis()) + ".jpg";
 		File imageFile = new File(imageFilePath);
 
 		FileOutputStream fout;

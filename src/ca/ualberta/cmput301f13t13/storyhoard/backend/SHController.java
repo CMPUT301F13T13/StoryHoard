@@ -291,40 +291,18 @@ public class SHController {
 	public UUID cacheStory(Story story) {
 		// authors own story
 		if (story.getPhoneId().equals(Utilities.getPhoneId(context))) {
-			return story.getId();
-		}
-		
-		addObject(story, ObjectType.CACHED_STORY);
-		
-		// empty story
-		if (story.getFirstChapterId() == null) {
-			return story.getId();
-		}
-		
-		// Mapping old and new ids, saving new chaps, update media
-		for (Chapter chap : story.getChapters().values()) {
-			addObject(chap, ObjectType.CHAPTER);
-			
-			for (Media photo : chap.getPhotos()) {
-				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
-				photo.setPath(path);
-				addObject(photo, ObjectType.MEDIA);
+			if (getStory(story.getId(), ObjectType.CREATED_STORY) != null) {
+				story.updateSelf(context);
+			} else {
+				story.addSelf(context);
 			}
-			for (Media ill : chap.getIllustrations()) {
-				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
-				ill.setPath(path);
-				addObject(ill, ObjectType.MEDIA);
-			}	
-		}
-		
-		// updating choices, need idMappings
-		for (Chapter chap : story.getChapters().values()) {				
-			for (Choice choice : chap.getChoices()) {
-				addObject(choice, ObjectType.CHOICE);
+		} else {
+			if (getStory(story.getId(), ObjectType.CACHED_STORY) != null) {
+				story.updateSelf(context);
+			} else {
+				story.addSelf(context);
 			}
-		}
-		
-		addObject(story, ObjectType.CACHED_STORY);
+		}		
 		return story.getId();
 	}
 	

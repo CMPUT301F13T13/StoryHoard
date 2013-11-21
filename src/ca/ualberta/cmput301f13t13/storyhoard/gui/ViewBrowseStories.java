@@ -35,6 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
@@ -113,8 +114,13 @@ public class ViewBrowseStories extends Activity {
 				// currently breaks downloaded stories
 				if (viewType == ObjectType.PUBLISHED_STORY) {
 					UUID newStoryId = gc.cacheStory(story);
-					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
-					lifedata.setStoryType(ObjectType.CACHED_STORY);
+					if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
+						story = gc.getStory(newStoryId, ObjectType.CREATED_STORY);
+						lifedata.setStoryType(ObjectType.CREATED_STORY);
+					} else {
+						story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
+						lifedata.setStoryType(ObjectType.CACHED_STORY);
+					}
 				} else {
 					lifedata.setStoryType(viewType);
 				}
@@ -158,9 +164,14 @@ public class ViewBrowseStories extends Activity {
 		case R.id.lucky:
 			Story story = gc.getRandomStory();
 			UUID newId = gc.cacheStory(story);
-			story = gc.getStory(newId, ObjectType.CACHED_STORY);
+			if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
+				story = gc.getStory(newId, ObjectType.CREATED_STORY);
+				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			} else {
+				story = gc.getStory(newId, ObjectType.CACHED_STORY);
+				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			}
 			lifedata.setStory(story);
-			lifedata.setStoryType(ObjectType.CACHED_STORY);
 			intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 			return true;

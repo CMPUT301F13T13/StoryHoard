@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -35,25 +37,32 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestMedia extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard/" + R.drawable.img1;
-	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
+	private static String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/drawable/img1.jpg";
+	private static String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
 	
 	public TestMedia() {
 		super(ViewBrowseStories.class);
 	}
 
+	public void setUp() throws Exception {
+		super.setUp();
+	}
 	/**
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		Uri uri = Uri.parse(path);
-		Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
-		assertTrue(bm != null);
+
+		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
+		path = Utilities.saveImageToSD(bm);
+
+		
 		// Make photo
 		try {
 			Media photo = new Media(UUID.randomUUID(), path, 
 					Media.PHOTO);
-			assertTrue(photo.getBitmap() != null);
+//			bm = photo.getBitmap();
+			bm = BitmapFactory.decodeFile(path);
+			assertTrue(bm != null);
 		} catch (Exception e) {
 			fail("error creating a new media object");
 		}
@@ -74,6 +83,8 @@ public class TestMedia extends
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
+		
+		path2 = Utilities.saveImageToSD(bm);
 		photo.setPath(path2);
 		
 		assertNotSame(id, photo.getId());

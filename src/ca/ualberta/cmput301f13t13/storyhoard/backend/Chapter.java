@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.content.Context;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 
 /**
@@ -289,5 +291,33 @@ public class Chapter{
 		}
 
 		return info;
+	}
+
+	public void updateSelf(Context context) {
+		ChapterManager cm = ChapterManager.getInstance(context);
+		cm.update(this);
+		for (Media photo : photos) {
+			photo.updateSelf(context);
+		}
+		for (Media ill : illustrations) {
+			ill.updateSelf(context);
+		}
+		for (Choice choice : choices) {
+			choice.updateSelf(context);
+		}
+	}
+
+	public void addSelf(Context context) {
+		ChapterManager cm = ChapterManager.getInstance(context);
+		cm.insert(this);
+		for (Media photo : photos) {
+			photo.addSelf(context);
+		}
+		for (Media ill : illustrations) {
+			ill.addSelf(context);
+		}
+		for (Choice choice : choices) {
+			choice.addSelf(context);
+		}
 	}
 }
