@@ -6,15 +6,16 @@
         android:showAsAction="always"/>
     <item
         android:id="@+id/searchStories"
-        android:showAsAction="always"
-        android:title="search stories"/>
+        android:icon="@drawable/search"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/lucky"
-        android:showAsAction="always"
-        android:title="Explore"/>
+        android:icon="@drawable/random"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/addNewStory"
         android:icon="@drawable/add"
         android:showAsAction="always"
         android:title="@string/add_new_story"/>
+
 </menu>

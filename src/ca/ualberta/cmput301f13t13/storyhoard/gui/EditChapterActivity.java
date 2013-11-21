@@ -53,6 +53,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * added.
  * 
  * author: Alexander Wong
+ * author: Kim Wu
  */
 
 public class EditChapterActivity extends MediaActivity {
