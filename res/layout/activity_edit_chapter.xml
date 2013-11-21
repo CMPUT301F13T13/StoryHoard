@@ -8,6 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:background="#000000"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -31,13 +32,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editHorizontalSCIllustrations"
+            android:background="#800080"
             android:hint="@string/add_chapter_edit_text" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/chapterEditChoices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="#FF00FF" >
     </ListView>
 
 </LinearLayout>
