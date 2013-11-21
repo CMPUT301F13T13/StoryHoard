@@ -42,29 +42,12 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/addNewChoice"
-            style="android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="@string/add_choice_button" />
-
         <ListView
             android:id="@+id/chapterEditChoices"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/chapterSaveButton"
-            android:layout_below="@+id/addNewChoice" >
-        </ListView>
+            android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/chapterSaveButton"
-            style="android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/save" />
+        </ListView>
     </RelativeLayout>
 
 </LinearLayout>
