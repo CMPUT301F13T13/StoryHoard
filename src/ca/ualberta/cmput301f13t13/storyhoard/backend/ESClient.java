@@ -246,7 +246,7 @@ public class ESClient {
 
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
 
-		if (criteria.getTitle() != null) {
+		if (criteria.getTitle() != null && !criteria.getTitle().equals("")) {
 			// searching by keywords in title
 			String query = "{\"query\" : {\"query_string\" : {\"default_field\""
 					+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
