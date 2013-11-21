@@ -30,17 +30,8 @@
             android:id="@+id/chapterEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/chapterAddIllust"
             android:layout_below="@+id/editHorizontalSCIllustrations"
             android:hint="@string/add_chapter_edit_text" />
-
-        <Button
-            android:id="@+id/chapterAddIllust"
-            style="android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/add_chapter_illust" />
     </RelativeLayout>
 
     <RelativeLayout

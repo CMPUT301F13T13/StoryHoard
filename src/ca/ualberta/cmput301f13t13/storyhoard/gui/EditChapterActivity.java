@@ -62,7 +62,6 @@ public class EditChapterActivity extends MediaActivity {
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
-	private Button addIllust;
 	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
@@ -88,7 +87,6 @@ public class EditChapterActivity extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setSaveButtonListener();
-		setAddChoiceListener();
 		updateICData();
 	}
 
@@ -118,7 +116,6 @@ public class EditChapterActivity extends MediaActivity {
 
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
-		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
 
@@ -160,34 +157,8 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		});
 	}
-
-	/**
-	 * Sets the onClick Listener for adding a choice.
-	 */
-	private void setAddChoiceListener() {
-		// Add a choice to this chapter
-		addChoice.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (app.isEditing()) {
-					Intent intent = new Intent(getBaseContext(),
-							EditChoiceActivity.class);
-					app.setChapter(chapter);
-					app.setStory(story);
-					startActivity(intent);
-				} else {
-					Toast.makeText(getBaseContext(),
-							"Save chapter before adding first choice",
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Sets the onCLick listener for adding an illustration.
-	 */
-
+	
+	
 
 	public Uri getImageFileUri() {
 		return this.imageFileUri;
@@ -210,8 +181,7 @@ public class EditChapterActivity extends MediaActivity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.addChoice:
-			Intent browse = new Intent(this, ViewBrowseStories.class);
-			startActivity(browse);
+			addChoice();
 			return true;
 		case R.id.addIllus:
 			addIllustration();
@@ -252,5 +222,18 @@ public class EditChapterActivity extends MediaActivity {
 				});
 		illustDialog = alert.create();
 		illustDialog.show();
+	}
+	private void addChoice() {
+		if (app.isEditing()) {
+			Intent intent = new Intent(getBaseContext(),
+					EditChoiceActivity.class);
+			app.setChapter(chapter);
+			app.setStory(story);
+			startActivity(intent);
+		} else {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first choice",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 }
