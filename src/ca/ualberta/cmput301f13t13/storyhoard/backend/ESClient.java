@@ -130,8 +130,10 @@ public class ESClient {
 	 * @return json string of the response
 	 */
 	String getEntityContent(HttpResponse response) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(response
-				.getEntity().getContent()));
+		HttpEntity entity =  response.getEntity();
+		InputStreamReader is = new InputStreamReader(entity.getContent());
+		BufferedReader br = new BufferedReader(is);
+
 		String output;
 		System.err.println("Output from ESClient -> ");
 		String json = "";
@@ -140,6 +142,9 @@ public class ESClient {
 			json += output;
 		}
 		System.err.println("JSON:" + json);
+		entity.consumeContent();
+		is.close();
+		br.close();
 		return json;
 	}
 

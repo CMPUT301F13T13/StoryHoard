@@ -45,13 +45,13 @@ public class TestServerManager
 	public void setUp() throws Exception {
 		super.setUp();
 		sm = ServerManager.getInstance();	
-		// clean up server
-		Story mockCriteria = new Story(null, null, null, null, null);
-		sm.retrieve(mockCriteria);
-		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
-		for (Object story: mockStories) {
-			sm.remove(story);
-		}
+//		// clean up server
+//		Story mockCriteria = new Story(null, null, null, null, null);
+//		sm.retrieve(mockCriteria);
+//		ArrayList<Object> mockStories = sm.retrieve(mockCriteria);
+//		for (Object story: mockStories) {
+//			sm.remove(story);
+//		}
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class TestServerManager
 		chap.addChoice(c1);
 		story.addChapter(chap);
 		
-		sm.insert(story);
+		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
@@ -101,7 +101,7 @@ public class TestServerManager
 		story.setFirstChapterId(chap.getId());
 		story.addChapter(chap);
 		
-		sm.insert(story);
+		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
@@ -130,13 +130,13 @@ public class TestServerManager
 	public void testGetAllPublishedStories() {		
 		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory1);
+		sm.update(mockStory1);
 		Story mockStory2 = new Story("My Frog", "Dr. Phil",
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory2);
+		sm.update(mockStory2);
 		Story mockStory3 = new Story("My Hen", "Dr. Farmer",
 				"my chubby hen", Utilities.getPhoneId(getActivity()));
-		sm.insert(mockStory3);
+		sm.update(mockStory3);
 
 		// setting search criteria
 		Story mockCriteria = new Story(null, null, null, null, 

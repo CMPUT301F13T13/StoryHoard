@@ -25,6 +25,8 @@ import java.util.UUID;
 import org.apache.http.client.ClientProtocolException;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 
 /**
@@ -82,29 +84,23 @@ public class ServerManager implements StoringManager {
 	 */	
 	@Override
 	public void insert(Object object){
-		new AsyncTask<Object, Void, Void>()
-		{
-			@Override
-			protected Void doInBackground(Object... params)
-			{
-				Story story = (Story) params[0];
-				String id = story.getId().toString();
-				
-				// story not yet in server
-				if (esclient.searchById(id) == null) {
-					prepareStory(story);
-					esclient.insertStory(story);
-				} else {    // story already in server
-					update(story);
-				}
-				return null;
-			}
+//		new AsyncTask<Object, Void, Void>()
+//		{
+//			@Override
+//			protected Void doInBackground(Object... params)
+//			{
+//				Story story = (Story) params[0];
+		Story story = (Story) object;
+				prepareStory(story);
+				esclient.insertStory(story);
+//				return null;
+//			}
 
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-			}
-		}.execute(object);
+//			@Override
+//			protected void onPostExecute(Void result) {
+//				super.onPostExecute(result);
+//			}
+//		}.execute(object);
 	}
 
 	/**
@@ -252,27 +248,20 @@ public class ServerManager implements StoringManager {
 	 */
 	@Override
 	public void update(Object object) { 
-		new AsyncTask<Object, Void, Void>()
-		{
-			@Override
-			protected Void doInBackground(Object... params)
-			{
-				Story story = (Story) params[0];
-
-				try {
-					esclient.deleteStory(story);
-					esclient.insertStory(story);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return null;
+		Story story = (Story) object;
+		String id = story.getId().toString();
+		
+		// story already on server
+		if (esclient.searchById(id) != null) {
+			try {
+				esclient.deleteStory(story);
+				esclient.insertStory(story);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-			}
-		}.execute(object);		
+		} else {
+			insert(story);
+		}
 	}	
 
 	/**
@@ -288,26 +277,27 @@ public class ServerManager implements StoringManager {
 	 * 			Story with id of the story you want to delete from server. 
 	 */
 	public void remove(Object object) { 
-		new AsyncTask<Object, Void, Void>()
-		{
-			@Override
-			protected Void doInBackground(Object... params)
-			{
-				Story story = (Story) params[0];
-				
+//		new AsyncTask<Object, Void, Void>()
+//		{
+//			@Override
+//			protected Void doInBackground(Object... params)
+//			{
+//				Story story = (Story) params[0];
+//				
+		Story story = (Story) object;
 				try {
 					esclient.deleteStory(story);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-			}
-		}.execute(object);			
+//				return null;
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Void result) {
+//				super.onPostExecute(result);
+//			}
+//		}.execute(object);			
 	}	
 
 	/**
