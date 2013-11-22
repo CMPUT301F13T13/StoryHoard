@@ -197,7 +197,6 @@ public class SHController {
 		ArrayList<Object> local = storyMan.retrieve(criteria);
 		ArrayList<Story> stories = Utilities.objectsToStories(local);
 		return stories;
-		
 	}
 	
 	/**
@@ -266,12 +265,13 @@ public class SHController {
 	public Story getRandomStory() {
 		Story story = null;
 		ArrayList<Story> stories = getAllPublishedStories();
-		Random rand = new Random(); 
-		int index = rand.nextInt(stories.size());
 		
 		if (stories.size() < 1) {
 			return null;
 		}
+		
+		Random rand = new Random(); 
+		int index = rand.nextInt(stories.size());
 		
 		story = stories.get(index);
 		 

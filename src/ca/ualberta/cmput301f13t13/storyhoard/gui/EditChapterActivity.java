@@ -152,8 +152,9 @@ public class EditChapterActivity extends MediaActivity {
 				if (lifedata.isEditing()) {
 					chapter.updateSelf(EditChapterActivity.this);
 				} else {
-					story.addChapter(chapter);
+					chapter.addSelf(EditChapterActivity.this);
 					if (lifedata.isFirstStory()) {
+						story.setFirstChapterId(chapter.getId());
 						story.addSelf(EditChapterActivity.this);
 					}
 				}

@@ -77,6 +77,7 @@ public class Chapter extends StoryPart {
 		this.randomChoice = null;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
+		choices = new ArrayList<Choice>();
 	}
 	/**
 	 * Initialize a new chapter with an id. Can also be used to make a chapter
@@ -101,6 +102,7 @@ public class Chapter extends StoryPart {
 		}
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
+		choices = new ArrayList<Choice>();
 	}
 
 	// Getters

@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
@@ -57,16 +58,20 @@ public class SearchResultsActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
+		lifedata = LifecycleData.getInstance();
 		emptyList = (TextView) findViewById(R.id.empty);
 
 		ArrayList<Story> newStories = lifedata.getStoryList();
+
+		if (newStories == null || newStories.size() == 0) {
+			Toast.makeText(getBaseContext(),
+					"No stories matched your search.", Toast.LENGTH_LONG)
+					.show();	
+		} 
+		
 		gridArray.clear();
-
-		if (newStories.size() !=0 ) {
-			gridArray.addAll(newStories);
-			emptyList.setText(" ");
-		}
-
+		gridArray.addAll(newStories);
+		emptyList.setText(" ");
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,

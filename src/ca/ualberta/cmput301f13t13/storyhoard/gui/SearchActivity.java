@@ -51,6 +51,8 @@ public class SearchActivity extends Activity {
 	private Spinner spinner;
 	private SHController gc;
 	private LifecycleData lifedata;
+	private enum Type {AUTHOR, CACHED, PUBLISHED};
+	private Type viewType = Type.AUTHOR;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,59 +69,79 @@ public class SearchActivity extends Activity {
 		titleInput = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
 		onSpinnerClick();
+		setSearchListener();
+	}
+
+	private void setSearchListener() {
 		searchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String title = titleInput.getText().toString();
 				title = title.trim();
 				title = title.replaceAll("[\n\r]", "");
 
-				// Correct Input: will save data to database and refresh
-				// activity.
-				if (valid_input(title)) {
-					Intent intent = new Intent(getBaseContext(),
-							SearchResultsActivity.class);
-					finish();
-					startActivity(intent);
+				if (validInput(title)) {
+					// Correct Input: will save data to database and refresh
+					// activity.
+					search(title);
+				} else {   
 					// Invalid Input types
-				} else {
-					AlertDialog.Builder alert = new AlertDialog.Builder(
-							SearchActivity.this);
-					alert.setTitle("Whoopsies!")
-							.setMessage("Story title is empty/invalid")
-							.setCancelable(false)
-							// cannot dismiss this dialog
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											dialog.cancel();
-										}
-									}); // parenthesis mean an anonymous class
-					// Show alert dialog
-					AlertDialog show_alert = alert.create();
-					show_alert.show();
+					alertDialog();
 				}
 			}
-		});
+		});		
 	}
-
+	
+	private void search(String title) {
+		ArrayList<Story> stories = new ArrayList<Story>();
+		if (viewType == Type.AUTHOR) {
+			stories = gc.searchAuthorStories(title);
+		} else if (viewType == Type.CACHED) {
+			stories = gc.searchCachedStories(title);
+		} else {
+			stories = gc.searchPublishedStories(title);
+		}
+		
+		lifedata.setStoryList(stories);
+		Intent intent = new Intent(getBaseContext(),
+				SearchResultsActivity.class);
+		finish();
+		startActivity(intent);		
+	}
+	
+	private void alertDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				SearchActivity.this);
+		alert.setTitle("Whoopsies!")
+				.setMessage("Story title is empty/invalid")
+				.setCancelable(false)
+				// cannot dismiss this dialog
+				.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+								dialog.cancel();
+							}
+						}); // parenthesis mean an anonymous class
+		// Show alert dialog
+		AlertDialog show_alert = alert.create();
+		show_alert.show();		
+	}
+	
 	// When the spinner is clicked
 	private void onSpinnerClick() {
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v,
 					int position, long id) {
-				ArrayList<Story> stories = new ArrayList<Story>();
 				if (position == 0) {
-					stories = gc.getAllAuthorStories();
+					viewType = Type.AUTHOR;
 				} else if (position == 1) {
-					stories = gc.getAllCachedStories();
+					viewType = Type.CACHED;
 				} else if (position == 2) {
-					stories = gc.getAllPublishedStories();
+					viewType = Type.PUBLISHED;
 				}
-				lifedata.setStoryList(stories);
 			}
 
 			@Override
@@ -130,8 +152,8 @@ public class SearchActivity extends Activity {
 	}
 
 	// Checks to see if story title is empty
-	private boolean valid_input(String user_input) {
-		int length = user_input.length();
+	private boolean validInput(String userInput) {
+		int length = userInput.length();
 		if (length == 0) {
 			return false;
 		} else {

@@ -251,14 +251,6 @@ public class TestStory extends
 		assertEquals(objs.size(), 1);
 		
 		sm.remove(s1);
-		
-        // clean up server
-        Story erase = new Story(null, null, null, null, null);
-        sm.retrieve(erase);
-        objs = sm.retrieve(erase);
-        for (Object story: objs) {
-                sm.remove(story);
-        }
 	}
 	
 	public void testExistsLocally() {

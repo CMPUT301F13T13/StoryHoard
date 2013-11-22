@@ -85,10 +85,10 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							currentStories = gc.getAllCachedStories();
+							currentStories = gc.getAllAuthorStories();
 							viewType = Type.LOCAL;
 						} else if (itemPosition == 1) {
-							currentStories = gc.getAllAuthorStories();
+							currentStories = gc.getAllCachedStories();
 							viewType = Type.LOCAL;
 						} else if (itemPosition == 2) {
 							currentStories = gc.getAllPublishedStories();
