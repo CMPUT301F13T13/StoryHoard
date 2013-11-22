@@ -225,7 +225,8 @@ public class TestStory extends
 		mockStory.addChapter(chap);
 		mockStory.cache(activity);
 
-		Story story = new Story(mockStory.getId(), null, null, null, null);
+		Story story = new Story(mockStory.getId(), null, null, null, 
+				mockStory.getPhoneId());
 		story.setFullContent(activity);
 		assertNotNull(story.getTitle());
 		assertNotNull(story.getAuthor());
@@ -234,12 +235,37 @@ public class TestStory extends
 		story.setTitle("newTitle");
 		story.cache(activity);
 		
-		story = new Story(mockStory.getId(), null, null, null, null);
+		story = new Story(mockStory.getId(), null, null, null, 
+				mockStory.getPhoneId());
 		story.setFullContent(activity);
 		assertTrue(story.getTitle().equals("newTitle"));
 	}	
 	
-	public void testPublishAndExistsLocally() {
+	public void testPublish() {
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		s1.publish();
+		ServerManager sm = ServerManager.getInstance();
+		ArrayList<Object> objs = sm.retrieve(s1);
+		assertEquals(objs.size(), 1);
 		
+		sm.remove(s1);
+		
+        // clean up server
+        Story erase = new Story(null, null, null, null, null);
+        sm.retrieve(erase);
+        objs = sm.retrieve(erase);
+        for (Object story: objs) {
+                sm.remove(story);
+        }
+	}
+	
+	public void testExistsLocally() {
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+
+		s1.addSelf(activity);
+		assertTrue(s1.existsLocally(getActivity()));
 	}
 }

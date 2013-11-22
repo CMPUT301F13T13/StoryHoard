@@ -345,7 +345,8 @@ public class Story extends StoryPart {
 	
 	public Boolean existsLocally(Context context) {
 		StoryManager sm = StoryManager.getInstance(context);
-		ArrayList<Object> objects = sm.retrieve(this);
+		Story crit = new Story(id, null, null, null, phoneId);
+		ArrayList<Object> objects = sm.retrieve(crit);
 		if (objects.size() < 1) {
 			return false;
 		}
