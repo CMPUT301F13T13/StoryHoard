@@ -19,7 +19,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import android.content.Context;
 
@@ -35,72 +34,6 @@ import android.provider.Settings;
  * 
  */
 public class Utilities {
-
-	/**
-	 * Takes an array of objects and converts them all to Stories.
-	 * 
-	 * @param objects
-	 * @return stories
-	 */
-	public static ArrayList<Story> objectsToStories(ArrayList<Object> objs) {
-		ArrayList<Story> stories = new ArrayList<Story>();
-
-		for (Object obj : objs) {
-			stories.add((Story) obj);
-		}
-
-		return stories;
-	}
-
-	/**
-	 * Takes an array of objects and converts them all to Chapters.
-	 * 
-	 * @param objects
-	 * @return chapters
-	 */
-	public static ArrayList<Chapter> objectsToChapters(ArrayList<Object> objs) {
-		ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-
-		for (Object obj : objs) {
-			chapters.add((Chapter) obj);
-		}
-
-		return chapters;
-	}
-
-	/**
-	 * Takes an array of objects and converts them all to Choice objects.
-	 * 
-	 * @param objects
-	 * @return choices
-	 */
-	public static ArrayList<Choice> objectsToChoices(ArrayList<Object> objs) {
-		ArrayList<Choice> choices = new ArrayList<Choice>();
-
-		for (Object obj : objs) {
-			choices.add((Choice) obj);
-		}
-
-		return choices;
-	}
-
-	/**
-	 * Takes an array of objects and converts them all to Media objects.
-	 * 
-	 * @param objects
-	 * @return medias
-	 */
-	public static ArrayList<Media> objectsToMedia(ArrayList<Object> objects) {
-		ArrayList<Media> medias = new ArrayList<Media>();
-
-		for (Object obj : objects) {
-			medias.add((Media) obj);
-		}
-
-		return medias;
-	}
-
-
 
 	/**
 	 * This functions gets the id of the device and returns it as a string

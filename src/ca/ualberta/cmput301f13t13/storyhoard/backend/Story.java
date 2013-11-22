@@ -40,7 +40,7 @@ public class Story {
 	private String title;
 	private String description;
 	private UUID firstChapterId;
-	private HashMap<UUID, Chapter> chapters;
+	private ArrayList<Chapter> chapters;
 	private String phoneId;
 	public static final String NOT_AUTHORS = "not";
 
@@ -70,7 +70,7 @@ public class Story {
 		}
 		this.phoneId = phoneId;
 		this.firstChapterId = null;
-		chapters = new HashMap<UUID, Chapter>();
+		chapters = new ArrayList<Chapter>();
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class Story {
 		this.description = description;
 		this.phoneId = phoneId;
 		this.firstChapterId = null;
-		chapters = new HashMap<UUID, Chapter>();
+		chapters = new ArrayList<Chapter>();
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class Story {
 		if (chapterId != null) {
 			this.firstChapterId = UUID.fromString(chapterId);
 		}
-		this.chapters = new HashMap<UUID, Chapter>();
+		this.chapters = new ArrayList<Chapter>();
 		this.phoneId = phoneId;
 	}
 
@@ -171,7 +171,7 @@ public class Story {
 	 * 
 	 * @return chapters
 	 */
-	public HashMap<UUID, Chapter> getChapters() {
+	public ArrayList<Chapter> getChapters() {
 		return this.chapters;
 	}
 
@@ -182,16 +182,6 @@ public class Story {
 	 */
 	public UUID getFirstChapterId() {
 		return this.firstChapterId;
-	}
-
-	/**
-	 * Returns the chapter matching the chapter id
-	 * 
-	 * @return chapter
-	 */
-	public Chapter getChapter(UUID id) {
-		Chapter chap = chapters.get(id);
-		return chap;
 	}
 
 	/**
@@ -255,7 +245,7 @@ public class Story {
 	 * 
 	 * @param chapters
 	 */
-	public void setChapters(HashMap<UUID, Chapter> chapters) {
+	public void setChapters(ArrayList<Chapter> chapters) {
 		this.chapters = chapters;
 	}
 
@@ -288,10 +278,10 @@ public class Story {
 		if (firstChapterId == null) {
 			// set first chapter id
 			firstChapterId = chapter.getId();
-			chapters.put(chapter.getId(), chapter);
+			chapters.add(chapter);
 			return true;
 		}
-		chapters.put(chapter.getId(), chapter);
+		chapters.add(chapter);
 		return false;
 	}
 	
@@ -305,19 +295,12 @@ public class Story {
 		firstChapterId = self.getFirstChapterId();
 		phoneId = self.getPhoneId();
 		
-		HashMap<UUID, Chapter> chapHash = new HashMap<UUID, Chapter>();
 		ChapterManager cm = ChapterManager.getInstance(context);
 		Chapter criteria = new Chapter(null, getId(), null);		
 		ArrayList<Chapter> chapters = cm.retrieve(criteria);
 
-		// Get all choices
-		for (Chapter chap : chapters) {
-			chap.setFullContent(context);
-			chapHash.put(chap.getId(), chap);
-		}
-
 		// add chapters to story
-		setChapters(chapHash);		
+		setChapters(chapters);		
 	}
 	
 	/**

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -113,10 +112,9 @@ public class ServerManager implements StoringManager<Story> {
 	private void prepareStory(Story story) {
 
 		// get any media associated with the chapters of the story
-		HashMap<UUID, Chapter> chaps = story.getChapters();
+		ArrayList<Chapter> chaps = story.getChapters();
 
-		for (UUID key : chaps.keySet()) {
-			Chapter chap = chaps.get(key);
+		for (Chapter chap : chaps) {
 			ArrayList<Media> photos = chap.getPhotos();
 
 			for (Media photo : photos) {
