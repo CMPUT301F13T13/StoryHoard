@@ -60,6 +60,14 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		activity.deleteDatabase(DBContract.DATABASE_NAME);
 
 		gc = SHController.getInstance(activity);				
+		ServerManager sm = ServerManager.getInstance();	
+		sm.setTestServer();
+	}
+
+	public void tearDown() throws Exception {
+		super.tearDown();
+		ServerManager sm = ServerManager.getInstance();
+		sm.setRealServer();
 	}
 
 	/**
@@ -205,15 +213,12 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 				Utilities.getPhoneId(getActivity()));
 		Story s5 = new Story("sad toe", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		Story s6 = new Story("sad hen", "me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
 
 		s1.addSelf(activity);
 		s2.addSelf(activity);
 		s3.addSelf(activity);
 		s4.publish();
 		s5.publish();
-		s6.publish();
 
 		// title are null (should retrieve all local author stories)
 		stories = gc.searchAuthorStories(null);
@@ -235,7 +240,6 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		ServerManager sm = ServerManager.getInstance();
 		sm.remove(s4);
 		sm.remove(s5);
-		sm.remove(s6);
 	}
 
 	/**

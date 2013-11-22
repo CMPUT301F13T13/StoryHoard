@@ -28,6 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
@@ -44,6 +45,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 public class TestStory extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private Context activity;
+	private ServerManager sm;
 
 	public TestStory() {
 		super(ViewBrowseStories.class);
@@ -57,6 +59,14 @@ public class TestStory extends
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		activity = getActivity();
+		sm = ServerManager.getInstance();	
+		sm.setTestServer();
+	}
+
+	public void tearDown() throws Exception {
+		super.tearDown();
+		sm = ServerManager.getInstance();
+		sm.setRealServer();
 	}
 	
 	/**
@@ -228,4 +238,8 @@ public class TestStory extends
 		story.setFullContent(activity);
 		assertTrue(story.getTitle().equals("newTitle"));
 	}	
+	
+	public void testPublishAndExistsLocally() {
+		
+	}
 }
