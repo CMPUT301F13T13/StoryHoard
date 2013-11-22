@@ -61,7 +61,6 @@ public class EditChapterActivity extends MediaActivity {
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
-	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private SHController gc;
@@ -86,7 +85,6 @@ public class EditChapterActivity extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setSaveButtonListener();
-		setAddChoiceListener();
 		setRandomChoice();
 		updateICData();
 	}
@@ -117,7 +115,6 @@ public class EditChapterActivity extends MediaActivity {
 
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
-		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
 		randChoiceCheck = (CheckBox) findViewById(R.id.randChoiceCheck);
@@ -162,28 +159,6 @@ public class EditChapterActivity extends MediaActivity {
 		});
 	}
 
-	/**
-	 * Sets the onClick Listener for adding a choice.
-	 */
-	private void setAddChoiceListener() {
-		// Add a choice to this chapter
-		addChoice.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (lifedata.isEditing()) {
-					Intent intent = new Intent(getBaseContext(),
-							EditChoiceActivity.class);
-					lifedata.setChapter(chapter);
-					lifedata.setStory(story);
-					startActivity(intent);
-				} else {
-					Toast.makeText(getBaseContext(),
-							"Save chapter before adding first choice",
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Set onClick listener for setting random choice
@@ -220,6 +195,7 @@ public class EditChapterActivity extends MediaActivity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.addChoice:
+			addChoice();
 			return true;
 		case R.id.addIllus:
 			addIllustration();
@@ -261,6 +237,20 @@ public class EditChapterActivity extends MediaActivity {
 				});
 		illustDialog = alert.create();
 		illustDialog.show();
+	}
+
+	private void addChoice() {
+		if (lifedata.isEditing()) {
+			Intent intent = new Intent(getBaseContext(),
+					EditChoiceActivity.class);
+			lifedata.setChapter(chapter);
+			lifedata.setStory(story);
+			startActivity(intent);
+		} else {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first choice",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }
