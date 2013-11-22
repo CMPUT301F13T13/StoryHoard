@@ -15,8 +15,6 @@
  */                                          
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import android.app.Activity;
-import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.SearchActivity;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.SearchResultsActivity;
 
 /**
  * Test case for the searching stories activity
@@ -42,28 +39,6 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 	public TestSearchActivity() {
 		super(SearchActivity.class);
 	}
-
-	//Used http://stackoverflow.com/questions/9405561/test-if-a-button-starts-a-new-activity-in-android-junit-pref-without-robotium
-	
-	public void testOpenNextActivity() {
-//		  ActivityMonitor activityMonitor = getInstrumentation().addMonitor(SearchResultsActivity.class.getName(), null, false);
-//
-//		  // open current activity.
-//		  SearchActivity myActivity = getActivity();
-//		  final Button button = (Button) myActivity.findViewById(R.id.searchButton);
-//		  myActivity.runOnUiThread(new Runnable() {
-//		    @Override
-//		    public void run() {
-//		      // click button and open next activity.
-//		      button.performClick();
-//		    }
-//		  });
-//
-//		  Activity nextActivity = getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 10);
-//		  // next activity is opened and captured.
-//		  assertNotNull(nextActivity);
-//		  nextActivity.finish();
-		}
 	
 	protected void setUp() throws Exception {
 		super.setUp();
