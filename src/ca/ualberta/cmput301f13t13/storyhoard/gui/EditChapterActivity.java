@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,7 +69,6 @@ public class EditChapterActivity extends MediaActivity {
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
 
-	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
@@ -231,7 +229,7 @@ public class EditChapterActivity extends MediaActivity {
 	 */
 	public void setRandomChoice() {
 		//If the chapter has been set to random choice, check box
-		if (chapter.getRandomChoice().equals("yes")) {
+		if (chapter.hasRandomChoice()) {
 			randChoiceCheck.setChecked(true);
 		}
 		
@@ -246,13 +244,5 @@ public class EditChapterActivity extends MediaActivity {
 				}
 			}
 		});
-	}
-
-	public Uri getImageFileUri() {
-		return this.imageFileUri;
-	}
-
-	public Chapter getChapter() {
-		return this.chapter;
 	}
 }

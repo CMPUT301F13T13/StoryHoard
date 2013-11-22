@@ -128,7 +128,7 @@ public class TestChapter
 		assertTrue(mockChapter.getChoices() != null);
 		assertTrue(mockChapter.getPhotos() != null);
 		assertTrue(mockChapter.getIllustrations() != null);
-		assertTrue(mockChapter.getRandomChoice());
+		assertTrue(mockChapter.hasRandomChoice());
 	}
 	
 	/**

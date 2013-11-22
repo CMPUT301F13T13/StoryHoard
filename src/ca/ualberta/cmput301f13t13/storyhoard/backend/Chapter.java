@@ -74,7 +74,7 @@ public class Chapter extends StoryPart {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		this.randomChoice = null;
+		this.randomChoice = false;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 		choices = new ArrayList<Choice>();
@@ -139,7 +139,7 @@ public class Chapter extends StoryPart {
 	 * 
 	 * @return randomChoice
 	 */
-	public Boolean getRandomChoice() {
+	public Boolean hasRandomChoice() {
 
 		return this.randomChoice;
 	}
@@ -286,10 +286,6 @@ public class Chapter extends StoryPart {
 
 		if (storyId != null) {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		}
-		if (randomChoice != null) {
-			info.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
-					randomChoice.toString());
 		}
 
 		return info;
