@@ -114,7 +114,7 @@ public class EditStoryActivity extends Activity {
 	
 	private class Update extends AsyncTask<Void, Void, Void>{
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected synchronized Void doInBackground(Void... params) {
 			// publish or update story 
 			newStory.setFullContent(EditStoryActivity.this);
 			newStory.publish();
