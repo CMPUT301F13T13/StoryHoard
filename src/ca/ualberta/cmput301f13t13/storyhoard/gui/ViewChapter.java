@@ -89,7 +89,6 @@ public class ViewChapter extends MediaActivity {
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
-		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,

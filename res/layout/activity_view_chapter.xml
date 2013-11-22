@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@drawable/choices_bg"
     android:layout_height="match_parent" >
 
     <HorizontalScrollView
@@ -18,21 +19,28 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/chapterContent"
+    <LinearLayout
+        android:id="@+id/content"
+        android:background="#B4D2E3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/horizontalSCIllustraions"
-        android:text="@string/chapter_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/chapterContent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chapter_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalSCPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/chapterContent">
+        android:layout_below="@+id/content" >
 
         <LinearLayout
             android:id="@+id/horizontalPhotos"
@@ -41,13 +49,12 @@
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-	
+
     <ListView
         android:id="@+id/chapterChoices"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/horizontalSCPhotos" >
-
     </ListView>
 
 </RelativeLayout>
