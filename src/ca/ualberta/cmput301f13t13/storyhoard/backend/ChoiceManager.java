@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChoiceTable;
 
 /**
@@ -193,5 +194,16 @@ public class ChoiceManager implements StoringManager {
 			}	
 		}
 		return selection;
+	}
+
+	@Override
+	public void remove(Object object) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Choice choice = (Choice) object;
+		
+		// Delete entry 
+		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
+		String[] selectionArgs1 = { String.valueOf(choice.getId())};
+		db.delete(ChoiceTable.TABLE_NAME, selection, selectionArgs1);
 	}
 }

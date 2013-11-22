@@ -229,5 +229,11 @@ public class StoryManager implements StoringManager {
 			sArgs.add(phoneId);
 		}
 		return selection;
+	}
+
+	@Override
+	public void remove(Object object) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

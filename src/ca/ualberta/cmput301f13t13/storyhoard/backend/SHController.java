@@ -293,7 +293,8 @@ public class SHController {
 		Random rand = new Random(); 
 		int num;
 		num = rand.nextInt(max);
-		Choice choice=choices.get(num);
+		Choice choice = choices.get(num);
+		choice.setText("I'm feeling lucky...");
 
 		return choice;
 	}	

@@ -267,6 +267,7 @@ public class ServerManager implements StoringManager {
 	 * @param object
 	 * 			Story with id of the story you want to delete from server. 
 	 */
+	@Override
 	public void remove(Object object) { 
 		Story story = (Story) object;
 				try {

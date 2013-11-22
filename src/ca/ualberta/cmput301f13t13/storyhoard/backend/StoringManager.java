@@ -67,5 +67,5 @@ public interface StoringManager {
 	 */
 	public String setSearchCriteria(Object object, ArrayList<String> sArgs);
 
-	// public void delete();
+	public void remove(Object object);
 }

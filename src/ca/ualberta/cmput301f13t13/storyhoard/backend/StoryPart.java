@@ -17,4 +17,8 @@ public abstract class StoryPart {
 	
 	public abstract void setFullContent(Context context);
 	
+	public void removeSelf(Context context) {
+		// optional
+	}
+	
 }

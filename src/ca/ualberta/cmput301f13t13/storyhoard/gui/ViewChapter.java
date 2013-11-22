@@ -118,10 +118,12 @@ public class ViewChapter extends MediaActivity {
 			chapterContent.setText(chapterContent.getText()
 					+ "\n\n<No Choices>");
 		} else {
-			choices.addAll(chapter.getChoices());
+			ArrayList<Choice> chapChoices = chapter.getChoices();
 			if (chapter.hasRandomChoice() == true) {
-				choices.add(gc.getRandomChoice(chapter.getId()));
+				chapChoices.add(gc.getRandomChoice(chapter.getId()));
 			}
+			choices.addAll(chapChoices);
+
 		}
 		choiceAdapter.notifyDataSetChanged();
 

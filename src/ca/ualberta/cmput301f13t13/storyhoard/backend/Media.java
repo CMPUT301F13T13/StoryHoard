@@ -197,6 +197,8 @@ public class Media {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	
 
 	/**
 	 * Returns the information of the media (id, chapterId, type) that could be
@@ -277,5 +279,10 @@ public class Media {
 			bitmapString = "";
 		}
 		mm.insert(this);
+	}	
+	
+	public void removeSelf(Context context) {
+		ChoiceManager cm = ChoiceManager.getInstance(context);
+		cm.remove(this);
 	}	
 }

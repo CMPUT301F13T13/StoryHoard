@@ -205,4 +205,10 @@ public class ChapterManager implements StoringManager {
 		}
 		return selection;
 	}
+
+	@Override
+	public void remove(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
 }

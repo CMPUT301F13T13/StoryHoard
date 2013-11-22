@@ -199,4 +199,9 @@ public class Choice {
 		ChoiceManager cm = ChoiceManager.getInstance(context);
 		cm.insert(this);
 	}
+	
+	public void removeSelf(Context context) {
+		ChoiceManager cm = ChoiceManager.getInstance(context);
+		cm.remove(this);
+	}
 }
