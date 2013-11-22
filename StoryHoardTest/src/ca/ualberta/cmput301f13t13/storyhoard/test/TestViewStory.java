@@ -27,7 +27,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -36,7 +35,6 @@ import android.widget.TextView;
  */
 public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	private ViewStory activity;
-	private ImageView storyCover;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
