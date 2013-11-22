@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
@@ -163,17 +164,23 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story story = gc.getRandomStory();
-			UUID newId = gc.cacheStory(story);
-			if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
-				story = gc.getStory(newId, ObjectType.CREATED_STORY);
-				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			
+			// no stories on server to choose from
+			if (story != null) {			
+				gc.cacheStory(story);
+				if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
+					lifedata.setStoryType(ObjectType.CREATED_STORY);
+				} else {
+					lifedata.setStoryType(ObjectType.CACHED_STORY);
+				}
+				lifedata.setStory(story);
+				intent = new Intent(getBaseContext(), ViewStory.class);
+				startActivity(intent);
 			} else {
-				story = gc.getStory(newId, ObjectType.CACHED_STORY);
-				lifedata.setStoryType(ObjectType.CACHED_STORY);
+				Toast.makeText(getBaseContext(),
+						"No Published Stories Available", Toast.LENGTH_LONG)
+						.show();				
 			}
-			lifedata.setStory(story);
-			intent = new Intent(getBaseContext(), ViewStory.class);
-			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

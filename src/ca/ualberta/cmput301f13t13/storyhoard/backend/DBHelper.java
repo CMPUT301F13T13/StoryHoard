@@ -74,8 +74,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(DBContract.OwnStoryTable.SQL_CREATE_TABLE);
-		db.execSQL(DBContract.CachedStoryTable.SQL_CREATE_TABLE);
+		db.execSQL(DBContract.StoryTable.SQL_CREATE_TABLE);
 		db.execSQL(DBContract.ChapterTable.SQL_CREATE_TABLE);
 		db.execSQL(DBContract.ChoiceTable.SQL_CREATE_TABLE);
 		db.execSQL(DBContract.MediaTable.SQL_CREATE_TABLE);
@@ -86,8 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL(DBContract.OwnStoryTable.SQL_DELETE_TABLE);
-		db.execSQL(DBContract.CachedStoryTable.SQL_DELETE_TABLE);
+		db.execSQL(DBContract.StoryTable.SQL_DELETE_TABLE);
 		db.execSQL(DBContract.ChapterTable.SQL_DELETE_TABLE);
 		db.execSQL(DBContract.ChoiceTable.SQL_DELETE_TABLE);
 		db.execSQL(DBContract.MediaTable.SQL_DELETE_TABLE);

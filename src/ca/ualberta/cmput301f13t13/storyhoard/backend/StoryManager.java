@@ -17,11 +17,15 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
+
+import android.content.ContentValues;
 import android.content.Context;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.CachedStoryTable;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve story
@@ -36,10 +40,14 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.OwnStoryTable;
  * @see Story
  * @see StoringManager
  */
-public class StoryManager extends StoryManagerHelper implements StoringManager {
+public class StoryManager implements StoringManager {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 	private static String phoneId = null;
+	protected ContentValues values;
+	protected String selection;
+	protected String[] sArgs;
+	protected String[] projection;
 
 	/**
 	 * Initializes a new OwnStoryManager object.
@@ -75,12 +83,9 @@ public class StoryManager extends StoryManagerHelper implements StoringManager {
 	 */
 	@Override
 	public void insert(Object object) {
-		Story story = (Story) object;
-		if (story.getPhoneId().equals(phoneId)) {
-			super.insert(object, OwnStoryTable.TABLE_NAME, helper);
-		} else {
-			super.insert(object, CachedStoryTable.TABLE_NAME, helper);
-		}
+		SQLiteDatabase db = helper.getWritableDatabase();
+		setContentValues(object);
+		db.insert(StoryTable.TABLE_NAME, null, values);
 	}
 
 	/**
@@ -91,12 +96,13 @@ public class StoryManager extends StoryManagerHelper implements StoringManager {
 	 */
 	@Override
 	public void update(Object newObject) {
-		Story story = (Story) newObject;
-		if (story.getPhoneId().equals(phoneId)) {
-			super.update(story, OwnStoryTable.TABLE_NAME, helper);
-		} else {
-			super.update(story, CachedStoryTable.TABLE_NAME, helper);
-		}		
+		setContentValues(newObject);
+		Story newS = (Story) newObject;
+		selection = StoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
+		sArgs = new String[]{ newS.getId().toString() };
+		SQLiteDatabase db = helper.getReadableDatabase();
+		db.update(StoryTable.TABLE_NAME, values, selection, 
+				sArgs);	
 	}
 
 	/**
@@ -107,12 +113,120 @@ public class StoryManager extends StoryManagerHelper implements StoringManager {
 	 */
 	@Override
 	public ArrayList<Object> retrieve(Object criteria) {
-		Story story = (Story) criteria;
-		if (story.getPhoneId() != null) {
-			return super.retrieve(story, OwnStoryTable.TABLE_NAME, helper);
-		} else {
-			return super.retrieve(story, CachedStoryTable.TABLE_NAME, helper);
-		}		
-		
+		ArrayList<Object> results = new ArrayList<Object>();
+		SQLiteDatabase db = helper.getReadableDatabase();
+		setUpSearch(criteria);
+
+		// Querying the database
+		Cursor cursor = db.query(StoryTable.TABLE_NAME, projection, selection,
+				sArgs, null, null, null);
+
+		// Retrieving all the entries
+		results = retrieveCursorEntries(cursor);
+		return results;
 	}
+	
+
+	private ArrayList<Object> retrieveCursorEntries(Cursor cursor) {
+		ArrayList<Object> results = new ArrayList<Object>();
+		
+		// Retrieving all the entries
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			String storyId = cursor.getString(0);
+
+			Story story = new Story(
+					storyId, 
+					cursor.getString(1), // title
+					cursor.getString(2), // author
+					cursor.getString(3), // description
+					cursor.getString(4), // first chapter id
+					cursor.getString(5) // phoneId
+					);
+			results.add(story);
+			cursor.moveToNext();
+		}
+		cursor.close();
+
+		return results;		
+	}
+	
+	protected void setUpSearch(Object criteria) {
+		sArgs = null;
+		projection = new String[]{ 
+				StoryTable.COLUMN_NAME_STORY_ID,
+				StoryTable.COLUMN_NAME_TITLE, 
+				StoryTable.COLUMN_NAME_AUTHOR,
+				StoryTable.COLUMN_NAME_DESCRIPTION,
+				StoryTable.COLUMN_NAME_FIRST_CHAPTER,
+				StoryTable.COLUMN_NAME_PHONE_ID };
+
+		// Setting search criteria
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+		selection = setSearchCriteria(criteria, selectionArgs);
+
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			selection = null;
+		}
+	}	
+	
+	/**
+	 * Sets up the ContentValues for inserting or updating the database.
+	 * @param object
+	 */
+	protected void setContentValues(Object object) {
+		Story story = (Story) object;
+		UUID chapterId = story.getFirstChapterId();
+
+		// Insert story
+		values = new ContentValues();
+		values.put(StoryTable.COLUMN_NAME_STORY_ID, 
+				(story.getId()).toString());
+		values.put(StoryTable.COLUMN_NAME_TITLE, story.getTitle());
+		values.put(StoryTable.COLUMN_NAME_AUTHOR, story.getAuthor());
+		values.put(StoryTable.COLUMN_NAME_DESCRIPTION,
+				story.getDescription());
+		if (chapterId != null) {
+			values.put(StoryTable.COLUMN_NAME_FIRST_CHAPTER, 
+				chapterId.toString());
+		}
+		values.put(StoryTable.COLUMN_NAME_PHONE_ID, story.getPhoneId());
+	}
+	
+	/**
+	 * Creates the selection string (a prepared statement) to be used in the
+	 * database query. Also creates an array holding the items to be placed in
+	 * the ? of the selection.
+	 * 
+	 * @param object
+	 *            Holds the data needed to build the selection string and the
+	 *            selection arguments array.
+	 * @param sArgs
+	 *            Holds the arguments to be passed into the selection string.
+	 * @return String The selection string, i.e. the where clause that will be
+	 *         used in the sql query.
+	 */
+	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
+		Story story = (Story) object;
+		HashMap<String, String> storyCrit = story.getSearchCriteria();
+
+		// Setting search criteria
+		String selection = "1 LIKE ?";
+		sArgs.add("1");
+		
+		for (String key : storyCrit.keySet()) {
+			String value = storyCrit.get(key);
+			selection += " AND " + key + " LIKE ?";
+			sArgs.add(value);
+			
+		}
+		
+		if (!storyCrit.containsKey(StoryTable.COLUMN_NAME_PHONE_ID)) {
+			selection += " AND " + StoryTable.COLUMN_NAME_PHONE_ID 
+					+ " NOT LIKE " + phoneId;
+		}
+		return selection;
+	}	
 }

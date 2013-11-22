@@ -151,13 +151,12 @@ public class EditChapterActivity extends MediaActivity {
 			public void onClick(View v) {
 				chapter.setText(chapterContent.getText().toString());
 				if (lifedata.isEditing()) {
-					gc.updateObject(chapter, ObjectType.CHAPTER);
+					chapter.updateSelf(EditChapterActivity.this);
 				} else {
 					story.addChapter(chapter);
 					if (lifedata.isFirstStory()) {
-						gc.addObject(story, ObjectType.CREATED_STORY);
+						story.addSelf(EditChapterActivity.this);
 					}
-					gc.addObject(chapter, ObjectType.CHAPTER);
 				}
 				finish();
 			}

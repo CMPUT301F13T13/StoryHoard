@@ -74,7 +74,7 @@ public class Chapter extends StoryPart {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		this.randomChoice = false;
+		this.randomChoice = null;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 	}
@@ -333,6 +333,12 @@ public class Chapter extends StoryPart {
 	 */
 	@Override
 	public void setFullContent(Context context) {
+		ChapterManager chapm = ChapterManager.getInstance(context);
+		ArrayList<Object> objs = chapm.retrieve(this);
+		Chapter self = (Chapter) objs.get(0);
+		
+		storyId = self.getStoryId();
+		text = self.getText();
 		
 		// Get all its choices
 		Choice criteria = new Choice(null, getId());

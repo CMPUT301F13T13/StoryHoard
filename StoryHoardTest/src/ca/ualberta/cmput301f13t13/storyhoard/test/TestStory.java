@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
@@ -42,6 +43,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestStory extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	private Context activity;
 
 	public TestStory() {
 		super(ViewBrowseStories.class);
@@ -54,6 +56,7 @@ public class TestStory extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		activity = getActivity();
 	}
 	
 	/**
@@ -182,18 +185,47 @@ public class TestStory extends
 	 * tests getting all components of a chapter (media + choices)
 	 */
 	public void testGetFullContent() {
+		Story s = new Story("title", "author", "des", "phoneid");
 		Chapter chap = new Chapter(UUID.randomUUID(), "chap1");
 		Choice mockChoice = new Choice(chap.getId(), chap.getId(), "opt1");
 		Media m = new Media(chap.getId(), null, Media.PHOTO);
 		chap.addPhoto(m);
 		chap.addChoice(mockChoice);
+		s.addChapter(chap);
+		s.addSelf(getActivity());
 		
-		chap.addSelf(getActivity());
+		Story fullStory = new Story(s.getId(), null, null, null, null);
+		fullStory.setFullContent(getActivity());
 		
-		Chapter newChap = new Chapter(chap.getId(), chap.getStoryId(), "newchap1");
-		newChap.setFullContent(getActivity());
-		
-		assertEquals(newChap.getChoices().size(), 1);
-		assertEquals(newChap.getPhotos().size(), 1);
+		assertEquals(s.getChapters().size(), 1);
+		assertEquals(s.getChapter(s.getFirstChapterId()).getChoices().size(), 1);
+		assertEquals(s.getChapter(s.getFirstChapterId()).getPhotos().size(), 1);
 	}
+	
+	/**
+	 * Tests caching a story.
+	 */
+	public void testCacheLoadStory() {
+		Story mockStory = new Story("My Monkey", "TS ELLIOT",
+				"monkey is in the server", Utilities.getPhoneId(getActivity()));
+		Chapter chap = new Chapter(mockStory.getId(), "l");
+		Chapter chap2 = new Chapter(mockStory.getId(), "2");
+		chap.addChoice(new Choice(chap.getId(), chap2.getId(), "hi"));
+
+		mockStory.addChapter(chap);
+		mockStory.cache(activity);
+
+		Story story = new Story(mockStory.getId(), null, null, null, null);
+		story.setFullContent(activity);
+		assertNotNull(story.getTitle());
+		assertNotNull(story.getAuthor());
+		assertNotNull(story.getDescription());
+		
+		story.setTitle("newTitle");
+		story.cache(activity);
+		
+		story = new Story(mockStory.getId(), null, null, null, null);
+		story.setFullContent(activity);
+		assertTrue(story.getTitle().equals("newTitle"));
+	}	
 }

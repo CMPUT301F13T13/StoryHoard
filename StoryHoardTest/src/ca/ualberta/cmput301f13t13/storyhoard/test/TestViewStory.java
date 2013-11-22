@@ -15,14 +15,17 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.UUID;
+
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +41,7 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
-	private Story story;
+	private LifecycleData lifedata;
 	
 	public TestViewStory() {
 		super(ViewStory.class);
@@ -49,20 +52,20 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		story = new Story("title", "author", "es", "432432");		
-		Intent intent = new Intent();
-		intent.putExtra("storyID", story.getId());
+		lifedata = LifecycleData.getInstance();
 		
-		setActivityIntent(intent);
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		story.addChapter(chapter);
+		lifedata.setStory(story);
+
+		activity = getActivity();
 	}
 
-	public void test() {
-		fail("Not yet implemented");
-		
-		activity = getActivity();
-		SHController gc = SHController.getInstance(getActivity());
-		gc.addObject(story, ObjectType.CACHED_STORY);
-		
+	public void testPreConditions() {
+
 		storyCover = (ImageView) activity.findViewById(R.id.storyImage);
 		storyTitle = (TextView) activity.findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) activity.findViewById(R.id.storyAuthor);
@@ -75,4 +78,25 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		assertTrue(storyDescription != null);
 		assertTrue(beginReading != null);
 	}
+	
+	@UiThreadTest
+	public void testSetAuthor() {
+		String author = "The Best Author Ever";
+		storyAuthor.setText(author);
+		assertTrue(storyAuthor.getText().toString().equals(author));
+	}	
+	
+	@UiThreadTest
+	public void testSetTitle() {
+		String title = "My Title";
+		storyTitle.setText(title);
+		assertTrue(storyTitle.getText().toString().equals(title));
+	}	
+	
+	@UiThreadTest
+	public void testSetDescription() {
+		String desc = "This is the story of a new description.";
+		storyDescription.setText(desc);
+		assertTrue(storyDescription.getText().toString().equals(desc));
+	}	
 }

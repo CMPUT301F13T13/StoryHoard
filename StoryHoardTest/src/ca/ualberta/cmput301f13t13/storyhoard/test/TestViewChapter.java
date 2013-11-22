@@ -15,17 +15,17 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.UUID;
+
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.AdapterChoices;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,9 +38,8 @@ import android.widget.TextView;
 public class TestViewChapter extends
 		ActivityInstrumentationTestCase2<ViewChapter> {
 	private ViewChapter activity;
+	private LifecycleData lifedata;
 
-	private AdapterChoices choiceAdapter;
-	private AlertDialog photoDialog;
 	private LinearLayout illustrations;
 	private LinearLayout photos;
 
@@ -54,23 +53,20 @@ public class TestViewChapter extends
 	
 	@Override
 	public void setUp() throws Exception {
+		lifedata = LifecycleData.getInstance();
+		
 		Story story = new Story("title", "author", "es", "432432");
-		Chapter chap = new Chapter(story.getId(), null);
-		
-		SHController gc = SHController.getInstance(getActivity());
-		gc.addObject(story, ObjectType.CACHED_STORY);
-		gc.addObject(chap, ObjectType.CACHED_STORY);
-		Intent intent = new Intent();
-		
-		intent.putExtra("storyID", story.getId());
-		intent.putExtra("chapterID", chap.getId());
-		
-		setActivityIntent(intent);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		story.addChapter(chapter);
+		lifedata.setStory(story);
+
+		activity = getActivity();
 	}
 
 	public void testPreConditions() {
-		activity = getActivity();
-		
+	
 		// Setup the activity fields
 		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
@@ -84,4 +80,11 @@ public class TestViewChapter extends
 		assertTrue(illustrations != null);
 		assertTrue(photos != null);
 	}
+	
+	@UiThreadTest
+	public void testSetChapterContent() {
+		String title = "My chap";
+		chapterContent.setText(title);
+		assertTrue(chapterContent.getText().toString().equals(title));
+	}	
 }
