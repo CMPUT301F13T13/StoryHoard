@@ -22,6 +22,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -229,15 +231,15 @@ public class EditChapterActivity extends MediaActivity {
 	 * Set onClick listener for setting random choice
 	 */
 	public void setRandomChoice() {
-		//If the chapter has been set to random choice, check box
+		// If the chapter has been set to random choice, check box
 		if (chapter.hasRandomChoice()) {
 			randChoiceCheck.setChecked(true);
 		}
-		
+
 		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//If checked, set random choice on chapter
+				// If checked, set random choice on chapter
 				if (randChoiceCheck.isChecked()) {
 					chapter.setRandomChoice(true);
 				} else {
@@ -246,4 +248,28 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		});
 	}
+
+	// MENU INFORMATION
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.view_edit_chapter, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.addChoice:
+			return true;
+		case R.id.addIllus:
+			return true;
+		case R.id.Save:
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 }
