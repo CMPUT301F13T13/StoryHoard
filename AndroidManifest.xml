@@ -55,6 +55,7 @@
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.SearchActivity"
             android:label="@string/title_activity_search"
+            android:theme="@style/MainBar"
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
