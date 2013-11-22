@@ -39,7 +39,6 @@
 
     <RelativeLayout
         android:id="@+id/choicesSubLayout"
-        style="@android:style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
@@ -48,18 +47,9 @@
         <ListView
             android:id="@+id/chapterEditChoices"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/chapterSaveButton" >
+            android:layout_height="wrap_content" >
 
         </ListView>
-
-        <Button
-            android:id="@+id/chapterSaveButton"
-            style="android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/save" />
     </RelativeLayout>
 
 </LinearLayout>
