@@ -80,23 +80,17 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	}
 	
 	@UiThreadTest
-	public void testSetAuthor() {
-		String author = "The Best Author Ever";
-		storyAuthor.setText(author);
-		assertTrue(storyAuthor.getText().toString().equals(author));
+	public void testAuthor() {
+		assertTrue(storyAuthor.getText().toString().equals("author"));
 	}	
 	
 	@UiThreadTest
-	public void testSetTitle() {
-		String title = "My Title";
-		storyTitle.setText(title);
-		assertTrue(storyTitle.getText().toString().equals(title));
+	public void testTitle() {
+		assertTrue(storyTitle.getText().toString().equals("title"));
 	}	
 	
 	@UiThreadTest
 	public void testSetDescription() {
-		String desc = "This is the story of a new description.";
-		storyDescription.setText(desc);
-		assertTrue(storyDescription.getText().toString().equals(desc));
+		assertTrue(storyDescription.getText().toString().equals("es"));
 	}	
 }

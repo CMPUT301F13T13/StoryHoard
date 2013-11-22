@@ -225,7 +225,8 @@ public class StoryManager implements StoringManager {
 		
 		if (!storyCrit.containsKey(StoryTable.COLUMN_NAME_PHONE_ID)) {
 			selection += " AND " + StoryTable.COLUMN_NAME_PHONE_ID 
-					+ " NOT LIKE " + phoneId;
+					+ " NOT LIKE ?"; 
+			sArgs.add(phoneId);
 		}
 		return selection;
 	}	

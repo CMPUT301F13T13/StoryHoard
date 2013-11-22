@@ -190,14 +190,57 @@ public class SHController {
 	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title) {
+	public ArrayList<Story> searchAuthorStories(String title) {
+		// getting authors own
+		Story criteria = new Story(null, title, null, null, 
+				Utilities.getPhoneId(context));
+		ArrayList<Object> local = storyMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(local);
+		return stories;
+		
+	}
+	
+	/**
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
+	 * 
+	 * @param title
+	 *            Title of the story user is looking for.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public ArrayList<Story> searchCachedStories(String title) {
+		// getting cached
 		Story criteria = new Story(null, title, null, null, null);
 		ArrayList<Object> local = storyMan.retrieve(criteria);
-		ArrayList<Object> server = serverMan.retrieve(criteria);
-		local.addAll(server);
 		ArrayList<Story> stories = Utilities.objectsToStories(local);
 		return stories;
 	}
+	
+	/**
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
+	 * 
+	 * @param title
+	 *            Title of the story user is looking for.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public ArrayList<Story> searchPublishedStories(String title) {
+		// getting published
+		Story criteria = new Story(null, title, null, null, null);
+		ArrayList<Object> server = serverMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(server);
+		return stories;
+	}	
 	
 	/**
 	 * Used to search for stories matching the given search criteria. Users can

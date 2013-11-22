@@ -195,11 +195,11 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		// Insert some stories
-		Story s1 = new Story("Lily the cow", "me", "D: none", 
+		Story s1 = new Story("Lily the cowy", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
 		Story s2 = new Story("Bob the hen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		Story s3 = new Story("Bob the cow", "me", "D: none", 
+		Story s3 = new Story("Bob the cowy", "me", "D: none", 
 				"34532432423");
 		Story s4 = new Story("sad pen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
@@ -215,20 +215,20 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		s5.publish();
 		s6.publish();
 
-		// title are null (should retrieve all stories)
-		stories = gc.searchStory(null);
-		assertEquals(stories.size(), 6);
+		// title are null (should retrieve all local author stories)
+		stories = gc.searchAuthorStories(null);
+		assertTrue(stories.size() > 2);
 
-		// title has cow
-		stories = gc.searchStory("cow");
-		assertEquals(stories.size(), 2);
+		// title has cowy, cached stories
+		stories = gc.searchCachedStories("cowy");
+		assertEquals(stories.size(), 1);
 
 		// created, title has bob and hen
-		stories = gc.searchStory("Bob hen");
+		stories = gc.searchAuthorStories("Bob hen");
 		assertEquals(stories.size(), 1);
 
 		// title has toe
-		stories = gc.searchStory("toe");
+		stories = gc.searchPublishedStories("toe");
 		assertEquals(stories.size(), 1);
 		
 		// clean up server

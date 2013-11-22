@@ -37,6 +37,7 @@ public class TestViewBrowseStories extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		activity = getActivity();
 		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
 	}
 

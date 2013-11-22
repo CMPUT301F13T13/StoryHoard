@@ -62,10 +62,8 @@ public class SearchResultsActivity extends Activity {
 
 		emptyList = (TextView) findViewById(R.id.empty);
 
-		ArrayList<Story> newStories = new ArrayList<Story>();
+		ArrayList<Story> newStories = lifedata.getStoryList();
 		gridArray.clear();
-		gc = SHController.getInstance(this);
-		newStories = gc.searchStory(titleName);
 
 		if (newStories.size() !=0 ) {
 			gridArray.addAll(newStories);

@@ -61,6 +61,7 @@ public class TestViewChapter extends
 		chapter.addChoice(c1);
 		story.addChapter(chapter);
 		lifedata.setStory(story);
+		lifedata.setChapter(chapter);
 
 		activity = getActivity();
 	}
@@ -82,9 +83,7 @@ public class TestViewChapter extends
 	}
 	
 	@UiThreadTest
-	public void testSetChapterContent() {
-		String title = "My chap";
-		chapterContent.setText(title);
-		assertTrue(chapterContent.getText().toString().equals(title));
+	public void testChapterContent() {
+		assertTrue(chapterContent.getText().toString().equals("chapter"));
 	}	
 }

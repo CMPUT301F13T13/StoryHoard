@@ -15,6 +15,8 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,6 +32,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
  * Search Activity
@@ -44,6 +49,8 @@ public class SearchActivity extends Activity {
 	private Button searchButton;
 	private EditText titleInput;
 	private Spinner spinner;
+	private SHController gc;
+	private LifecycleData lifedata;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,8 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		lifedata = LifecycleData.getInstance();
+		gc = SHController.getInstance(this);
 		searchButton = (Button) findViewById(R.id.searchButton);
 		titleInput = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
@@ -103,6 +111,15 @@ public class SearchActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v,
 					int position, long id) {
+				ArrayList<Story> stories = new ArrayList<Story>();
+				if (position == 0) {
+					stories = gc.getAllAuthorStories();
+				} else if (position == 1) {
+					stories = gc.getAllCachedStories();
+				} else if (position == 2) {
+					stories = gc.getAllPublishedStories();
+				}
+				lifedata.setStoryList(stories);
 			}
 
 			@Override
