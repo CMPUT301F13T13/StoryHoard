@@ -68,8 +68,6 @@ public class TestViewChapter extends
 		// Setup the activity fields
 		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
-		addPhotoButton = (Button) activity.findViewById(R.id.addPhotoButton);
-		illustrations = (LinearLayout) activity.findViewById(R.id.horizontalIllustraions);
 		photos = (LinearLayout) activity.findViewById(R.id.horizontalPhotos);
 				
 	}
@@ -77,8 +75,6 @@ public class TestViewChapter extends
 	public void testPreConditions() {
 		assertTrue(chapterContent != null);
 		assertTrue(chapterChoices != null);
-		assertTrue(addPhotoButton != null);
-		assertTrue(illustrations != null);
 		assertTrue(photos != null);
 	}
 	

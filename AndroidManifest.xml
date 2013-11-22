@@ -35,8 +35,7 @@
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter"
-            android:label="@string/title_viewChapter"
-            android:uiOptions="splitActionBarWhenNarrow" >
+            android:label="@string/title_viewChapter" >
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity"

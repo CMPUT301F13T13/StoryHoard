@@ -21,10 +21,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
  * through the activity stack.
  * 
  * @author Alexander Wong
+ * @author Kim Wu
  * 
  */
 public class ViewChapter extends MediaActivity {
@@ -53,11 +55,9 @@ public class ViewChapter extends MediaActivity {
 	private AdapterChoices choiceAdapter;
 	private AlertDialog photoDialog;
 	private LinearLayout illustrations;
-	// private LinearLayout photos;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
-	private Button addPhotoButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,6 @@ public class ViewChapter extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setNextChapterListener();
-		setAddPhotoListener();
 		updateData();
 	}
 
@@ -84,7 +83,6 @@ public class ViewChapter extends MediaActivity {
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
-		addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
 		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
@@ -103,7 +101,8 @@ public class ViewChapter extends MediaActivity {
 
 		// Check to see if the chapter exists, else terminate
 		if (chapter == null) {
-			Toast.makeText(getBaseContext(), "Chapter does not exist", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getBaseContext(), "Chapter does not exist",
+					Toast.LENGTH_SHORT).show();
 			finish();
 			return;
 		}
@@ -129,7 +128,7 @@ public class ViewChapter extends MediaActivity {
 
 		photoList = chapter.getPhotos();
 		illList = chapter.getIllustrations();
-		
+
 		// photos.removeAllViews();
 		illustrations.removeAllViews();
 		// Insert Photos
@@ -142,39 +141,7 @@ public class ViewChapter extends MediaActivity {
 		}
 	}
 
-	/**
-	 * Sets up the onClick listener for the button to add a new photo.
-	 */
-	public void setAddPhotoListener() {
-		addPhotoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						ViewChapter.this);
-				// Set dialog title
-				alert.setTitle("Choose method:");
-				// Options that user may choose to add photo
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto(Media.PHOTO);
-									break;
-								case 1:
-									browseGallery(Media.PHOTO);
-									break;
-								}
-								photoDialog.dismiss();
-							}
-						});
-				photoDialog = alert.create();
-				photoDialog.show();
-			}
-		});
-	}
+
 
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
@@ -187,14 +154,66 @@ public class ViewChapter extends MediaActivity {
 					long arg3) {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+
 				Chapter nextChap = new Chapter(choices.get(arg2).getNextChapter(), null ,null);
 				nextChap.setFullContent(ViewChapter.this);
 				lifedata.setChapter(nextChap);
+				
 				startActivity(intent);
-				//photos.removeAllViews();
+				// photos.removeAllViews();
 				illustrations.removeAllViews();
 				finish();
 			}
 		});
+	}
+
+	/**
+	 * Menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_chapter, menu);
+		return true;
+	}
+
+	/**
+	 * Menu
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.addPhoto:
+			addPhoto();
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void addPhoto() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				ViewChapter.this);
+		// Set dialog title
+		alert.setTitle("Choose method:");
+		// Options that user may choose to add photo
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.PHOTO);
+							break;
+						case 1:
+							browseGallery(Media.PHOTO);
+							break;
+						}
+						photoDialog.dismiss();
+					}
+				});
+		photoDialog = alert.create();
+		photoDialog.show();
 	}
 }
