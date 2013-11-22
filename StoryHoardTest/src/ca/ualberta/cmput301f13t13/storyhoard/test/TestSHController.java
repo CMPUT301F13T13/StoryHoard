@@ -27,10 +27,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**

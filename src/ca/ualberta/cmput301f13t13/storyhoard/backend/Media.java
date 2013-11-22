@@ -281,8 +281,4 @@ public class Media {
 		mm.insert(this);
 	}	
 	
-	public void removeSelf(Context context) {
-		ChoiceManager cm = ChoiceManager.getInstance(context);
-		cm.remove(this);
-	}	
 }

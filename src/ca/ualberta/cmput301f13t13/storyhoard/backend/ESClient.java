@@ -248,9 +248,9 @@ public class ESClient {
 	 *            The selection string. Will either be empty or a keyword query.
 	 *            Eg. "bacon AND ham AND fish"
 	 */
-	public ArrayList<Object> searchStories(Story criteria, String selection)
+	public ArrayList<Story> searchStories(Story criteria, String selection)
 			throws ClientProtocolException, IOException {
-		ArrayList<Object> stories = new ArrayList<Object>();
+		ArrayList<Story> stories = new ArrayList<Story>();
 
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
 

@@ -39,12 +39,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
  * @see Media
  * @see StoringManager
  */
-public class MediaManager implements StoringManager{
+public class MediaManager implements StoringManager<Media>{
 	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	
 	/**
-	 * Initializes a new MediaManager object.
+	 * Initializes a new MediaManager media.
 	 */
 	protected MediaManager(Context context) {
 		helper = DBHelper.getInstance(context);
@@ -66,14 +66,13 @@ public class MediaManager implements StoringManager{
 	}
 	
 	/**
-	 * Inserts a new media object into the database.
+	 * Inserts a new media media into the database.
 	 * 
-	 * @param object
-	 * 			Media object to be inserted.
+	 * @param media
+	 * 			Media media to be inserted.
 	 */
 	@Override
-	public void insert(Object object) {
-		Media media = (Media) object;
+	public void insert(Media media) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 
 		// Insert Media
@@ -87,14 +86,14 @@ public class MediaManager implements StoringManager{
 	}
 
 	/**
-	 * Retrieves a media object from the database.
+	 * Retrieves a media media from the database.
 	 * 
 	 * @param criteria 
 	 * 			Holds the search criteria.
 	 */	
 	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
-		ArrayList<Object> results = new ArrayList<Object>();
+	public ArrayList<Media> retrieve(Media criteria) {
+		ArrayList<Media> results = new ArrayList<Media>();
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -138,25 +137,24 @@ public class MediaManager implements StoringManager{
 	
 
 	/**
-	 * Updates a media object already in the database.
+	 * Updates a media media already in the database.
 	 * 
 	 * 
-	 * @param newObject
-	 * 			Contains the changes to the object.
+	 * @param newMedia
+	 * 			Contains the changes to the media.
 	 */	
 	@Override
-	public void update(Object newObject) {
-		Media newM = (Media) newObject;
+	public void update(Media newMedia) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (newM.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (newM.getChapterId()).toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (newM.getPath()).toString());
-		values.put(MediaTable.COLUMN_NAME_TYPE, newM.getType());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (newMedia.getId()).toString());		
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (newMedia.getChapterId()).toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (newMedia.getPath()).toString());
+		values.put(MediaTable.COLUMN_NAME_TYPE, newMedia.getType());
 
 		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
-		String[] sArgs = { newM.getId().toString()};	
+		String[] sArgs = { newMedia.getId().toString()};	
 
 		db.update(MediaTable.TABLE_NAME, values, selection, sArgs);
 		
@@ -167,7 +165,7 @@ public class MediaManager implements StoringManager{
 	 * in the database query. Also creates an array holding the items
 	 * to be placed in the ? of the selection.
 	 *  
-	 * @param object
+	 * @param media
 	 * 			Holds the data needed to build the selection string 
 	 * 			and the selection arguments array.
 	 * @param sArgs
@@ -176,8 +174,7 @@ public class MediaManager implements StoringManager{
 	 * 			The selection string.
 	 */	
 	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		Media media = (Media) object;
+	public String setSearchCriteria(Media media, ArrayList<String> sArgs) {
 		HashMap<String,String> medCrit = media.getSearchCriteria();
 		String selection = "";
 
@@ -197,9 +194,8 @@ public class MediaManager implements StoringManager{
 	}
 
 	@Override
-	public void remove(Object object) {
+	public void remove(Media media) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Media media = (Media) object;
 		
 		// Delete entry 
 		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";

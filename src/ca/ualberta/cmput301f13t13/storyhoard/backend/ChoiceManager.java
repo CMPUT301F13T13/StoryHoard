@@ -41,12 +41,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChoiceTable;
  *
  */
 
-public class ChoiceManager implements StoringManager {
+public class ChoiceManager implements StoringManager<Choice> {
 	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
 
 	/**
-	 * Initializes a new ChoiceManager object.
+	 * Initializes a new ChoiceManager choice.
 	 */
 	protected ChoiceManager(Context context) {
 		helper = DBHelper.getInstance(context);
@@ -70,8 +70,7 @@ public class ChoiceManager implements StoringManager {
 	 * Saves a new choice locally (in the database).
 	 */	
 	@Override
-	public void insert(Object object) {
-		Choice choice = (Choice) object;
+	public void insert(Choice choice) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -86,25 +85,24 @@ public class ChoiceManager implements StoringManager {
 	 * Updates a choice already in the database.
 	 * 
 	 * 
-	 * @param newObject
-	 * 			Contains the changes to the object.
+	 * @param newChoice
+	 * 			Contains the changes to the choice.
 	 */
 	@Override
-	public void update(Object newObject) {
-		Choice newC = (Choice) newObject;
+	public void update(Choice newChoice) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newC.getId().toString());		
+		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newChoice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, 
-				newC.getCurrentChapter().toString());
+				newChoice.getCurrentChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, 
-				newC.getNextChapter().toString());
-		values.put(ChoiceTable.COLUMN_NAME_TEXT, newC.getText());
+				newChoice.getNextChapter().toString());
+		values.put(ChoiceTable.COLUMN_NAME_TEXT, newChoice.getText());
 
 		// Setting search criteria
 		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
-		String[] sArgs = { newC.getId().toString()};	
+		String[] sArgs = { newChoice.getId().toString()};	
 
 		db.update(ChoiceTable.TABLE_NAME, values, selection, sArgs);	
 	}
@@ -116,8 +114,8 @@ public class ChoiceManager implements StoringManager {
 	 * 			Holds the search criteria.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
-		ArrayList<Object> results = new ArrayList<Object>();
+	public ArrayList<Choice> retrieve(Choice criteria) {
+		ArrayList<Choice> results = new ArrayList<Choice>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String[] sArgs = null;
 		String[] projection = {
@@ -164,7 +162,7 @@ public class ChoiceManager implements StoringManager {
 	 * in the database query. Also creates an array holding the items
 	 * to be placed in the ? of the selection.
 	 *  
-	 * @param object
+	 * @param choice
 	 * 			Holds the data needed to build the selection string 
 	 * 			and the selection arguments array.
 	 * @param sArgs
@@ -173,8 +171,7 @@ public class ChoiceManager implements StoringManager {
 	 * 			The selection string.
 	 */
 	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		Choice choice = (Choice) object;
+	public String setSearchCriteria(Choice choice, ArrayList<String> sArgs) {
 		HashMap<String,String> choiceCrit = choice.getSearchCriteria();		
 
 		// Setting search criteria
@@ -197,9 +194,8 @@ public class ChoiceManager implements StoringManager {
 	}
 
 	@Override
-	public void remove(Object object) {
+	public void remove(Choice choice) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Choice choice = (Choice) object;
 		
 		// Delete entry 
 		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";

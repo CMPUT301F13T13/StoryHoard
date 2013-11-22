@@ -32,14 +32,14 @@ import java.util.ArrayList;
  * @see MediaManager
  * @see ServerManager
  */
-public interface StoringManager {
+public interface StoringManager<A> {
 
 	/**
 	 * Inserts an object into the database.
 	 * 
 	 * @param object
 	 */
-	public void insert(Object object);
+	public void insert(A object);
 
 	/**
 	 * Retrieves an object(s) from the database.
@@ -48,14 +48,14 @@ public interface StoringManager {
 	 * 
 	 * @return objects
 	 */
-	public ArrayList<Object> retrieve(Object criteria);
+	public ArrayList<A> retrieve(A criteria);
 
 	/**
 	 * Updates an object in the database.
 	 * 
 	 * @param newObject
 	 */
-	public void update(Object newObject);
+	public void update(A newObject);
 
 	/**
 	 * Builds the selection string and the selection arguments to be used in a
@@ -65,7 +65,7 @@ public interface StoringManager {
 	 * @param sArgs
 	 * @return selectionString
 	 */
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs);
+	public String setSearchCriteria(A object, ArrayList<String> sArgs);
 
-	public void remove(Object object);
+	public void remove(A object);
 }

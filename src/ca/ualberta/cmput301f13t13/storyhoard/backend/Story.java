@@ -34,7 +34,7 @@ import android.content.Context;
  * @author Stephanie Gil
  * @author Ashley Brown
  */
-public class Story extends StoryPart {
+public class Story {
 	private UUID id;
 	private String author;
 	private String title;
@@ -42,6 +42,7 @@ public class Story extends StoryPart {
 	private UUID firstChapterId;
 	private HashMap<UUID, Chapter> chapters;
 	private String phoneId;
+	public static final String NOT_AUTHORS = "not";
 
 	/**
 	 * Initializes a new story object without need an id as an argument.
@@ -294,11 +295,10 @@ public class Story extends StoryPart {
 		return false;
 	}
 	
-	@Override
 	public void setFullContent(Context context) {
 		StoryManager sm = StoryManager.getInstance(context);
-		ArrayList<Object> objs = sm.retrieve(this);
-		Story self = (Story) objs.get(0);
+		ArrayList<Story> stories = sm.retrieve(this);
+		Story self = stories.get(0);
 		title = self.getTitle();
 		author = self.getAuthor();
 		description = self.getDescription();
@@ -308,8 +308,7 @@ public class Story extends StoryPart {
 		HashMap<UUID, Chapter> chapHash = new HashMap<UUID, Chapter>();
 		ChapterManager cm = ChapterManager.getInstance(context);
 		Chapter criteria = new Chapter(null, getId(), null);		
-		ArrayList<Object> objects = cm.retrieve(criteria);
-		ArrayList<Chapter> chapters = Utilities.objectsToChapters(objects);
+		ArrayList<Chapter> chapters = cm.retrieve(criteria);
 
 		// Get all choices
 		for (Chapter chap : chapters) {
@@ -318,57 +317,7 @@ public class Story extends StoryPart {
 		}
 
 		// add chapters to story
-		setChapters(chapHash);
-	}	
-
-	@Override
-	public void updateSelf(Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		sm.update(this);
-	
-		// updating all its chapters
-		for (Chapter chap : getChapters().values()) {
-			chap.updateSelf(context);	
-		}
-	}
-	
-	@Override
-	public void addSelf(Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		sm.insert(this);
-
-		// adding all its chapters
-		for (Chapter chap : getChapters().values()) {
-			chap.addSelf(context);	
-		}		
-	}
-	
-	public Boolean existsLocally(Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		Story crit = new Story(id, null, null, null, phoneId);
-		ArrayList<Object> objects = sm.retrieve(crit);
-		if (objects.size() < 1) {
-			return false;
-		}
-		return true;		
-	}
-	
-	public void publish() {
-		ServerManager sm = ServerManager.getInstance();
-		sm.update(this);
-	}
-	
-	public void unpublish() {
-		ServerManager sm = ServerManager.getInstance();
-		sm.remove(this);
-	}
-	
-	public void cache(Context context) {
-		if (existsLocally(context)) {
-			updateSelf(context);
-		} else {
-			addSelf(context);
-		}		
+		setChapters(chapHash);		
 	}
 	
 	/**

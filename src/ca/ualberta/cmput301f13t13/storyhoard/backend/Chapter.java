@@ -332,8 +332,8 @@ public class Chapter extends StoryPart {
 	@Override
 	public void setFullContent(Context context) {
 		ChapterManager chapm = ChapterManager.getInstance(context);
-		ArrayList<Object> objs = chapm.retrieve(this);
-		Chapter self = (Chapter) objs.get(0);
+		ArrayList<Chapter>chaps = chapm.retrieve(this);
+		Chapter self = (Chapter) chaps.get(0);
 		
 		storyId = self.getStoryId();
 		text = self.getText();
@@ -342,23 +342,20 @@ public class Chapter extends StoryPart {
 		// Get all its choices
 		Choice criteria = new Choice(null, getId());
 		ChoiceManager cm = ChoiceManager.getInstance(context);
-		ArrayList<Object> objects = cm.retrieve(criteria);
-		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);
+		ArrayList<Choice> choices = cm.retrieve(criteria);
 		
 		setChoices(choices);
 		
 		// Get all its illustrations
 		MediaManager mm = MediaManager.getInstance(context);
 		Media mCriteria = new Media(null, getId(), null, Media.ILLUSTRATION);
-		objects = mm.retrieve(mCriteria);
-		ArrayList<Media> illustrations = Utilities.objectsToMedia(objects);
+		ArrayList<Media> illustrations = mm.retrieve(mCriteria);
 		
 		setIllustrations(illustrations);
 		
 		// Get all its photos
 		mCriteria = new Media(null, getId(), null, Media.PHOTO);
-		objects = mm.retrieve(mCriteria);
-		ArrayList<Media> photos = Utilities.objectsToMedia(objects);
+		ArrayList<Media> photos = mm.retrieve(mCriteria);
 		
 		setPhotos(photos);	
 	}

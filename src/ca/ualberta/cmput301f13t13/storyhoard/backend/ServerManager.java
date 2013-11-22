@@ -40,7 +40,7 @@ import android.os.StrictMode;
  * @see ESClient
  * @see StoringManager
  */
-public class ServerManager implements StoringManager {
+public class ServerManager implements StoringManager<Story> {
 	private static ESClient esclient = null;
 	private static ServerManager self = null;
 
@@ -71,7 +71,7 @@ public class ServerManager implements StoringManager {
 	}
 	
 	/**
-	 * Inserts a story object onto the server.The insertStory from the ESClient 
+	 * Inserts a story story onto the server.The insertStory from the ESClient 
 	 * class, here the story is prepared (all its images are first turned into 
 	 * strings to be stored), and this method also sets up a new thread for the
 	 * task.
@@ -84,12 +84,11 @@ public class ServerManager implements StoringManager {
 	 * </br>
 	 * sm.insert(myStory);
 	 * 
-	 * @param object
-	 * 			Story object to be inserted.
+	 * @param story
+	 * 			Story story to be inserted.
 	 */	
 	@Override
-	public void insert(Object object){
-		Story story = (Story) object;
+	public void insert(Story story){
 				prepareStory(story);
 				esclient.insertStory(story);
 	}
@@ -151,12 +150,12 @@ public class ServerManager implements StoringManager {
 	 * </br> Story criteria = new Story(null, null, null, null, null).
 	 * </br></br> Retrieving story/stories.
 	 * </br> ServerManager sm = ServerManager.getInstance(context);
-	 * </br> ArrayList<Object> objs = sm.retrieve(criteria);
+	 * </br> ArrayList<Story> objs = sm.retrieve(criteria);
 	 * 
 	 * @param criteria
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
+	public ArrayList<Story> retrieve(Story criteria) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -180,15 +179,14 @@ public class ServerManager implements StoringManager {
 	 * </br> Story criteria = new Story(null, null, null, null, null).
 	 * </br></br> Retrieving story/stories.
 	 * </br> ServerManager sm = ServerManager.getInstance(context);
-	 * </br> ArrayList<Object> objs = sm.delegateSearch(criteria);
+	 * </br> ArrayList<Story> objs = sm.delegateSearch(criteria);
 	 * 
-	 * @param object
-	 * 			Story object holding search criteria.
+	 * @param story
+	 * 			Story story holding search criteria.
 	 * @return matching stories
 	 */
-	private ArrayList<Object> delegateSearch(Object object) {
-		Story crit = (Story) object;
-		ArrayList<Object> stories = new ArrayList<Object>();
+	private ArrayList<Story> delegateSearch(Story crit) {
+		ArrayList<Story> stories = new ArrayList<Story>();
 
 		if (crit.getId() != null) { 
 
@@ -224,7 +222,7 @@ public class ServerManager implements StoringManager {
 	
 	/**
 	 * Updates a story on the server. This is done by first deleting the
-	 * story matching the object to be updated's id, and then re-inserting
+	 * story matching the story to be updated's id, and then re-inserting
 	 * it. This method sets up a new thread to do the updating on, and uses
 	 * ESClient methods to remove and insert the story.
 	 * 
@@ -234,12 +232,11 @@ public class ServerManager implements StoringManager {
 	 * </br> ServerManager sm = ServerManager.getInstance(context);
 	 * </br> sm.update(newStory);
 	 * 
-	 * @param object
+	 * @param story
 	 * 			Story with updates/new data that you want to publish.
 	 */
 	@Override
-	public void update(Object object) { 
-		Story story = (Story) object;
+	public void update(Story story) { 
 		String id = story.getId().toString();
 		
 		// story already on server
@@ -264,12 +261,11 @@ public class ServerManager implements StoringManager {
 	 * </br> ServerManager sm = ServerManager.getInstance(context);
 	 * </br> sm.remove(criteria);
 	 * 
-	 * @param object
+	 * @param story
 	 * 			Story with id of the story you want to delete from server. 
 	 */
 	@Override
-	public void remove(Object object) { 
-		Story story = (Story) object;
+	public void remove(Story story) { 
 				try {
 					esclient.deleteStory(story);
 				} catch (IOException e) {
@@ -292,12 +288,11 @@ public class ServerManager implements StoringManager {
 	 * </br> If the story's title is null, then an empty selection string
 	 * will be returned.
 	 * 
-	 * @param object
+	 * @param story
 	 */
 	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> args) {
+	public String setSearchCriteria(Story story, ArrayList<String> args) {
 		String selection = "";
-		Story story = (Story) object;
 
 		if (story.getTitle() == null) {
 			return selection;

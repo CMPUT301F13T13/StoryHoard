@@ -32,8 +32,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
 
 /**
  * Class which displays all stories in a grid, handles different view types.

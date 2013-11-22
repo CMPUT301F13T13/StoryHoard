@@ -40,7 +40,7 @@ import android.database.sqlite.SQLiteDatabase;
  * @see Story
  * @see StoringManager
  */
-public class StoryManager implements StoringManager {
+public class StoryManager implements StoringManager<Story> {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 	private static String phoneId = null;
@@ -50,7 +50,7 @@ public class StoryManager implements StoringManager {
 	protected String[] projection;
 
 	/**
-	 * Initializes a new OwnStoryManager object.
+	 * Initializes a new OwnStoryManager story.
 	 */
 	protected StoryManager(Context context) {
 		helper = DBHelper.getInstance(context);
@@ -82,22 +82,22 @@ public class StoryManager implements StoringManager {
 	 * </br> sm.insert(story);
 	 */
 	@Override
-	public void insert(Object object) {
+	public void insert(Story story) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		setContentValues(object);
+		setContentValues(story);
 		db.insert(StoryTable.TABLE_NAME, null, values);
 	}
 
 	/**
 	 * Updates a story already in the database.
 	 * 
-	 * @param newObject
-	 *            Contains the changes to the object.
+	 * @param newStory
+	 *            Contains the changes to the story.
 	 */
 	@Override
-	public void update(Object newObject) {
-		setContentValues(newObject);
-		Story newS = (Story) newObject;
+	public void update(Story newStory) {
+		setContentValues(newStory);
+		Story newS = (Story) newStory;
 		selection = StoryTable.COLUMN_NAME_STORY_ID + " LIKE ?";
 		sArgs = new String[]{ newS.getId().toString() };
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -112,8 +112,8 @@ public class StoryManager implements StoringManager {
 	 *            Holds the search criteria.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
-		ArrayList<Object> results = new ArrayList<Object>();
+	public ArrayList<Story> retrieve(Story criteria) {
+		ArrayList<Story> results = new ArrayList<Story>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		setUpSearch(criteria);
 
@@ -127,8 +127,8 @@ public class StoryManager implements StoringManager {
 	}
 	
 
-	private ArrayList<Object> retrieveCursorEntries(Cursor cursor) {
-		ArrayList<Object> results = new ArrayList<Object>();
+	private ArrayList<Story> retrieveCursorEntries(Cursor cursor) {
+		ArrayList<Story> results = new ArrayList<Story>();
 		
 		// Retrieving all the entries
 		cursor.moveToFirst();
@@ -151,7 +151,7 @@ public class StoryManager implements StoringManager {
 		return results;		
 	}
 	
-	protected void setUpSearch(Object criteria) {
+	protected void setUpSearch(Story criteria) {
 		sArgs = null;
 		projection = new String[]{ 
 				StoryTable.COLUMN_NAME_STORY_ID,
@@ -174,10 +174,9 @@ public class StoryManager implements StoringManager {
 	
 	/**
 	 * Sets up the ContentValues for inserting or updating the database.
-	 * @param object
+	 * @param story
 	 */
-	protected void setContentValues(Object object) {
-		Story story = (Story) object;
+	protected void setContentValues(Story story) {
 		UUID chapterId = story.getFirstChapterId();
 
 		// Insert story
@@ -200,7 +199,7 @@ public class StoryManager implements StoringManager {
 	 * database query. Also creates an array holding the items to be placed in
 	 * the ? of the selection.
 	 * 
-	 * @param object
+	 * @param story
 	 *            Holds the data needed to build the selection string and the
 	 *            selection arguments array.
 	 * @param sArgs
@@ -208,8 +207,7 @@ public class StoryManager implements StoringManager {
 	 * @return String The selection string, i.e. the where clause that will be
 	 *         used in the sql query.
 	 */
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		Story story = (Story) object;
+	public String setSearchCriteria(Story story, ArrayList<String> sArgs) {
 		HashMap<String, String> storyCrit = story.getSearchCriteria();
 
 		// Setting search criteria
@@ -217,23 +215,23 @@ public class StoryManager implements StoringManager {
 		sArgs.add("1");
 		
 		for (String key : storyCrit.keySet()) {
-			String value = storyCrit.get(key);
-			selection += " AND " + key + " LIKE ?";
-			sArgs.add(value);
 			
+			if (key.equals(StoryTable.COLUMN_NAME_PHONE_ID) 
+					&& story.getPhoneId().equals(Story.NOT_AUTHORS)) {
+				selection += " AND " + key	+ " NOT LIKE ?"; 
+				sArgs.add(phoneId);
+			} else {
+				String value = storyCrit.get(key);
+				selection += " AND " + key + " LIKE ?";
+				sArgs.add(value);
+			}
 		}
 		
-		if (!storyCrit.containsKey(StoryTable.COLUMN_NAME_PHONE_ID)) {
-			selection += " AND " + StoryTable.COLUMN_NAME_PHONE_ID 
-					+ " NOT LIKE ?"; 
-			sArgs.add(phoneId);
-		}
 		return selection;
 	}
 
 	@Override
-	public void remove(Object object) {
+	public void remove(Story story) {
 		// TODO Auto-generated method stub
-		
 	}	
 }

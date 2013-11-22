@@ -28,7 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve chapter
- * objects. It implements the StoringManager interface.
+ * chapters. It implements the StoringManager interface.
  * 
  * </br>
  * Design Pattern: Singleton
@@ -39,13 +39,13 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
  * @see Chapter
  * @see StoringManager
  */
-public class ChapterManager implements StoringManager {
+public class ChapterManager implements StoringManager<Chapter> {
 	private static DBHelper helper = null;
 	private static ChapterManager self = null;
 	private static ContentValues values;
 
 	/**
-	 * Initializes a new ChapterManager object.
+	 * Initializes a new ChapterManager chapter.
 	 * 
 	 * @param context
 	 */
@@ -70,30 +70,30 @@ public class ChapterManager implements StoringManager {
 	/**
 	 * Inserts a new chapter into the database.
 	 * 
-	 * @param object
-	 *            Object to be stored in the database. In this case, it will be
-	 *            a chapter object.
+	 * @param chapter
+	 *            Chapter to be stored in the database. In this case, it will be
+	 *            a chapter chapter.
 	 */
 	@Override
-	public void insert(Object object) {
+	public void insert(Chapter chapter) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		setContentValues(object);
+		setContentValues(chapter);
 		db.insert(ChapterTable.TABLE_NAME, null, values);
 	}
 
 	/**
-	 * Takes a chapter object that holds the desired search criteria (null
+	 * Takes a chapter chapter that holds the desired search criteria (null
 	 * values for any parameter that you don't want included in the search, for
 	 * example, chapter text). It then retrieves a chapter or chapters from the
 	 * database that matched the criteria and returns them in an ArrayList.
 	 * 
 	 * @param criteria
-	 *            Criteria for the object(s) to be retrieved from the database.
-	 * @return chapters Contains the objects that matched the search criteria.
+	 *            Criteria for the chapter(s) to be retrieved from the database.
+	 * @return chapters Contains the chapters that matched the search criteria.
 	 */
 	@Override
-	public ArrayList<Object> retrieve(Object criteria) {
-		ArrayList<Object> results = new ArrayList<Object>();
+	public ArrayList<Chapter> retrieve(Chapter criteria) {
+		ArrayList<Chapter> results = new ArrayList<Chapter>();
 		String[] sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
 
@@ -139,13 +139,13 @@ public class ChapterManager implements StoringManager {
 	/**
 	 * Updates a chapter's data in the database.
 	 * 
-	 * @param newObject
+	 * @param newChapter
 	 *            Holds the new data that will be used to update.
 	 */
 	@Override
-	public void update(Object newObject) {
-		setContentValues(newObject);
-		Chapter newC = (Chapter) newObject;
+	public void update(Chapter newChapter) {
+		setContentValues(newChapter);
+		Chapter newC = (Chapter) newChapter;
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
 		String[] sArgs = { newC.getId().toString() };
@@ -156,10 +156,9 @@ public class ChapterManager implements StoringManager {
 	/**
 	 * Sets the content values to be used in the sql query.
 	 * 
-	 * @param object
+	 * @param chapter
 	 */
-	private void setContentValues(Object object) {
-		Chapter chapter = (Chapter) object;
+	private void setContentValues(Chapter chapter) {
 		// Insert chapter
 		values = new ContentValues();
 		values.put(ChapterTable.COLUMN_NAME_CHAPTER_ID,
@@ -178,7 +177,7 @@ public class ChapterManager implements StoringManager {
 	 * 
 	 * Eg. selection: WHERE CHAPTER_ID = ? selectionArg = "11244543"
 	 * 
-	 * @param object
+	 * @param chapter
 	 *            Holds the data needed to build the selection string and the
 	 *            selection arguments array.
 	 * @param sArgs
@@ -186,8 +185,7 @@ public class ChapterManager implements StoringManager {
 	 * @return selection The selection string.
 	 */
 	@Override
-	public String setSearchCriteria(Object object, ArrayList<String> sArgs) {
-		Chapter chapter = (Chapter) object;
+	public String setSearchCriteria(Chapter chapter, ArrayList<String> sArgs) {
 		HashMap<String, String> chapCrit = chapter.getSearchCriteria();
 		String selection = "";
 
@@ -207,7 +205,7 @@ public class ChapterManager implements StoringManager {
 	}
 
 	@Override
-	public void remove(Object object) {
+	public void remove(Chapter chapter) {
 		// TODO Auto-generated method stub
 		
 	}
