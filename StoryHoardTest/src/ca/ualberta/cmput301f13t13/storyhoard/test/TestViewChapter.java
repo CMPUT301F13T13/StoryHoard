@@ -64,17 +64,17 @@ public class TestViewChapter extends
 		lifedata.setChapter(chapter);
 
 		activity = getActivity();
-	}
-
-	public void testPreConditions() {
-	
+		
 		// Setup the activity fields
 		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
 		addPhotoButton = (Button) activity.findViewById(R.id.addPhotoButton);
 		illustrations = (LinearLayout) activity.findViewById(R.id.horizontalIllustraions);
 		photos = (LinearLayout) activity.findViewById(R.id.horizontalPhotos);
-		
+				
+	}
+
+	public void testPreConditions() {
 		assertTrue(chapterContent != null);
 		assertTrue(chapterChoices != null);
 		assertTrue(addPhotoButton != null);

@@ -217,7 +217,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 		// title are null (should retrieve all local author stories)
 		stories = gc.searchAuthorStories(null);
-		assertTrue(stories.size() > 2);
+		assertEquals(stories.size(), 2);
 
 		// title has cowy, cached stories
 		stories = gc.searchCachedStories("cowy");

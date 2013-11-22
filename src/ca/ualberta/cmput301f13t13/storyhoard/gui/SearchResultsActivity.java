@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
@@ -42,12 +41,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class SearchResultsActivity extends Activity {
-	private String titleName;
 	private LifecycleData lifedata;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
-	private SHController gc;
 	private TextView emptyList;
 
 	@Override

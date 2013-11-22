@@ -62,17 +62,15 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		lifedata.setStory(story);
 
 		activity = getActivity();
-	}
 
-	public void testPreConditions() {
-
-		storyCover = (ImageView) activity.findViewById(R.id.storyImage);
 		storyTitle = (TextView) activity.findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) activity.findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) activity.findViewById(R.id.storyDescription);
 		beginReading = (Button) activity.findViewById(R.id.viewFirstChapter);		
-		
-		assertTrue(storyCover != null);
+				
+	}
+
+	public void testPreConditions() {
 		assertTrue(storyTitle != null);
 		assertTrue(storyAuthor != null);
 		assertTrue(storyDescription != null);
