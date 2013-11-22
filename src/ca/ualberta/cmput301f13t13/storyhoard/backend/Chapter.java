@@ -337,6 +337,7 @@ public class Chapter extends StoryPart {
 		
 		storyId = self.getStoryId();
 		text = self.getText();
+		randomChoice = self.hasRandomChoice();
 		
 		// Get all its choices
 		Choice criteria = new Choice(null, getId());

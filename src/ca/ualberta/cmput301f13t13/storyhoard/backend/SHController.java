@@ -295,7 +295,6 @@ public class SHController {
 		num = rand.nextInt(max);
 		Choice choice = choices.get(num);
 		choice.setText("I'm feeling lucky...");
-		choice.setId(UUID.randomUUID());
 
 		return choice;
 	}	
