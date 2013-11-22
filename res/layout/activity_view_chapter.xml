@@ -9,12 +9,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="#B30961" >
 
         <LinearLayout
             android:id="@+id/horizontalIllustraions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#000000"
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
@@ -26,6 +28,11 @@
         android:layout_below="@+id/horizontalSCIllustraions"
         android:background="#A6000000"
         android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/line" />
 
         <TextView
             android:layout_width="302dp"
@@ -40,11 +47,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:paddingRight="30dp"
             android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:text="@string/chapter_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ece2b4" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/line" />
     </LinearLayout>
 
     <HorizontalScrollView
@@ -52,12 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/content" >
+        android:layout_below="@+id/content"
+        android:background="#B30961" >
 
         <LinearLayout
             android:id="@+id/horizontalPhotos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#B30961"
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
@@ -68,4 +82,5 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/horizontalSCPhotos" >
     </ListView>
+
 </RelativeLayout>
