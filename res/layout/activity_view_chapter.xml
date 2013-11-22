@@ -83,5 +83,4 @@
         android:layout_below="@+id/horizontalSCPhotos"
         android:layout_margin="10dp" >
     </ListView>
-
 </RelativeLayout>

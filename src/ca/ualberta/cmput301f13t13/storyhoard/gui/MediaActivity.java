@@ -162,14 +162,14 @@ public abstract class MediaActivity extends Activity {
 	 */
 	public static View insertImage(Media ill, Context context) {
 		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
-				300, 300);
+				250, 250);
 		LinearLayout layout = new LinearLayout(context);
 
-		layout.setLayoutParams(new LayoutParams(300, 300));
+		layout.setLayoutParams(new LayoutParams(250, 250));
 		layout.setGravity(Gravity.CENTER);
 
 		ImageView imageView = new ImageView(context);
-		imageView.setLayoutParams(new LayoutParams(300, 300));
+		imageView.setLayoutParams(new LayoutParams(250, 250));
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageView.setImageBitmap(bm);
 
