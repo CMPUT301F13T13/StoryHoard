@@ -20,8 +20,6 @@ import java.io.File;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 
 import android.app.Activity;
 import android.content.Context;
@@ -109,8 +107,7 @@ public abstract class MediaActivity extends Activity {
 				Chapter chapter = LifecycleData.getInstance().getChapter();
 				Media photo = new Media(chapter.getId(),
 						imageFileUri.getPath(), imageType);
-				SHController gc = SHController.getInstance(this);
-				gc.addObject(photo, ObjectType.MEDIA);
+				photo.addSelf(this);
 				insertIntoGallery(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
@@ -123,9 +120,8 @@ public abstract class MediaActivity extends Activity {
 				Uri imageFileUri = intent.getData();
 				Chapter chapter = LifecycleData.getInstance().getChapter();
 				String path = getRealPathFromURI(imageFileUri, this);
-				SHController gc = SHController.getInstance(this);
 				Media photo = new Media(chapter.getId(), path, imageType);
-				gc.addObject(photo, ObjectType.MEDIA);
+				photo.addSelf(this);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
 			} else {

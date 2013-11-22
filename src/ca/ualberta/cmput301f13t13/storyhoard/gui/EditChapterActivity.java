@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
@@ -71,7 +69,6 @@ public class EditChapterActivity extends MediaActivity {
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
 
-	private Uri imageFileUri;
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
@@ -151,13 +148,14 @@ public class EditChapterActivity extends MediaActivity {
 			public void onClick(View v) {
 				chapter.setText(chapterContent.getText().toString());
 				if (lifedata.isEditing()) {
-					gc.updateObject(chapter, ObjectType.CHAPTER);
+					chapter.updateSelf(EditChapterActivity.this);
 				} else {
-					story.addChapter(chapter);
+					chapter.addSelf(EditChapterActivity.this);
 					if (lifedata.isFirstStory()) {
-						gc.addObject(story, ObjectType.CREATED_STORY);
+						story.setFirstChapterId(chapter.getId());
+						story.addSelf(EditChapterActivity.this);
+						lifedata.setFirstStory(false);
 					}
-					gc.addObject(chapter, ObjectType.CHAPTER);
 				}
 				finish();
 			}
@@ -232,7 +230,7 @@ public class EditChapterActivity extends MediaActivity {
 	 */
 	public void setRandomChoice() {
 		//If the chapter has been set to random choice, check box
-		if (chapter.getRandomChoice().equals("yes")) {
+		if (chapter.hasRandomChoice()) {
 			randChoiceCheck.setChecked(true);
 		}
 		
@@ -247,13 +245,5 @@ public class EditChapterActivity extends MediaActivity {
 				}
 			}
 		});
-	}
-
-	public Uri getImageFileUri() {
-		return this.imageFileUri;
-	}
-
-	public Chapter getChapter() {
-		return this.chapter;
 	}
 }

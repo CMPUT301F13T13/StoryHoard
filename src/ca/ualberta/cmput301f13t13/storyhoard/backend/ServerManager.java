@@ -62,6 +62,14 @@ public class ServerManager implements StoringManager {
 		return self;
 	}	
 
+	public void setTestServer() {
+		esclient.setTestServer();
+	}
+	
+	public void setRealServer() {
+		esclient.setRealServer();
+	}
+	
 	/**
 	 * Inserts a story object onto the server.The insertStory from the ESClient 
 	 * class, here the story is prepared (all its images are first turned into 
@@ -259,6 +267,7 @@ public class ServerManager implements StoringManager {
 	 * @param object
 	 * 			Story with id of the story you want to delete from server. 
 	 */
+	@Override
 	public void remove(Object object) { 
 		Story story = (Story) object;
 				try {

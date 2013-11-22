@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
 
 /**
@@ -195,4 +196,14 @@ public class MediaManager implements StoringManager{
 		return selection;
 	}
 
+	@Override
+	public void remove(Object object) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Media media = (Media) object;
+		
+		// Delete entry 
+		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
+		String[] selectionArgs1 = { String.valueOf(media.getId())};
+		db.delete(MediaTable.TABLE_NAME, selection, selectionArgs1);
+	}
 }

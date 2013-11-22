@@ -61,8 +61,8 @@ public class ESClient {
 	private static HttpClient httpclient = null; // Http Connector
 	private static Gson gson = null; // JSON Utilities
 	private static ESClient self = null;
-	private static final String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
-
+	private static String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
+	
 	/**
 	 * Initializes an ESClient.
 	 */
@@ -83,6 +83,14 @@ public class ESClient {
 		return self;
 	}
 
+	public void setTestServer() {
+		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/tests/";
+	}
+	
+	public void setRealServer() {
+		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
+	}
+	
 	/**
 	 * Deletes an entry (in this case a story object) specified by the id from
 	 * the server.

@@ -168,7 +168,7 @@ public class ChapterManager implements StoringManager {
 				chapter.getStoryId().toString());
 		values.put(ChapterTable.COLUMN_NAME_TEXT, chapter.getText());
 		values.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
-				chapter.getRandomChoice().toString());
+				chapter.hasRandomChoice().toString());
 	}
 
 	/**
@@ -204,5 +204,11 @@ public class ChapterManager implements StoringManager {
 			}
 		}
 		return selection;
+	}
+
+	@Override
+	public void remove(Object object) {
+		// TODO Auto-generated method stub
+		
 	}
 }

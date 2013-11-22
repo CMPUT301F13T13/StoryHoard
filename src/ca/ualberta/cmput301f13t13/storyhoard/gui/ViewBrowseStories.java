@@ -16,7 +16,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -30,12 +29,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
@@ -50,7 +48,9 @@ public class ViewBrowseStories extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private SHController gc;
-	private ObjectType viewType = ObjectType.CREATED_STORY;
+	private enum Type {LOCAL, PUBLISHED};
+	private Type viewType;
+	ArrayList<Story> currentStories;
 	
 	/**
 	 * Create the View Browse Stories activity
@@ -86,11 +86,14 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = ObjectType.CREATED_STORY;
+							currentStories = gc.getAllAuthorStories();
+							viewType = Type.LOCAL;
 						} else if (itemPosition == 1) {
-							viewType = ObjectType.CACHED_STORY;
+							currentStories = gc.getAllCachedStories();
+							viewType = Type.LOCAL;
 						} else if (itemPosition == 2) {
-							viewType = ObjectType.PUBLISHED_STORY;
+							currentStories = gc.getAllPublishedStories();
+							viewType = Type.PUBLISHED;
 						}
 						refreshStories();
 						return true;
@@ -113,18 +116,9 @@ public class ViewBrowseStories extends Activity {
 				Story story = gridArray.get(arg2);
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
-				if (viewType == ObjectType.PUBLISHED_STORY) {
-					UUID newStoryId = gc.cacheStory(story);
-					if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
-						story = gc.getStory(newStoryId, ObjectType.CREATED_STORY);
-						lifedata.setStoryType(ObjectType.CREATED_STORY);
-					} else {
-						story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
-						lifedata.setStoryType(ObjectType.CACHED_STORY);
-					}
-				} else {
-					lifedata.setStoryType(viewType);
-				}
+				if (viewType == Type.PUBLISHED) {
+					story.cache(ViewBrowseStories.this);
+				} 
 				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
@@ -164,17 +158,18 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story story = gc.getRandomStory();
-			UUID newId = gc.cacheStory(story);
-			if (story.getPhoneId().equals(Utilities.getPhoneId(ViewBrowseStories.this))) {
-				story = gc.getStory(newId, ObjectType.CREATED_STORY);
-				lifedata.setStoryType(ObjectType.CACHED_STORY);
+			
+			// no stories on server to choose from
+			if (story != null) {			
+				story.cache(this);
+				lifedata.setStory(story);
+				intent = new Intent(getBaseContext(), ViewStory.class);
+				startActivity(intent);
 			} else {
-				story = gc.getStory(newId, ObjectType.CACHED_STORY);
-				lifedata.setStoryType(ObjectType.CACHED_STORY);
+				Toast.makeText(getBaseContext(),
+						"No Published Stories Available", Toast.LENGTH_LONG)
+						.show();				
 			}
-			lifedata.setStory(story);
-			intent = new Intent(getBaseContext(), ViewStory.class);
-			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -185,6 +180,7 @@ public class ViewBrowseStories extends Activity {
 	public void onResume() {
 		super.onResume();
 		lifedata = LifecycleData.getInstance();
+		gc = SHController.getInstance(this);
 		setActionBar();
 		refreshStories();
 	}
@@ -194,12 +190,9 @@ public class ViewBrowseStories extends Activity {
 	 * whatever the general controller returns.
 	 */
 	private void refreshStories() {
-		ArrayList<Story> newStories;
 		gridArray.clear();
-		gc = SHController.getInstance(this);
-		newStories = gc.getAllStories(viewType);
-		if (newStories != null) {
-			gridArray.addAll(newStories);
+		if (currentStories != null) {
+			gridArray.addAll(currentStories);
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}

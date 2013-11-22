@@ -18,7 +18,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.util.ArrayList;
 
-import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 
@@ -39,11 +38,21 @@ import android.content.Context;
 public class SHController {
 
 	private static SHController self = null;   
-	private static ManagerFactory sf = null;
+	private static ServerManager serverMan;
+	private static StoryManager storyMan;
+	private static ChapterManager chapterMan;
+	private static ChoiceManager choiceMan;
+	private static MediaManager mediaMan;
+	
 	private Context context = null;
 
 	protected SHController(Context context) {
-		sf = new ManagerFactory(context);
+		serverMan = ServerManager.getInstance();
+		storyMan = StoryManager.getInstance(context);
+		chapterMan = ChapterManager.getInstance(context);
+		choiceMan = ChoiceManager.getInstance(context);
+		mediaMan = MediaManager.getInstance(context);
+		
 		this.context = context;
 	}
 
@@ -68,19 +77,46 @@ public class SHController {
 	 *            CREATED_STORY.
 	 * @return Array list of all the stories the application asked for.
 	 */
-	public ArrayList<Story> getAllStories(ObjectType type) {
-		Story criteria;
-		if (type == ObjectType.CACHED_STORY) {
-			criteria = new Story(null, null, null, null, "not");
-		} else {
-			criteria = new Story(null, null, null, null, Utilities.getPhoneId(context));
-		}
-		StoringManager sm = sf.getStoringManager(type);
-		ArrayList<Object> objects = sm.retrieve(criteria);
+	public ArrayList<Story> getAllAuthorStories() {
+		Story criteria = new Story(null, null, null, null, 
+				Utilities.getPhoneId(context));
+		ArrayList<Object> objects = storyMan.retrieve(criteria);
 		ArrayList<Story> stories = Utilities.objectsToStories(objects);
 		return stories;
 	}
 
+	/**
+	 * Gets all the stories that are either cached, created by the author, or
+	 * published.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
+	 *            CREATED_STORY.
+	 * @return Array list of all the stories the application asked for.
+	 */
+	public ArrayList<Story> getAllCachedStories() {
+		Story criteria = new Story(null, null, null, null, null);
+		ArrayList<Object> objects = storyMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(objects);
+		return stories;
+	}
+	
+	/**
+	 * Gets all the stories that are either cached, created by the author, or
+	 * published.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
+	 *            CREATED_STORY.
+	 * @return Array list of all the stories the application asked for.
+	 */
+	public ArrayList<Story> getAllPublishedStories() {
+		Story criteria = new Story(null, null, null, null, null);
+		ArrayList<Object> objects = serverMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(objects);
+		return stories;
+	}	
+	
 	/**
 	 * Retrieves all the chapters that are in a given story.
 	 * 
@@ -90,9 +126,8 @@ public class SHController {
 	 * @return ArrayList of the chapters.
 	 */
 	public ArrayList<Chapter> getAllChapters(UUID storyId) {
-		Chapter criteria = new Chapter(null, storyId, null);
-		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);		
-		ArrayList<Object> objects = sm.retrieve(criteria);
+		Chapter criteria = new Chapter(null, storyId, null);	
+		ArrayList<Object> objects = chapterMan.retrieve(criteria);
 		ArrayList<Chapter> chapters = Utilities.objectsToChapters(objects);
 		return chapters;
 	}
@@ -107,10 +142,8 @@ public class SHController {
 	 */
 	public ArrayList<Choice> getAllChoices(UUID chapterId) {
 		Choice criteria = new Choice(null, chapterId);
-		StoringManager sm = sf.getStoringManager(ObjectType.CHOICE);
-		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Object> objects = choiceMan.retrieve(criteria);
 		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);		
-
 		return choices;
 	}
 
@@ -124,8 +157,7 @@ public class SHController {
 	 */
 	public ArrayList<Media> getAllIllustrations(UUID chapterId) {
 		Media criteria = new Media(null, chapterId, null, Media.ILLUSTRATION);
-		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Object> objects = mediaMan.retrieve(criteria);
 		ArrayList<Media> illustrations = Utilities.objectsToMedia(objects);
 		return illustrations;
 	}
@@ -140,8 +172,7 @@ public class SHController {
 	 */
 	public ArrayList<Media> getAllPhotos(UUID chapterId) {
 		Media criteria = new Media(null, chapterId, null, Media.PHOTO);
-		StoringManager sm = sf.getStoringManager(ObjectType.MEDIA);
-		ArrayList<Object> objects = sm.retrieve(criteria);
+		ArrayList<Object> objects = mediaMan.retrieve(criteria);
 		ArrayList<Media> photos = Utilities.objectsToMedia(objects);
 		return photos;
 	}
@@ -159,135 +190,71 @@ public class SHController {
 	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchStory(String title, ObjectType type) {
-		Story criteria = null;
-		StoringManager sm = sf.getStoringManager(type);
-		criteria = new Story(null, title, null, null, null);
-		ArrayList<Object> objects = sm.retrieve(criteria);
-		ArrayList<Story> stories = Utilities.objectsToStories(objects);
+	public ArrayList<Story> searchAuthorStories(String title) {
+		// getting authors own
+		Story criteria = new Story(null, title, null, null, 
+				Utilities.getPhoneId(context));
+		ArrayList<Object> local = storyMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(local);
 		return stories;
 	}
-
 	
 	/**
-	 * Used to search for stories matching the id given.
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
 	 * 
-	 * @param id
+	 * @param title
+	 *            Title of the story user is looking for.
 	 * 
 	 * @param type
 	 *            Will either be PUBLISHED_STORY, CACHED_STORY
 	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public Story getStory(UUID id, ObjectType type) {
-		Story criteria = null;
-		StoringManager sm = sf.getStoringManager(type);
-		criteria = new Story(id, null, null, null, null);
-		ArrayList<Object> objects = sm.retrieve(criteria);
-		if (objects.size() < 1) {
-			return null;
-		}
-		return (Story) objects.get(0);
+	public ArrayList<Story> searchCachedStories(String title) {
+		// getting cached
+		Story criteria = new Story(null, title, null, null, null);
+		ArrayList<Object> local = storyMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(local);
+		return stories;
 	}
 	
 	/**
-	 * Retrieves a complete chapter (including any photos, illustrations, and
-	 * choices).
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
 	 * 
-	 * @param id
-	 *            Id of the chapter wanted.
+	 * @param title
+	 *            Title of the story user is looking for.
 	 * 
-	 * @return The complete chapter.
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public Chapter getCompleteChapter(UUID id) {
-		// Search criteria gets set
-		Chapter criteria = new Chapter(id, null, null, null);
-		StoringManager sm = sf.getStoringManager(ObjectType.CHAPTER);
-		Chapter chapter;
-		
-		// Get chapter
-		ArrayList<Object> objects = sm.retrieve(criteria);
-		
-		if (objects.size() == 1) {
-			chapter = (Chapter) objects.get(0);
-		} else {
-			return null;  // chapter doesn't exist
-		}
-		
-		// Get chapter choices
-		chapter.setChoices(getAllChoices(id));
-
-		// Get photos
-		chapter.setPhotos(getAllPhotos(id));
-
-		// Get illustrations
-		chapter.setIllustrations(getAllIllustrations(id));
-
-		return chapter;
-	}
-
+	public ArrayList<Story> searchPublishedStories(String title) {
+		// getting published
+		Story criteria = new Story(null, title, null, null, null);
+		ArrayList<Object> server = serverMan.retrieve(criteria);
+		ArrayList<Story> stories = Utilities.objectsToStories(server);
+		return stories;
+	}	
+	
 	/**
-	 * Retrieves a complete story (including chapters, and any photos,
-	 * illustrations, and choices belonging to the chapters). Returns
-	 * null if the story doesn't exist.
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
 	 * 
-	 * @param id
-	 *            Story id of the story wanted.
+	 * @param title
+	 *            Title of the story user is looking for.
 	 * 
-	 * @return The complete story.
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public Story getCompleteStory(UUID id, ObjectType type) {
-		// Search criteria gets set
-		Story criteria = new Story(id, null, null, null, null);
-		StoringManager sm = sf.getStoringManager(type);
-		ArrayList<Object> objects = sm.retrieve(criteria);
-		Story story;
-		
-		if (objects.size() == 1) {
-			story = (Story) objects.get(0);
-		} else {
-			return null;   // story doesn't exist
-		}
 
-		// Get all chapters
-		ArrayList<Chapter> chapters = getAllChapters(id);
-		HashMap<UUID, Chapter> chaptersHash = new HashMap<UUID, Chapter>();
-
-		// Get all choices
-		for (Chapter chap : chapters) {
-			Chapter fullChap = getCompleteChapter(chap.getId());
-			chaptersHash.put(chap.getId(), fullChap);
-		}
-
-		// add chapters to story
-		story.setChapters(chaptersHash);
-
-		return story;
-	}
-
-	/**
-	 * Caches a published story by going through all of its elements
-	 * and adding them to the database. It also saves the images of
-	 * the chapters in the sd card and saves the path to them in the
-	 * chapter's info. Returns the new story's UUID.
-	 */
-	public UUID cacheStory(Story story) {
-		// authors own story
-		if (story.getPhoneId().equals(Utilities.getPhoneId(context))) {
-			if (getStory(story.getId(), ObjectType.CREATED_STORY) != null) {
-				story.updateSelf(context);
-			} else {
-				story.addSelf(context);
-			}
-		} else {
-			if (getStory(story.getId(), ObjectType.CACHED_STORY) != null) {
-				story.updateSelf(context);
-			} else {
-				story.addSelf(context);
-			}
-		}		
-		return story.getId();
-	}
 	
 	/**
 	 * Chooses a random story from within the stories that are 
@@ -297,13 +264,14 @@ public class SHController {
 	 */
 	public Story getRandomStory() {
 		Story story = null;
-		ArrayList<Story> stories = getAllStories(ObjectType.PUBLISHED_STORY);
-		Random rand = new Random(); 
-		int index = rand.nextInt(stories.size());
+		ArrayList<Story> stories = getAllPublishedStories();
 		
 		if (stories.size() < 1) {
 			return null;
 		}
+		
+		Random rand = new Random(); 
+		int index = rand.nextInt(stories.size());
 		
 		story = stories.get(index);
 		 
@@ -325,7 +293,8 @@ public class SHController {
 		Random rand = new Random(); 
 		int num;
 		num = rand.nextInt(max);
-		Choice choice=choices.get(num);
+		Choice choice = choices.get(num);
+		choice.setText("I'm feeling lucky...");
 
 		return choice;
 	}	
@@ -341,10 +310,7 @@ public class SHController {
 	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
 	 *            CACHED_STORY, CREATED_STORY
 	 */
-	public void updateObject(Object object, ObjectType type) {
-		StoringManager sm = sf.getStoringManager(type);
-		sm.update(object);
-	}
+
 	
 	/**
 	 * Adds either a story, chapter, or choice.
@@ -356,8 +322,5 @@ public class SHController {
 	 *            Will either be CHAPTER, CHOICE, MEDIA, PUBLISHED_STORY,
 	 *            CACHED_STORY, CREATED_STORY
 	 */
-	public void addObject(Object object, ObjectType type) {
-		StoringManager sm = sf.getStoringManager(type);
-		sm.insert(object);
-	}	
+	
 }

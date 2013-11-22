@@ -1,10 +1,12 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class LifecycleData {
 	private boolean isEditing;
 	private boolean firstStory;
+	private ArrayList<Story> storyList;
 	private Story story;
 	private Chapter chapter;
 	private ObjectType storyType;
@@ -67,5 +69,13 @@ public class LifecycleData {
 	
 	public UUID getStoryID() {
 		return this.story.getId();
+	}
+
+	public ArrayList<Story> getStoryList() {
+		return this.storyList;
+	}
+
+	public void setStoryList(ArrayList<Story> stories) {
+		storyList = stories;
 	}
 }

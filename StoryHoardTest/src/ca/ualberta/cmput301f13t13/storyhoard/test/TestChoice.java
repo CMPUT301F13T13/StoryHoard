@@ -150,4 +150,21 @@ public class TestChoice
 		assertEquals(objs.size(), 1);		
 		assertTrue(((Choice)objs.get(0)).getText().equals("new text"));
 	}
+	
+	/**
+	 * Tests removing itself from the database
+	 */
+	public void testRemoveSelf() {
+		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
+				"opt1");
+		mockChoice.addSelf(getActivity());
+		
+		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
+		ArrayList<Object> objs = cm.retrieve(mockChoice);
+		assertEquals(objs.size(), 1);		
+
+		mockChoice.removeSelf(getActivity());
+		ArrayList<Object> choices = cm.retrieve(mockChoice);
+		assertEquals(choices.size(), 0);
+	}
 }

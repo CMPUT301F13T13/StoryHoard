@@ -27,10 +27,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
@@ -42,42 +42,36 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class SearchResultsActivity extends Activity {
-	private String titleName;
-	private ObjectType storyType;
+	private LifecycleData lifedata;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
-	private SHController gc;
 	private TextView emptyList;
-	ObjectType viewType = ObjectType.CREATED_STORY;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_search_results);	
 	}
-	
+
 	@Override 
 	protected void onResume() {
-			super.onResume();
-		// Check if we are editing the story or making a new story
-		Bundle bundle = this.getIntent().getExtras();
-		storyType = (ObjectType) bundle.get("Type");
-		titleName = bundle.getString("Input_title");
+		super.onResume();
+
+		lifedata = LifecycleData.getInstance();
 		emptyList = (TextView) findViewById(R.id.empty);
 
+		ArrayList<Story> newStories = lifedata.getStoryList();
+
+		if (newStories == null || newStories.size() == 0) {
+			Toast.makeText(getBaseContext(),
+					"No stories matched your search.", Toast.LENGTH_LONG)
+					.show();	
+		} 
 		
-			ArrayList<Story> newStories = new ArrayList<Story>();
-			gridArray.clear();
-			gc = SHController.getInstance(this);
-			newStories = gc.searchStory(titleName, storyType);
-			
-			if (newStories.size() !=0 ) {
-				gridArray.addAll(newStories);
-				emptyList.setText(" ");
-			}
-			
+		gridArray.clear();
+		gridArray.addAll(newStories);
+		emptyList.setText(" ");
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
@@ -86,12 +80,16 @@ public class SearchResultsActivity extends Activity {
 
 		// Setup the grid view click listener
 		gridView.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// Handle going to view story activity
+				lifedata = LifecycleData.getInstance();
+				Story story = gridArray.get(arg2);
+				lifedata.setStory(story);
+
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				intent.putExtra("storyID", gridArray.get(arg2).getId());
 				startActivity(intent);
 			}
 		});	
@@ -116,7 +114,7 @@ public class SearchResultsActivity extends Activity {
 			return true;
 		case R.id.add_story:
 			Intent add = new Intent(this, EditStoryActivity.class);
-			add.putExtra("isEditing", false);
+			lifedata.setEditing(false);
 			startActivity(add);
 			return true;
 		default:

@@ -130,10 +130,9 @@ public class TestStoryManager extends
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, "not");
+		Story mockCriteria = new Story(null, null, null, null, null);
 		mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 2);
-
 	}
 
 	/**

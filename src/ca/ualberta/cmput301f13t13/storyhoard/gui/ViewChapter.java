@@ -16,7 +16,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -27,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
@@ -101,8 +96,7 @@ public class ViewChapter extends MediaActivity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		UUID chapterID = lifedata.getChapterID();
-		chapter = gc.getCompleteChapter(chapterID);
+		chapter = lifedata.getChapter();
 		choices.clear();
 
 		// Check to see if the chapter exists, else terminate
@@ -123,10 +117,12 @@ public class ViewChapter extends MediaActivity {
 			chapterContent.setText(chapterContent.getText()
 					+ "\n\n<No Choices>");
 		} else {
-			choices.addAll(chapter.getChoices());
-			if (chapter.getRandomChoice() == true) {
-				choices.add(gc.getRandomChoice(chapterID));
+			ArrayList<Choice> chapChoices = chapter.getChoices();
+			if (chapter.hasRandomChoice() == true) {
+				chapChoices.add(gc.getRandomChoice(chapter.getId()));
 			}
+			choices.addAll(chapChoices);
+
 		}
 		choiceAdapter.notifyDataSetChanged();
 
@@ -158,8 +154,11 @@ public class ViewChapter extends MediaActivity {
 					long arg3) {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				lifedata.setChapter(gc.getCompleteChapter(choices.get(arg2)
-						.getNextChapter()));
+
+				Chapter nextChap = new Chapter(choices.get(arg2).getNextChapter(), null ,null);
+				nextChap.setFullContent(ViewChapter.this);
+				lifedata.setChapter(nextChap);
+				
 				startActivity(intent);
 				// photos.removeAllViews();
 				illustrations.removeAllViews();

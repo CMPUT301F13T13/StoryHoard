@@ -41,8 +41,14 @@ public class TestServerManager
 	public void setUp() throws Exception {
 		super.setUp();
 		sm = ServerManager.getInstance();	
+		sm.setTestServer();
 	}
 
+	public void tearDown() throws Exception {
+		super.tearDown();
+		sm = ServerManager.getInstance();
+		sm.setRealServer();
+	}
 	/**
 	 * Tests uploading and retrieving a story from the server.
 	 */
@@ -59,7 +65,7 @@ public class TestServerManager
 		
 		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
-		assertTrue(stories.size() > 0);
+		assertEquals(stories.size(), 1);
 		assertNotNull((Story) stories.get(0));
 		
 		HashMap<UUID, Chapter> chaps = story.getChapters();
@@ -89,7 +95,7 @@ public class TestServerManager
 		
 		sm.update(story);
 		ArrayList<Object> stories = sm.retrieve(story);
-		assertTrue(stories.size() > 0);
+		assertEquals(stories.size(), 1);
 		
 		Story newStory = (Story) stories.get(0);
 		newStory.setTitle("new title");
@@ -98,7 +104,7 @@ public class TestServerManager
 		
 		sm.update(newStory);
 		stories = sm.retrieve(newStory);
-		assertTrue(stories.size() > 0);
+		assertEquals(stories.size(), 1);
 		newStory = (Story) stories.get(0);
 		
 		HashMap<UUID, Chapter> chaps = newStory.getChapters();
@@ -127,5 +133,6 @@ public class TestServerManager
 		assertTrue(stories.size() > 0);
 
 		sm.remove(mockStory1);
+		sm.remove(mockStory2);
 	}
 }

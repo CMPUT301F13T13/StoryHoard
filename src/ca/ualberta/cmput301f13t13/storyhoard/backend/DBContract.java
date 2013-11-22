@@ -40,30 +40,30 @@ public final class DBContract {
 
 	public static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "StoryHoard.Db";
-	public static final String COLUMN_NAME_STORY_ID = "story_id";
-	public static final String COLUMN_NAME_TITLE = "title";
-	public static final String COLUMN_NAME_AUTHOR = "author";
-	public static final String COLUMN_NAME_DESCRIPTION = "description";
-	public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
-	public static final String COLUMN_NAME_PHONE_ID = "phone_id";
-
+	
 	public DBContract() {
 	}
 
 	/**
 	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing author's own stories.
+	 * table containing stories.
 	 */
-	protected static abstract class OwnStoryTable implements BaseColumns {
+	protected static abstract class StoryTable implements BaseColumns {
 
-		private OwnStoryTable() {
+		private StoryTable() {
 		}
 
-		public static final String TABLE_NAME = "own_story_table";
-
+		public static final String TABLE_NAME = "story_table";
+		public static final String COLUMN_NAME_STORY_ID = "story_id";
+		public static final String COLUMN_NAME_TITLE = "title";
+		public static final String COLUMN_NAME_AUTHOR = "author";
+		public static final String COLUMN_NAME_DESCRIPTION = "description";
+		public static final String COLUMN_NAME_FIRST_CHAPTER = "first_chapter";
+		public static final String COLUMN_NAME_PHONE_ID = "phone_id";
+		
 		// TO DO: Add column with phone id
 		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
-				+ OwnStoryTable.TABLE_NAME + " (" + OwnStoryTable._ID + " INTEGER,"
+				+ StoryTable.TABLE_NAME + " (" + StoryTable._ID + " INTEGER,"
 				+ COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
 				+ COLUMN_NAME_TITLE + " TEXT, "
 				+ COLUMN_NAME_AUTHOR + " TEXT, "
@@ -72,33 +72,8 @@ public final class DBContract {
 				+ COLUMN_NAME_PHONE_ID + " TEXT)";
 
 		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
-				+ OwnStoryTable.TABLE_NAME;
+				+ StoryTable.TABLE_NAME;
 	}
-	
-	/**
-	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing cached stories.
-	 */
-	protected static abstract class CachedStoryTable implements BaseColumns {
-
-		private CachedStoryTable() {
-		}
-
-		public static final String TABLE_NAME = "cached_story_table";
-
-		// TO DO: Add column with phone id
-		public static final String SQL_CREATE_TABLE = "CREATE TABLE "
-				+ CachedStoryTable.TABLE_NAME + " (" + CachedStoryTable._ID + " INTEGER,"
-				+ COLUMN_NAME_STORY_ID + " TEXT PRIMARY KEY,"
-				+ COLUMN_NAME_TITLE + " TEXT, "
-				+ COLUMN_NAME_AUTHOR + " TEXT, "
-				+ COLUMN_NAME_DESCRIPTION + " TEXT, "
-				+ COLUMN_NAME_FIRST_CHAPTER + " TEXT, "
-				+ COLUMN_NAME_PHONE_ID + " TEXT)";
-
-		public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "
-				+ CachedStoryTable.TABLE_NAME;
-	}	
 
 	/**
 	 * Sets up column names and then create and delete SQL statements for the

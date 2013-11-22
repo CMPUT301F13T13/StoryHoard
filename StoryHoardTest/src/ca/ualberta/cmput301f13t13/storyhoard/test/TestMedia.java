@@ -168,4 +168,20 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		
 		return path;
 	}
+	
+	/**
+	 * Tests removing itself from the database
+	 */
+	public void testRemoveSelf() {
+		Media media = new Media(UUID.randomUUID(), null, Media.PHOTO);
+		media.addSelf(getActivity());
+		
+		MediaManager mm = MediaManager.getInstance(getActivity());
+		ArrayList<Object> objs = mm.retrieve(media);
+		assertEquals(objs.size(), 1);		
+
+		media.removeSelf(getActivity());
+		ArrayList<Object> medias = mm.retrieve(media);
+		assertEquals(medias.size(), 0);
+	}	
 }

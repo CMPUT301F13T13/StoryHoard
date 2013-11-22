@@ -15,6 +15,8 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,7 +32,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
  * Search Activity
@@ -44,11 +48,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 public class SearchActivity extends Activity {
 	private Button searchButton;
 	private EditText titleInput;
-	private ObjectType storyType;
 	private Spinner spinner;
-	private static final String DOWNLOADED = "Downloaded Stories";
-	private static final String CREATED = "My Stories";
-	private static final String PUBLISHED = "Published Stories";
+	private SHController gc;
+	private LifecycleData lifedata;
+	private enum Type {AUTHOR, CACHED, PUBLISHED};
+	private Type viewType = Type.AUTHOR;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,65 +63,84 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		lifedata = LifecycleData.getInstance();
+		gc = SHController.getInstance(this);
 		searchButton = (Button) findViewById(R.id.searchButton);
 		titleInput = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
 		onSpinnerClick();
+		setSearchListener();
+	}
+
+	private void setSearchListener() {
 		searchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String title = titleInput.getText().toString();
 				title = title.trim();
 				title = title.replaceAll("[\n\r]", "");
 
-				// Correct Input: will save data to database and refresh
-				// activity.
-				if (valid_input(title)) {
-					Intent intent = new Intent(getBaseContext(),
-							SearchResultsActivity.class);
-					intent.putExtra("Input_title", title);
-					intent.putExtra("Type", storyType);
-					finish();
-					startActivity(intent);
+				if (validInput(title)) {
+					// Correct Input: will save data to database and refresh
+					// activity.
+					search(title);
+				} else {   
 					// Invalid Input types
-				} else {
-					AlertDialog.Builder alert = new AlertDialog.Builder(
-							SearchActivity.this);
-					alert.setTitle("Whoopsies!")
-							.setMessage("Story title is empty/invalid")
-							.setCancelable(false)
-							// cannot dismiss this dialog
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											dialog.cancel();
-										}
-									}); // parenthesis mean an anonymous class
-					// Show alert dialog
-					AlertDialog show_alert = alert.create();
-					show_alert.show();
+					alertDialog();
 				}
 			}
-		});
+		});		
 	}
-
+	
+	private void search(String title) {
+		ArrayList<Story> stories = new ArrayList<Story>();
+		if (viewType == Type.AUTHOR) {
+			stories = gc.searchAuthorStories(title);
+		} else if (viewType == Type.CACHED) {
+			stories = gc.searchCachedStories(title);
+		} else {
+			stories = gc.searchPublishedStories(title);
+		}
+		
+		lifedata.setStoryList(stories);
+		Intent intent = new Intent(getBaseContext(),
+				SearchResultsActivity.class);
+		finish();
+		startActivity(intent);		
+	}
+	
+	private void alertDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				SearchActivity.this);
+		alert.setTitle("Whoopsies!")
+				.setMessage("Story title is empty/invalid")
+				.setCancelable(false)
+				// cannot dismiss this dialog
+				.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+								dialog.cancel();
+							}
+						}); // parenthesis mean an anonymous class
+		// Show alert dialog
+		AlertDialog show_alert = alert.create();
+		show_alert.show();		
+	}
+	
 	// When the spinner is clicked
 	private void onSpinnerClick() {
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v,
 					int position, long id) {
-				// On selecting a spinner item
-				String item = adapter.getItemAtPosition(position).toString();
-				if (item.equals(DOWNLOADED)) {
-					storyType = ObjectType.CACHED_STORY;
-				} else if (item.equals(CREATED)) {
-					storyType = ObjectType.CREATED_STORY;
-				} else if (item.equals(PUBLISHED)) {
-					storyType = ObjectType.PUBLISHED_STORY;
+				if (position == 0) {
+					viewType = Type.AUTHOR;
+				} else if (position == 1) {
+					viewType = Type.CACHED;
+				} else if (position == 2) {
+					viewType = Type.PUBLISHED;
 				}
 			}
 
@@ -129,8 +152,8 @@ public class SearchActivity extends Activity {
 	}
 
 	// Checks to see if story title is empty
-	private boolean valid_input(String user_input) {
-		int length = user_input.length();
+	private boolean validInput(String userInput) {
+		int length = userInput.length();
 		if (length == 0) {
 			return false;
 		} else {

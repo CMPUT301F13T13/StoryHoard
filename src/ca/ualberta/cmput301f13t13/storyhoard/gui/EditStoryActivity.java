@@ -26,8 +26,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
@@ -44,7 +42,6 @@ public class EditStoryActivity extends Activity {
 	private EditText newAuthor;
 	private EditText newDescription;
 	private Story newStory;
-	private SHController gc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +60,6 @@ public class EditStoryActivity extends Activity {
 		final ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Story Details");
 		actionBar.setDisplayShowTitleEnabled(true);
-		
-		gc = SHController.getInstance(this);
 
 		newTitle = (EditText) findViewById(R.id.newStoryTitle);
 		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
@@ -121,8 +116,8 @@ public class EditStoryActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// publish or update story 
-			gc.updateObject(gc.getCompleteStory(newStory.getId(), lifedata.getStoryType()),
-					ObjectType.PUBLISHED_STORY);
+			newStory.setFullContent(EditStoryActivity.this);
+			newStory.publish();
 			return null;
 		}
 	}
@@ -137,14 +132,7 @@ public class EditStoryActivity extends Activity {
 			newStory.setTitle(title);
 			newStory.setDescription(description);
 			lifedata.setStory(newStory);
-			
-			// May not be needed...
-			if (lifedata.getStoryType().equals(ObjectType.CREATED_STORY)) {
-				gc.updateObject(newStory, ObjectType.CREATED_STORY);
-			} else {
-				gc.updateObject(newStory, ObjectType.CACHED_STORY);
-			}
-//			gc.updateObject(newStory, ObjectType.CREATED_STORY);
+			newStory.updateSelf(this);
 		} else {
 			newStory = new Story(title, author, description, 
 					Utilities.getPhoneId(getBaseContext()));

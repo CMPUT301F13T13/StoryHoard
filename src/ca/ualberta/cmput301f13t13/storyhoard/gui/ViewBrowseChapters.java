@@ -51,7 +51,6 @@ public class ViewBrowseChapters extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_view_browse_chapters);
 	}
 
@@ -90,6 +89,7 @@ public class ViewBrowseChapters extends Activity {
 	 * Initialize private fields needed
 	 */
 	public void setUpFields() {
+		lifedata = LifecycleData.getInstance();
 		// Grab GC and pull all chapters from story
 		gc = SHController.getInstance(this);
 		story = lifedata.getStory();

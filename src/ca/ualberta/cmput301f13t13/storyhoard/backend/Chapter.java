@@ -77,6 +77,7 @@ public class Chapter extends StoryPart {
 		this.randomChoice = false;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
+		choices = new ArrayList<Choice>();
 	}
 	/**
 	 * Initialize a new chapter with an id. Can also be used to make a chapter
@@ -101,6 +102,7 @@ public class Chapter extends StoryPart {
 		}
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
+		choices = new ArrayList<Choice>();
 	}
 
 	// Getters
@@ -137,7 +139,7 @@ public class Chapter extends StoryPart {
 	 * 
 	 * @return randomChoice
 	 */
-	public Boolean getRandomChoice() {
+	public Boolean hasRandomChoice() {
 
 		return this.randomChoice;
 	}
@@ -285,10 +287,6 @@ public class Chapter extends StoryPart {
 		if (storyId != null) {
 			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
 		}
-		if (randomChoice != null) {
-			info.put(ChapterTable.COLUMN_NAME_RANDOM_CHOICE, 
-					randomChoice.toString());
-		}
 
 		return info;
 	}
@@ -333,6 +331,12 @@ public class Chapter extends StoryPart {
 	 */
 	@Override
 	public void setFullContent(Context context) {
+		ChapterManager chapm = ChapterManager.getInstance(context);
+		ArrayList<Object> objs = chapm.retrieve(this);
+		Chapter self = (Chapter) objs.get(0);
+		
+		storyId = self.getStoryId();
+		text = self.getText();
 		
 		// Get all its choices
 		Choice criteria = new Choice(null, getId());

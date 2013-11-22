@@ -18,9 +18,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseChapters;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
@@ -34,6 +37,7 @@ public class TestViewBrowseChapters extends
 		ActivityInstrumentationTestCase2<ViewBrowseChapters> {
 	private ListView storyChapters;
 	private ViewBrowseChapters activity;
+	private LifecycleData lifedata; 
 
 	public TestViewBrowseChapters() {
 		super(ViewBrowseChapters.class);
@@ -42,15 +46,19 @@ public class TestViewBrowseChapters extends
 	@Override
 	public void setUp() throws Exception{
 		super.setUp();
-		Intent intent = new Intent();
-		intent.putExtra("storyID", UUID.randomUUID());
-		setActivityIntent(intent);
+		lifedata = LifecycleData.getInstance();
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		story.addChapter(chapter);
+		lifedata.setStory(story);
+
+		activity = getActivity();
 	}
 
 	public void testPreConditions() {
-		fail("not yet implemented");
-		
-		activity = getActivity();
 		storyChapters = (ListView) activity.findViewById(R.id.storyChapters);		
 		assertTrue(storyChapters != null);
 	}

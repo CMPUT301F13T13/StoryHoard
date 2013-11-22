@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
+
 import android.content.Context;
 
 /**
@@ -294,6 +296,15 @@ public class Story extends StoryPart {
 	
 	@Override
 	public void setFullContent(Context context) {
+		StoryManager sm = StoryManager.getInstance(context);
+		ArrayList<Object> objs = sm.retrieve(this);
+		Story self = (Story) objs.get(0);
+		title = self.getTitle();
+		author = self.getAuthor();
+		description = self.getDescription();
+		firstChapterId = self.getFirstChapterId();
+		phoneId = self.getPhoneId();
+		
 		HashMap<UUID, Chapter> chapHash = new HashMap<UUID, Chapter>();
 		ChapterManager cm = ChapterManager.getInstance(context);
 		Chapter criteria = new Chapter(null, getId(), null);		
@@ -332,9 +343,32 @@ public class Story extends StoryPart {
 		}		
 	}
 	
+	public Boolean existsLocally(Context context) {
+		StoryManager sm = StoryManager.getInstance(context);
+		Story crit = new Story(id, null, null, null, phoneId);
+		ArrayList<Object> objects = sm.retrieve(crit);
+		if (objects.size() < 1) {
+			return false;
+		}
+		return true;		
+	}
+	
 	public void publish() {
 		ServerManager sm = ServerManager.getInstance();
 		sm.update(this);
+	}
+	
+	public void unpublish() {
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(this);
+	}
+	
+	public void cache(Context context) {
+		if (existsLocally(context)) {
+			updateSelf(context);
+		} else {
+			addSelf(context);
+		}		
 	}
 	
 	/**
@@ -349,7 +383,7 @@ public class Story extends StoryPart {
 		HashMap<String, String> info = new HashMap<String, String>();
 
 		if (id != null) {
-			info.put(DBContract.COLUMN_NAME_STORY_ID, id.toString());
+			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
 		}
 
 		if (title != null) {
@@ -357,7 +391,7 @@ public class Story extends StoryPart {
 		}
 
 		if (phoneId != null) {
-			info.put(DBContract.COLUMN_NAME_PHONE_ID, phoneId);
+			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
 		}
 
 		return info;
@@ -376,7 +410,7 @@ public class Story extends StoryPart {
 		words = Arrays.asList(title.split("\\s+"));
 		
 		for (String keyword : words) {
-			info.put(DBContract.COLUMN_NAME_TITLE, "%" + keyword + "%");
+			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
 	}
 }

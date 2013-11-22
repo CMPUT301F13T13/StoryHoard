@@ -128,7 +128,7 @@ public class TestChapter
 		assertTrue(mockChapter.getChoices() != null);
 		assertTrue(mockChapter.getPhotos() != null);
 		assertTrue(mockChapter.getIllustrations() != null);
-		assertTrue(mockChapter.getRandomChoice());
+		assertTrue(mockChapter.hasRandomChoice());
 	}
 	
 	/**
@@ -161,18 +161,19 @@ public class TestChapter
 	/**
 	 * tests getting all components of a chapter (media + choices)
 	 */
-	public void testGetFullContent() {
+	public void testSetFullContent() {
 		Chapter chap = new Chapter(UUID.randomUUID(), "chap1");
 		Choice mockChoice = new Choice(chap.getId(), chap.getId(), "opt1");
 		Media m = new Media(chap.getId(), null, Media.PHOTO);
 		chap.addPhoto(m);
 		chap.addChoice(mockChoice);
-		
 		chap.addSelf(getActivity());
 		
-		Chapter newChap = new Chapter(chap.getId(), chap.getStoryId(), "newchap1");
+		Chapter newChap = new Chapter(chap.getId(), null, null);
 		newChap.setFullContent(getActivity());
 		
+		assertNotNull(newChap.getText());
+		assertNotNull(newChap.getStoryId());
 		assertEquals(newChap.getChoices().size(), 1);
 		assertEquals(newChap.getPhotos().size(), 1);
 	}
