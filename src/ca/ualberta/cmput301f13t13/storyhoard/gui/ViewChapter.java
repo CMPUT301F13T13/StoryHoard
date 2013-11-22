@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +36,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
@@ -144,8 +140,6 @@ public class ViewChapter extends MediaActivity {
 		}
 	}
 
-
-
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
 	 * (selecting a choice).
@@ -191,8 +185,7 @@ public class ViewChapter extends MediaActivity {
 	}
 
 	private void addPhoto() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				ViewChapter.this);
+		AlertDialog.Builder alert = new AlertDialog.Builder(ViewChapter.this);
 		// Set dialog title
 		alert.setTitle("Choose method:");
 		// Options that user may choose to add photo
