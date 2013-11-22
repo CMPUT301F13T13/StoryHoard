@@ -201,9 +201,9 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 				Utilities.getPhoneId(getActivity()));
 		Story s3 = new Story("Bob the cow", "me", "D: none", 
 				"34532432423");
-		Story s4 = new Story("sad cow", "me", "D: none", 
+		Story s4 = new Story("sad pen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
-		Story s5 = new Story("sad cow", "me", "D: none", 
+		Story s5 = new Story("sad toe", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
 		Story s6 = new Story("sad hen", "me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
@@ -215,21 +215,21 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		s5.publish();
 		s6.publish();
 
-		// title are null (should retrieve all created stories)
-		stories = gc.searchLocalStory(null);
+		// title are null (should retrieve all stories)
+		stories = gc.searchStory(null);
+		assertEquals(stories.size(), 6);
+
+		// title has cow
+		stories = gc.searchStory("cow");
 		assertEquals(stories.size(), 2);
 
-		// title has cow, created
-		stories = gc.searchLocalStory("cow");
-		assertEquals(stories.size(), 1);
-
 		// created, title has bob and hen
-		stories = gc.searchLocalStory("Bob hen");
+		stories = gc.searchStory("Bob hen");
 		assertEquals(stories.size(), 1);
 
-		// title has sad
-		stories = gc.searchPublishedStory("sad");
-		assertEquals(stories.size(), 3);
+		// title has toe
+		stories = gc.searchStory("toe");
+		assertEquals(stories.size(), 1);
 		
 		// clean up server
 		ServerManager sm = ServerManager.getInstance();

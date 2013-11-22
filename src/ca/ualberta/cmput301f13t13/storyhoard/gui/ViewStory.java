@@ -30,7 +30,6 @@ import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 
 /**
@@ -42,7 +41,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 public class ViewStory extends Activity {
 	LifecycleData lifedata;
 	private Story story;
-	private SHController gc;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
@@ -97,7 +95,6 @@ public class ViewStory extends Activity {
 	 * Initialize private fields
 	 */
 	public void setUpFields() {
-		gc = SHController.getInstance(getBaseContext());
 		
 		// Initialize the activity fields
 		/**storyCover = (ImageView) findViewById(R.id.storyImage);
@@ -144,8 +141,9 @@ public class ViewStory extends Activity {
 				// Begin reading, go to first chapter
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				UUID firstChapterID = story.getFirstChapterId();
-				Chapter chapter = gc.getCompleteChapter(firstChapterID);
-				lifedata.setChapter(chapter);
+				Chapter nextChap = new Chapter(firstChapterID, null ,null);
+				nextChap.setFullContent(ViewStory.this);
+				lifedata.setChapter(nextChap);
 				startActivity(intent);
 				finish();
 			}

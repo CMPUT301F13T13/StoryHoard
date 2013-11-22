@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 
 /**
  * Search Activity
@@ -44,11 +43,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
 public class SearchActivity extends Activity {
 	private Button searchButton;
 	private EditText titleInput;
-	private ObjectType storyType;
 	private Spinner spinner;
-	private static final String DOWNLOADED = "Downloaded Stories";
-	private static final String CREATED = "My Stories";
-	private static final String PUBLISHED = "Published Stories";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +70,6 @@ public class SearchActivity extends Activity {
 				if (valid_input(title)) {
 					Intent intent = new Intent(getBaseContext(),
 							SearchResultsActivity.class);
-					intent.putExtra("Input_title", title);
-					intent.putExtra("Type", storyType);
 					finish();
 					startActivity(intent);
 					// Invalid Input types
@@ -110,15 +103,6 @@ public class SearchActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v,
 					int position, long id) {
-				// On selecting a spinner item
-				String item = adapter.getItemAtPosition(position).toString();
-				if (item.equals(DOWNLOADED)) {
-					storyType = ObjectType.CACHED_STORY;
-				} else if (item.equals(CREATED)) {
-					storyType = ObjectType.CREATED_STORY;
-				} else if (item.equals(PUBLISHED)) {
-					storyType = ObjectType.PUBLISHED_STORY;
-				}
 			}
 
 			@Override

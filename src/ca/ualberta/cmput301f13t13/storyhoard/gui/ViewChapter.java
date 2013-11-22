@@ -16,7 +16,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -99,8 +98,7 @@ public class ViewChapter extends MediaActivity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {
-		UUID chapterID = lifedata.getChapterID();
-		chapter = gc.getCompleteChapter(chapterID);
+		chapter = lifedata.getChapter();
 		choices.clear();
 
 		// Check to see if the chapter exists, else terminate
@@ -122,7 +120,7 @@ public class ViewChapter extends MediaActivity {
 		} else {
 			choices.addAll(chapter.getChoices());
 			if (chapter.getRandomChoice() == true) {
-				choices.add(gc.getRandomChoice(chapterID));
+				choices.add(gc.getRandomChoice(chapter.getId()));
 			}
 		}
 		choiceAdapter.notifyDataSetChanged();
@@ -187,7 +185,9 @@ public class ViewChapter extends MediaActivity {
 					long arg3) {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				lifedata.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
+				Chapter nextChap = new Chapter(choices.get(arg2).getNextChapter(), null ,null);
+				nextChap.setFullContent(ViewChapter.this);
+				lifedata.setChapter(nextChap);
 				startActivity(intent);
 				//photos.removeAllViews();
 				illustrations.removeAllViews();

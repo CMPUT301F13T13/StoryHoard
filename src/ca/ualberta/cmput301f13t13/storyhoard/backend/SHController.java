@@ -190,20 +190,15 @@ public class SHController {
 	 * 
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
-	public ArrayList<Story> searchLocalStory(String title) {
+	public ArrayList<Story> searchStory(String title) {
 		Story criteria = new Story(null, title, null, null, null);
-		ArrayList<Object> objects = storyMan.retrieve(criteria);
-		ArrayList<Story> stories = Utilities.objectsToStories(objects);
+		ArrayList<Object> local = storyMan.retrieve(criteria);
+		ArrayList<Object> server = serverMan.retrieve(criteria);
+		local.addAll(server);
+		ArrayList<Story> stories = Utilities.objectsToStories(local);
 		return stories;
 	}
 	
-	public ArrayList<Story> searchPublishedStory(String title) {
-		Story criteria = new Story(null, title, null, null, null);
-		ArrayList<Object> objects = serverMan.retrieve(criteria);
-		ArrayList<Story> stories = Utilities.objectsToStories(objects);
-		return stories;
-	}	
-
 	/**
 	 * Used to search for stories matching the given search criteria. Users can
 	 * either search by specifying the title or author of the story. All stories
