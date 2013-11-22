@@ -37,6 +37,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * for editing chapters.
  * 
  * @author alexanderwwong
+ * @author Kim Wu
  */
 
 public class ViewBrowseChapters extends Activity {
