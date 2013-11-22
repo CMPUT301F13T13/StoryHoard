@@ -358,6 +358,11 @@ public class Story extends StoryPart {
 		sm.update(this);
 	}
 	
+	public void unpublish() {
+		ServerManager sm = ServerManager.getInstance();
+		sm.remove(this);
+	}
+	
 	public void cache(Context context) {
 		if (existsLocally(context)) {
 			updateSelf(context);

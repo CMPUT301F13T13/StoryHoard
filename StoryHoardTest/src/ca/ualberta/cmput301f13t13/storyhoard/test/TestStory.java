@@ -241,7 +241,7 @@ public class TestStory extends
 		assertTrue(story.getTitle().equals("newTitle"));
 	}	
 	
-	public void testPublish() {
+	public void testPublishRemove() {
 		// Insert some stories
 		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
 				Utilities.getPhoneId(getActivity()));
@@ -250,7 +250,10 @@ public class TestStory extends
 		ArrayList<Object> objs = sm.retrieve(s1);
 		assertEquals(objs.size(), 1);
 		
-		sm.remove(s1);
+		s1.unpublish();
+		
+		objs = sm.retrieve(s1);
+		assertEquals(objs.size(), 0);
 	}
 	
 	public void testExistsLocally() {
