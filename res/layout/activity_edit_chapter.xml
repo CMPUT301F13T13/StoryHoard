@@ -4,19 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
 
         <HorizontalScrollView
             android:id="@+id/editHorizontalSCIllustrations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
+             >
 
             <LinearLayout
                 android:id="@+id/editHorizontalIllustrations"
@@ -26,29 +19,23 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <EditText
-            android:id="@+id/chapterEditText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/randChoiceCheck"
-            android:layout_below="@+id/editHorizontalSCIllustrations"
-            android:hint="@string/add_chapter_edit_text" />
-
         <CheckBox
             android:id="@+id/randChoiceCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/chapterAddIllust"
             android:text="@string/set_random_choice" />
-        
-        <Button
-            android:id="@+id/chapterAddIllust"
-            style="android:attr/buttonBarButtonStyle"
+
+        <EditText
+            android:id="@+id/chapterEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/add_chapter_illust" />
-    </RelativeLayout>
+
+            android:ems="10"
+            android:hint="@string/add_chapter_edit_text" >
+
+            <requestFocus />
+        </EditText>
+
 
     <RelativeLayout
         android:id="@+id/choicesSubLayout"

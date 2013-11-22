@@ -51,6 +51,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * added.
  * 
  * author: Alexander Wong
+ * author: Kim Wu
  */
 
 public class EditChapterActivity extends MediaActivity {
@@ -60,7 +61,6 @@ public class EditChapterActivity extends MediaActivity {
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
-	private Button addIllust;
 	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
@@ -87,7 +87,6 @@ public class EditChapterActivity extends MediaActivity {
 		super.onResume();
 		setSaveButtonListener();
 		setAddChoiceListener();
-		setAddIllustrationListener();
 		setRandomChoice();
 		updateICData();
 	}
@@ -120,7 +119,6 @@ public class EditChapterActivity extends MediaActivity {
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
-		addIllust = (Button) findViewById(R.id.chapterAddIllust);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
 		randChoiceCheck = (CheckBox) findViewById(R.id.randChoiceCheck);
 
@@ -188,46 +186,6 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	/**
-	 * Sets the onCLick listener for adding an illustration.
-	 */
-	private void setAddIllustrationListener() {
-		addIllust.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!lifedata.isEditing()) {
-					Toast.makeText(getBaseContext(),
-							"Save chapter before adding first illustration",
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						EditChapterActivity.this);
-				// Set dialog title
-				alert.setTitle("Choose method:");
-				// Options that user may choose to add illustration
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto(Media.ILLUSTRATION);
-									break;
-								case 1:
-									browseGallery(Media.ILLUSTRATION);
-									break;
-								}
-								illustDialog.dismiss();
-							}
-						});
-				illustDialog = alert.create();
-				illustDialog.show();
-			}
-		});
-	}
-
-	/**
 	 * Set onClick listener for setting random choice
 	 */
 	public void setRandomChoice() {
@@ -264,12 +222,45 @@ public class EditChapterActivity extends MediaActivity {
 		case R.id.addChoice:
 			return true;
 		case R.id.addIllus:
+			addIllustration();
 			return true;
 		case R.id.Save:
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void addIllustration() {
+		if (!lifedata.isEditing()) {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first illustration",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				EditChapterActivity.this);
+		// Set dialog title
+		alert.setTitle("Choose method:");
+		// Options that user may choose to add illustration
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.ILLUSTRATION);
+							break;
+						case 1:
+							browseGallery(Media.ILLUSTRATION);
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
+		illustDialog = alert.create();
+		illustDialog.show();
 	}
 
 }
