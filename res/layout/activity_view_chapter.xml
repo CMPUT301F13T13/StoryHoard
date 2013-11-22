@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@drawable/choices_bg"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/choices_bg" >
 
     <HorizontalScrollView
         android:id="@+id/horizontalSCIllustraions"
@@ -21,18 +21,30 @@
 
     <LinearLayout
         android:id="@+id/content"
-        android:background="#B4D2E3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/horizontalSCIllustraions"
+        android:background="#A6000000"
         android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="302dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/top" />
 
         <TextView
             android:id="@+id/chapterContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
             android:text="@string/chapter_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ece2b4" />
     </LinearLayout>
 
     <HorizontalScrollView
