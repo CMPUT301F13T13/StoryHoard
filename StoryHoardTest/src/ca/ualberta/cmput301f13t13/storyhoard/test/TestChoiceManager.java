@@ -64,9 +64,8 @@ public class TestChoiceManager extends
 		cm.insert(c);
 
 		// retrieving story in db that matches mockStory
-		ArrayList<Object> choice = cm.retrieve(c);
-		assertTrue(choice.size() == 1);
-		assertTrue(hasChoice(choice, c));
+		ArrayList<Choice> choice = cm.retrieve(c);
+		assertEquals(choice.size(), 1);
 	}
 
 	/**
@@ -83,9 +82,8 @@ public class TestChoiceManager extends
 
 		cm.insert(c);
 
-		ArrayList<Object> mockChoices = cm.retrieve(c);
-		assertTrue(mockChoices.size() == 1);
-		assertTrue(hasChoice(mockChoices, c));
+		ArrayList<Choice> mockChoices = cm.retrieve(c);
+		assertEquals(mockChoices.size(), 1);
 
 		Choice newChoice = (Choice) mockChoices.get(0);
 
@@ -93,8 +91,7 @@ public class TestChoiceManager extends
 		cm.update(c);
 		// make sure you can find new choice
 		mockChoices = cm.retrieve(newChoice);
-		assertTrue(mockChoices.size() == 1);
-		assertTrue(hasChoice(mockChoices, newChoice));
+		assertEquals(mockChoices.size(), 1);
 
 		// make sure old version no longer exists
 		assertFalse(c.getText().equals(newChoice.getText()));
@@ -117,30 +114,7 @@ public class TestChoiceManager extends
 		// Looking for all choices belonging to chapter id 1
 		Choice criteria = new Choice(null, chapId1, null, null);
 
-		ArrayList<Object> mockChoices = cm.retrieve(criteria);
+		ArrayList<Choice> mockChoices = cm.retrieve(criteria);
 		assertEquals(mockChoices.size(), 2);
-		assertTrue(hasChoice(mockChoices, mockChoice));
-		assertTrue(hasChoice(mockChoices, mockChoice2));
-		assertFalse(hasChoice(mockChoices, mockChoice3));
-	}
-
-	/**
-	 * Checks whether a choice is contained in a choices ArrayList.
-	 * 
-	 * @param objs
-	 *            ArrayList of objects.
-	 * @param chap
-	 *            Object for which we are testing whether or not it is 
-	 *            contained in the ArrayList.
-	 * @return Boolean
-	 */
-	public Boolean hasChoice(ArrayList<Object> objs, Choice choice) {
-		for (Object object : objs) {
-			Choice newChoice = (Choice) object;
-			if (newChoice.getId().equals(choice.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -68,7 +68,7 @@ public class TestMediaManager extends
 		
 		mm.insert(mockMedia);
 
-		ArrayList<Object> objects = mm.retrieve(mockMedia);
+		ArrayList<Media> objects = mm.retrieve(mockMedia);
 		assertEquals(objects.size(), 1);
 
 		Media check = (Media) objects.get(0);
@@ -87,7 +87,7 @@ public class TestMediaManager extends
 
 		// get all media
 		Media criteria = new Media(null, chapId, null, null);
-		ArrayList<Object> objects = mm.retrieve(criteria);
+		ArrayList<Media> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);
 
 		Media newm = (Media) objects.get(0);
@@ -105,7 +105,7 @@ public class TestMediaManager extends
 		
 		Media criteria = new Media(null, chap.getId(), null, null);
 		
-		ArrayList<Object> objects = mm.retrieve(criteria);
+		ArrayList<Media> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);
 
 		Media newM1 = (Media) objects.get(0);
@@ -146,10 +146,8 @@ public class TestMediaManager extends
 			outStream.close();
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

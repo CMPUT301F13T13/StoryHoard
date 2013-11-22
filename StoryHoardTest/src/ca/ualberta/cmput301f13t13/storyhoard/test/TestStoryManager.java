@@ -31,7 +31,7 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestStoryManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private ArrayList<Object> mockStories;
+	private ArrayList<Story> mockStories;
 	private StoryManager sm = null;
 
 	public TestStoryManager() {

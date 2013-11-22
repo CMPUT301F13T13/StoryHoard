@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.content.Context;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 
 /**
@@ -32,7 +30,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
  * @author Stephanie Gil
  * 
  */
-public class Chapter extends StoryPart {
+public class Chapter {
 	private UUID id;
 	private UUID storyId;
 	private String text;
@@ -289,74 +287,5 @@ public class Chapter extends StoryPart {
 		}
 
 		return info;
-	}
-
-	/**
-	 * Updates itself in the database
-	 */
-	public void updateSelf(Context context) {
-		ChapterManager cm = ChapterManager.getInstance(context);
-		cm.update(this);
-		for (Media photo : photos) {
-			photo.updateSelf(context);
-		}
-		for (Media ill : illustrations) {
-			ill.updateSelf(context);
-		}
-		for (Choice choice : choices) {
-			choice.updateSelf(context);
-		}
-	}
-
-	/**
-	 * Adds itself to the database
-	 */
-	public void addSelf(Context context) {
-		ChapterManager cm = ChapterManager.getInstance(context);
-		cm.insert(this);
-		for (Media photo : photos) {
-			photo.addSelf(context);
-		}
-		for (Media ill : illustrations) {
-			ill.addSelf(context);
-		}
-		for (Choice choice : choices) {
-			choice.addSelf(context);
-		}
-	}
-
-	/**
-	 * Gets the full content (choices + media) of the chapter and sets
-	 * the corresponding fields.
-	 */
-	@Override
-	public void setFullContent(Context context) {
-		ChapterManager chapm = ChapterManager.getInstance(context);
-		ArrayList<Chapter>chaps = chapm.retrieve(this);
-		Chapter self = (Chapter) chaps.get(0);
-		
-		storyId = self.getStoryId();
-		text = self.getText();
-		randomChoice = self.hasRandomChoice();
-		
-		// Get all its choices
-		Choice criteria = new Choice(null, getId());
-		ChoiceManager cm = ChoiceManager.getInstance(context);
-		ArrayList<Choice> choices = cm.retrieve(criteria);
-		
-		setChoices(choices);
-		
-		// Get all its illustrations
-		MediaManager mm = MediaManager.getInstance(context);
-		Media mCriteria = new Media(null, getId(), null, Media.ILLUSTRATION);
-		ArrayList<Media> illustrations = mm.retrieve(mCriteria);
-		
-		setIllustrations(illustrations);
-		
-		// Get all its photos
-		mCriteria = new Media(null, getId(), null, Media.PHOTO);
-		ArrayList<Media> photos = mm.retrieve(mCriteria);
-		
-		setPhotos(photos);	
 	}
 }

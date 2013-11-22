@@ -20,17 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
@@ -44,7 +39,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  */
 public class TestStory extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private Context activity;
 	private ServerManager sm;
 
 	public TestStory() {
@@ -58,7 +52,6 @@ public class TestStory extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		activity = getActivity();
 		sm = ServerManager.getInstance();	
 		sm.setTestServer();
 	}
@@ -91,23 +84,6 @@ public class TestStory extends
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.addChapter(chapter);
 		assertEquals(story.getChapters().size(), 1);
-	}
-
-	/**
-	 * Tests retrieving a specific chapter from a story.
-	 */
-	public void testGetChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story",
-				Utilities.getPhoneId(this.getActivity()));
-		Chapter chapter1 = new Chapter(story.getId(), 
-				"On a cold, dark night.");
-		Chapter chapter2 = new Chapter(story.getId(), 
-				"On a sunny, bright day.");
-		story.addChapter(chapter1);
-		story.addChapter(chapter2);
-
-		Chapter result = story.getChapter(chapter1.getId());
-		assertSame(result, chapter1);
 	}
 
 	/**
@@ -144,7 +120,7 @@ public class TestStory extends
 		String author = mockStory.getAuthor();
 		String desc = mockStory.getDescription();
 		String phoneid = mockStory.getPhoneId();
-		HashMap<UUID, Chapter> chapters = mockStory.getChapters();
+		ArrayList<Chapter> chapters = mockStory.getChapters();
 		UUID firstChapId = mockStory.getFirstChapterId();
 
 		mockStory.setId(UUID.randomUUID());
@@ -162,105 +138,5 @@ public class TestStory extends
 		assertTrue(phoneid.equals(mockStory.getPhoneId()));
 		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);
-	}
-	
-	/**
-	 * tests adding itself to the database
-	 */
-	public void testAddSelf() {
-		Story story = new Story("the mouse", "me", "little mousey", 
-				Utilities.getPhoneId(getActivity()));
-		story.addSelf(getActivity());
-		StoryManager sm = StoryManager.getInstance(getActivity());
-		ArrayList<Object> objs = sm.retrieve(story);
-		assertEquals(objs.size(), 1);
-	}
-	
-	/**
-	 * tests updating itself in the database
-	 */
-	public void testUpdateSelf() {
-		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"opt1");
-		mockChoice.addSelf(getActivity());
-		mockChoice.setText("new text");
-		mockChoice.updateSelf(getActivity());
-		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
-		ArrayList<Object> objs = cm.retrieve(mockChoice);
-		assertEquals(objs.size(), 1);		
-		assertTrue(((Choice)objs.get(0)).getText().equals("new text"));
-	}
-	
-	/**
-	 * tests getting all components of a chapter (media + choices)
-	 */
-	public void testGetFullContent() {
-		Story s = new Story("title", "author", "des", "phoneid");
-		Chapter chap = new Chapter(UUID.randomUUID(), "chap1");
-		Choice mockChoice = new Choice(chap.getId(), chap.getId(), "opt1");
-		Media m = new Media(chap.getId(), null, Media.PHOTO);
-		chap.addPhoto(m);
-		chap.addChoice(mockChoice);
-		s.addChapter(chap);
-		s.addSelf(getActivity());
-		
-		Story fullStory = new Story(s.getId(), null, null, null, null);
-		fullStory.setFullContent(getActivity());
-		
-		assertEquals(s.getChapters().size(), 1);
-		assertEquals(s.getChapter(s.getFirstChapterId()).getChoices().size(), 1);
-		assertEquals(s.getChapter(s.getFirstChapterId()).getPhotos().size(), 1);
-	}
-	
-	/**
-	 * Tests caching a story.
-	 */
-	public void testCacheLoadStory() {
-		Story mockStory = new Story("My Monkey", "TS ELLIOT",
-				"monkey is in the server", Utilities.getPhoneId(getActivity()));
-		Chapter chap = new Chapter(mockStory.getId(), "l");
-		Chapter chap2 = new Chapter(mockStory.getId(), "2");
-		chap.addChoice(new Choice(chap.getId(), chap2.getId(), "hi"));
-
-		mockStory.addChapter(chap);
-		mockStory.cache(activity);
-
-		Story story = new Story(mockStory.getId(), null, null, null, 
-				mockStory.getPhoneId());
-		story.setFullContent(activity);
-		assertNotNull(story.getTitle());
-		assertNotNull(story.getAuthor());
-		assertNotNull(story.getDescription());
-		
-		story.setTitle("newTitle");
-		story.cache(activity);
-		
-		story = new Story(mockStory.getId(), null, null, null, 
-				mockStory.getPhoneId());
-		story.setFullContent(activity);
-		assertTrue(story.getTitle().equals("newTitle"));
-	}	
-	
-	public void testPublishRemove() {
-		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
-		s1.publish();
-		ServerManager sm = ServerManager.getInstance();
-		ArrayList<Object> objs = sm.retrieve(s1);
-		assertEquals(objs.size(), 1);
-		
-		s1.unpublish();
-		
-		objs = sm.retrieve(s1);
-		assertEquals(objs.size(), 0);
-	}
-	
-	public void testExistsLocally() {
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
-
-		s1.addSelf(activity);
-		assertTrue(s1.existsLocally(getActivity()));
 	}
 }

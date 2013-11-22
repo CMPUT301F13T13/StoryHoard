@@ -17,7 +17,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -64,15 +63,12 @@ public class TestServerManager
 		story.addChapter(chap2);
 		
 		sm.update(story);
-		ArrayList<Object> stories = sm.retrieve(story);
+		ArrayList<Story> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		assertNotNull((Story) stories.get(0));
 		
-		HashMap<UUID, Chapter> chaps = story.getChapters();
+		ArrayList<Chapter> chaps = story.getChapters();
 		assertEquals(chaps.size(), 2);
-		Chapter nChap = chaps.get(story.getFirstChapterId());
-		ArrayList<Choice> choices = nChap.getChoices();
-		assertEquals(choices.size(), 1);
 		
 		// delete
 		sm.remove(story);
@@ -94,7 +90,7 @@ public class TestServerManager
 		story.addChapter(chap);
 		
 		sm.update(story);
-		ArrayList<Object> stories = sm.retrieve(story);
+		ArrayList<Story> stories = sm.retrieve(story);
 		assertEquals(stories.size(), 1);
 		
 		Story newStory = (Story) stories.get(0);
@@ -107,7 +103,7 @@ public class TestServerManager
 		assertEquals(stories.size(), 1);
 		newStory = (Story) stories.get(0);
 		
-		HashMap<UUID, Chapter> chaps = newStory.getChapters();
+		ArrayList<Chapter> chaps = newStory.getChapters();
 		assertEquals(chaps.size(), 2);
 		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
 		assertFalse(newStory.getTitle().equals(story.getTitle()));
@@ -129,7 +125,7 @@ public class TestServerManager
 
 		// setting search criteria
 		Story mockCriteria = new Story(null, null, null, null, null);
-		ArrayList<Object> stories = sm.retrieve(mockCriteria);
+		ArrayList<Story> stories = sm.retrieve(mockCriteria);
 		assertTrue(stories.size() > 0);
 
 		sm.remove(mockStory1);

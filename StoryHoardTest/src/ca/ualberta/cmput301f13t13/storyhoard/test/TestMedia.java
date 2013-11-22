@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
@@ -102,32 +101,6 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	}
 	
 	/**
-	 * tests adding itself to the database
-	 */
-	public void testAddSelf() {
-		Media media = new Media(UUID.randomUUID(), null, Media.PHOTO);
-		media.addSelf(getActivity());
-		MediaManager mm = MediaManager.getInstance(getActivity());
-		ArrayList<Object> objs = mm.retrieve(media);
-		assertEquals(objs.size(), 1);
-	}
-	
-	/**
-	 * tests updating itself in the database
-	 */
-	public void testUpdateSelf() {
-		path = createPath("img1.jpg");
-		Media media = new Media(UUID.randomUUID(), path, Media.PHOTO);
-		media.addSelf(getActivity());
-		MediaManager mm = MediaManager.getInstance(getActivity());	
-		media.setType(Media.ILLUSTRATION);
-		media.updateSelf(getActivity());
-		ArrayList<Object> objs = mm.retrieve(new Media(media.getId(), null, null, null));
-		assertEquals(objs.size(), 1);		
-		assertTrue(((Media)objs.get(0)).getType().equals(Media.ILLUSTRATION));
-	}
-	
-	/**
 	 * Creates a new bitmap, save sit on to SD card and sets path to it.
 	 */
 	public String createPath(String fname) {
@@ -168,20 +141,4 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		
 		return path;
 	}
-	
-	/**
-	 * Tests removing itself from the database
-	 */
-	public void testRemoveSelf() {
-		Media media = new Media(UUID.randomUUID(), null, Media.PHOTO);
-		media.addSelf(getActivity());
-		
-		MediaManager mm = MediaManager.getInstance(getActivity());
-		ArrayList<Object> objs = mm.retrieve(media);
-		assertEquals(objs.size(), 1);		
-
-		media.removeSelf(getActivity());
-		ArrayList<Object> medias = mm.retrieve(media);
-		assertEquals(medias.size(), 0);
-	}	
 }

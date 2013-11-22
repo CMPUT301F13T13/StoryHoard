@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -266,19 +265,4 @@ public class Media {
 				0, decodedString.length);
 		return decodedByte;
 	}
-
-	public void updateSelf(Context context) {
-		MediaManager mm = MediaManager.getInstance(context);
-		mm.update(this);
-	}
-
-	public void addSelf(Context context) {
-		MediaManager mm = MediaManager.getInstance(context);
-		if (!bitmapString.equals("")) {
-			path = Utilities.saveImageToSD(getBitmapFromString());
-			bitmapString = "";
-		}
-		mm.insert(this);
-	}	
-	
 }

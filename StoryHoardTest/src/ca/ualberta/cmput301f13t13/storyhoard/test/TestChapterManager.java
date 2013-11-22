@@ -34,7 +34,7 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestChapterManager extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private ArrayList<Object> mockChapters;
+	private ArrayList<Chapter> mockChapters;
 	private ChapterManager cm = null;
 	public TestChapterManager() {
 		super(ViewBrowseStories.class);
@@ -74,7 +74,6 @@ public class TestChapterManager extends
 		cm.insert(mockChapter);
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 
 	/**
@@ -92,10 +91,7 @@ public class TestChapterManager extends
 		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), null);
 
 		mockChapters = cm.retrieve(criteria);
-		assertTrue(mockChapters.size() == 2);
-		assertTrue(hasChapter(mockChapters, mockChapter));
-		assertTrue(hasChapter(mockChapters, mockChapter2));
-		assertFalse(hasChapter(mockChapters, mockChapter3));
+		assertEquals(mockChapters.size(), 2);
 	}
 
 	/**
@@ -108,7 +104,6 @@ public class TestChapterManager extends
 
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, mockChapter));
 
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 
@@ -118,30 +113,9 @@ public class TestChapterManager extends
 		// make sure you can find new chapter
 		mockChapters = cm.retrieve(newChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, newChapter));
 
 		// make sure old version no longer exists
 		Chapter compChap = (Chapter) mockChapters.get(0);
 		assertTrue(compChap.getText().equals(newChapter.getText()));
-	}
-
-	/**
-	 * Checks whether a chapter is contained in a chapters ArrayList.
-	 * 
-	 * @param objs
-	 *            ArrayList of objects.
-	 * @param chap
-	 *            Object for which we are testing whether or not it is contained
-	 *            in the ArrayList.
-	 * @return Boolean
-	 */
-	public Boolean hasChapter(ArrayList<Object> objs, Chapter chap) {
-		for (Object object : objs) {
-			Chapter newChap = (Chapter) object;
-			if (newChap.getId().equals(chap.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -16,7 +16,6 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -25,7 +24,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
@@ -122,49 +120,5 @@ public class TestChoice
 		assertSame(currentChapter, mockChoice.getCurrentChapter());
 		assertSame(nextChapter, mockChoice.getNextChapter());
 		assertSame(text, mockChoice.getText());
-	}
-
-	/**
-	 * tests adding itself to the database
-	 */
-	public void testAddSelf() {
-		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"opt1");
-		mockChoice.addSelf(getActivity());
-		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
-		ArrayList<Object> objs = cm.retrieve(mockChoice);
-		assertEquals(objs.size(), 1);
-	}
-	
-	/**
-	 * tests updating itself in the database
-	 */
-	public void testUpdateSelf() {
-		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"opt1");
-		mockChoice.addSelf(getActivity());
-		mockChoice.setText("new text");
-		mockChoice.updateSelf(getActivity());
-		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
-		ArrayList<Object> objs = cm.retrieve(mockChoice);
-		assertEquals(objs.size(), 1);		
-		assertTrue(((Choice)objs.get(0)).getText().equals("new text"));
-	}
-	
-	/**
-	 * Tests removing itself from the database
-	 */
-	public void testRemoveSelf() {
-		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"opt1");
-		mockChoice.addSelf(getActivity());
-		
-		ChoiceManager cm = ChoiceManager.getInstance(getActivity());
-		ArrayList<Object> objs = cm.retrieve(mockChoice);
-		assertEquals(objs.size(), 1);		
-
-		mockChoice.removeSelf(getActivity());
-		ArrayList<Object> choices = cm.retrieve(mockChoice);
-		assertEquals(choices.size(), 0);
 	}
 }

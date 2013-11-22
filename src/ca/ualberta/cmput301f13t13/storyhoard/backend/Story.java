@@ -23,8 +23,6 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
 
-import android.content.Context;
-
 /**
  * Role: A container to hold story information. This includes id, author, 
  * title, description, the id of the first chapter, a collection of
@@ -257,51 +255,31 @@ public class Story {
 	public void setPhoneId(String phoneId) {
 		this.phoneId = phoneId;
 	}
-
-	// Other methods
-
-	/**
-	 * Adds a chapter onto the story object. If the story
-	 * has no chapters when the new chapter is added, the
-	 * firstChapterId will also be set for the story.
-	 * 
-	 * If the story needs to be updated in the database
-	 * (due to now having a firstChapterId), then it will
-	 * return true so the front end will know to use the
-	 * OwnStoryManager to update the story data.
-	 * 
-	 * If the story already had its firstChapterId set, then
-	 * there is no need to update it in the database, therefore
-	 * the function will return False.
-	 */
-	public Boolean addChapter(Chapter chapter) {
-		if (firstChapterId == null) {
-			// set first chapter id
-			firstChapterId = chapter.getId();
-			chapters.add(chapter);
-			return true;
-		}
-		chapters.add(chapter);
-		return false;
-	}
 	
-	public void setFullContent(Context context) {
-		StoryManager sm = StoryManager.getInstance(context);
-		ArrayList<Story> stories = sm.retrieve(this);
-		Story self = stories.get(0);
-		title = self.getTitle();
-		author = self.getAuthor();
-		description = self.getDescription();
-		firstChapterId = self.getFirstChapterId();
-		phoneId = self.getPhoneId();
-		
-		ChapterManager cm = ChapterManager.getInstance(context);
-		Chapter criteria = new Chapter(null, getId(), null);		
-		ArrayList<Chapter> chapters = cm.retrieve(criteria);
-
-		// add chapters to story
-		setChapters(chapters);		
-	}
+    /**
+     * Adds a chapter onto the story object. If the story
+     * has no chapters when the new chapter is added, the
+     * firstChapterId will also be set for the story.
+     * 
+     * If the story needs to be updated in the database
+     * (due to now having a firstChapterId), then it will
+     * return true so the front end will know to use the
+     * OwnStoryManager to update the story data.
+     * 
+     * If the story already had its firstChapterId set, then
+     * there is no need to update it in the database, therefore
+     * the function will return False.
+     */
+    public Boolean addChapter(Chapter chapter) {
+            if (firstChapterId == null) {
+                    // set first chapter id
+                    firstChapterId = chapter.getId();
+                    chapters.add(chapter);
+                    return true;
+            }
+            chapters.add(chapter);
+            return false;
+    }	
 	
 	/**
 	 * Returns the information of the story (id, title, author, PhoneId) that
