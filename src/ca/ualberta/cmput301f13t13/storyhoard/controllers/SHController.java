@@ -34,8 +34,6 @@ public interface SHController<A> {
 
 	public ArrayList<A> getAll();
 	
-	public ArrayList<A> retrieve(A object);
-	
 	public void insert(A object);
 	
 	public void update(A object);

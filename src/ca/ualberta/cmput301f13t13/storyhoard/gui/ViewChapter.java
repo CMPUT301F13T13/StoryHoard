@@ -38,6 +38,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
@@ -50,6 +51,7 @@ public class ViewChapter extends MediaActivity {
 	LifecycleData lifedata;
 	private ChapterController chapCon;
 	private ChoiceController choiceCon;
+	private MediaController mediaCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayList<Media> photoList;
@@ -82,6 +84,7 @@ public class ViewChapter extends MediaActivity {
 		lifedata = LifecycleData.getInstance();
 		chapCon = ChapterController.getInstance(this);
 		choiceCon = ChoiceController.getInstance(this);
+		mediaCon = MediaController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
@@ -212,6 +215,14 @@ public class ViewChapter extends MediaActivity {
 							browseGallery(Media.PHOTO);
 							break;
 						}
+						
+						ArrayList<Media> photos = lifedata.getCurrImages();
+						if (photos != null) {
+							for (Media photo : photos) {
+								mediaCon.insert(photo);
+							}
+						}		
+						lifedata.setCurrImages(null);
 						photoDialog.dismiss();
 					}
 				});

@@ -71,9 +71,6 @@ public class EditChapterActivity extends MediaActivity {
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
 
-	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
-	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -231,6 +228,16 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void saveAction() {
+		// saving any illustrations
+		ArrayList<Media> ills = lifedata.getCurrImages();
+		if (ills != null) {
+			for (Media ill : ills) {
+				mediaCon.insert(ill);
+			}
+		}	
+
+		lifedata.setCurrImages(null);
+		
 		chapter.setText(chapterContent.getText().toString());
 		if (lifedata.isEditing()) {
 			chapCon.update(chapter);

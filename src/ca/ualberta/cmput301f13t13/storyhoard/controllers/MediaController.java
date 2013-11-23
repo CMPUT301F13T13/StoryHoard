@@ -37,11 +37,6 @@ public class MediaController implements SHController<Media>{
 	}
 
 	@Override
-	public ArrayList<Media> retrieve(Media media) {
-		return mediaMan.retrieve(media);
-	}
-
-	@Override
 	public void insert(Media media) {
 		mediaMan.insert(media);
 	}

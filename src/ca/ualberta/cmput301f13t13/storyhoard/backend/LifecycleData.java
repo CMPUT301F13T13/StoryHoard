@@ -10,6 +10,8 @@ public class LifecycleData {
 	private Story story;
 	private Chapter chapter;
 	private ObjectType storyType;
+	private ArrayList<Media> currentImages;
+	private ArrayList<Choice> currentChoices;
 	private static LifecycleData self = null;
 	
 	protected LifecycleData() {
@@ -74,8 +76,31 @@ public class LifecycleData {
 	public ArrayList<Story> getStoryList() {
 		return this.storyList;
 	}
-
 	public void setStoryList(ArrayList<Story> stories) {
 		storyList = stories;
 	}
+	public ArrayList<Media> getCurrImages() {
+		return this.currentImages;
+	}
+	public void setCurrImages(ArrayList<Media> medias) {
+		this.currentImages = medias;
+	}
+	public void addToCurrImages(Media media) {
+		if (currentImages == null) {
+			currentImages = new ArrayList<Media>();
+		}
+		this.currentImages.add(media);
+	}
+	public ArrayList<Choice> getCurrChoices() {
+		return this.currentChoices;
+	}
+	public void setCurrChoices(ArrayList<Choice> choices) {
+		this.currentChoices = choices;
+	}
+	public void addToCurrChoices(Choice choice) {
+		if (currentChoices == null) {
+			currentChoices = new ArrayList<Choice>();
+		}
+		this.currentChoices.add(choice);
+	}	
 }

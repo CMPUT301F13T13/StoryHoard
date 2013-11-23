@@ -184,7 +184,6 @@ public class ChapterManager implements StoringManager<Chapter> {
 	 *            Holds the arguments to be passed into the selection string.
 	 * @return selection The selection string.
 	 */
-	@Override
 	public String setSearchCriteria(Chapter chapter, ArrayList<String> sArgs) {
 		HashMap<String, String> chapCrit = chapter.getSearchCriteria();
 		String selection = "";

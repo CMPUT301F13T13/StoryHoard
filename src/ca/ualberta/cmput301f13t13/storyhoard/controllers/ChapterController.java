@@ -75,8 +75,7 @@ public class ChapterController implements SHController<Chapter>{
 		return chapter;
 	}
 	
-	@Override
-	public ArrayList<Chapter> retrieve(Chapter chapter) {
+	private ArrayList<Chapter> retrieve(Chapter chapter) {
 		return chapterMan.retrieve(chapter);
 	}
 

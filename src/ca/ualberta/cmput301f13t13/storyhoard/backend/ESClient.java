@@ -248,16 +248,15 @@ public class ESClient {
 	 *            The selection string. Will either be empty or a keyword query.
 	 *            Eg. "bacon AND ham AND fish"
 	 */
-	public ArrayList<Story> searchStories(Story criteria, String selection)
+	public ArrayList<Story> retrieve(String query)
 			throws ClientProtocolException, IOException {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		HttpPost searchRequest = new HttpPost(server + "_search?pretty=1");
 
-		if (!selection.equals("")) {
+		if (query != null) {
 			// searching by keywords in title
-			String query = "{\"query\" : {\"query_string\" : {\"default_field\""
-					+ " : \"title\",\"query\" : \"" + selection + "\"}}}";
+
 			StringEntity stringentity = new StringEntity(query);
 			searchRequest.setEntity(stringentity);
 		}

@@ -18,8 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -39,7 +39,7 @@ import android.os.StrictMode;
  * @see ESClient
  * @see StoringManager
  */
-public class ServerManager implements StoringManager<Story> {
+public class ServerManager {
 	private static ESClient esclient = null;
 	private static ServerManager self = null;
 
@@ -64,11 +64,11 @@ public class ServerManager implements StoringManager<Story> {
 	public void setTestServer() {
 		esclient.setTestServer();
 	}
-	
+
 	public void setRealServer() {
 		esclient.setRealServer();
 	}
-	
+
 	/**
 	 * Inserts a story story onto the server.The insertStory from the ESClient 
 	 * class, here the story is prepared (all its images are first turned into 
@@ -86,10 +86,9 @@ public class ServerManager implements StoringManager<Story> {
 	 * @param story
 	 * 			Story story to be inserted.
 	 */	
-	@Override
 	public void insert(Story story){
-				prepareStory(story);
-				esclient.insertStory(story);
+		prepareStory(story);
+		esclient.insertStory(story);
 	}
 
 	/**
@@ -131,93 +130,77 @@ public class ServerManager implements StoringManager<Story> {
 		story.setChapters(chaps);
 	}
 
-	/**
-	 * Retrieves stories from the server. Calls the delegateSearch method
-	 * to determine whether it is a search by id, get all, or search by 
-	 * keywords. It also sets the permission for the main UI thread to
-	 * do networking. The actual interaction with the server is done by
-	 * calling the corresponding methods in ESClient (done in the 
-	 * delegateSearch method).
-	 * 
-	 * </br> An example call
-	 * </br> Searching for a specific story by id.
-	 * </br> Story criteria = new Story(UUID, null, null, null, null). OR
-	 * </br> Searching for stories by keywords.
-	 * </br> Story criteria = new Story(null, "love", null, null, null). OR
-	 * </br> Searching for all available published stories.
-	 * </br> Story criteria = new Story(null, null, null, null, null).
-	 * </br></br> Retrieving story/stories.
-	 * </br> ServerManager sm = ServerManager.getInstance(context);
-	 * </br> ArrayList<Story> objs = sm.retrieve(criteria);
-	 * 
-	 * @param criteria
-	 */
-	@Override
-	public ArrayList<Story> retrieve(Story criteria) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        
-		return delegateSearch(criteria);
+	public Story getById(UUID id) {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		// search by id
+		return esclient.searchById(id.toString());	
 	}
 
-	/**
-	 * Calls the correct retrieval method in ESCLient depending on
-	 * what search criteria is given. You can either search by Id,
-	 * by keywords in the title, or search for all published stories.
-	 * Note that this method is always called by the retrieve method,
-	 * never on its own outside of this class.
-	 * 
-	 * </br> An example call
-	 * </br> Searching for a specific story by id.
-	 * </br> Story criteria = new Story(UUID, null, null, null, null). OR
-	 * </br> Searching for stories by keywords.
-	 * </br> Story criteria = new Story(null, "love", null, null, null). OR
-	 * </br> Searching for all available published stories.
-	 * </br> Story criteria = new Story(null, null, null, null, null).
-	 * </br></br> Retrieving story/stories.
-	 * </br> ServerManager sm = ServerManager.getInstance(context);
-	 * </br> ArrayList<Story> objs = sm.delegateSearch(criteria);
-	 * 
-	 * @param story
-	 * 			Story story holding search criteria.
-	 * @return matching stories
-	 */
-	private ArrayList<Story> delegateSearch(Story crit) {
+
+	public ArrayList<Story> getAll() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
 		ArrayList<Story> stories = new ArrayList<Story>();
-
-		if (crit.getId() != null) { 
-
-			// search by id
-			Story story = esclient.searchById(crit.getId().toString());
-			if (story != null) {
-				stories.add(story);
-			}
-		} else {
-
-			// search for multiple stories
-			try {
-				ArrayList<String> sargs = new ArrayList<String>();
-				HashMap<String, String> storyData = crit.getSearchCriteria();
-
-				// setting selection string
-				for (String key: storyData.keySet()) {
-					sargs.add(storyData.get(key));
-				}
-
-				String selection = setSearchCriteria(crit, sargs);	
-
-				stories = esclient.searchStories(crit, selection);
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}			
-		} 
+		try {
+			stories = esclient.retrieve(null);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 
 		return stories;
 	}
-	
+
+	/**
+	 * Returns null if no stories were found.
+	 * @return
+	 */
+	public Story getRandom() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		String query = "{\"query\": {\"custom_score\" : {\"script\" : "
+				+ "\"random()\", \"query\" : {\"match_all\" : {}}}}, " +
+				"\"sort\" : {\"_score\" : {\"order\" :\"desc\"}}, \"size\" :" 
+				+ " 1 }";
+		ArrayList<Story> stories = new ArrayList<Story>();	
+		try {
+			stories = esclient.retrieve(query);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		if (stories.size() != 1) {
+			return null;
+		} else {
+			return stories.get(0);
+		}		
+	}
+
+	public ArrayList<Story> searchByKeywords(String keywords) {
+		String selection = prepareKeywords(keywords);
+		String query = "{\"query\" : {\"query_string\" : {\"default_field\""
+				+ " : \"title\",\"query\" : \"" + selection + "\"}}}";	
+
+		ArrayList<Story> stories = new ArrayList<Story>();
+		try {
+			stories =  esclient.retrieve(query);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stories;
+	}
+
 	/**
 	 * Updates a story on the server. This is done by first deleting the
 	 * story matching the story to be updated's id, and then re-inserting
@@ -233,10 +216,9 @@ public class ServerManager implements StoringManager<Story> {
 	 * @param story
 	 * 			Story with updates/new data that you want to publish.
 	 */
-	@Override
 	public void update(Story story) { 
 		String id = story.getId().toString();
-		
+
 		// story already on server
 		if (esclient.searchById(id) != null) {
 			try {
@@ -262,13 +244,12 @@ public class ServerManager implements StoringManager<Story> {
 	 * @param story
 	 * 			Story with id of the story you want to delete from server. 
 	 */
-	@Override
 	public void remove(Story story) { 
-				try {
-					esclient.deleteStory(story);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}		
+		try {
+			esclient.deleteStory(story);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}	
 
 	/**
@@ -288,18 +269,15 @@ public class ServerManager implements StoringManager<Story> {
 	 * 
 	 * @param story
 	 */
-	@Override
-	public String setSearchCriteria(Story story, ArrayList<String> args) {
+	public String prepareKeywords(String keywords) {
 		String selection = "";
 
-		if (story.getTitle() == null) {
-			return selection;
+		if (keywords == null) {
+			return null;
 		}
 
-		String allWords = story.getTitle();
-
 		// split keywords and clean them
-		List<String> words = Arrays.asList(allWords.split("\\s+"));
+		List<String> words = Arrays.asList(keywords.split("\\s+"));
 
 		if (words.size() > 0) {
 			selection += words.get(0);

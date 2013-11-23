@@ -20,7 +20,6 @@ import java.io.File;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,8 +46,8 @@ public abstract class MediaActivity extends Activity {
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 	private Uri imageFileUri;
 	private String imageType;
-	private MediaController mediaCon;
-	
+	private LifecycleData lifedata;
+
 	/**
 	 * Code for browsing gallery
 	 * </br>
@@ -104,13 +103,14 @@ public abstract class MediaActivity extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		mediaCon = MediaController.getInstance(MediaActivity.this);
+		lifedata = LifecycleData.getInstance();
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				Chapter chapter = LifecycleData.getInstance().getChapter();
 				Media photo = new Media(chapter.getId(),
 						imageFileUri.getPath(), imageType);
-				mediaCon.insert(photo);
+				
+				lifedata.addToCurrImages(photo);
 				insertIntoGallery(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
@@ -124,7 +124,7 @@ public abstract class MediaActivity extends Activity {
 				Chapter chapter = LifecycleData.getInstance().getChapter();
 				String path = getRealPathFromURI(imageFileUri, this);
 				Media photo = new Media(chapter.getId(), path, imageType);
-				mediaCon.insert(photo);
+				lifedata.addToCurrImages(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
 			} else {

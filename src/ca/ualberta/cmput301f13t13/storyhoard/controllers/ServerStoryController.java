@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.controllers;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import android.content.Context;
 
@@ -36,9 +35,8 @@ public class ServerStoryController implements SHController<Story>{
 	 */
 	@Override
 	public ArrayList<Story> getAll() {
-		Story criteria = new Story(null, null, null, null, null);
-		return serverMan.retrieve(criteria);
-	}		
+		return serverMan.getAll();
+	}	
 	
 	public void publish(Story story) {
 		story.setChapters(chapCon.getFullStoryChapters(story.getId()));
@@ -63,8 +61,7 @@ public class ServerStoryController implements SHController<Story>{
 	 * @return ArrayList of stories that matched the search criteria.
 	 */
 	public ArrayList<Story> searchByTitle(String title) {
-		Story criteria = new Story(null, title, null, null, null);
-		return serverMan.retrieve(criteria);
+		return serverMan.searchByKeywords(title);
 	}		
 	
 	/**
@@ -74,24 +71,7 @@ public class ServerStoryController implements SHController<Story>{
 	 * 
 	 */
 	public Story getRandomStory() {
-		Story story = null;
-		ArrayList<Story> stories = getAll();
-		
-		if (stories.size() < 1) {
-			return null;
-		}
-		
-		Random rand = new Random(); 
-		int index = rand.nextInt(stories.size());
-		
-		story = stories.get(index);
-		 
-		return story;
-	}
-
-	@Override
-	public ArrayList<Story> retrieve(Story story) {
-		return serverMan.retrieve(story);
+		return serverMan.getRandom();
 	}
 
 	@Override

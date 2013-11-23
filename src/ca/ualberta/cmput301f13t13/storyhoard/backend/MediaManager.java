@@ -173,7 +173,6 @@ public class MediaManager implements StoringManager<Media>{
 	 * @return String
 	 * 			The selection string.
 	 */	
-	@Override
 	public String setSearchCriteria(Media media, ArrayList<String> sArgs) {
 		HashMap<String,String> medCrit = media.getSearchCriteria();
 		String selection = "";

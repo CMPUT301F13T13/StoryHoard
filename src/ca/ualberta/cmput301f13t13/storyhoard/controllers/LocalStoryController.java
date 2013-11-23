@@ -71,8 +71,7 @@ public class LocalStoryController implements SHController<Story> {
 		storyMan.insert(story);
 	}
 	
-	@Override
-	public ArrayList<Story> retrieve(Story story) {
+	private ArrayList<Story> retrieve(Story story) {
 		return storyMan.retrieve(story);
 	}
 	

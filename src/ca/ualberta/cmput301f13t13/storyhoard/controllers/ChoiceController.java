@@ -55,11 +55,6 @@ public class ChoiceController implements SHController<Choice>{
 	}
 	
 	@Override
-	public ArrayList<Choice> retrieve(Choice choice) {
-		return choiceMan.retrieve(choice);
-	}
-
-	@Override
 	public void insert(Choice choice) {
 		choiceMan.insert(choice);
 	}

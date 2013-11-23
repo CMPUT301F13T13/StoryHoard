@@ -57,15 +57,5 @@ public interface StoringManager<A> {
 	 */
 	public void update(A newObject);
 
-	/**
-	 * Builds the selection string and the selection arguments to be used in a
-	 * retrieval query. Only applicable for the database queries.
-	 * 
-	 * @param object
-	 * @param sArgs
-	 * @return selectionString
-	 */
-	public String setSearchCriteria(A object, ArrayList<String> sArgs);
-
 	public void remove(A object);
 }
