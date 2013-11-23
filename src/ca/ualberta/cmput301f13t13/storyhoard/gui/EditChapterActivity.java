@@ -182,12 +182,12 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void addIllustration() {
-		if (!lifedata.isEditing()) {
-			Toast.makeText(getBaseContext(),
-					"Save chapter before adding first illustration",
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
+//		if (!lifedata.isEditing()) {
+//			Toast.makeText(getBaseContext(),
+//					"Save chapter before adding first illustration",
+//					Toast.LENGTH_SHORT).show();
+//			return;
+//		}
 		AlertDialog.Builder alert = new AlertDialog.Builder(
 				EditChapterActivity.this);
 		// Set dialog title
@@ -214,17 +214,22 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void addChoice() {
-		if (lifedata.isEditing()) {
-			Intent intent = new Intent(getBaseContext(),
-					EditChoiceActivity.class);
-			lifedata.setChapter(chapter);
-			lifedata.setStory(story);
-			startActivity(intent);
-		} else {
-			Toast.makeText(getBaseContext(),
-					"Save chapter before adding first choice",
-					Toast.LENGTH_SHORT).show();
-		}
+		Intent intent = new Intent(getBaseContext(),
+				EditChoiceActivity.class);
+		lifedata.setChapter(chapter);
+		lifedata.setStory(story);
+		startActivity(intent);
+//		if (lifedata.isEditing()) {
+//			Intent intent = new Intent(getBaseContext(),
+//					EditChoiceActivity.class);
+//			lifedata.setChapter(chapter);
+//			lifedata.setStory(story);
+//			startActivity(intent);
+//		} else {
+//			Toast.makeText(getBaseContext(),
+//					"Save chapter before adding first choice",
+//					Toast.LENGTH_SHORT).show();
+//		}
 	}
 
 	private void saveAction() {
@@ -234,7 +239,15 @@ public class EditChapterActivity extends MediaActivity {
 			for (Media ill : ills) {
 				mediaCon.insert(ill);
 			}
-		}	
+		}
+		
+		// saving any choices
+		ArrayList<Choice> choices = lifedata.getCurrChoices();
+		if (choices != null) {
+			for (Choice choice : choices) {
+				choiceCon.insert(choice);
+			}
+		}		
 
 		lifedata.setCurrImages(null);
 		

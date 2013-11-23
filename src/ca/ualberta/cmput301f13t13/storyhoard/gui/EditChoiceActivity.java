@@ -32,7 +32,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 
 /**
  * Activity class for adding and editing a choice.
@@ -50,7 +49,6 @@ public class EditChoiceActivity extends Activity {
 	private Chapter fromChapter;
 	private Chapter toChapter;
 	private ChapterController chapCon;
-	private ChoiceController choiceCon;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +74,6 @@ public class EditChoiceActivity extends Activity {
 	 */
 	public void setUpFields() {
 		chapCon = ChapterController.getInstance(this);
-		choiceCon = ChoiceController.getInstance(this);
 		
 		story = lifedata.getStory();
 		fromChapter = lifedata.getChapter();
@@ -103,7 +100,7 @@ public class EditChoiceActivity extends Activity {
 				String text = choiceText.getText().toString();
 				Choice addedChoice = new Choice(fromChapter.getId(), toChapter
 						.getId(), text);
-				choiceCon.insert(addedChoice);
+				lifedata.addToCurrChoices(addedChoice);
 				finish();
 			}
 		});
