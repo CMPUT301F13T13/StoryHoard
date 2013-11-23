@@ -40,6 +40,13 @@ public class TestServerManager
 	public void setUp() throws Exception {
 		super.setUp();
 		sm = ServerManager.getInstance();	
+        // clean up server
+        Story mockCriteria = new Story(null, null, null, null, null);
+        sm.retrieve(mockCriteria);
+        ArrayList<Story> mockStories = sm.retrieve(mockCriteria);
+        for (Story story: mockStories) {
+                sm.remove(story);
+        }
 		sm.setTestServer();
 	}
 

@@ -99,7 +99,7 @@ public class SearchActivity extends Activity {
 		if (viewType == Type.AUTHOR) {
 			stories = localCon.searchAuthorStories(title);
 		} else if (viewType == Type.CACHED) {
-			stories = localCon.searchAuthorStories(title);
+			stories = localCon.searchCachedStories(title);
 		} else {
 			stories = serverCon.searchByTitle(title);
 		}
