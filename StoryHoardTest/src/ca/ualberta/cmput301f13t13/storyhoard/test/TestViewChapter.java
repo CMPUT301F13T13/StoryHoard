@@ -26,7 +26,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,12 +39,10 @@ public class TestViewChapter extends
 	private ViewChapter activity;
 	private LifecycleData lifedata;
 
-	private LinearLayout illustrations;
 	private LinearLayout photos;
 
 	private TextView chapterContent;
 	private ListView chapterChoices;
-	private Button addPhotoButton;
 	
 	public TestViewChapter() {
 		super(ViewChapter.class);

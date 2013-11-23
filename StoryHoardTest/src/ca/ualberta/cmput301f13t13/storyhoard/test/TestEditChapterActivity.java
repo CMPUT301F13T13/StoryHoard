@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,9 +41,6 @@ public class TestEditChapterActivity extends
 		ActivityInstrumentationTestCase2<EditChapterActivity> {
 	private LifecycleData lifedata;
 	private EditChapterActivity activity;
-	private Button saveButton;
-	private Button addIllust;
-	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private LinearLayout illustrations;	
@@ -70,10 +66,7 @@ public class TestEditChapterActivity extends
 		activity = getActivity();
 		
 		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
-		saveButton = (Button) activity.findViewById(R.id.chapterSaveButton);
-		addChoice = (Button) activity.findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
-		addIllust = (Button) activity.findViewById(R.id.chapterAddIllust);
 		illustrations = (LinearLayout) activity.findViewById(R.id.editHorizontalIllustrations);
 	}
 
@@ -84,10 +77,7 @@ public class TestEditChapterActivity extends
 	public void testPreconditions() {
 		assertTrue(activity != null);
 		assertTrue(chapterContent != null);
-		assertTrue(saveButton != null);
-		assertTrue(addChoice != null);
 		assertTrue(viewChoices != null);
-		assertTrue(addIllust != null);
 		assertTrue(illustrations != null);
 	}
 	

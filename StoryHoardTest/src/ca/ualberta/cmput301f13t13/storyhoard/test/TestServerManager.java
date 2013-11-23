@@ -41,9 +41,7 @@ public class TestServerManager
 		super.setUp();
 		sm = ServerManager.getInstance();	
         // clean up server
-        Story mockCriteria = new Story(null, null, null, null, null);
-        sm.retrieve(mockCriteria);
-        ArrayList<Story> mockStories = sm.retrieve(mockCriteria);
+        ArrayList<Story> mockStories = sm.getAll();
         for (Story story: mockStories) {
                 sm.remove(story);
         }
@@ -56,9 +54,10 @@ public class TestServerManager
 		sm.setRealServer();
 	}
 	/**
-	 * Tests uploading and retrieving a story from the server.
+	 * Tests uploading and retrieving a story by id from the server. Also
+	 * tests removing a story from a server
 	 */
-	public void testAddLoadDeleteStory() {
+	public void testGetByIdAndDelete() {
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -70,17 +69,16 @@ public class TestServerManager
 		story.addChapter(chap2);
 		
 		sm.update(story);
-		ArrayList<Story> stories = sm.retrieve(story);
-		assertEquals(stories.size(), 1);
-		assertNotNull((Story) stories.get(0));
-		
+		story = sm.getById(story.getId());
+		assertNotNull(story);
+
 		ArrayList<Chapter> chaps = story.getChapters();
 		assertEquals(chaps.size(), 2);
 		
 		// delete
 		sm.remove(story);
-		stories = sm.retrieve(story);
-		assertEquals(stories.size(), 0);
+		story = sm.getById(story.getId());
+		assertNull(story);
 	}
 	
 	/**
@@ -97,18 +95,16 @@ public class TestServerManager
 		story.addChapter(chap);
 		
 		sm.update(story);
-		ArrayList<Story> stories = sm.retrieve(story);
-		assertEquals(stories.size(), 1);
+		Story newStory = sm.getById(story.getId());
+		assertNotNull(newStory);
 		
-		Story newStory = (Story) stories.get(0);
 		newStory.setTitle("new title");
 		newStory.setAuthor("new author");
 		newStory.addChapter(new Chapter(newStory.getId(), "my text"));
 		
 		sm.update(newStory);
-		stories = sm.retrieve(newStory);
-		assertEquals(stories.size(), 1);
-		newStory = (Story) stories.get(0);
+		newStory = sm.getById(story.getId());
+		assertNotNull(newStory);
 		
 		ArrayList<Chapter> chaps = newStory.getChapters();
 		assertEquals(chaps.size(), 2);
@@ -131,11 +127,47 @@ public class TestServerManager
 		sm.update(mockStory2);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, null);
-		ArrayList<Story> stories = sm.retrieve(mockCriteria);
+		ArrayList<Story> stories = sm.getAll();
 		assertTrue(stories.size() > 0);
 
 		sm.remove(mockStory1);
 		sm.remove(mockStory2);
+	}
+	
+	/**
+	 * Tests searching for a story by keywords in the title.
+	 */
+	public void testSearchByKeywords() {
+		Story mockStory1 = new Story("test My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(getActivity()));
+		sm.update(mockStory1);
+		Story mockStory2 = new Story("test My Cow Again", "Dr. Phil",
+				"my chubby frog", Utilities.getPhoneId(getActivity()));
+		sm.update(mockStory2);
+
+		// setting search criteria
+		ArrayList<Story> stories = sm.searchByKeywords("test");
+		assertEquals(stories.size(), 2);
+		sm.remove(mockStory1);
+		sm.remove(mockStory2);			
+	}
+	
+	/**
+	 * Tests getting a random story
+	 */
+	public void testRandomStory() {
+		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(getActivity()));
+		sm.update(mockStory1);
+		Story mockStory2 = new Story("My Frog", "Dr. Phil",
+				"my chubby frog", Utilities.getPhoneId(getActivity()));
+		sm.update(mockStory2);
+
+		Story story = sm.getRandom();
+		assertNotNull(story);
+		assertTrue(story.getId().equals(mockStory1.getId()) 
+				|| story.getId().equals(mockStory2.getId()));
+		sm.remove(mockStory1);
+		sm.remove(mockStory2);		
 	}
 }
