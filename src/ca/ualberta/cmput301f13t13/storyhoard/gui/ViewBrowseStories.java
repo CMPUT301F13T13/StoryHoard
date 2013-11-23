@@ -33,7 +33,8 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
@@ -47,7 +48,8 @@ public class ViewBrowseStories extends Activity {
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
-	private SHController gc;
+	private LocalStoryController localCon;
+	private ServerStoryController serverCon;	
 	private enum Type {LOCAL, PUBLISHED};
 	private Type viewType;
 	ArrayList<Story> currentStories;
@@ -86,13 +88,13 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							currentStories = gc.getAllAuthorStories();
+							currentStories = localCon.getAllAuthorStories();
 							viewType = Type.LOCAL;
 						} else if (itemPosition == 1) {
-							currentStories = gc.getAllCachedStories();
+							currentStories = localCon.getAllCachedStories();
 							viewType = Type.LOCAL;
 						} else if (itemPosition == 2) {
-							currentStories = gc.getAllPublishedStories();
+							currentStories = serverCon.getAll();
 							viewType = Type.PUBLISHED;
 						}
 						refreshStories();
@@ -117,7 +119,7 @@ public class ViewBrowseStories extends Activity {
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
-					story.cache(ViewBrowseStories.this);
+					localCon.cache(story);
 				} 
 				
 				// Handle going to view story activity
@@ -157,11 +159,11 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.lucky:
-			Story story = gc.getRandomStory();
+			Story story = serverCon.getRandomStory();
 			
 			// no stories on server to choose from
 			if (story != null) {			
-				story.cache(this);
+				localCon.cache(story);
 				lifedata.setStory(story);
 				intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
@@ -180,7 +182,8 @@ public class ViewBrowseStories extends Activity {
 	public void onResume() {
 		super.onResume();
 		lifedata = LifecycleData.getInstance();
-		gc = SHController.getInstance(this);
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
 		setActionBar();
 		refreshStories();
 	}

@@ -31,7 +31,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 
 /**
  * Activity class for adding and editing a choice.
@@ -48,7 +49,8 @@ public class EditChoiceActivity extends Activity {
 	private Story story;
 	private Chapter fromChapter;
 	private Chapter toChapter;
-	private SHController gc;
+	private ChapterController chapCon;
+	private ChoiceController choiceCon;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class EditChoiceActivity extends Activity {
 
 		data.clear();
 		UUID mystory = story.getId();
-		data.addAll(gc.getAllChapters(mystory));
+		data.addAll(chapCon.getChaptersByStory(mystory));
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -73,8 +75,9 @@ public class EditChoiceActivity extends Activity {
 	 * Initializes the private fields needed
 	 */
 	public void setUpFields() {
-		// Grab GC and necessary story and chapter info
-		gc = SHController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
+		
 		story = lifedata.getStory();
 		fromChapter = lifedata.getChapter();
 		// Set up activity fields
@@ -100,9 +103,8 @@ public class EditChoiceActivity extends Activity {
 				String text = choiceText.getText().toString();
 				Choice addedChoice = new Choice(fromChapter.getId(), toChapter
 						.getId(), text);
-				addedChoice.addSelf(EditChoiceActivity.this);
+				choiceCon.insert(addedChoice);
 				finish();
-
 			}
 		});
 	}

@@ -36,7 +36,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 
 /**
  * Add Chapter Activity
@@ -55,14 +58,15 @@ public class EditChapterActivity extends MediaActivity {
 	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
-
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private Button saveButton;
 	private Button addIllust;
 	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
-	private SHController gc;
+	private ChapterController chapCon;
+	private ChoiceController choiceCon;
+	private MediaController mediaCon;
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
 	private ArrayList<Media> illList;
@@ -75,7 +79,6 @@ public class EditChapterActivity extends MediaActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_edit_chapter);
 		setUpFields();
 	}
@@ -96,10 +99,10 @@ public class EditChapterActivity extends MediaActivity {
 	private void updateICData() {
 		// Set the chapter text, if new Chapter will simply be blank
 		choices.clear();
-		choices.addAll(gc.getAllChoices(chapter.getId()));
+		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
 		choiceAdapter.notifyDataSetChanged();
 		// Getting illustrations
-		illList = gc.getAllIllustrations(chapter.getId());
+		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
 		// Clean up illustrations layout
 		illustrations.removeAllViews();
 		// Insert Illustrations
@@ -112,8 +115,11 @@ public class EditChapterActivity extends MediaActivity {
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
 	private void setUpFields() {
-		gc = SHController.getInstance(getBaseContext());
-
+		chapCon = ChapterController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
+		mediaCon = MediaController.getInstance(this);
+		
+		lifedata = LifecycleData.getInstance();
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		saveButton = (Button) findViewById(R.id.chapterSaveButton);
 		addChoice = (Button) findViewById(R.id.addNewChoice);
@@ -148,12 +154,13 @@ public class EditChapterActivity extends MediaActivity {
 			public void onClick(View v) {
 				chapter.setText(chapterContent.getText().toString());
 				if (lifedata.isEditing()) {
-					chapter.updateSelf(EditChapterActivity.this);
+					chapCon.update(chapter);
 				} else {
-					chapter.addSelf(EditChapterActivity.this);
+					chapCon.insert(chapter);
 					if (lifedata.isFirstStory()) {
+						LocalStoryController storyCon = LocalStoryController.getInstance(EditChapterActivity.this);
 						story.setFirstChapterId(chapter.getId());
-						story.addSelf(EditChapterActivity.this);
+						storyCon.insert(story);
 						lifedata.setFirstStory(false);
 					}
 				}

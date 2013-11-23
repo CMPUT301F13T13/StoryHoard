@@ -28,9 +28,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 
 /**
  * Handles viewing the story metadata.
@@ -40,6 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  */
 public class ViewStory extends Activity {
 	LifecycleData lifedata;
+	private ChapterController chapterCon;	
 	private Story story;
 	private TextView storyTitle;
 	private TextView storyAuthor;
@@ -49,7 +50,6 @@ public class ViewStory extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_view_browse_story);
 	}
 
@@ -97,8 +97,8 @@ public class ViewStory extends Activity {
 	public void setUpFields() {
 		
 		// Initialize the activity fields
-		/**storyCover = (ImageView) findViewById(R.id.storyImage);
-		 * So I think it looks better without the image view**/
+		lifedata = LifecycleData.getInstance();
+		chapterCon = ChapterController.getInstance(this);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
@@ -141,9 +141,7 @@ public class ViewStory extends Activity {
 				// Begin reading, go to first chapter
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				UUID firstChapterID = story.getFirstChapterId();
-				Chapter nextChap = new Chapter(firstChapterID, null ,null);
-				nextChap.setFullContent(ViewStory.this);
-				lifedata.setChapter(nextChap);
+				lifedata.setChapter(chapterCon.getFullChapter(firstChapterID));
 				startActivity(intent);
 				finish();
 			}

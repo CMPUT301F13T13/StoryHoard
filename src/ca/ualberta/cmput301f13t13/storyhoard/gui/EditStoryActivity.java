@@ -28,6 +28,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 
 /**
  * Activity for editing the story metadata (title, author, description, and
@@ -42,6 +44,8 @@ public class EditStoryActivity extends Activity {
 	private EditText newAuthor;
 	private EditText newDescription;
 	private Story newStory;
+	private LocalStoryController localCon;
+	private ServerStoryController serverCon;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,9 @@ public class EditStoryActivity extends Activity {
 	        }
 
 		lifedata = LifecycleData.getInstance();
-
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
+		
 		setContentView(R.layout.activity_edit_story);
 
 		final ActionBar actionBar = getActionBar();
@@ -115,9 +121,8 @@ public class EditStoryActivity extends Activity {
 	private class Update extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			// publish or update story 
-			newStory.setFullContent(EditStoryActivity.this);
-			newStory.publish();
+			// publish or update story
+			serverCon.publish(newStory);
 			return null;
 		}
 	}
@@ -132,7 +137,7 @@ public class EditStoryActivity extends Activity {
 			newStory.setTitle(title);
 			newStory.setDescription(description);
 			lifedata.setStory(newStory);
-			newStory.updateSelf(this);
+			localCon.update(newStory);
 		} else {
 			newStory = new Story(title, author, description, 
 					Utilities.getPhoneId(getBaseContext()));

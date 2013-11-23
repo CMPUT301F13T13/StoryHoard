@@ -30,7 +30,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 
 /**
  * Takes a storyID bundle, displays all the chapters related to that story. Used
@@ -42,7 +42,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
 
 public class ViewBrowseChapters extends Activity {
 	LifecycleData lifedata;
-	private SHController gc;
+	private ChapterController chapCon;
 	private Story story;
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
@@ -81,7 +81,7 @@ public class ViewBrowseChapters extends Activity {
 		setUpFields();
 		setOnItemClickListener();
 		data.clear();
-		data.addAll(gc.getAllChapters(story.getId()));
+		data.addAll(chapCon.getChaptersByStory(story.getId()));
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -90,11 +90,14 @@ public class ViewBrowseChapters extends Activity {
 	 */
 	public void setUpFields() {
 		lifedata = LifecycleData.getInstance();
-		// Grab GC and pull all chapters from story
-		gc = SHController.getInstance(this);
+		
+		// Grab controllers and pull all chapters from story
+		chapCon = ChapterController.getInstance(this);
 		story = lifedata.getStory();
+		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
+		
 		// Set adapter
 		chapterAdapter = new AdapterChapters(this,
 				R.layout.browse_chapter_item, data);
@@ -109,6 +112,7 @@ public class ViewBrowseChapters extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				
 				// Go to edit that chapter
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);

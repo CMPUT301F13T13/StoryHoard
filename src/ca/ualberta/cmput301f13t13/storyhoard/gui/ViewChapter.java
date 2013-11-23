@@ -16,6 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,8 +36,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
-
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
@@ -47,7 +48,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
  */
 public class ViewChapter extends MediaActivity {
 	LifecycleData lifedata;
-	private SHController gc;
+	private ChapterController chapCon;
+	private ChoiceController choiceCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayList<Media> photoList;
@@ -78,7 +80,8 @@ public class ViewChapter extends MediaActivity {
 	 */
 	public void setUpFields() {
 		lifedata = LifecycleData.getInstance();
-		gc = SHController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
@@ -119,7 +122,7 @@ public class ViewChapter extends MediaActivity {
 		} else {
 			ArrayList<Choice> chapChoices = chapter.getChoices();
 			if (chapter.hasRandomChoice() == true) {
-				chapChoices.add(gc.getRandomChoice(chapter.getId()));
+				chapChoices.add(choiceCon.getRandomChoice(chapter.getId()));
 			}
 			choices.addAll(chapChoices);
 
@@ -155,9 +158,8 @@ public class ViewChapter extends MediaActivity {
 				// Go to the chapter in question
 				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 
-				Chapter nextChap = new Chapter(choices.get(arg2).getNextChapter(), null ,null);
-				nextChap.setFullContent(ViewChapter.this);
-				lifedata.setChapter(nextChap);
+				UUID nextChap = choices.get(arg2).getNextChapter();
+				lifedata.setChapter(chapCon.getFullChapter(nextChap));
 				
 				startActivity(intent);
 				// photos.removeAllViews();

@@ -34,7 +34,8 @@ import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.SHController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 
 /**
  * Search Activity
@@ -49,7 +50,8 @@ public class SearchActivity extends Activity {
 	private Button searchButton;
 	private EditText titleInput;
 	private Spinner spinner;
-	private SHController gc;
+	private LocalStoryController localCon;
+	private ServerStoryController serverCon;
 	private LifecycleData lifedata;
 	private enum Type {AUTHOR, CACHED, PUBLISHED};
 	private Type viewType = Type.AUTHOR;
@@ -64,7 +66,8 @@ public class SearchActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		lifedata = LifecycleData.getInstance();
-		gc = SHController.getInstance(this);
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
 		searchButton = (Button) findViewById(R.id.searchButton);
 		titleInput = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
@@ -94,11 +97,11 @@ public class SearchActivity extends Activity {
 	private void search(String title) {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		if (viewType == Type.AUTHOR) {
-			stories = gc.searchAuthorStories(title);
+			stories = localCon.searchAuthorStories(title);
 		} else if (viewType == Type.CACHED) {
-			stories = gc.searchCachedStories(title);
+			stories = localCon.searchAuthorStories(title);
 		} else {
-			stories = gc.searchPublishedStories(title);
+			stories = serverCon.searchByTitle(title);
 		}
 		
 		lifedata.setStoryList(stories);
