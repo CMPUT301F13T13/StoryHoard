@@ -22,9 +22,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,6 +52,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
  * added.
  * 
  * author: Alexander Wong
+ * author: Kim Wu
  */
 
 public class EditChapterActivity extends MediaActivity {
@@ -59,9 +60,6 @@ public class EditChapterActivity extends MediaActivity {
 	private Story story;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private Button saveButton;
-	private Button addIllust;
-	private Button addChoice;
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private ChapterController chapCon;
@@ -86,9 +84,6 @@ public class EditChapterActivity extends MediaActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		setSaveButtonListener();
-		setAddChoiceListener();
-		setAddIllustrationListener();
 		setRandomChoice();
 		updateICData();
 	}
@@ -121,10 +116,7 @@ public class EditChapterActivity extends MediaActivity {
 		
 		lifedata = LifecycleData.getInstance();
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
-		saveButton = (Button) findViewById(R.id.chapterSaveButton);
-		addChoice = (Button) findViewById(R.id.addNewChoice);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
-		addIllust = (Button) findViewById(R.id.chapterAddIllust);
 		illustrations = (LinearLayout) findViewById(R.id.editHorizontalIllustrations);
 		randChoiceCheck = (CheckBox) findViewById(R.id.randChoiceCheck);
 
@@ -145,106 +137,18 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	/**
-	 * Sets the onClick listener for saving.
-	 */
-	private void setSaveButtonListener() {
-		// Save the chapter to the database, or update if editing
-		saveButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				chapter.setText(chapterContent.getText().toString());
-				if (lifedata.isEditing()) {
-					chapCon.update(chapter);
-				} else {
-					chapCon.insert(chapter);
-					if (lifedata.isFirstStory()) {
-						LocalStoryController storyCon = LocalStoryController.getInstance(EditChapterActivity.this);
-						story.setFirstChapterId(chapter.getId());
-						storyCon.insert(story);
-						lifedata.setFirstStory(false);
-					}
-				}
-				finish();
-			}
-		});
-	}
-
-	/**
-	 * Sets the onClick Listener for adding a choice.
-	 */
-	private void setAddChoiceListener() {
-		// Add a choice to this chapter
-		addChoice.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (lifedata.isEditing()) {
-					Intent intent = new Intent(getBaseContext(),
-							EditChoiceActivity.class);
-					lifedata.setChapter(chapter);
-					lifedata.setStory(story);
-					startActivity(intent);
-				} else {
-					Toast.makeText(getBaseContext(),
-							"Save chapter before adding first choice",
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Sets the onCLick listener for adding an illustration.
-	 */
-	private void setAddIllustrationListener() {
-		addIllust.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!lifedata.isEditing()) {
-					Toast.makeText(getBaseContext(),
-							"Save chapter before adding first illustration",
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						EditChapterActivity.this);
-				// Set dialog title
-				alert.setTitle("Choose method:");
-				// Options that user may choose to add illustration
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto(Media.ILLUSTRATION);
-									break;
-								case 1:
-									browseGallery(Media.ILLUSTRATION);
-									break;
-								}
-								illustDialog.dismiss();
-							}
-						});
-				illustDialog = alert.create();
-				illustDialog.show();
-			}
-		});
-	}
-
-	/**
 	 * Set onClick listener for setting random choice
 	 */
 	public void setRandomChoice() {
-		//If the chapter has been set to random choice, check box
+		// If the chapter has been set to random choice, check box
 		if (chapter.hasRandomChoice()) {
 			randChoiceCheck.setChecked(true);
 		}
-		
+
 		randChoiceCheck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//If checked, set random choice on chapter
+				// If checked, set random choice on chapter
 				if (randChoiceCheck.isChecked()) {
 					chapter.setRandomChoice(true);
 				} else {
@@ -253,4 +157,93 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		});
 	}
+
+	// MENU INFORMATION
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.view_edit_chapter, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.addChoice:
+			addChoice();
+			return true;
+		case R.id.addIllus:
+			addIllustration();
+			return true;
+		case R.id.Save:
+			saveAction();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void addIllustration() {
+		if (!lifedata.isEditing()) {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first illustration",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				EditChapterActivity.this);
+		// Set dialog title
+		alert.setTitle("Choose method:");
+		// Options that user may choose to add illustration
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.ILLUSTRATION);
+							break;
+						case 1:
+							browseGallery(Media.ILLUSTRATION);
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
+		illustDialog = alert.create();
+		illustDialog.show();
+	}
+
+	private void addChoice() {
+		if (lifedata.isEditing()) {
+			Intent intent = new Intent(getBaseContext(),
+					EditChoiceActivity.class);
+			lifedata.setChapter(chapter);
+			lifedata.setStory(story);
+			startActivity(intent);
+		} else {
+			Toast.makeText(getBaseContext(),
+					"Save chapter before adding first choice",
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void saveAction() {
+		chapter.setText(chapterContent.getText().toString());
+		if (lifedata.isEditing()) {
+			chapCon.update(chapter);
+		} else {
+			chapCon.insert(chapter);
+			if (lifedata.isFirstStory()) {
+				LocalStoryController storyCon = LocalStoryController.getInstance(EditChapterActivity.this);
+				story.setFirstChapterId(chapter.getId());
+				storyCon.insert(story);
+				lifedata.setFirstStory(false);
+			}
+		}
+		finish();
+	}
+
 }

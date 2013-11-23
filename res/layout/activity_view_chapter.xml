@@ -78,10 +78,9 @@
 
     <ListView
         android:id="@+id/chapterChoices"
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/horizontalSCPhotos" >
+        android:layout_below="@+id/horizontalSCPhotos"
+        android:layout_margin="10dp" >
     </ListView>
-
 </RelativeLayout>
