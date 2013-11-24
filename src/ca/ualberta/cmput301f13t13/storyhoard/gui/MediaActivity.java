@@ -108,34 +108,24 @@ public abstract class MediaActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		lifedata = LifecycleData.getInstance();
-		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Chapter chapter = LifecycleData.getInstance().getChapter();
-				Media photo = new Media(chapter.getId(),
-						imageFileUri.getPath(), imageType);
-
-				lifedata.addToCurrImages(photo);
-				lifedata.setCurrImage(photo);
+		if (resultCode == RESULT_OK) {
+			String path = "";
+			Chapter chapter = LifecycleData.getInstance().getChapter();
+			Media photo = new Media(chapter.getId(), path , imageType);
+			if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+				imageFileUri = intent.getData();
+				photo.setPath(getRealPathFromURI(imageFileUri, this));
+			} else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+				photo.setPath(imageFileUri.getPath());
 				insertIntoGallery(photo);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
 			}
 
-		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Uri imageFileUri = intent.getData();
-				Chapter chapter = LifecycleData.getInstance().getChapter();
-				String path = getRealPathFromURI(imageFileUri, this);
-				Media photo = new Media(chapter.getId(), path, imageType);
-				lifedata.addToCurrImages(photo);
-				lifedata.setCurrImage(photo);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
+			lifedata.addToCurrImages(photo);
+			lifedata.setCurrImage(photo);
+		} else if (resultCode == RESULT_CANCELED) {
+			System.out.println("cancelled action");
+		} else {
+			System.err.println("Error " + resultCode);
 		}
 	}	
 
@@ -184,10 +174,10 @@ public abstract class MediaActivity extends Activity {
 
 		layout.addView(imageView);
 		main.addView(layout);
-		
+
 		return (View) imageView;
 	}		
-	
+
 	/**
 	 * CODE REUSE
 	 * URL: http://stackoverflow.com/questions/3401579/get-filename-and-path-from-uri-from-mediastore

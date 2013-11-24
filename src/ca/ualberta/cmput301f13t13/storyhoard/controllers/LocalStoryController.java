@@ -17,9 +17,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 public class LocalStoryController implements SHController<Story> {
 	private static StoryManager storyMan = null;
-	private static ChapterManager chapMan = null;
-	private static MediaManager mediaMan = null;
-	private static ChoiceManager choiceMan = null;
 	private static Syncher syncher = null;
 	private static LocalStoryController self = null;
 	private static String phoneId = null;

@@ -60,10 +60,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  */
 
 public class EditChapterActivity extends MediaActivity {
+	private ActivityDialogBuilder dialBuilder = new ActivityDialogBuilder();
 	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
-	private AlertDialog photoDialog;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ListView viewChoices;
 	private EditText chapterContent;
@@ -126,7 +126,7 @@ public class EditChapterActivity extends MediaActivity {
 					@Override
 					public boolean onLongClick(View v) {
 						viewClicked = v;
-						setDialog();
+						dialBuilder.setDialog(EditChapterActivity.this, viewClicked, illustrations);
 						return false;
 					}
 				});
@@ -241,33 +241,6 @@ public class EditChapterActivity extends MediaActivity {
 		illustDialog.show();
 	}
 
-	public void setDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		// Set dialog title
-		alert.setTitle("Permanently delete illustration?");
-		// Options that user may choose to add photo
-		final String[] methods = { "yes", "no" };
-		alert.setSingleChoiceItems(methods, -1,
-				new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-				case 0:
-					mediaCon = MediaController.getInstance(getBaseContext());
-					Media media = (Media) viewClicked.getTag();
-					mediaCon.remove(media.getId());
-					illustrations.removeView(viewClicked);
-					break;
-				case 1:
-					break;
-				}
-				photoDialog.dismiss();
-			}
-		});
-		photoDialog = alert.create();
-		photoDialog.show();		
-	}
-
 	private void addChoice() {
 		Intent intent = new Intent(getBaseContext(),
 				EditChoiceActivity.class);
@@ -305,6 +278,14 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		}
 		finish();
+	}
+
+	public void setMediaCon(MediaController mediaCon) {
+		this.mediaCon = mediaCon;
+	}
+
+	public MediaController getMediaCon() {
+		return mediaCon;
 	}
 
 }
