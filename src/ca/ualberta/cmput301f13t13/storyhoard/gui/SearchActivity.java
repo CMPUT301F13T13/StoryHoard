@@ -33,9 +33,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 /**
  * Search Activity

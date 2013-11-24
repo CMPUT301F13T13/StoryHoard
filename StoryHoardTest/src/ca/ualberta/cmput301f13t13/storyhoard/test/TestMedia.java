@@ -28,6 +28,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**

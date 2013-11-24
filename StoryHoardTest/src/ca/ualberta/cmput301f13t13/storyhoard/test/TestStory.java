@@ -21,13 +21,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Class meant for the testing of the Story class in the StoryHoard 

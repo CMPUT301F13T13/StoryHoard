@@ -21,14 +21,14 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**

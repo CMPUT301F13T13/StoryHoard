@@ -25,6 +25,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve chapter
@@ -216,5 +217,15 @@ public class ChapterManager implements StoringManager<Chapter> {
 			return false;
 		}
 		return true;		
+	}
+
+	public void syncChapter(Chapter chap, ArrayList<UUID> medias,
+			Syncher syncher) {
+		if (existsLocally(chap)) {
+			update(chap);
+			syncher.syncDeletions(medias, chap.getId());
+		} else {
+			insert(chap);
+		}
 	}
 }

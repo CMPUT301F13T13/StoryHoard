@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import android.content.Context;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.MediaManager;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
 public class MediaController implements SHController<Media>{
 	private static MediaController self = null;   

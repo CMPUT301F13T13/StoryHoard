@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChapterManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.MediaManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 public class LocalStoryController implements SHController<Story> {
 	private static StoryManager storyMan = null;

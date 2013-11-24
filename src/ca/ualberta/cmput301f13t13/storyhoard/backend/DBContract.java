@@ -48,7 +48,7 @@ public final class DBContract {
 	 * Sets up column names and then create and delete SQL statements for the
 	 * table containing stories.
 	 */
-	protected static abstract class StoryTable implements BaseColumns {
+	public static abstract class StoryTable implements BaseColumns {
 
 		private StoryTable() {
 		}
@@ -79,7 +79,7 @@ public final class DBContract {
 	 * Sets up column names and then create and delete SQL statements for the
 	 * table containing the chapters
 	 */
-	protected static abstract class ChapterTable implements BaseColumns {
+	public static abstract class ChapterTable implements BaseColumns {
 
 		private ChapterTable() {
 		}
@@ -106,7 +106,7 @@ public final class DBContract {
 	 * Sets up column names and then create and delete SQL statements for the
 	 * table containing the choices
 	 */
-	protected static abstract class ChoiceTable implements BaseColumns {
+	public static abstract class ChoiceTable implements BaseColumns {
 
 		private ChoiceTable() {
 		}
@@ -132,7 +132,7 @@ public final class DBContract {
 	 * Sets up column names and then create and delete SQL statements for the
 	 * table containing media (photos/illustrations/audio/video)
 	 */
-	protected static abstract class MediaTable implements BaseColumns {
+	public static abstract class MediaTable implements BaseColumns {
 
 		private MediaTable() {
 		}

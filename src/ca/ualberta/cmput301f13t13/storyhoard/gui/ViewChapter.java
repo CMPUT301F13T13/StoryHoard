@@ -35,13 +35,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
@@ -121,13 +121,14 @@ public class ViewChapter extends MediaActivity {
 		} else {
 			chapterContent.setText(chapter.getText());
 		}
+		
+		ArrayList<Choice> chapChoices = chapter.getChoices();
 		// Check for no choices
-		if (chapter.getChoices().isEmpty()) {
+		if (chapChoices.isEmpty()) {
 			chapterContent.setText(chapterContent.getText()
 					+ "\n\n<No Choices>");
 		} else {
-			ArrayList<Choice> chapChoices = chapter.getChoices();
-			if (chapter.hasRandomChoice() == true) {
+			if (chapter.hasRandomChoice() && chapChoices.size() > 1) {
 				chapChoices.add(choiceCon.getRandomChoice(chapter.getId()));
 			}
 			choices.addAll(chapChoices);

@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve media

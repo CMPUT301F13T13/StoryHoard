@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 
 /**
  * Class which handles taking the Choice object and adapting it to a 

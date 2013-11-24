@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 import android.content.ContentValues;
 import android.content.Context;

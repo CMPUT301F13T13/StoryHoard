@@ -7,7 +7,7 @@ import java.util.UUID;
 import android.content.Context;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 
 public class ChoiceController implements SHController<Choice>{
 	private static ChoiceController self = null;   
@@ -34,11 +34,12 @@ public class ChoiceController implements SHController<Choice>{
 	 */
 	public Choice getRandomChoice(UUID chapterId) {
 		ArrayList<Choice> choices = getChoicesByChapter(chapterId);
-		int max = 0;
-		max = choices.size();
+		
+		if (choices.size() == 0) {
+			return null;
+		}
 		Random rand = new Random(); 
-		int num;
-		num = rand.nextInt(max);
+		int num = rand.nextInt(choices.size());
 		Choice choice = choices.get(num);
 		choice.setText("I'm feeling lucky...");
 

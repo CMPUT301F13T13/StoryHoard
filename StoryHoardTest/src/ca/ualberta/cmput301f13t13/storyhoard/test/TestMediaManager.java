@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 
 import android.graphics.Bitmap;
