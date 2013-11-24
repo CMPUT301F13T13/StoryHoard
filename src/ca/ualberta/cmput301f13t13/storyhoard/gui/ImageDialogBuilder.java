@@ -18,7 +18,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class ActivityDialogBuilder {
+public class ImageDialogBuilder {
 	private AlertDialog photoDialog;
 
 	public AlertDialog getPhotoDialog() {

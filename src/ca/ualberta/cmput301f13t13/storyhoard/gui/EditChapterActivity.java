@@ -60,7 +60,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  */
 
 public class EditChapterActivity extends MediaActivity {
-	private ActivityDialogBuilder dialBuilder = new ActivityDialogBuilder();
+	private ImageDialogBuilder dialBuilder = new ImageDialogBuilder();
 	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
