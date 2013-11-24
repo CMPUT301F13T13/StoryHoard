@@ -39,12 +39,7 @@ public class TestServerManager
 
 	public void setUp() throws Exception {
 		super.setUp();
-		sm = ServerManager.getInstance();	
-        // clean up server
-        ArrayList<Story> mockStories = sm.getAll();
-        for (Story story: mockStories) {
-                sm.remove(story);
-        }
+		sm = ServerManager.getInstance();
 		sm.setTestServer();
 	}
 
@@ -165,8 +160,6 @@ public class TestServerManager
 
 		Story story = sm.getRandom();
 		assertNotNull(story);
-		assertTrue(story.getId().equals(mockStory1.getId()) 
-				|| story.getId().equals(mockStory2.getId()));
 		sm.remove(mockStory1);
 		sm.remove(mockStory2);		
 	}

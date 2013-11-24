@@ -39,13 +39,7 @@ public class TestStoryManager extends
 	}
 
 	protected void setUp() throws Exception {
-		super.setUp();
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
+		super.setUp();	
 		sm = StoryManager.getInstance(getActivity());
 	}
 
@@ -98,6 +92,11 @@ public class TestStoryManager extends
 	 * include any stories not created by author.
 	 */
 	public void testGetAllAuthorStories() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -119,6 +118,11 @@ public class TestStoryManager extends
 	 * Tests loading all cached stories.
 	 */
 	public void testGetAllCachedStories() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -130,7 +134,7 @@ public class TestStoryManager extends
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, null);
+		Story mockCriteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
 		mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 2);
 	}
@@ -155,10 +159,10 @@ public class TestStoryManager extends
 
 		// make sure you can find new story
 		mockStories = sm.retrieve(newStory);
-		assertTrue(mockStories.size() == 1);
+		assertEquals(mockStories.size(), 1);
 
 		// make sure old version no longer exists
 		mockStories = sm.retrieve(mockStory);
-		assertTrue(mockStories.size() == 0);
+		assertEquals(mockStories.size(), 0);
 	}
 }

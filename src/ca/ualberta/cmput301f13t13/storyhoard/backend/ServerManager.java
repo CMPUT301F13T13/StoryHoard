@@ -273,7 +273,7 @@ public class ServerManager {
 		String selection = "";
 
 		if (keywords == null) {
-			return null;
+			return selection;
 		}
 
 		// split keywords and clean them

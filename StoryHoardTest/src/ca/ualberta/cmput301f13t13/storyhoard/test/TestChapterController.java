@@ -3,11 +3,17 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
  * @author sgil
@@ -17,7 +23,10 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<View
 	private Chapter mockChapter;
 	private Chapter mockChapter2;
 	private Chapter mockChapter3;
+	private ArrayList<Chapter> mockChapters;
 	private ChapterController chapCon;
+	private ChoiceController choiceCon;
+	private MediaController mediaCon;
 	
 	public TestChapterController() {
 		super(ViewBrowseStories.class);
@@ -28,18 +37,15 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<View
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+		chapCon = ChapterController.getInstance(getActivity());
+		choiceCon = ChoiceController.getInstance(getActivity());
+		mediaCon = MediaController.getInstance(getActivity());
 	}
 	
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-	
-	public ArrayList<Chapter> getChaptersByStory(UUID storyId) {
-		Chapter criteria = new Chapter(null, storyId, null);	
-		return chapterMan.retrieve(criteria);
-	}
-	
-	public void testGetAll() {
+	/**
+	 * Tests getting all chapters from a story.
+	 */
+	public void testGetChaptersByStory() {
 		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
 		chapCon.insert(mockChapter);
 		mockChapter2 = new Chapter(mockChapter.getStoryId(),
@@ -48,54 +54,67 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<View
 		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
 		chapCon.insert(mockChapter3);
 
-		Chapter criteria = new Chapter(null, null, null);
+		mockChapters = chapCon.getChaptersByStory(mockChapter.getStoryId());
+		assertEquals(mockChapters.size(), 2);		
+	}
+	
+	/**
+	 * Tests getting all created chapters.
+	 */
+	public void testGetAll() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
+		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
+		chapCon.insert(mockChapter);
+		mockChapter2 = new Chapter(mockChapter.getStoryId(),
+				"Lily drove");
+		chapCon.insert(mockChapter2);
+		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
+		chapCon.insert(mockChapter3);
 
-		mockChapters = chapCon.retrieve(criteria);
+		mockChapters = chapCon.getAll();
 		assertEquals(mockChapters.size(), 3);		
 	}
 
-	public void testGetFullStoryChapters(UUID storyId) {
-		ArrayList<Chapter> chaps = getChaptersByStory(storyId);
-		ArrayList<Chapter> fullChaps = new ArrayList<Chapter>();
+	/**
+	 * Tests getting a full chapter back from the database (including
+	 * choices and media).
+	 */
+	public void testGetFullChapter() {
+		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
+		Choice c1 = new Choice(mockChapter.getId(), UUID.randomUUID(), "c1");
+		Media m1 = new Media(mockChapter.getId(), null, Media.ILLUSTRATION);
+		choiceCon.insert(c1);
+		mediaCon.insert(m1);
+		chapCon.insert(mockChapter);
 		
-		for (Chapter chap : chaps) {
-			// Get all its choices
-			chap.setChoices(choiceCon.getChoicesByChapter(chap.getId()));
-			// Get all its illustrations
-			chap.setIllustrations(mediaCon.getIllustrationsByChapter(chap.getId()));
-			// Get all its photos
-			chap.setPhotos(mediaCon.getPhotosByChapter(chap.getId()));
-		}
-		
-		return fullChaps;
-	}
-
-	public Chapter getFullChapter(UUID chapId) {
-		ArrayList<Chapter> chapters = retrieve(new Chapter(chapId, null, null, null));
-		
-		// Check to make sure chapter exists
-		if (chapters.size() == 0) {
-			return null;
-		}
-		Chapter chapter = (Chapter) chapters.get(0);
-		chapter.setChoices(choiceCon.getChoicesByChapter(chapId));
-		chapter.setIllustrations(mediaCon.getIllustrationsByChapter(chapId));
-		chapter.setPhotos(mediaCon.getPhotosByChapter(chapId));
-		return chapter;
+		Chapter newChapter = chapCon.getFullChapter(mockChapter.getId());
+		assertEquals(newChapter.getChoices().size(), 1);
+		assertEquals(newChapter.getIllustrations().size(), 1);
+		assertTrue(mockChapter.getText().equals(newChapter.getText()));
 	}
 	
-	private ArrayList<Chapter> retrieve(Chapter chapter) {
-		return chapterMan.retrieve(chapter);
+	/**
+	 * Tests inserting, retrieving, and updating a chapter.
+	 */
+	public void testInsertRetrieveUpdate() {
+		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
+		chapCon.insert(mockChapter);
+		
+		mockChapters = chapCon.retrieve(mockChapter);
+		assertEquals(mockChapters.size(), 1);
+		
+		mockChapter2 = mockChapters.get(0);
+		mockChapter2.setText("hello");
+		chapCon.update(mockChapter2);
+		
+		mockChapters = chapCon.retrieve(mockChapter);
+		assertEquals(mockChapters.size(), 1);	
+		mockChapter2 = mockChapters.get(0);
+		
+		assertFalse(mockChapter2.getText().equals(mockChapter.getText()));
 	}
-
-	@Override
-	public void insert(Chapter chapter) {
-		chapterMan.insert(chapter);
-	}
-
-	@Override
-	public void update(Chapter chapter) {
-		chapterMan.update(chapter);
-	}	
-
 }

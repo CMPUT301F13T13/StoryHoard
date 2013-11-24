@@ -40,16 +40,6 @@ public class TestChapter
 	public TestChapter() {
 		super(ViewBrowseStories.class);
 	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-	}
-
 	
 	/**
 	 * Tests creating a chapter two ways.
@@ -94,10 +84,9 @@ public class TestChapter
 		criteria = new Chapter(id, sId, null, true);
 		info = criteria.getSearchCriteria();
 
-		assertEquals(info.size(), 3);
+		assertEquals(info.size(), 2);
 		assertTrue(info.get("chapter_id").equals(id.toString()));
 		assertTrue(info.get("story_id").equals(sId.toString()));
-		assertTrue(info.get("random_Choice").equals("true"));
 	}
 
 	/**
