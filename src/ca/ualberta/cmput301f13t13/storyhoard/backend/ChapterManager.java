@@ -207,4 +207,14 @@ public class ChapterManager implements StoringManager<Chapter> {
 	public void remove(UUID id) {
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public Boolean existsLocally(Chapter chap) {
+		Chapter crit = new Chapter(chap.getId(), null, null, null);
+		ArrayList<Chapter> chapters = retrieve(crit);
+		if (chapters.size() != 1) {
+			return false;
+		}
+		return true;		
+	}
 }

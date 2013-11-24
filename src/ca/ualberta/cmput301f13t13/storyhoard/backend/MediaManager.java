@@ -201,4 +201,14 @@ public class MediaManager implements StoringManager<Media>{
 		String[] selectionArgs1 = { String.valueOf(id)};
 		db.delete(MediaTable.TABLE_NAME, selection, selectionArgs1);
 	}
+	
+	@Override
+	public Boolean existsLocally(Media media) {
+		Media crit = new Media(media.getId(), null, null, null);
+		ArrayList<Media> medias = retrieve(crit);
+		if (medias.size() != 1) {
+			return false;
+		}
+		return true;		
+	}	
 }

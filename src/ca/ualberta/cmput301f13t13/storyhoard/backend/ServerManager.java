@@ -26,7 +26,7 @@ import org.apache.http.client.ClientProtocolException;
 import android.os.StrictMode;
 
 /**
- * Role: Uses functions from the ESClient to add, remove, update, and 
+ * Role: Uses functions from the ESUpdates to add, remove, update, and 
  * search for stories that have been published onto the server. All 
  * operations except for retrieving stories are performed on a different
  * thread than the main UI thread.
@@ -36,18 +36,22 @@ import android.os.StrictMode;
  * 
  * @author Stephanie Gil
  * 
- * @see ESClient
+ * @see ESUpdates
  * @see StoringManager
  */
 public class ServerManager {
-	private static ESClient esclient = null;
+	private static ESRetrieval esRetrieval = null;
+	private static ESUpdates esUpdates = null;
 	private static ServerManager self = null;
+	public static String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
+	
 
 	/**
 	 * Initializes a new ServerManager.
 	 */
 	protected ServerManager() {
-		esclient = new ESClient();
+		esUpdates = new ESUpdates();
+		esRetrieval = new ESRetrieval();
 	}
 
 	/**
@@ -59,18 +63,18 @@ public class ServerManager {
 			self = new ServerManager();
 		}
 		return self;
+	}
+	
+	public void setTestServer() {
+		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/tests/";
+	}
+	
+	public void setRealServer() {
+		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
 	}	
 
-	public void setTestServer() {
-		esclient.setTestServer();
-	}
-
-	public void setRealServer() {
-		esclient.setRealServer();
-	}
-
 	/**
-	 * Inserts a story story onto the server.The insertStory from the ESClient 
+	 * Inserts a story story onto the server.The insertStory from the ESUpdates 
 	 * class, here the story is prepared (all its images are first turned into 
 	 * strings to be stored), and this method also sets up a new thread for the
 	 * task.
@@ -87,48 +91,9 @@ public class ServerManager {
 	 * 			Story story to be inserted.
 	 */	
 	public void insert(Story story){
-		prepareStory(story);
-		esclient.insertStory(story);
+		esUpdates.insertStory(story, server);
 	}
 
-	/**
-	 * Due to performance issues, Media objects don't actually hold Bitmaps.
-	 * A path to the location of the file is instead saved and used to 
-	 * retrieve bitmaps whenever needed. Media objects can also hold the
-	 * bitmaps after the have been converted to a string (Base64). 
-	 * </br>
-	 * Before a Story can be inserted into the server, all the images 
-	 * belonging to the story's chapters must have their bitmap strings
-	 * set. This is only done when the story is published to avoid doing
-	 * the expensive conversion unnecessarily (local stories only need to 
-	 * know the path).
-	 * </br>
-	 * 
-	 * This function takes care of setting all the Medias' bitmap strings.
-	 * 
-	 * @param story
-	 */
-	private void prepareStory(Story story) {
-
-		// get any media associated with the chapters of the story
-		ArrayList<Chapter> chaps = story.getChapters();
-
-		for (Chapter chap : chaps) {
-			ArrayList<Media> photos = chap.getPhotos();
-
-			for (Media photo : photos) {
-				photo.setBitmapString(photo.getBitmap());
-			}
-			chap.setPhotos(photos);
-
-			ArrayList<Media> ills = chap.getIllustrations();
-			for (Media ill : ills) {
-				ill.setBitmapString(ill.getBitmap());
-			}
-			chap.setIllustrations(ills);
-		}
-		story.setChapters(chaps);
-	}
 
 	public Story getById(UUID id) {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -136,7 +101,7 @@ public class ServerManager {
 		StrictMode.setThreadPolicy(policy);
 
 		// search by id
-		return esclient.searchById(id.toString());	
+		return esRetrieval.searchById(id.toString(), server);	
 	}
 
 
@@ -147,7 +112,7 @@ public class ServerManager {
 
 		ArrayList<Story> stories = new ArrayList<Story>();
 		try {
-			stories = esclient.retrieve(null);
+			stories = esRetrieval.retrieve(null, server);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -172,7 +137,7 @@ public class ServerManager {
 				+ " 1 }";
 		ArrayList<Story> stories = new ArrayList<Story>();	
 		try {
-			stories = esclient.retrieve(query);
+			stories = esRetrieval.retrieve(query, server);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -192,7 +157,7 @@ public class ServerManager {
 
 		ArrayList<Story> stories = new ArrayList<Story>();
 		try {
-			stories =  esclient.retrieve(query);
+			stories =  esRetrieval.retrieve(query, server);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -205,7 +170,7 @@ public class ServerManager {
 	 * Updates a story on the server. This is done by first deleting the
 	 * story matching the story to be updated's id, and then re-inserting
 	 * it. This method sets up a new thread to do the updating on, and uses
-	 * ESClient methods to remove and insert the story.
+	 * ESUpdates methods to remove and insert the story.
 	 * 
 	 * </br> Example call.
 	 * </br> Story newStory = new Story(exisitingUUID, "new title", 
@@ -220,10 +185,10 @@ public class ServerManager {
 		String id = story.getId().toString();
 
 		// story already on server
-		if (esclient.searchById(id) != null) {
+		if (esRetrieval.searchById(id, server) != null) {
 			try {
-				esclient.deleteStory(story);
-				esclient.insertStory(story);
+				esUpdates.deleteStory(story, server);
+				esUpdates.insertStory(story, server);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -246,7 +211,7 @@ public class ServerManager {
 	 */
 	public void remove(Story story) { 
 		try {
-			esclient.deleteStory(story);
+			esUpdates.deleteStory(story, server);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		

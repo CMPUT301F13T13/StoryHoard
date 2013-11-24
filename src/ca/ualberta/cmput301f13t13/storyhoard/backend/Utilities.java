@@ -16,14 +16,9 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import android.content.Context;
 
-import android.graphics.Bitmap;
-import android.os.Environment;
 import android.provider.Settings;
 
 /**
@@ -50,37 +45,5 @@ public class Utilities {
 		String PhoneId = Settings.Secure.getString(context.getContentResolver(), 
 				Settings.Secure.ANDROID_ID);
 		return PhoneId;
-	}
-
-
-	/**
-	 * Saves a bitmap to a location on the phone's sd card. Returns
-	 * the path of where the image was saved to.
-	 * 
-	 */
-	public static String saveImageToSD(Bitmap bmp) {
-		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
-		File folderF = new File(folder);
-		if (!folderF.exists()) {
-			folderF.mkdir();
-		}
-
-		String imageFilePath;
-		imageFilePath = folder + "/"
-					+ String.valueOf(System.currentTimeMillis()) + ".jpg";
-		File imageFile = new File(imageFilePath);
-
-		FileOutputStream fout;
-		try {
-			fout = new FileOutputStream(imageFile);
-			bmp.compress(Bitmap.CompressFormat.JPEG, 85, fout);
-
-			fout.flush();
-			fout.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return imageFilePath;
-	}
+	}	
 }

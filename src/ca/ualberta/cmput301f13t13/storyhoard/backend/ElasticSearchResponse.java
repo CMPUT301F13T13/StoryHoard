@@ -42,7 +42,7 @@ import java.util.Collection;
  * @author Stephanie Gil
  * 
  * @see SimpleESResponse
- * @see ESClient
+ * @see ESUpdates
  */
 public class ElasticSearchResponse<T> {
 	int took;

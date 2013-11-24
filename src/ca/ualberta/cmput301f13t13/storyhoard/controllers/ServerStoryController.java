@@ -7,13 +7,16 @@ import android.content.Context;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ServerManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
 
 public class ServerStoryController implements SHController<Story>{
 	private static ServerStoryController self = null;   
 	private static ServerManager serverMan;
+	private static Syncher syncher = null;
 
 	protected ServerStoryController(Context context) {
 		serverMan = ServerManager.getInstance();
+		syncher = Syncher.getInstance(context);
 	}
 	
 	public static ServerStoryController getInstance(Context context) {
@@ -38,6 +41,7 @@ public class ServerStoryController implements SHController<Story>{
 	}	
 	
 	public void publish(Story story) {
+		syncher.prepareStory(story);
 		serverMan.update(story);
 	}
 	

@@ -31,7 +31,6 @@ import java.util.UUID;
  * @see ChapterManager
  * @see ChoiceManager
  * @see MediaManager
- * @see ServerManager
  */
 public interface StoringManager<A> {
 
@@ -59,4 +58,6 @@ public interface StoringManager<A> {
 	public void update(A newObject);
 
 	public void remove(UUID objId);
+	
+	public Boolean existsLocally(A object);
 }

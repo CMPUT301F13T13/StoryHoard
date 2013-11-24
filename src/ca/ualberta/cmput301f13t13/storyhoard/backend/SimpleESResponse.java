@@ -25,7 +25,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
  * </br>
  * CODE REUSE: This code was taken directly from 
  * </br>
- * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+ * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESUpdates.java
  * </br>
  * Date: Nov. 4th, 2013 
  * </br>
@@ -35,7 +35,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.backend;
  * @author Chenlei Zhang
  * @author Stephanie Gil
  * 
- * @see ESClient
+ * @see ESUpdates
  */
 public class SimpleESResponse<T> {
     String _index;

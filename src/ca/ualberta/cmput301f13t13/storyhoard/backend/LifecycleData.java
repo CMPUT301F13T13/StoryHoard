@@ -10,7 +10,6 @@ public class LifecycleData {
 	private ArrayList<Story> storyList;
 	private Story story;
 	private Chapter chapter;
-	private ObjectType storyType;
 	private Media currImage;
 	private ArrayList<Media> currentImages;
 	private ArrayList<Choice> currentChoices;
@@ -57,14 +56,6 @@ public class LifecycleData {
 
 	public void setChapter(Chapter chapter) {
 		this.chapter = chapter;
-	}
-
-	public ObjectType getStoryType() {
-		return storyType;
-	}
-
-	public void setStoryType(ObjectType storyType) {
-		this.storyType = storyType;
 	}
 	
 	public UUID getChapterID() {

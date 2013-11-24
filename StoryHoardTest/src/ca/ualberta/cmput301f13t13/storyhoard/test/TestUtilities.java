@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
@@ -52,7 +53,7 @@ public class TestUtilities extends
 	 */
 	public void testSaveImageToSD() {
 		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);
-		String path = Utilities.saveImageToSD(bmp);
+		String path = Syncher.saveImageToSD(bmp);
 		assertNotNull(path);
 	}
 }

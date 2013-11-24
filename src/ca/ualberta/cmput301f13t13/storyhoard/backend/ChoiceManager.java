@@ -201,4 +201,14 @@ public class ChoiceManager implements StoringManager<Choice> {
 		String[] selectionArgs1 = { String.valueOf(id)};
 		db.delete(ChoiceTable.TABLE_NAME, selection, selectionArgs1);
 	}
+	
+	@Override
+	public Boolean existsLocally(Choice choice) {
+		Choice crit = new Choice(choice.getId(), null, null, null);
+		ArrayList<Choice> choices = retrieve(crit);
+		if (choices.size() != 1) {
+			return false;
+		}
+		return true;		
+	}	
 }

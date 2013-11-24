@@ -4,18 +4,29 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.MediaManager;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 
 public class LocalStoryController implements SHController<Story> {
 	private static StoryManager storyMan = null;
+	private static ChapterManager chapMan = null;
+	private static MediaManager mediaMan = null;
+	private static ChoiceManager choiceMan = null;
+	private static Syncher syncher = null;
 	private static LocalStoryController self = null;
 	private static String phoneId = null;
 
 	protected LocalStoryController(Context context) {
 		storyMan = StoryManager.getInstance(context);
+		syncher = Syncher.getInstance(context);
 		phoneId = Utilities.getPhoneId(context);
 	}
 	
@@ -55,11 +66,7 @@ public class LocalStoryController implements SHController<Story> {
 	}
 	
 	public void cache(Story story) {
-		if (existsLocally(story)) {
-			update(story);
-		} else {
-			insert(story);
-		}	
+		syncher.syncStoryFromServer(story);
 	}
 	
 	@Override
@@ -74,15 +81,6 @@ public class LocalStoryController implements SHController<Story> {
 	
 	private ArrayList<Story> retrieve(Story story) {
 		return storyMan.retrieve(story);
-	}
-	
-	public Boolean existsLocally(Story story) {
-		Story crit = new Story(story.getId(), null, null, null, null);
-		ArrayList<Story> stories = storyMan.retrieve(crit);
-		if (stories.size() != 1) {
-			return false;
-		}
-		return true;		
 	}
 	
 	/**

@@ -224,4 +224,14 @@ public class StoryManager implements StoringManager<Story> {
 	public void remove(UUID id) {
 		// TODO Auto-generated method stub
 	}	
+	
+	@Override
+	public Boolean existsLocally(Story story) {
+		Story crit = new Story(story.getId(), null, null, null, null);
+		ArrayList<Story> stories = retrieve(crit);
+		if (stories.size() != 1) {
+			return false;
+		}
+		return true;		
+	}	
 }
