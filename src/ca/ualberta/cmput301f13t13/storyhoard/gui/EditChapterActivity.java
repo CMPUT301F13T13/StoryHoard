@@ -17,19 +17,23 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
@@ -59,6 +63,7 @@ public class EditChapterActivity extends MediaActivity {
 	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
+	private AlertDialog photoDialog;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ListView viewChoices;
 	private EditText chapterContent;
@@ -70,6 +75,7 @@ public class EditChapterActivity extends MediaActivity {
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
+	private View viewClicked;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,28 +98,39 @@ public class EditChapterActivity extends MediaActivity {
 		// Set the chapter text, if new Chapter will simply be blank
 		choices.clear();
 		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
-		// any images that have not been saved
-		ArrayList<Choice> choices = lifedata.getCurrChoices();
-		for (Choice choice : choices) {
+	
+		// any choices that have not been saved
+		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
+		for (Choice choice : myChoices) {
 			choices.add(choice);
 		}
-		lifedata.setCurrImage(null);
+
 		choiceAdapter.notifyDataSetChanged();
-		
+
 		// Getting illustrations
 		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
-		
+
 		// Clean up illustrations layout
 		illustrations.removeAllViews();
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(insertImage(ill, EditChapterActivity.this));
+			insertImage(ill, this, illustrations);
 		}
-		
+
 		// any images that have not been saved
 		ArrayList<Media> imgs = lifedata.getCurrImages();
 		for (Media img : imgs) {
-			illustrations.addView(insertImage(img, EditChapterActivity.this));
+			View v = insertImage(img, EditChapterActivity.this, illustrations);
+			if (img.getType().equals(Media.ILLUSTRATION)) {
+				v.setOnLongClickListener(new OnLongClickListener () {
+					@Override
+					public boolean onLongClick(View v) {
+						viewClicked = v;
+						setDialog();
+						return false;
+					}
+				});
+			}
 		}
 		lifedata.setCurrImage(null);
 	}
@@ -125,7 +142,7 @@ public class EditChapterActivity extends MediaActivity {
 		chapCon = ChapterController.getInstance(this);
 		choiceCon = ChoiceController.getInstance(this);
 		mediaCon = MediaController.getInstance(this);
-		
+
 		lifedata = LifecycleData.getInstance();
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
 		viewChoices = (ListView) findViewById(R.id.chapterEditChoices);
@@ -206,22 +223,49 @@ public class EditChapterActivity extends MediaActivity {
 		final String[] methods = { "Take Photo", "Choose from Gallery" };
 		alert.setSingleChoiceItems(methods, -1,
 				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int item) {
-						switch (item) {
-						case 0:
-							takePhoto(Media.ILLUSTRATION);
-							break;
-						case 1:
-							browseGallery(Media.ILLUSTRATION);
-							break;
-						}
-						illustDialog.dismiss();
-					}
-				});
-		
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					takePhoto(Media.ILLUSTRATION);
+					break;
+				case 1:
+					browseGallery(Media.ILLUSTRATION);
+					break;
+				}
+				illustDialog.dismiss();
+			}
+		});
+
 		illustDialog = alert.create();
 		illustDialog.show();
+	}
+
+	public void setDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		// Set dialog title
+		alert.setTitle("Permanently delete illustration?");
+		// Options that user may choose to add photo
+		final String[] methods = { "yes", "no" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					mediaCon = MediaController.getInstance(getBaseContext());
+					Media media = (Media) viewClicked.getTag();
+					mediaCon.remove(media.getId());
+					illustrations.removeView(viewClicked);
+					break;
+				case 1:
+					break;
+				}
+				photoDialog.dismiss();
+			}
+		});
+		photoDialog = alert.create();
+		photoDialog.show();		
 	}
 
 	private void addChoice() {
@@ -235,22 +279,19 @@ public class EditChapterActivity extends MediaActivity {
 	private void saveAction() {
 		// saving any illustrations
 		ArrayList<Media> ills = lifedata.getCurrImages();
-		if (ills != null) {
-			for (Media ill : ills) {
-				mediaCon.insert(ill);
-			}
+		for (Media ill : ills) {
+			mediaCon.insert(ill);
 		}
-		
+
 		// saving any choices
 		ArrayList<Choice> choices = lifedata.getCurrChoices();
-		if (choices != null) {
-			for (Choice choice : choices) {
+		for (Choice choice : choices) {
 				choiceCon.insert(choice);
-			}
-		}		
-
+		}
+	
+		lifedata.setCurrChoices(null);
 		lifedata.setCurrImages(null);
-		
+
 		chapter.setText(chapterContent.getText().toString());
 		if (lifedata.isEditing()) {
 			chapCon.update(chapter);

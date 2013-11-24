@@ -17,11 +17,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,14 +32,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 
 /**
  * @author sgil
@@ -47,12 +47,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 public abstract class MediaActivity extends Activity {
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
-	private AlertDialog photoDialog;
 	private Uri imageFileUri;
 	private String imageType;
 	private LifecycleData lifedata;
-	private MediaController mediaCon;
-	private Media img;
+	ImageView imageView;
 
 	/**
 	 * Code for browsing gallery
@@ -170,8 +168,7 @@ public abstract class MediaActivity extends Activity {
 	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
-	public View insertImage(Media img, Context context) {
-		this.img = img;
+	public View insertImage(Media img, Context context, LinearLayout main) {
 		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(img.getPath()), 
 				250, 250);
 		LinearLayout layout = new LinearLayout(context);
@@ -179,51 +176,17 @@ public abstract class MediaActivity extends Activity {
 		layout.setLayoutParams(new LayoutParams(250, 250));
 		layout.setGravity(Gravity.CENTER);
 
-		ImageView imageView = new ImageView(context);
+		imageView = new ImageView(context);
 		imageView.setLayoutParams(new LayoutParams(250, 250));
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageView.setImageBitmap(bm);
-		imageView.setLongClickable(true);
-
-		// make image removable
-		if (img.getType().equals(Media.ILLUSTRATION)) {
-			imageView.setOnLongClickListener(new OnLongClickListener () {
-				@Override
-				public boolean onLongClick(View v) {
-					setDialog();
-					return false;
-				}
-			});
-		}
+		imageView.setTag(img);
 
 		layout.addView(imageView);
-		return layout;
+		main.addView(layout);
+		
+		return (View) imageView;
 	}		
-
-	public void setDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(MediaActivity.this);
-		// Set dialog title
-		alert.setTitle("Delete Illustration?");
-		// Options that user may choose to add photo
-		final String[] methods = { "yes", "no" };
-		alert.setSingleChoiceItems(methods, -1,
-				new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-				case 0:
-					mediaCon = MediaController.getInstance(getBaseContext());
-					mediaCon.remove(img.getId());
-					break;
-				case 1:
-					break;
-				}
-				photoDialog.dismiss();
-			}
-		});
-		photoDialog = alert.create();
-		photoDialog.show();		
-	}
 	
 	/**
 	 * CODE REUSE

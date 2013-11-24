@@ -1,4 +1,4 @@
-
+package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 

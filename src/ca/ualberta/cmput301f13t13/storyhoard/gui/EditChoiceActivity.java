@@ -53,13 +53,13 @@ public class EditChoiceActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		lifedata = LifecycleData.getInstance();
 		setContentView(R.layout.activity_edit_choice);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		lifedata = LifecycleData.getInstance();
 		setUpFields();
 		setAddChoiceListener();
 

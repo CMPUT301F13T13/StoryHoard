@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -141,23 +143,23 @@ public class ViewChapter extends MediaActivity {
 		
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(insertImage(ill, this));
+			insertImage(ill, this, illustrations);
 		}
 		
 		// Insert Photos
 		for (Media photo : photoList) {
-			illustrations.addView(insertImage(photo, this));
+			insertImage(photo, this, illustrations);
 		}
 		
 		Media img = lifedata.getCurrImage();
 		if (img != null) {
 			mediaCon.insert(img);
-			illustrations.addView(insertImage(img, this));
+			insertImage(img, this, illustrations);
 			lifedata.setCurrImage(null);
 			lifedata.setCurrImages(null);
 		}
 	}
-
+	
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
 	 * (selecting a choice).

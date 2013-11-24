@@ -120,15 +120,6 @@ public class StoryManager implements StoringManager<Story> {
 		// Querying the database
 		Cursor cursor = db.query(StoryTable.TABLE_NAME, projection, selection,
 				sArgs, null, null, null);
-
-		// Retrieving all the entries
-		results = retrieveCursorEntries(cursor);
-		return results;
-	}
-	
-
-	private ArrayList<Story> retrieveCursorEntries(Cursor cursor) {
-		ArrayList<Story> results = new ArrayList<Story>();
 		
 		// Retrieving all the entries
 		cursor.moveToFirst();
@@ -147,8 +138,7 @@ public class StoryManager implements StoringManager<Story> {
 			cursor.moveToNext();
 		}
 		cursor.close();
-
-		return results;		
+		return results;
 	}
 	
 	protected void setUpSearch(Story criteria) {
