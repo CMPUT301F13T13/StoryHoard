@@ -92,7 +92,7 @@ public class TestMediaManager extends
 		mm.insert(m2);
 
 		// get all media
-		Media criteria = new Media(null, chapId, null, null);
+		Media criteria = new Media(null, chapId, null, null, "");
 		ArrayList<Media> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);
 
@@ -109,7 +109,7 @@ public class TestMediaManager extends
 		Media mockMedia = new Media(chap.getId(), null, null);
 		mm.insert(mockMedia);
 		
-		Media criteria = new Media(null, chap.getId(), null, null);
+		Media criteria = new Media(null, chap.getId(), null, null, "");
 		
 		ArrayList<Media> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);

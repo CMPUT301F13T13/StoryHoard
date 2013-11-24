@@ -78,10 +78,10 @@ public class ChapterController implements SHController<Chapter>{
 				chap.getId(), null, null)));
 		// Get all its illustrations
 		chap.setIllustrations(mediaMan.retrieve(new Media(null, 
-				chap.getId(), null, Media.ILLUSTRATION)));
+				chap.getId(), null, Media.ILLUSTRATION, "")));
 		// Get all its photos
 		chap.setPhotos(mediaMan.retrieve(new Media(null, 
-				chap.getId(), null, Media.PHOTO)));		
+				chap.getId(), null, Media.PHOTO, "")));		
 	}
 	
 	

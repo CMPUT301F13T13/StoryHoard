@@ -113,24 +113,18 @@ public class EditChapterActivity extends MediaActivity {
 		// Clean up illustrations layout
 		illustrations.removeAllViews();
 		// Insert Illustrations
-		for (Media ill : illList) {
-			insertImage(ill, this, illustrations);
-		}
-
 		// any images that have not been saved
-		ArrayList<Media> imgs = lifedata.getCurrImages();
-		for (Media img : imgs) {
-			View v = insertImage(img, EditChapterActivity.this, illustrations);
-			if (img.getType().equals(Media.ILLUSTRATION)) {
-				v.setOnLongClickListener(new OnLongClickListener () {
-					@Override
-					public boolean onLongClick(View v) {
-						viewClicked = v;
-						dialBuilder.setDialog(EditChapterActivity.this, viewClicked, illustrations);
-						return false;
-					}
-				});
-			}
+		illList.addAll(lifedata.getCurrImages());
+		for (Media img : illList) {
+			View v = insertImage(img, this, illustrations);
+			v.setOnLongClickListener(new OnLongClickListener () {
+				@Override
+				public boolean onLongClick(View v) {
+					viewClicked = v;
+					dialBuilder.setDialog(EditChapterActivity.this, viewClicked, illustrations);
+					return false;
+				}
+			});
 		}
 		lifedata.setCurrImage(null);
 	}

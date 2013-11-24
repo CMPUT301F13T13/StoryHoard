@@ -24,11 +24,11 @@ public class MediaController implements SHController<Media>{
 	}
 
 	public ArrayList<Media> getPhotosByChapter(UUID chapterId) {
-		return mediaMan.retrieve(new Media(null, chapterId, null, Media.PHOTO));		
+		return mediaMan.retrieve(new Media(null, chapterId, null, Media.PHOTO, ""));		
 	}	
 	
 	public ArrayList<Media> getIllustrationsByChapter(UUID chapterId) {
-		return mediaMan.retrieve(new Media(null, chapterId, null, Media.ILLUSTRATION));		
+		return mediaMan.retrieve(new Media(null, chapterId, null, Media.ILLUSTRATION, ""));		
 	}		
 	
 	@Override

@@ -223,7 +223,7 @@ public class StoryManager implements StoringManager<Story> {
 
 	@Override
 	public void remove(UUID id) {
-		// TODO Auto-generated method stub
+		// Not implemented for this iteration of the project
 	}	
 	
 	@Override

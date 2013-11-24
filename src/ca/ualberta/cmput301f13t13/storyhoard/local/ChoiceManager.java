@@ -45,6 +45,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChoiceTable;
 public class ChoiceManager implements StoringManager<Choice> {
 	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
+	protected ContentValues values;
+	protected String selection;
+	protected String[] sArgs;
+	protected String[] projection;	
 
 	/**
 	 * Initializes a new ChoiceManager choice.
@@ -73,15 +77,18 @@ public class ChoiceManager implements StoringManager<Choice> {
 	@Override
 	public void insert(Choice choice) {
 		SQLiteDatabase db = helper.getWritableDatabase();
+		setContentValues(choice);
+		db.insert(ChoiceTable.TABLE_NAME, null, values);		
+	}
 
+	private void setContentValues(Choice choice) {
 		ContentValues values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getNextChapter().toString());
-		values.put(ChoiceTable.COLUMN_NAME_TEXT, choice.getText());
-		db.insert(ChoiceTable.TABLE_NAME, null, values);		
+		values.put(ChoiceTable.COLUMN_NAME_TEXT, choice.getText());		
 	}
-
+	
 	/**
 	 * Updates a choice already in the database.
 	 * 
@@ -92,19 +99,12 @@ public class ChoiceManager implements StoringManager<Choice> {
 	@Override
 	public void update(Choice newChoice) {
 		SQLiteDatabase db = helper.getReadableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, newChoice.getId().toString());		
-		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, 
-				newChoice.getCurrentChapter().toString());
-		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, 
-				newChoice.getNextChapter().toString());
-		values.put(ChoiceTable.COLUMN_NAME_TEXT, newChoice.getText());
+		setContentValues(newChoice);
 
 		// Setting search criteria
-		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
-		String[] sArgs = { newChoice.getId().toString()};	
-
+		selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
+		sArgs = new String[]{ newChoice.getId().toString()};	
+		
 		db.update(ChoiceTable.TABLE_NAME, values, selection, sArgs);	
 	}
 
@@ -118,24 +118,9 @@ public class ChoiceManager implements StoringManager<Choice> {
 	public ArrayList<Choice> retrieve(Choice criteria) {
 		ArrayList<Choice> results = new ArrayList<Choice>();
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String[] sArgs = null;
-		String[] projection = {
-				ChoiceTable.COLUMN_NAME_CHOICE_ID,
-				ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
-				ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
-				ChoiceTable.COLUMN_NAME_TEXT
-		};
-
-		// Setting search criteria
-		ArrayList<String> selectionArgs = new ArrayList<String>();
-		String selection = setSearchCriteria(criteria, selectionArgs);
-
-		if (selectionArgs.size() > 0) {
-			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-		} else {
-			selection = null;
-		}
-
+		
+		setupSearch(criteria);
+		
 		// Querying the database
 		Cursor cursor = db.query(ChoiceTable.TABLE_NAME, projection, selection, 
 				sArgs, null, null, null);
@@ -158,6 +143,26 @@ public class ChoiceManager implements StoringManager<Choice> {
 		return results;
 	}
 
+	private void setupSearch(Choice criteria) {
+		sArgs = null;
+		projection = new String[]{
+				ChoiceTable.COLUMN_NAME_CHOICE_ID,
+				ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
+				ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
+				ChoiceTable.COLUMN_NAME_TEXT
+		};
+
+		// Setting search criteria
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+		selection = setSearchCriteria(criteria, selectionArgs);
+
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			selection = null;
+		}
+		
+	}
 	/**
 	 * Creates the selection string (a prepared statement) to be used 
 	 * in the database query. Also creates an array holding the items
@@ -196,11 +201,9 @@ public class ChoiceManager implements StoringManager<Choice> {
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		
-		// Delete entry 
-		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
-		String[] selectionArgs1 = { String.valueOf(id)};
-		db.delete(ChoiceTable.TABLE_NAME, selection, selectionArgs1);
+		selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
+		sArgs = new String[]{ String.valueOf(id)};
+		db.delete(ChoiceTable.TABLE_NAME, selection, sArgs);
 	}
 	
 	@Override

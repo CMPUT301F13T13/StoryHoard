@@ -19,15 +19,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -106,11 +104,10 @@ public class ViewChapter extends MediaActivity {
 	 */
 	public void updateData() {	
 		chapter = lifedata.getChapter();
-		choices.clear();
 
 		// Check to see if the chapter exists, else terminate
 		if (chapter == null) {
-			Toast.makeText(getBaseContext(), "Chapter does not exist",
+			Toast.makeText(getBaseContext(), "Next chapter does not exist",
 					Toast.LENGTH_SHORT).show();
 			finish();
 			return;
@@ -122,6 +119,13 @@ public class ViewChapter extends MediaActivity {
 			chapterContent.setText(chapter.getText());
 		}
 		
+		insertChoices();
+		insertIllustrations();
+		insertPhotos();
+	}
+	
+	public void insertChoices() {
+		choices.clear();
 		ArrayList<Choice> chapChoices = chapter.getChoices();
 		// Check for no choices
 		if (chapChoices.isEmpty()) {
@@ -134,31 +138,43 @@ public class ViewChapter extends MediaActivity {
 			choices.addAll(chapChoices);
 
 		}
-		choiceAdapter.notifyDataSetChanged();
+		choiceAdapter.notifyDataSetChanged();		
+	}
 
-		photoList = chapter.getPhotos();
+	public void insertIllustrations() {
 		illList = chapter.getIllustrations();
 
 		// photos.removeAllViews();
 		illustrations.removeAllViews();
-		
+
 		// Insert Illustrations
 		for (Media ill : illList) {
 			insertImage(ill, this, illustrations);
-		}
-		
+		}		
+	}
+	
+	public void insertPhotos() {
 		// Insert Photos
-		for (Media photo : photoList) {
-			insertImage(photo, this, illustrations);
-		}
-		
 		Media img = lifedata.getCurrImage();
 		if (img != null) {
 			mediaCon.insert(img);
-			insertImage(img, this, illustrations);
 			lifedata.setCurrImage(null);
 			lifedata.setCurrImages(null);
 		}
+		
+		// set listener to display photo text on click 
+		photoList = mediaCon.getPhotosByChapter(chapter.getId());
+		for (Media photo : photoList) {
+			View v = insertImage(photo, this, illustrations);
+			v.setOnClickListener(new OnClickListener () {
+				@Override
+				public void onClick(View v) {
+					Media media = (Media) v.getTag();
+					Toast.makeText(getBaseContext(),
+							media.getText(), Toast.LENGTH_LONG).show();	
+				}
+			});		
+		}		
 	}
 	
 	/**
@@ -175,7 +191,7 @@ public class ViewChapter extends MediaActivity {
 
 				UUID nextChap = choices.get(arg2).getNextChapter();
 				lifedata.setChapter(chapCon.getFullChapter(nextChap));
-				
+
 				startActivity(intent);
 				// photos.removeAllViews();
 				illustrations.removeAllViews();
@@ -216,19 +232,19 @@ public class ViewChapter extends MediaActivity {
 		final String[] methods = { "Take Photo", "Choose from Gallery" };
 		alert.setSingleChoiceItems(methods, -1,
 				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int item) {
-						switch (item) {
-						case 0:
-							takePhoto(Media.PHOTO);
-							break;
-						case 1:
-							browseGallery(Media.PHOTO);
-							break;
-						}
-						photoDialog.dismiss();
-					}
-				});
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					takePhoto(Media.PHOTO);
+					break;
+				case 1:
+					browseGallery(Media.PHOTO);
+					break;
+				}
+				photoDialog.dismiss();
+			}
+		});
 		photoDialog = alert.create();
 		photoDialog.show();
 	}

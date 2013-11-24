@@ -43,7 +43,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChapterTable;
 public class ChapterManager implements StoringManager<Chapter> {
 	private static DBHelper helper = null;
 	private static ChapterManager self = null;
-	private static ContentValues values;
+	protected ContentValues values;
+	protected String selection;
+	protected String[] sArgs;
+	protected String[] projection;
 
 	/**
 	 * Initializes a new ChapterManager chapter.
@@ -95,25 +98,8 @@ public class ChapterManager implements StoringManager<Chapter> {
 	@Override
 	public ArrayList<Chapter> retrieve(Chapter criteria) {
 		ArrayList<Chapter> results = new ArrayList<Chapter>();
-		String[] sArgs = null;
-		ArrayList<String> selectionArgs = new ArrayList<String>();
-
 		SQLiteDatabase db = helper.getReadableDatabase();
-
-		String[] projection = { ChapterTable.COLUMN_NAME_CHAPTER_ID,
-				ChapterTable.COLUMN_NAME_STORY_ID,
-				ChapterTable.COLUMN_NAME_TEXT,
-				ChapterTable.COLUMN_NAME_RANDOM_CHOICE };
-
-		// Setting search criteria
-		String selection = setSearchCriteria(criteria, selectionArgs);
-
-		if (selectionArgs.size() > 0) {
-			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-		} else {
-			sArgs = null;
-			selection = null;
-		}
+		setupSearch(criteria);
 
 		// Querying the database
 		Cursor cursor = db.query(ChapterTable.TABLE_NAME, projection,
@@ -137,6 +123,26 @@ public class ChapterManager implements StoringManager<Chapter> {
 		return results;
 	}
 
+	public void setupSearch(Chapter criteria) {
+		sArgs = null;
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+
+		projection = new String[]{ ChapterTable.COLUMN_NAME_CHAPTER_ID,
+				ChapterTable.COLUMN_NAME_STORY_ID,
+				ChapterTable.COLUMN_NAME_TEXT,
+				ChapterTable.COLUMN_NAME_RANDOM_CHOICE };
+
+		// Setting search criteria
+		selection = setSearchCriteria(criteria, selectionArgs);
+
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			sArgs = null;
+			selection = null;
+		}		
+	}
+	
 	/**
 	 * Updates a chapter's data in the database.
 	 * 
@@ -148,9 +154,8 @@ public class ChapterManager implements StoringManager<Chapter> {
 		setContentValues(newChapter);
 		Chapter newC = (Chapter) newChapter;
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
-		String[] sArgs = { newC.getId().toString() };
-
+		selection = ChapterTable.COLUMN_NAME_CHAPTER_ID + " LIKE ?";
+		sArgs = new String[]{ newC.getId().toString() };
 		db.update(ChapterTable.TABLE_NAME, values, selection, sArgs);
 	}
 	
@@ -206,7 +211,7 @@ public class ChapterManager implements StoringManager<Chapter> {
 
 	@Override
 	public void remove(UUID id) {
-		// TODO Auto-generated method stub
+		// Not implemented in this iteration of the project
 	}
 	
 	@Override

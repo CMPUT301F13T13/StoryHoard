@@ -40,6 +40,7 @@ public class Media {
 	private String path;
 	private String type;
 	private String bitmapString;
+	private String text;
 
 	// CONSTANTS
 	public static final String PHOTO = "photo";
@@ -56,6 +57,7 @@ public class Media {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
+		this.text = "";
 		bitmapString = "";
 		if (path != null) {
 			this.path = path;
@@ -73,8 +75,9 @@ public class Media {
 	 * @param chapterId
 	 * @param path
 	 * @param type
+	 * @param text TODO
 	 */
-	public Media(UUID id, UUID chapterId, String path, String type) {
+	public Media(UUID id, UUID chapterId, String path, String type, String text) {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
@@ -152,6 +155,9 @@ public class Media {
 		return getBitmapFromString(bitmapString);
 	}	
 
+	public String getText() {
+		return text;
+	}
 	// SETTERS
 
 	/**
@@ -197,6 +203,9 @@ public class Media {
 		this.type = type;
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+	}
 	
 
 	/**

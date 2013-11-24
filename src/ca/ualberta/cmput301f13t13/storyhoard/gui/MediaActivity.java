@@ -17,12 +17,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -30,12 +29,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
@@ -50,7 +50,8 @@ public abstract class MediaActivity extends Activity {
 	private Uri imageFileUri;
 	private String imageType;
 	private LifecycleData lifedata;
-	ImageView imageView;
+	private ImageView imageView;
+	private String photoComment;
 
 	/**
 	 * Code for browsing gallery
@@ -86,6 +87,35 @@ public abstract class MediaActivity extends Activity {
 	 * @param imageFileUri
 	 */
 	public void takePhoto(String imageType) {
+
+		// gettting image text / annotation
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		// Set dialog title
+		alert.setTitle("Photo Comment:");
+		final EditText text = new EditText(this); 
+		text.setHint("Enter comment here");
+
+		// setting max length for comment
+		InputFilter[] fArray = new InputFilter[1];
+		fArray[0] = new InputFilter.LengthFilter(25);
+		text.setFilters(fArray);
+
+		alert.setView(text);
+		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {  
+				photoComment = text.getText().toString();
+				return;                  
+			}  
+		});  
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				return;   
+			}
+		});	
+
 		this.imageType = imageType;
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		imageFileUri = getUri();
@@ -112,6 +142,7 @@ public abstract class MediaActivity extends Activity {
 			String path = "";
 			Chapter chapter = LifecycleData.getInstance().getChapter();
 			Media photo = new Media(chapter.getId(), path , imageType);
+			photo.setText(photoComment);
 			if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
 				imageFileUri = intent.getData();
 				photo.setPath(getRealPathFromURI(imageFileUri, this));

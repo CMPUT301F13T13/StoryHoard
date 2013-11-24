@@ -43,6 +43,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
 public class MediaManager implements StoringManager<Media>{
 	private static DBHelper helper = null;
 	private static MediaManager self = null;
+	protected ContentValues values;
+	protected String selection;
+	protected String[] sArgs;
+	protected String[] projection;
 	
 	/**
 	 * Initializes a new MediaManager media.
@@ -75,17 +79,19 @@ public class MediaManager implements StoringManager<Media>{
 	@Override
 	public void insert(Media media) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-
-		// Insert Media
-		ContentValues values = new ContentValues();
-		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (media.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (media.getChapterId()).toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (media.getPath()));
-		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
-
+		setContentValues(media);
 		db.insert(MediaTable.TABLE_NAME, null, values);	
 	}
 
+	private void setContentValues(Media media) {
+		// Insert Media
+		values = new ContentValues();
+		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, media.getId().toString());		
+		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, media.getChapterId().toString());
+		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, media.getPath());
+		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
+		values.put(MediaTable.COLUMN_NAME_TEXT, media.getText());		
+	}
 	/**
 	 * Retrieves a media media from the database.
 	 * 
@@ -94,27 +100,11 @@ public class MediaManager implements StoringManager<Media>{
 	 */	
 	@Override
 	public ArrayList<Media> retrieve(Media criteria) {
-		ArrayList<Media> results = new ArrayList<Media>();
-		String[] sArgs = null;
-		ArrayList<String> selectionArgs = new ArrayList<String>();
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String[] projection = {
-				MediaTable.COLUMN_NAME_MEDIA_ID,
-				MediaTable.COLUMN_NAME_CHAPTER_ID,
-				MediaTable.COLUMN_NAME_MEDIA_URI,
-				MediaTable.COLUMN_NAME_TYPE
-		};
-
-		// Setting search criteria
-		String selection = setSearchCriteria(criteria, selectionArgs);
-
-		if (selectionArgs.size() > 0) {
-			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
-		} else {
-			sArgs = null;
-			selection = null;
-		}
-
+		ArrayList<Media> results = new ArrayList<Media>();
+		
+		setUpSearch(criteria);
+		
 		// Querying the database
 		Cursor cursor = db.query(MediaTable.TABLE_NAME, projection, 
 				selection, sArgs, null, null, null);
@@ -124,10 +114,11 @@ public class MediaManager implements StoringManager<Media>{
 		while (!cursor.isAfterLast()) {
 		
 			Media newMedia = new Media(
-					UUID.fromString(cursor.getString(0)), // media id
-					UUID.fromString(cursor.getString(1)), // chapter id
-					cursor.getString(2), // path
-					cursor.getString(3) // type
+					UUID.fromString(cursor.getString(0)),  // media id
+					UUID.fromString(cursor.getString(1)),  // chapter id
+					cursor.getString(2),  // path
+					cursor.getString(3),  // type
+					cursor.getString(4)   // text
 					);
 			results.add(newMedia);
 			cursor.moveToNext();
@@ -137,6 +128,28 @@ public class MediaManager implements StoringManager<Media>{
 	}
 	
 
+	public void setUpSearch(Media criteria) {
+		sArgs = null;
+		ArrayList<String> selectionArgs = new ArrayList<String>();
+		projection = new String[]{
+				MediaTable.COLUMN_NAME_MEDIA_ID,
+				MediaTable.COLUMN_NAME_CHAPTER_ID,
+				MediaTable.COLUMN_NAME_MEDIA_URI,
+				MediaTable.COLUMN_NAME_TYPE,
+				MediaTable.COLUMN_NAME_TEXT
+		};
+
+		// Setting search criteria
+		selection = setSearchCriteria(criteria, selectionArgs);
+
+		if (selectionArgs.size() > 0) {
+			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
+		} else {
+			sArgs = null;
+			selection = null;
+		}
+		
+	}
 	/**
 	 * Updates a media media already in the database.
 	 * 
@@ -147,16 +160,9 @@ public class MediaManager implements StoringManager<Media>{
 	@Override
 	public void update(Media newMedia) {
 		SQLiteDatabase db = helper.getReadableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(MediaTable.COLUMN_NAME_MEDIA_ID, (newMedia.getId()).toString());		
-		values.put(MediaTable.COLUMN_NAME_CHAPTER_ID, (newMedia.getChapterId()).toString());
-		values.put(MediaTable.COLUMN_NAME_MEDIA_URI, (newMedia.getPath()).toString());
-		values.put(MediaTable.COLUMN_NAME_TYPE, newMedia.getType());
-
-		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
-		String[] sArgs = { newMedia.getId().toString()};	
-
+		setContentValues(newMedia);
+		selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
+		sArgs = new String[]{ newMedia.getId().toString()};	
 		db.update(MediaTable.TABLE_NAME, values, selection, sArgs);
 		
 	}
@@ -196,16 +202,15 @@ public class MediaManager implements StoringManager<Media>{
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		
 		// Delete entry 
-		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
-		String[] selectionArgs1 = { String.valueOf(id)};
-		db.delete(MediaTable.TABLE_NAME, selection, selectionArgs1);
+		selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
+		sArgs = new String[]{ String.valueOf(id)};
+		db.delete(MediaTable.TABLE_NAME, selection, sArgs);
 	}
 	
 	@Override
 	public Boolean existsLocally(Media media) {
-		Media crit = new Media(media.getId(), null, null, null);
+		Media crit = new Media(media.getId(), null, null, null, "");
 		ArrayList<Media> medias = retrieve(crit);
 		if (medias.size() != 1) {
 			return false;
@@ -222,7 +227,7 @@ public class MediaManager implements StoringManager<Media>{
 	}
 
 	public void syncDeletions(ArrayList<UUID> newMedias, UUID id) {
-		ArrayList<Media> oldMedias = retrieve(new Media(null, id, null, null));
+		ArrayList<Media> oldMedias = retrieve(new Media(null, id, null, null, ""));
 		
 		for (Media media : oldMedias) {
 			if (!newMedias.contains(media.getId())) {

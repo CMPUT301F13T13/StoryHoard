@@ -19,14 +19,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class ImageDialogBuilder {
-	private AlertDialog photoDialog;
+	private AlertDialog illDialog;
 
-	public AlertDialog getPhotoDialog() {
-		return photoDialog;
+	public AlertDialog getIllDialog() {
+		return illDialog;
 	}
 
-	public void setPhotoDialog(AlertDialog photoDialog) {
-		this.photoDialog = photoDialog;
+	public void setIllDialog(AlertDialog illDialog) {
+		this.illDialog = illDialog;
 	}
 
 	public void setDialog(final EditChapterActivity editChapterActivity,
@@ -51,10 +51,10 @@ public class ImageDialogBuilder {
 						case 1:
 							break;
 						}
-						photoDialog.dismiss();
+						illDialog.dismiss();
 					}
 				});
-		photoDialog = alert.create();
-		photoDialog.show();
+		illDialog = alert.create();
+		illDialog.show();
 	}
 }
