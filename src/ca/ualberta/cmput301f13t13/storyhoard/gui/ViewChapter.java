@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,12 +68,12 @@ public class ViewChapter extends MediaActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_chapter);
-		setUpFields();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		setUpFields();
 		setNextChapterListener();
 		updateData();
 	}
@@ -101,7 +102,7 @@ public class ViewChapter extends MediaActivity {
 	/**
 	 * Gets the new chapter and updates the view's components.
 	 */
-	public void updateData() {
+	public void updateData() {	
 		chapter = lifedata.getChapter();
 		choices.clear();
 
@@ -137,17 +138,25 @@ public class ViewChapter extends MediaActivity {
 
 		// photos.removeAllViews();
 		illustrations.removeAllViews();
-		// Insert Photos
-		for (Media photo : photoList) {
-			illustrations.addView(insertImage(photo, this));
-		}
+		
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(insertImage(ill, this));
 		}
+		
+		// Insert Photos
+		for (Media photo : photoList) {
+			illustrations.addView(insertImage(photo, this));
+		}
+		
+		Media img = lifedata.getCurrImage();
+		if (img != null) {
+			mediaCon.insert(img);
+			illustrations.addView(insertImage(img, this));
+			lifedata.setCurrImage(null);
+			lifedata.setCurrImages(null);
+		}
 	}
-
-
 
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
@@ -189,7 +198,6 @@ public class ViewChapter extends MediaActivity {
 		switch (item.getItemId()) {
 		case R.id.addPhoto:
 			addPhoto();
-
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -215,14 +223,6 @@ public class ViewChapter extends MediaActivity {
 							browseGallery(Media.PHOTO);
 							break;
 						}
-						
-						ArrayList<Media> photos = lifedata.getCurrImages();
-						if (photos != null) {
-							for (Media photo : photos) {
-								mediaCon.insert(photo);
-							}
-						}		
-						lifedata.setCurrImages(null);
 						photoDialog.dismiss();
 					}
 				});

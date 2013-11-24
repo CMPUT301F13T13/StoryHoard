@@ -29,7 +29,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
@@ -75,12 +75,12 @@ public class EditChapterActivity extends MediaActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_chapter);
-		setUpFields();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		setUpFields();
 		setRandomChoice();
 		updateICData();
 	}
@@ -92,15 +92,30 @@ public class EditChapterActivity extends MediaActivity {
 		// Set the chapter text, if new Chapter will simply be blank
 		choices.clear();
 		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
+		// any images that have not been saved
+		ArrayList<Choice> choices = lifedata.getCurrChoices();
+		for (Choice choice : choices) {
+			choices.add(choice);
+		}
+		lifedata.setCurrImage(null);
 		choiceAdapter.notifyDataSetChanged();
+		
 		// Getting illustrations
 		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
+		
 		// Clean up illustrations layout
 		illustrations.removeAllViews();
 		// Insert Illustrations
 		for (Media ill : illList) {
 			illustrations.addView(insertImage(ill, EditChapterActivity.this));
 		}
+		
+		// any images that have not been saved
+		ArrayList<Media> imgs = lifedata.getCurrImages();
+		for (Media img : imgs) {
+			illustrations.addView(insertImage(img, EditChapterActivity.this));
+		}
+		lifedata.setCurrImage(null);
 	}
 
 	/**
@@ -130,6 +145,7 @@ public class EditChapterActivity extends MediaActivity {
 		} else {
 			// Create a new chapter from the story's ID
 			chapter = new Chapter(story.getId(), "");
+			lifedata.setChapter(chapter);
 		}
 	}
 
@@ -182,12 +198,6 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void addIllustration() {
-//		if (!lifedata.isEditing()) {
-//			Toast.makeText(getBaseContext(),
-//					"Save chapter before adding first illustration",
-//					Toast.LENGTH_SHORT).show();
-//			return;
-//		}
 		AlertDialog.Builder alert = new AlertDialog.Builder(
 				EditChapterActivity.this);
 		// Set dialog title
@@ -209,6 +219,7 @@ public class EditChapterActivity extends MediaActivity {
 						illustDialog.dismiss();
 					}
 				});
+		
 		illustDialog = alert.create();
 		illustDialog.show();
 	}
@@ -219,17 +230,6 @@ public class EditChapterActivity extends MediaActivity {
 		lifedata.setChapter(chapter);
 		lifedata.setStory(story);
 		startActivity(intent);
-//		if (lifedata.isEditing()) {
-//			Intent intent = new Intent(getBaseContext(),
-//					EditChoiceActivity.class);
-//			lifedata.setChapter(chapter);
-//			lifedata.setStory(story);
-//			startActivity(intent);
-//		} else {
-//			Toast.makeText(getBaseContext(),
-//					"Save chapter before adding first choice",
-//					Toast.LENGTH_SHORT).show();
-//		}
 	}
 
 	private void saveAction() {

@@ -31,6 +31,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -111,6 +112,7 @@ public abstract class MediaActivity extends Activity {
 						imageFileUri.getPath(), imageType);
 				
 				lifedata.addToCurrImages(photo);
+				lifedata.setCurrImage(photo);
 				insertIntoGallery(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
@@ -125,6 +127,7 @@ public abstract class MediaActivity extends Activity {
 				String path = getRealPathFromURI(imageFileUri, this);
 				Media photo = new Media(chapter.getId(), path, imageType);
 				lifedata.addToCurrImages(photo);
+				lifedata.setCurrImage(photo);
 			} else if (resultCode == RESULT_CANCELED) {
 				System.out.println("cancelled taking a photo");
 			} else {
