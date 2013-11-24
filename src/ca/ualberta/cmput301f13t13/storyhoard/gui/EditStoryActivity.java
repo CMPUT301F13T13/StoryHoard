@@ -28,6 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 
@@ -46,40 +47,24 @@ public class EditStoryActivity extends Activity {
 	private Story newStory;
 	private LocalStoryController localCon;
 	private ServerStoryController serverCon;	
+	private ChapterController chapCon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-        try {
-	          Class.forName("android.os.AsyncTask");
-	        } catch (ClassNotFoundException e) {
-	          e.printStackTrace();
-	        }
 
-		lifedata = LifecycleData.getInstance();
-		serverCon = ServerStoryController.getInstance(this);
-		localCon = LocalStoryController.getInstance(this);
-		
-		setContentView(R.layout.activity_edit_story);
-
-		final ActionBar actionBar = getActionBar();
-		actionBar.setTitle("Story Details");
-		actionBar.setDisplayShowTitleEnabled(true);
-
-		newTitle = (EditText) findViewById(R.id.newStoryTitle);
-		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
-		newDescription = (EditText) findViewById(R.id.newStoryDescription);
-
-		// Check if we are editing the story or making a new story
-		if (lifedata.isEditing()) {
-			newStory = lifedata.getStory();
-			newTitle.setText(newStory.getTitle());
-			newAuthor.setText(newStory.getAuthor());
-			newDescription.setText(newStory.getDescription());
+		try {
+			Class.forName("android.os.AsyncTask");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
-	
+
+	@Override
+	public void onResume(){
+		super.onResume();
+        setupFields();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,6 +87,30 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	private void setupFields() {
+		lifedata = LifecycleData.getInstance();
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
+
+		setContentView(R.layout.activity_edit_story);
+
+		final ActionBar actionBar = getActionBar();
+		actionBar.setTitle("Story Details");
+		actionBar.setDisplayShowTitleEnabled(true);
+
+		newTitle = (EditText) findViewById(R.id.newStoryTitle);
+		newAuthor = (EditText) findViewById(R.id.newStoryAuthor);
+		newDescription = (EditText) findViewById(R.id.newStoryDescription);
+
+		// Check if we are editing the story or making a new story
+		if (lifedata.isEditing()) {
+			newStory = lifedata.getStory();
+			newTitle.setText(newStory.getTitle());
+			newAuthor.setText(newStory.getAuthor());
+			newDescription.setText(newStory.getDescription());
+		}		
+	}
 
 	private void publishStory() {
 		if (lifedata.isEditing()) {
@@ -117,11 +126,12 @@ public class EditStoryActivity extends Activity {
 					.show();
 		}		
 	}
-	
+
 	private class Update extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// publish or update story
+			newStory.setChapters(chapCon.getFullStoryChapters(newStory.getId()));
 			serverCon.publish(newStory);
 			return null;
 		}

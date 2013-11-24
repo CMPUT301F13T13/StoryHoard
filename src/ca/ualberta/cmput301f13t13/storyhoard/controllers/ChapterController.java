@@ -4,20 +4,23 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.MediaManager;
 
 public class ChapterController implements SHController<Chapter>{
 	private static ChapterController self = null;   
 	private static ChapterManager chapterMan;
-	private static ChoiceController choiceCon;
-	private static MediaController mediaCon;
+	private static ChoiceManager choiceMan;
+	private static MediaManager mediaMan;
 
 	protected ChapterController(Context context) {
 		chapterMan = ChapterManager.getInstance(context);
-		choiceCon = ChoiceController.getInstance(context);
-		mediaCon = MediaController.getInstance(context);
+		choiceMan = ChoiceManager.getInstance(context);
+		mediaMan = MediaManager.getInstance(context);
 	}
 	
 	public static ChapterController getInstance(Context context) {
@@ -50,12 +53,7 @@ public class ChapterController implements SHController<Chapter>{
 		ArrayList<Chapter> fullChaps = new ArrayList<Chapter>();
 		
 		for (Chapter chap : chaps) {
-			// Get all its choices
-			chap.setChoices(choiceCon.getChoicesByChapter(chap.getId()));
-			// Get all its illustrations
-			chap.setIllustrations(mediaCon.getIllustrationsByChapter(chap.getId()));
-			// Get all its photos
-			chap.setPhotos(mediaCon.getPhotosByChapter(chap.getId()));
+			fillChapter(chap);
 		}
 		
 		return fullChaps;
@@ -63,17 +61,30 @@ public class ChapterController implements SHController<Chapter>{
 
 	public Chapter getFullChapter(UUID chapId) {
 		ArrayList<Chapter> chapters = retrieve(new Chapter(chapId, null, null, null));
-		
+
 		// Check to make sure chapter exists
 		if (chapters.size() == 0) {
 			return null;
 		}
-		Chapter chapter = (Chapter) chapters.get(0);
-		chapter.setChoices(choiceCon.getChoicesByChapter(chapId));
-		chapter.setIllustrations(mediaCon.getIllustrationsByChapter(chapId));
-		chapter.setPhotos(mediaCon.getPhotosByChapter(chapId));
+		
+		Chapter chapter = chapters.get(0);
+		fillChapter(chapter);
+
 		return chapter;
 	}
+	
+	private void fillChapter(Chapter chap) {
+		// Get all its choices
+		chap.setChoices(choiceMan.retrieve(new Choice(null, 
+				chap.getId(), null, null)));
+		// Get all its illustrations
+		chap.setIllustrations(mediaMan.retrieve(new Media(null, 
+				chap.getId(), null, Media.ILLUSTRATION)));
+		// Get all its photos
+		chap.setPhotos(mediaMan.retrieve(new Media(null, 
+				chap.getId(), null, Media.PHOTO)));		
+	}
+	
 	
 	private ArrayList<Chapter> retrieve(Chapter chapter) {
 		return chapterMan.retrieve(chapter);
@@ -91,7 +102,6 @@ public class ChapterController implements SHController<Chapter>{
 
 	@Override
 	public void remove(UUID objId) {
-		// TODO Auto-generated method stub
-		
+		// TODO Not implemented for this iteration of project
 	}	
 }

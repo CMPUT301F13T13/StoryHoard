@@ -11,11 +11,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
 public class ServerStoryController implements SHController<Story>{
 	private static ServerStoryController self = null;   
 	private static ServerManager serverMan;
-	private static ChapterController chapCon = null;
 
 	protected ServerStoryController(Context context) {
 		serverMan = ServerManager.getInstance();
-		chapCon = ChapterController.getInstance(context);
 	}
 	
 	public static ServerStoryController getInstance(Context context) {
@@ -40,7 +38,6 @@ public class ServerStoryController implements SHController<Story>{
 	}	
 	
 	public void publish(Story story) {
-		story.setChapters(chapCon.getFullStoryChapters(story.getId()));
 		serverMan.update(story);
 	}
 	
