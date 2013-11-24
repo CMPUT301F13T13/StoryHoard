@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.controllers;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.content.Context;
 
@@ -82,5 +83,11 @@ public class ServerStoryController implements SHController<Story>{
 	@Override
 	public void update(Story story) {
 		serverMan.update(story);
+	}
+
+	@Override
+	public void remove(UUID objId) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

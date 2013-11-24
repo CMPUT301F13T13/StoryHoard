@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.controllers;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.content.Context;
 
@@ -124,5 +125,11 @@ public class LocalStoryController implements SHController<Story> {
 	public ArrayList<Story> getAll() {
 		Story criteria = new Story(null, null, null, null, null);
 		return retrieve(criteria);
+	}
+
+	@Override
+	public void remove(UUID objId) {
+		// TODO Auto-generated method stub
+		
 	}		
 }

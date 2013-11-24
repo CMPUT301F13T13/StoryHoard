@@ -45,4 +45,9 @@ public class MediaController implements SHController<Media>{
 	public void update(Media media) {
 		mediaMan.update(media);
 	}
+	
+	@Override
+	public void remove(UUID id) {
+		mediaMan.remove(id);
+	}
 }

@@ -193,12 +193,12 @@ public class MediaManager implements StoringManager<Media>{
 	}
 
 	@Override
-	public void remove(Media media) {
+	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		
 		// Delete entry 
 		String selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
-		String[] selectionArgs1 = { String.valueOf(media.getId())};
+		String[] selectionArgs1 = { String.valueOf(id)};
 		db.delete(MediaTable.TABLE_NAME, selection, selectionArgs1);
 	}
 }

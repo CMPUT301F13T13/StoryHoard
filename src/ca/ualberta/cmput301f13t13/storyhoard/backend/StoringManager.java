@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.backend;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Interface for storing, updating, and retrieving objects locally 
@@ -57,5 +58,5 @@ public interface StoringManager<A> {
 	 */
 	public void update(A newObject);
 
-	public void remove(A object);
+	public void remove(UUID objId);
 }

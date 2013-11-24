@@ -204,8 +204,7 @@ public class ChapterManager implements StoringManager<Chapter> {
 	}
 
 	@Override
-	public void remove(Chapter chapter) {
+	public void remove(UUID id) {
 		// TODO Auto-generated method stub
-		
 	}
 }

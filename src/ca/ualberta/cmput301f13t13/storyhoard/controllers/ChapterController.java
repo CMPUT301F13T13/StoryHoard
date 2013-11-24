@@ -87,5 +87,11 @@ public class ChapterController implements SHController<Chapter>{
 	@Override
 	public void update(Chapter chapter) {
 		chapterMan.update(chapter);
+	}
+
+	@Override
+	public void remove(UUID objId) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

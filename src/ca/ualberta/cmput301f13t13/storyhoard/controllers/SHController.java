@@ -17,6 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.controllers;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Role: Is called by the views of the application to then interact with the
@@ -37,4 +38,6 @@ public interface SHController<A> {
 	public void insert(A object);
 	
 	public void update(A object);
+	
+	public void remove(UUID objId);
 }

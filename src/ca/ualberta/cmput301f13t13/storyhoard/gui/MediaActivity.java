@@ -17,13 +17,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,12 +29,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 
 /**
  * @author sgil
@@ -45,9 +47,12 @@ import android.widget.LinearLayout;
 public abstract class MediaActivity extends Activity {
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
+	private AlertDialog photoDialog;
 	private Uri imageFileUri;
 	private String imageType;
 	private LifecycleData lifedata;
+	private MediaController mediaCon;
+	private Media img;
 
 	/**
 	 * Code for browsing gallery
@@ -110,7 +115,7 @@ public abstract class MediaActivity extends Activity {
 				Chapter chapter = LifecycleData.getInstance().getChapter();
 				Media photo = new Media(chapter.getId(),
 						imageFileUri.getPath(), imageType);
-				
+
 				lifedata.addToCurrImages(photo);
 				lifedata.setCurrImage(photo);
 				insertIntoGallery(photo);
@@ -135,7 +140,7 @@ public abstract class MediaActivity extends Activity {
 			}
 		}
 	}	
-	
+
 	/**
 	 * Code for getting uri of a new file created for an image
 	 * 
@@ -146,7 +151,6 @@ public abstract class MediaActivity extends Activity {
 	 * @return 
 	 */
 	private Uri getUri() {
-
 		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
@@ -166,8 +170,9 @@ public abstract class MediaActivity extends Activity {
 	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
-	public static View insertImage(Media ill, Context context) {
-		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
+	public View insertImage(Media img, Context context) {
+		this.img = img;
+		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(img.getPath()), 
 				250, 250);
 		LinearLayout layout = new LinearLayout(context);
 
@@ -178,11 +183,48 @@ public abstract class MediaActivity extends Activity {
 		imageView.setLayoutParams(new LayoutParams(250, 250));
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageView.setImageBitmap(bm);
+		imageView.setLongClickable(true);
+
+		// make image removable
+		if (img.getType().equals(Media.ILLUSTRATION)) {
+			imageView.setOnLongClickListener(new OnLongClickListener () {
+				@Override
+				public boolean onLongClick(View v) {
+					setDialog();
+					return false;
+				}
+			});
+		}
 
 		layout.addView(imageView);
 		return layout;
 	}		
 
+	public void setDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(MediaActivity.this);
+		// Set dialog title
+		alert.setTitle("Delete Illustration?");
+		// Options that user may choose to add photo
+		final String[] methods = { "yes", "no" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					mediaCon = MediaController.getInstance(getBaseContext());
+					mediaCon.remove(img.getId());
+					break;
+				case 1:
+					break;
+				}
+				photoDialog.dismiss();
+			}
+		});
+		photoDialog = alert.create();
+		photoDialog.show();		
+	}
+	
 	/**
 	 * CODE REUSE
 	 * URL: http://stackoverflow.com/questions/3401579/get-filename-and-path-from-uri-from-mediastore
@@ -200,7 +242,7 @@ public abstract class MediaActivity extends Activity {
 		cursor.moveToFirst();
 		return cursor.getString(column_index);
 	}	
-	
+
 	/**
 	 * Calculates size for bitmap.
 	 * 

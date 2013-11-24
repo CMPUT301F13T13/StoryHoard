@@ -193,12 +193,12 @@ public class ChoiceManager implements StoringManager<Choice> {
 	}
 
 	@Override
-	public void remove(Choice choice) {
+	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		
 		// Delete entry 
 		String selection = ChoiceTable.COLUMN_NAME_CHOICE_ID + " LIKE ?";
-		String[] selectionArgs1 = { String.valueOf(choice.getId())};
+		String[] selectionArgs1 = { String.valueOf(id)};
 		db.delete(ChoiceTable.TABLE_NAME, selection, selectionArgs1);
 	}
 }

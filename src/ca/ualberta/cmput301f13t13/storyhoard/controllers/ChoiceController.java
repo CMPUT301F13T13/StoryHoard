@@ -63,4 +63,10 @@ public class ChoiceController implements SHController<Choice>{
 	public void update(Choice choice) {
 		choiceMan.update(choice);
 	}
+
+	@Override
+	public void remove(UUID objId) {
+		// TODO Auto-generated method stub
+		
+	}
 }
