@@ -25,6 +25,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the ChoiceManager class in the StoryHoard

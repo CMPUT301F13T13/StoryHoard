@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import android.content.Context;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 public class ServerStoryController implements SHController<Story>{

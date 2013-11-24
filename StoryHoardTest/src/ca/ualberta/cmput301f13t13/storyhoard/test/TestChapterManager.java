@@ -23,6 +23,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**

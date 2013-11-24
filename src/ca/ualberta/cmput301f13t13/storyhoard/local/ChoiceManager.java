@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +25,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChoiceTable;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChoiceTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve choice
@@ -211,5 +211,13 @@ public class ChoiceManager implements StoringManager<Choice> {
 			return false;
 		}
 		return true;		
+	}
+
+	public void syncChoice(Choice choice) {
+		if (existsLocally(choice)) {
+			update(choice);
+		} else {
+			insert(choice);
+		}	
 	}	
 }

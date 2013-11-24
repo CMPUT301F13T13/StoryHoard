@@ -22,14 +22,14 @@ import java.util.UUID;
 import android.test.ActivityInstrumentationTestCase2;
 
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the Choice class in the StoryHoard

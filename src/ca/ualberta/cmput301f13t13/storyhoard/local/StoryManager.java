@@ -14,14 +14,14 @@
  * the License.
  */
 
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.StoryTable;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -234,5 +234,13 @@ public class StoryManager implements StoringManager<Story> {
 			return false;
 		}
 		return true;		
+	}
+
+	public void syncStory(Story story) {
+		if (existsLocally(story)) {
+			update(story);
+		} else {
+			insert(story);
+		}
 	}	
 }

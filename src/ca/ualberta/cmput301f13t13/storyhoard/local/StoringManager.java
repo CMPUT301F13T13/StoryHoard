@@ -14,10 +14,11 @@
  * the License.
  */
 
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
 
 /**
  * Interface for storing, updating, and retrieving objects locally 

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +24,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.ChapterTable;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChapterTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve chapter
@@ -219,11 +219,9 @@ public class ChapterManager implements StoringManager<Chapter> {
 		return true;		
 	}
 
-	public void syncChapter(Chapter chap, ArrayList<UUID> medias,
-			Syncher syncher) {
+	public void syncChapter(Chapter chap) {
 		if (existsLocally(chap)) {
 			update(chap);
-			syncher.syncDeletions(medias, chap.getId());
 		} else {
 			insert(chap);
 		}

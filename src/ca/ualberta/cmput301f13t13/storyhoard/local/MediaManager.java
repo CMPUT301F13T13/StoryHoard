@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +24,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.DBContract.MediaTable;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve media
@@ -211,5 +211,23 @@ public class MediaManager implements StoringManager<Media>{
 			return false;
 		}
 		return true;		
+	}
+
+	public void syncMedia(Media media) {
+		if (existsLocally(media)) {
+			update(media);
+		} else {
+			insert(media);
+		}	
+	}
+
+	public void syncDeletions(ArrayList<UUID> newMedias, UUID id) {
+		ArrayList<Media> oldMedias = retrieve(new Media(null, id, null, null));
+		
+		for (Media media : oldMedias) {
+			if (!newMedias.contains(media.getId())) {
+				remove(media.getId());
+			}
+		}
 	}	
 }

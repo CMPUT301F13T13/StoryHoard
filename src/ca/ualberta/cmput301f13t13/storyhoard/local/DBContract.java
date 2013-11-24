@@ -18,7 +18,7 @@
  * When: September 17, 2013 License: Apache 2.0
  * 
  */
-package ca.ualberta.cmput301f13t13.storyhoard.backend;
+package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import android.provider.BaseColumns;
 

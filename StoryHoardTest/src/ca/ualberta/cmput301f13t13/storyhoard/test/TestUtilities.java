@@ -16,10 +16,10 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.Syncher;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;

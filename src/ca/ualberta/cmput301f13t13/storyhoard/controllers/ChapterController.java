@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ChapterManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.MediaManager;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 
 public class ChapterController implements SHController<Chapter>{
 	private static ChapterController self = null;   
