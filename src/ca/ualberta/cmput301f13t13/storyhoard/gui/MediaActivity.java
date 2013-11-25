@@ -17,15 +17,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.io.File;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,11 +29,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * @author sgil
@@ -47,8 +48,12 @@ public abstract class MediaActivity extends Activity {
 	public static final int BROWSE_GALLERY_ACTIVITY_REQUEST_CODE = 1;
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 	private Uri imageFileUri;
-	private String imageType;;
-	
+	private String imageType;
+	private LifecycleData lifedata;
+	private ImageView imageView;
+	private String photoComment = "";
+	private AlertDialog photoDialog;
+
 	/**
 	 * Code for browsing gallery
 	 * </br>
@@ -90,6 +95,50 @@ public abstract class MediaActivity extends Activity {
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
+	public void addPhoto() {
+		// gettting image text / annotation
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		
+		// Set dialog title
+		alert.setTitle("Post a photo");
+		final EditText text = new EditText(this); 
+		text.setHint("Enter comment here");	
+		// setting max length for comment
+		InputFilter[] fArray = new InputFilter[1];
+		fArray[0] = new InputFilter.LengthFilter(50);
+		text.setFilters(fArray);
+		alert.setView(text);
+		
+		// Options that user may choose to add photo
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					photoComment = text.getText().toString();
+					takePhoto(Media.PHOTO);
+					break;
+				case 1:
+					photoComment = text.getText().toString();
+					browseGallery(Media.PHOTO);
+					break;
+				}
+				photoDialog.dismiss();
+			}
+		});
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				photoDialog.dismiss();
+				return;   
+			}
+		});		
+		
+		photoDialog = alert.create();
+		photoDialog.show();
+	}
 	/**
 	 * Adds an image into the gallery
 	 */
@@ -104,36 +153,29 @@ public abstract class MediaActivity extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Chapter chapter = ((HolderApplication) this.getApplication()).getChapter();
-				Media photo = new Media(chapter.getId(),
-						imageFileUri.getPath(), imageType);
-				SHController gc = SHController.getInstance(this);
-				gc.addObject(photo, ObjectType.MEDIA);
+		lifedata = LifecycleData.getInstance();
+		if (resultCode == RESULT_OK) {
+			String path = "";
+			Chapter chapter = LifecycleData.getInstance().getChapter();
+			Media photo = new Media(chapter.getId(), path , imageType);
+			photo.setText(photoComment);
+			if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
+				imageFileUri = intent.getData();
+				photo.setPath(getRealPathFromURI(imageFileUri, this));
+			} else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+				photo.setPath(imageFileUri.getPath());
 				insertIntoGallery(photo);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
 			}
 
-		} else if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				Uri imageFileUri = intent.getData();
-				Chapter chapter = ((HolderApplication) this.getApplication()).getChapter();
-				String path = getRealPathFromURI(imageFileUri, this);
-				SHController gc = SHController.getInstance(this);
-				Media photo = new Media(chapter.getId(), path, imageType);
-				gc.addObject(photo, ObjectType.MEDIA);
-			} else if (resultCode == RESULT_CANCELED) {
-				System.out.println("cancelled taking a photo");
-			} else {
-				System.err.println("Error in taking a photo" + resultCode);
-			}
+			lifedata.addToCurrImages(photo);
+			lifedata.setCurrImage(photo);
+		} else if (resultCode == RESULT_CANCELED) {
+			System.out.println("cancelled action");
+		} else {
+			System.err.println("Error " + resultCode);
 		}
 	}	
-	
+
 	/**
 	 * Code for getting uri of a new file created for an image
 	 * 
@@ -144,7 +186,6 @@ public abstract class MediaActivity extends Activity {
 	 * @return 
 	 */
 	private Uri getUri() {
-
 		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
@@ -164,21 +205,24 @@ public abstract class MediaActivity extends Activity {
 	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
 	 * Nov. 7, 2013 Author: Andr.oid Eric
 	 */
-	public static View insertImage(Media ill, Context context) {
-		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(ill.getPath()), 
-				220, 220);
+	public View insertImage(Media img, Context context, LinearLayout main) {
+		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(img.getPath()), 
+				250, 250);
 		LinearLayout layout = new LinearLayout(context);
 
 		layout.setLayoutParams(new LayoutParams(250, 250));
 		layout.setGravity(Gravity.CENTER);
 
-		ImageView imageView = new ImageView(context);
-		imageView.setLayoutParams(new LayoutParams(220, 220));
+		imageView = new ImageView(context);
+		imageView.setLayoutParams(new LayoutParams(250, 250));
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageView.setImageBitmap(bm);
+		imageView.setTag(img);
 
 		layout.addView(imageView);
-		return layout;
+		main.addView(layout);
+
+		return (View) imageView;
 	}		
 
 	/**
@@ -198,7 +242,7 @@ public abstract class MediaActivity extends Activity {
 		cursor.moveToFirst();
 		return cursor.getString(column_index);
 	}	
-	
+
 	/**
 	 * Calculates size for bitmap.
 	 * 

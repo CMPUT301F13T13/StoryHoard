@@ -18,7 +18,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,31 +30,31 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Takes a storyID bundle, displays all the chapters related to that story. Used
  * for editing chapters.
  * 
  * @author alexanderwwong
+ * @author Kim Wu
  */
 
 public class ViewBrowseChapters extends Activity {
-	HolderApplication app;
-	private SHController gc;
+	LifecycleData lifedata;
+	private ChapterController chapCon;
 	private Story story;
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (HolderApplication) this.getApplication();
 		setContentView(R.layout.activity_view_browse_chapters);
 	}
 
@@ -68,8 +71,9 @@ public class ViewBrowseChapters extends Activity {
 			// Go to the add new chapter page for the specified story
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
-			app.setEditing(false);
-			app.setStory(story);
+			lifedata.setEditing(false);
+			lifedata.setChapter(null);
+			lifedata.setStory(story);
 			startActivity(intent);
 			return true;
 		}
@@ -82,19 +86,21 @@ public class ViewBrowseChapters extends Activity {
 		setUpFields();
 		setOnItemClickListener();
 		data.clear();
-		data.addAll(gc.getAllChapters(story.getId()));
-		chapterAdapter.notifyDataSetChanged();
+		new GetStoryChapters().execute();
 	}
-
+	
 	/**
 	 * Initialize private fields needed
 	 */
 	public void setUpFields() {
-		// Grab GC and pull all chapters from story
-		gc = SHController.getInstance(this);
-		story = app.getStory();
+		lifedata = LifecycleData.getInstance();
+		
+		// Grab controllers and pull all chapters from story
+		chapCon = ChapterController.getInstance(this);
+		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
+		
 		// Set adapter
 		chapterAdapter = new AdapterChapters(this,
 				R.layout.browse_chapter_item, data);
@@ -109,14 +115,47 @@ public class ViewBrowseChapters extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				
 				// Go to edit that chapter
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
-				app.setEditing(true);
-				app.setStory(story);
-				app.setChapter(data.get(arg2));
+				lifedata.setEditing(true);
+				lifedata.setChapter(data.get(arg2));
 				startActivity(intent);
 			}
 		});
 	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
+	    
+		@Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseChapters.this, 
+	        		"Fetching Chapters",
+	        		"Please wait...", 
+	        		true);       
+	    };  
+		
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all story chapters
+			story = lifedata.getStory();
+			data.addAll(chapCon.getChaptersByStory(story.getId()));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			chapterAdapter.notifyDataSetChanged();
+		}
+	}	
 }

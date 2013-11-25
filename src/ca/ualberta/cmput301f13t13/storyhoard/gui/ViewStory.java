@@ -19,7 +19,9 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,11 +30,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Handles viewing the story metadata.
@@ -41,13 +41,14 @@ import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
  * 
  */
 public class ViewStory extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
+	private ChapterController chapterCon;	
 	private Story story;
-	private SHController gc;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
+	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,6 @@ public class ViewStory extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		app = (HolderApplication) this.getApplication();
 		setUpFields();
 		setBeginReading();
 	}
@@ -79,7 +79,7 @@ public class ViewStory extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		Intent intent;
-		app.setEditing(true);
+		lifedata.setEditing(true);
 		switch (item.getItemId()) {
 		case R.id.editExistingStory:
 			intent = new Intent(this, ViewBrowseChapters.class);
@@ -98,11 +98,10 @@ public class ViewStory extends Activity {
 	 * Initialize private fields
 	 */
 	public void setUpFields() {
-		gc = SHController.getInstance(getBaseContext());
 		
 		// Initialize the activity fields
-		/**storyCover = (ImageView) findViewById(R.id.storyImage);
-		 * So I think it looks better without the image view**/
+		lifedata = LifecycleData.getInstance();
+		chapterCon = ChapterController.getInstance(this);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
@@ -113,7 +112,7 @@ public class ViewStory extends Activity {
 		actionBar.setTitle("Story Information");
 		actionBar.setDisplayShowTitleEnabled(true);
 		
-		story = app.getStory();
+		story = lifedata.getStory();
 		// storyCover.setImageBitmap(focusedStory.getImage());
 		// Check no title
 		if (story.getTitle().equals("")) {
@@ -143,13 +142,42 @@ public class ViewStory extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Begin reading, go to first chapter
-				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				UUID firstChapterID = story.getFirstChapterId();
-				Chapter chapter = gc.getCompleteChapter(firstChapterID);
-				app.setChapter(chapter);
-				startActivity(intent);
-				finish();
+				new LoadChapter().execute(firstChapterID);
 			}
 		});
 	}
+	
+	/**
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
+	 */
+	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		ViewStory.this, 
+	        		"Loading Chapter",
+	        		"Please wait...", 
+	        		true);
+
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {	
+			lifedata.setChapter(chapterCon.getFullChapter(params[0]));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+			startActivity(intent);
+			progressDialog.dismiss();
+
+		}
+	}		
 }

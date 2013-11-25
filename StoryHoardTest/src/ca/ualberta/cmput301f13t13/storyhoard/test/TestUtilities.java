@@ -16,17 +16,12 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-
+import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the Utilities class in the StoryHoard
@@ -38,94 +33,25 @@ import android.test.ActivityInstrumentationTestCase2;
  * @see Utilities
  */
 public class TestUtilities extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "./mockImages/img1";
+		ActivityInstrumentationTestCase2<HelpGuide> {
 	
 	public TestUtilities() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	/**
-	 * Tests the get phoneId returns a string of phoneid 
+	 * Tests that the get phoneId returns a string of phoneid 
 	 */
-	
 	public void testGetPhoneId() {
 	assertFalse(Utilities.getPhoneId(this.getActivity()) == null);
 	}
-
-	/**
-	 * Tests converting an arrayList of objects to stories.
+	
+	/** 
+	 * Tests saving an image to the sd card.
 	 */
-	@SuppressWarnings("unused")
-	public void testObjectsToStories() {
-		Story story = new Story("title", "author", "desc", 
-				Utilities.getPhoneId(this.getActivity()));
-		Story story2 = new Story("title2", "author2", "desc2", 
-				Utilities.getPhoneId(this.getActivity()));
-		ArrayList<Object> objects = new ArrayList<Object>();
-		objects.add(story);
-		objects.add(story2);
-		ArrayList<Story> stories = Utilities.objectsToStories(objects);
-		try {
-			ArrayList<Story> as = stories;
-		} catch (Exception e) {
-			fail("converstion from objects to stories failed");
-		}
-	}
-
-	/**
-	 * Tests converting an arrayList of objects to chapters.
-	 */
-	@SuppressWarnings("unused")
-	public void testObjectsToChapters() {
-		Chapter chapter = new Chapter(UUID.randomUUID(), "chap text");
-		Chapter chapter2 = new Chapter(UUID.randomUUID(), "chap text");
-		ArrayList<Object> objects = new ArrayList<Object>();
-		objects.add(chapter);
-		objects.add(chapter2);
-		ArrayList<Chapter> chapters = Utilities.objectsToChapters(objects);
-		try {
-			ArrayList<Chapter> chaps = chapters;
-		} catch (Exception e) {
-			fail("converstion from objects to chapters failed");
-		}
-	}
-
-	/**
-	 * Tests converting an arrayList of objects to choices.
-	 */
-	@SuppressWarnings("unused")
-	public void testObjectsToChoices() {
-		Choice choice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"chap text");
-		Choice choice2 = new Choice(UUID.randomUUID(), UUID.randomUUID(),
-				"chap text");
-		ArrayList<Object> objects = new ArrayList<Object>();
-		objects.add(choice);
-		objects.add(choice2);
-		ArrayList<Choice> choices = Utilities.objectsToChoices(objects);
-		try {
-			ArrayList<Choice> as = choices;
-		} catch (Exception e) {
-			fail("converstion from objects to choices failed");
-		}
-	}
-
-	/**
-	 * Tests converting an arrayList of objects to medias.
-	 */
-	@SuppressWarnings("unused")
-	public void testObjectsToMedia() {
-		Media media = new Media(UUID.randomUUID(), path,
-				Media.PHOTO);
-
-		ArrayList<Object> objects = new ArrayList<Object>();
-		objects.add(media);
-		ArrayList<Media> medias = Utilities.objectsToMedia(objects);
-		try {
-			ArrayList<Media> as = medias;
-		} catch (Exception e) {
-			fail("converstion from objects to medias failed");
-		}
+	public void testSaveImageToSD() {
+		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);
+		String path = Syncher.saveImageToSD(bmp);
+		assertNotNull(path);
 	}
 }

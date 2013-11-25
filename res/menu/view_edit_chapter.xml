@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/addIllus"
+        android:icon="@drawable/illust"
+        android:showAsAction="always"
+        android:title="add Image"/>
+    <item
+        android:id="@+id/addChoice"
+        android:showAsAction="always"
+        android:title="add Choice"/>
+    <item
+        android:id="@+id/Save"
+        android:icon="@drawable/save"
+        android:showAsAction="always"
+        android:title="Save"/>
+
+</menu>

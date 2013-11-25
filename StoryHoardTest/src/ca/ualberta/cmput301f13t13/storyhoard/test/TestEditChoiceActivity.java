@@ -16,13 +16,14 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Test case for the activity to edit choices
@@ -32,7 +33,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
  */
 public class TestEditChoiceActivity extends
 		ActivityInstrumentationTestCase2<EditChoiceActivity> {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private EditText choiceText;
 	private ListView chapters;
 	
@@ -49,21 +50,35 @@ public class TestEditChoiceActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		app = (HolderApplication) getActivity().getApplication();
+		lifedata = LifecycleData.getInstance();
 		Story story = new Story("title", "author", "es", "432432");
 
-		app.setEditing(false);
-		app.setStory(story);
-		app.setChapter(new Chapter(story.getId(), null));
+		lifedata.setEditing(false);
+		lifedata.setStory(story);
+		lifedata.setChapter(new Chapter(story.getId(), null));
 		
 		mActivity = (EditChoiceActivity) getActivity();
 		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
 		chapters = (ListView) mActivity.findViewById(R.id.listAllLinkableChapters);
 	}
 
+	/**
+	 * Tests the ui widgets have been properly initialized.
+	 */
 	public void testPreConditions() {
 		assertTrue(mActivity != null);
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
 	} 
+	
+	/**
+	 * Tests setting the edit text for the widget containing choice
+	 * text.
+	 */
+	@UiThreadTest
+	public void testSetChoiceText() {
+		String title = "My choice";
+		choiceText.setText(title);
+		assertTrue(choiceText.getText().toString().equals(title));
+	}	
 }

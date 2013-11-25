@@ -15,15 +15,22 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import android.util.Log;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
  * Class meant for the testing of the Media class in the StoryHoard 
@@ -34,26 +41,35 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see Media
  */
 public class TestMedia extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private static final String path = "android.resource://ca.ualberta.cmput301f13t13.storyhoard/" + R.drawable.img1;
-	private static final String path2 = "android.resource://ca.ualberta.cmput301f13t13.storyhoard.test/" + R.drawable.img2;
+ActivityInstrumentationTestCase2<HelpGuide> {
+	private static String path;
+	private static String path2;
 	
 	public TestMedia() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
+	public void setUp() throws Exception {
+		super.setUp();
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+	
 	/**
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		Uri uri = Uri.parse(path);
-		Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
-		assertTrue(bm != null);
+		path = createPath("img1.jpg");
 		// Make photo
 		try {
+			@SuppressWarnings("unused")
 			Media photo = new Media(UUID.randomUUID(), path, 
 					Media.PHOTO);
-			assertTrue(photo.getBitmap() != null);
+			Bitmap bm = BitmapFactory.decodeFile(path);
+			assertTrue(bm != null);
 		} catch (Exception e) {
 			fail("error creating a new media object");
 		}
@@ -64,22 +80,68 @@ public class TestMedia extends
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
+		path = createPath("img1.jpg");
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
-		
+
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
 		String type = photo.getType();
 		Bitmap bm = photo.getBitmap();
-
+		String text = "text";
+		
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
+		photo.setText(text);
+
+		path2 = createPath("img2.jpg");
 		photo.setPath(path2);
-		
+
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
-		assertNotSame(type, photo.getType());
+		assertFalse(type.equals(photo.getType()));
+		assertTrue(text.equals(photo.getText()));
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
+	}
+	
+	/**
+	 * Creates a new bitmap, save sit on to SD card and sets path to it.
+	 */
+	public String createPath(String fname) {
+		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
+		File mFile1 = Environment.getExternalStorageDirectory();
+
+		String fileName = fname;
+
+		File mFile2 = new File(mFile1,fileName);
+		try {
+			FileOutputStream outStream;
+
+			outStream = new FileOutputStream(mFile2);
+
+			bm.compress(Bitmap.CompressFormat.JPEG, 75, outStream);
+
+			outStream.flush();
+
+			outStream.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		String path = mFile1.getAbsolutePath().toString()+"/"+fileName;
+
+		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+path); 
+
+		File temp=new File(path);
+
+		if(!temp.exists()){
+			Log.e("file","no image file at location :"+path);
+		}
+		
+		return path;
 	}
 }

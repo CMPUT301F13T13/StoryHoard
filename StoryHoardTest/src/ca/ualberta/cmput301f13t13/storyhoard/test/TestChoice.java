@@ -21,11 +21,15 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
+
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the Choice class in the StoryHoard
@@ -42,6 +46,18 @@ public class TestChoice
 		super(ViewBrowseStories.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		LifecycleData lifedata = LifecycleData.getInstance();
+		lifedata.setEditing(false);
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+
+	
 	/**
 	 * Tests creating a choice.
 	 */
@@ -66,19 +82,19 @@ public class TestChoice
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Choice criteria = new Choice(null, null, null);
+		Choice criteria = new Choice(null, null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 0);
+		assertEquals(info.size(), 0);
 
 		// not empty arguments
 		UUID choiceId = UUID.randomUUID();
 		UUID chapId = UUID.randomUUID();
 
-		criteria = new Choice(choiceId, chapId, null);
+		criteria = new Choice(choiceId, chapId, null, null);
 		info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 2);
+		assertEquals(info.size(), 2);
 		assertTrue(info.get("choice_id").equals(choiceId.toString()));
 		assertTrue(info.get("curr_chapter").equals(chapId.toString()));
 	}
@@ -90,20 +106,19 @@ public class TestChoice
 		Choice mockChoice = new Choice(UUID.randomUUID(), UUID.randomUUID(),
 				"opt1");
 
-		UUID choiceId = mockChoice.getId();
-		UUID currentChapter = mockChoice.getCurrentChapter();
-		UUID nextChapter = mockChoice.getNextChapter();
-		String text = mockChoice.getText();
+		UUID choiceId = UUID.randomUUID();
+		UUID currentChapter = UUID.randomUUID();
+		UUID nextChapter = UUID.randomUUID();
+		String text = "hello";
 
-		mockChoice.setId(UUID.randomUUID());
-		mockChoice.setNextChapter(UUID.randomUUID());
-		mockChoice.setCurrentChapter(UUID.randomUUID());
-		mockChoice.setText("blah");
+		mockChoice.setId(choiceId);
+		mockChoice.setNextChapter(nextChapter);
+		mockChoice.setCurrentChapter(currentChapter);
+		mockChoice.setText(text);
 
-		assertNotSame(choiceId, mockChoice.getId());
-		assertNotSame(currentChapter, mockChoice.getCurrentChapter());
-		assertNotSame(nextChapter, mockChoice.getNextChapter());
-		assertNotSame("blah", text);
+		assertSame(choiceId, mockChoice.getId());
+		assertSame(currentChapter, mockChoice.getCurrentChapter());
+		assertSame(nextChapter, mockChoice.getNextChapter());
+		assertSame(text, mockChoice.getText());
 	}
-
 }

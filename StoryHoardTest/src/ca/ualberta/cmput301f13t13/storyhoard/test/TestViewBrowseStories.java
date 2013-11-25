@@ -15,15 +15,9 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.AdapterStories;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 /**
@@ -35,8 +29,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 public class TestViewBrowseStories extends
 		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private GridView gridView;
-	private ArrayList<Story> gridArray = new ArrayList<Story>();
-	private AdapterStories customGridAdapter;
 	private ViewBrowseStories activity;
 	
 	public TestViewBrowseStories() {
@@ -45,13 +37,6 @@ public class TestViewBrowseStories extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		Intent intent = new Intent();
-		intent.putExtra("isEditing", false);
-		intent.putExtra("storyId", UUID.randomUUID());
-		
-		setActivityIntent(intent);
-		
 		activity = getActivity();
 		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
 	}

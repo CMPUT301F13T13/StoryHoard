@@ -18,74 +18,95 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
  * 
  * @author Alexander Wong
+ * @author Kim Wu
  * 
  */
 public class ViewChapter extends MediaActivity {
-	HolderApplication app;
-	private SHController gc;
+	LifecycleData lifedata;
+	private ChapterController chapCon;
+	private ChoiceController choiceCon;
+	private MediaController mediaCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ArrayList<Media> photoList;
 	private ArrayList<Media> illList;
 	private AdapterChoices choiceAdapter;
-	private AlertDialog photoDialog;
 	private LinearLayout illustrations;
-	// private LinearLayout photos;
-
 	private TextView chapterContent;
 	private ListView chapterChoices;
-	private Button addPhotoButton;
+	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_chapter);
-		setUpFields();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		setUpFields();
 		setNextChapterListener();
-		setAddPhotoListener();
 		updateData();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_chapter, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.addPhoto:
+			addPhoto();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	/**
 	 * Initializes the private fields needed.
 	 */
 	public void setUpFields() {
-		app = (HolderApplication) this.getApplication();
-		gc = SHController.getInstance(this);
+		lifedata = LifecycleData.getInstance();
+		chapCon = ChapterController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
+		mediaCon = MediaController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
-		addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
 		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
@@ -98,14 +119,13 @@ public class ViewChapter extends MediaActivity {
 	/**
 	 * Gets the new chapter and updates the view's components.
 	 */
-	public void updateData() {
-		UUID chapterID = app.chapterID();
-		chapter = gc.getCompleteChapter(chapterID);
-		choices.clear();
+	public void updateData() {	
+		chapter = lifedata.getChapter();
 
 		// Check to see if the chapter exists, else terminate
 		if (chapter == null) {
-			Toast.makeText(getBaseContext(), "Chapter does not exist", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getBaseContext(), "Next chapter does not exist",
+					Toast.LENGTH_SHORT).show();
 			finish();
 			return;
 		}
@@ -115,67 +135,65 @@ public class ViewChapter extends MediaActivity {
 		} else {
 			chapterContent.setText(chapter.getText());
 		}
+		
+		insertChoices();
+		insertIllustrations();
+		insertPhotos();
+	}
+	
+	public void insertChoices() {
+		choices.clear();
+		ArrayList<Choice> chapChoices = chapter.getChoices();
 		// Check for no choices
-		if (chapter.getChoices().isEmpty()) {
+		if (chapChoices.isEmpty()) {
 			chapterContent.setText(chapterContent.getText()
 					+ "\n\n<No Choices>");
 		} else {
-			choices.addAll(chapter.getChoices());
-			if (chapter.getRandomChoice() == "yes") {
-				choices.add(gc.getRandomChoice(chapterID));
+			if (chapter.hasRandomChoice() && chapChoices.size() > 1) {
+				chapChoices.add(choiceCon.getRandomChoice(chapter.getId()));
 			}
-		}
-		choiceAdapter.notifyDataSetChanged();
+			choices.addAll(chapChoices);
 
-		photoList = chapter.getPhotos();
+		}
+		choiceAdapter.notifyDataSetChanged();		
+	}
+
+	public void insertIllustrations() {
 		illList = chapter.getIllustrations();
-		
+
 		// photos.removeAllViews();
 		illustrations.removeAllViews();
-		// Insert Photos
-		for (Media photo : photoList) {
-			illustrations.addView(insertImage(photo, this));
-		}
+
 		// Insert Illustrations
 		for (Media ill : illList) {
-			illustrations.addView(insertImage(ill, this));
+			insertImage(ill, this, illustrations);
+		}		
+	}
+	
+	public void insertPhotos() {
+		// Insert Photos
+		Media img = lifedata.getCurrImage();
+		if (img != null) {
+			mediaCon.insert(img);
+			lifedata.setCurrImage(null);
+			lifedata.setCurrImages(null);
 		}
+		
+		// set listener to display photo text on click 
+		photoList = mediaCon.getPhotosByChapter(chapter.getId());
+		for (Media photo : photoList) {
+			View v = insertImage(photo, this, illustrations);
+			v.setOnClickListener(new OnClickListener () {
+				@Override
+				public void onClick(View v) {
+					Media media = (Media) v.getTag();
+					Toast.makeText(getBaseContext(),
+							media.getText(), Toast.LENGTH_LONG).show();	
+				}
+			});		
+		}		
 	}
-
-	/**
-	 * Sets up the onClick listener for the button to add a new photo.
-	 */
-	public void setAddPhotoListener() {
-		addPhotoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						ViewChapter.this);
-				// Set dialog title
-				alert.setTitle("Choose method:");
-				// Options that user may choose to add photo
-				final String[] methods = { "Take Photo", "Choose from Gallery" };
-				alert.setSingleChoiceItems(methods, -1,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int item) {
-								switch (item) {
-								case 0:
-									takePhoto(Media.PHOTO);
-									break;
-								case 1:
-									browseGallery(Media.PHOTO);
-									break;
-								}
-								photoDialog.dismiss();
-							}
-						});
-				photoDialog = alert.create();
-				photoDialog.show();
-			}
-		});
-	}
-
+	
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
 	 * (selecting a choice).
@@ -185,14 +203,44 @@ public class ViewChapter extends MediaActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// Go to the chapter in question
-				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-				app.setChapter(gc.getCompleteChapter(choices.get(arg2).getNextChapter()));
-				startActivity(intent);
-				//photos.removeAllViews();
-				illustrations.removeAllViews();
-				finish();
+	
+				UUID nextChap = choices.get(arg2).getNextChapter();
+				new LoadChapter().execute(nextChap);
 			}
 		});
 	}
+
+	/**
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
+	 */
+	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		ViewChapter.this, 
+	        		"Loading Chapter",
+	        		"Please wait...", 
+	        		true);
+
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {	
+			lifedata.setChapter(chapCon.getFullChapter(params[0]));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			// Go to the chapter in question
+			Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+			startActivity(intent);
+			progressDialog.dismiss();
+			finish();
+		}
+	}		
 }

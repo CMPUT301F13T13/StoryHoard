@@ -16,14 +16,18 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Utilities;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Class meant for the testing of the Story class in the StoryHoard 
@@ -34,12 +38,30 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see Story
  */
 public class TestStory extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<HelpGuide> {
+	private ServerManager sm;
 
 	public TestStory() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		sm = ServerManager.getInstance();	
+		sm.setTestServer();
+	}
+
+	public void tearDown() throws Exception {
+		super.tearDown();
+		sm = ServerManager.getInstance();
+		sm.setRealServer();
+	}
+	
 	/**
 	 * Tests creating a story without chapters.
 	 */
@@ -65,23 +87,6 @@ public class TestStory extends
 	}
 
 	/**
-	 * Tests retrieving a specific chapter from a story.
-	 */
-	public void testGetChapter() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story",
-				Utilities.getPhoneId(this.getActivity()));
-		Chapter chapter1 = new Chapter(story.getId(), 
-				"On a cold, dark night.");
-		Chapter chapter2 = new Chapter(story.getId(), 
-				"On a sunny, bright day.");
-		story.addChapter(chapter1);
-		story.addChapter(chapter2);
-
-		Chapter result = story.getChapter(chapter1.getId());
-		assertSame(result, chapter1);
-	}
-
-	/**
 	 * Tests retrieving the search information places within the story, i.e. the
 	 * id, title, author, description, and whether or not it was created by the
 	 * author.
@@ -97,9 +102,8 @@ public class TestStory extends
 		criteria = new Story(null, "john", "the cow", "went home",
 				Utilities.getPhoneId(this.getActivity()));
 		info = criteria.getSearchCriteria();
-
 		assertEquals(info.size(), 2);
-		assertTrue(info.get("title").equals("john"));
+		assertTrue(info.get("title").equals("%john%"));
 		assertTrue(info.get("phone_id").equals(criteria.getPhoneId()));
 	}
 
@@ -116,7 +120,7 @@ public class TestStory extends
 		String author = mockStory.getAuthor();
 		String desc = mockStory.getDescription();
 		String phoneid = mockStory.getPhoneId();
-		HashMap<UUID, Chapter> chapters = mockStory.getChapters();
+		ArrayList<Chapter> chapters = mockStory.getChapters();
 		UUID firstChapId = mockStory.getFirstChapterId();
 
 		mockStory.setId(UUID.randomUUID());

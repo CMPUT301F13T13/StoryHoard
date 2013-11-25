@@ -15,16 +15,18 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
+import java.util.UUID;
 
-import android.content.Intent;
+import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -33,12 +35,11 @@ import android.widget.TextView;
  */
 public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	private ViewStory activity;
-	private ImageView storyCover;
 	private TextView storyTitle;
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
-	private Story story;
+	private LifecycleData lifedata;
 	
 	public TestViewStory() {
 		super(ViewStory.class);
@@ -49,30 +50,54 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		story = new Story("title", "author", "es", "432432");		
-		Intent intent = new Intent();
-		intent.putExtra("storyID", story.getId());
+		lifedata = LifecycleData.getInstance();
 		
-		setActivityIntent(intent);
-	}
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.addChoice(c1);
+		story.addChapter(chapter);
+		lifedata.setStory(story);
 
-	public void test() {
-		fail("Not yet implemented");
-		
 		activity = getActivity();
-		SHController gc = SHController.getInstance(getActivity());
-		gc.addObject(story, ObjectType.CACHED_STORY);
-		
-		storyCover = (ImageView) activity.findViewById(R.id.storyImage);
+
 		storyTitle = (TextView) activity.findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) activity.findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) activity.findViewById(R.id.storyDescription);
 		beginReading = (Button) activity.findViewById(R.id.viewFirstChapter);		
-		
-		assertTrue(storyCover != null);
+				
+	}
+
+	/**
+	 * Tests that the ui widgets were correctly initialized.
+	 */
+	public void testPreConditions() {
 		assertTrue(storyTitle != null);
 		assertTrue(storyAuthor != null);
 		assertTrue(storyDescription != null);
 		assertTrue(beginReading != null);
 	}
+	
+	/**
+	 * Tests setting the ui widget for story author.
+	@UiThreadTest
+	public void testAuthor() {
+		assertTrue(storyAuthor.getText().toString().equals("author"));
+	}	
+
+	/**
+	 * Tests setting the ui widget for story title.
+	 */
+	@UiThreadTest
+	public void testTitle() {
+		assertTrue(storyTitle.getText().toString().equals("title"));
+	}	
+	
+	/**
+	 * Tests setting the ui widget for story description.
+	 */
+	@UiThreadTest
+	public void testSetDescription() {
+		assertTrue(storyDescription.getText().toString().equals("es"));
+	}	
 }

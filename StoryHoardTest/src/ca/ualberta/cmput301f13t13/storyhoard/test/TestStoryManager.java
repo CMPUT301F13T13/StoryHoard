@@ -17,10 +17,16 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the OwnStoryManager class in the StoryHoard
@@ -30,23 +36,17 @@ import android.test.ActivityInstrumentationTestCase2;
  * 
  */
 public class TestStoryManager extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private ArrayList<Object> mockStories;
-	private OwnStoryManager sm = null;
+		ActivityInstrumentationTestCase2<HelpGuide> {
+	private ArrayList<Story> mockStories;
+	private StoryManager sm = null;
 
 	public TestStoryManager() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	protected void setUp() throws Exception {
-		super.setUp();
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
-		sm = OwnStoryManager.getInstance(getActivity());
+		super.setUp();	
+		sm = StoryManager.getInstance(getActivity());
 	}
 
 	/**
@@ -98,6 +98,11 @@ public class TestStoryManager extends
 	 * include any stories not created by author.
 	 */
 	public void testGetAllAuthorStories() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -119,6 +124,11 @@ public class TestStoryManager extends
 	 * Tests loading all cached stories.
 	 */
 	public void testGetAllCachedStories() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -130,10 +140,9 @@ public class TestStoryManager extends
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, "43543543");
+		Story mockCriteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
 		mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 2);
-
 	}
 
 	/**
@@ -156,10 +165,38 @@ public class TestStoryManager extends
 
 		// make sure you can find new story
 		mockStories = sm.retrieve(newStory);
-		assertTrue(mockStories.size() == 1);
+		assertEquals(mockStories.size(), 1);
 
 		// make sure old version no longer exists
 		mockStories = sm.retrieve(mockStory);
-		assertTrue(mockStories.size() == 0);
+		assertEquals(mockStories.size(), 0);
 	}
+	
+	/**
+	 * Tests the correct determining of whether a story exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		UUID chapId1 = UUID.randomUUID();
+		UUID chapId2 = UUID.randomUUID();
+		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(this.getActivity()));
+		sm.insert(mockStory);
+		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
+				"my chubby frog", "43545454353");
+		assertTrue(sm.existsLocally(mockStory));
+		assertFalse(sm.existsLocally(mockStory2));
+	}
+
+	/**
+	 * Tests synching a story, which is really already tested by
+	 * inserting and updating a story.
+	 */
+	public void testSync() {
+		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(this.getActivity()));
+		sm.syncStory(mockStory);
+		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
+		assertEquals(mockStorys.size(), 1);
+	}			
 }

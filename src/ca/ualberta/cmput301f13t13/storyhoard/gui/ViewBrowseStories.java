@@ -16,13 +16,16 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.ActionBar;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,25 +33,32 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.HolderApplication;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.ObjectType;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.SHController;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
  * 
  * @author alexanderwong
+ * @author Kim Wu
  * 
  */
 public class ViewBrowseStories extends Activity {
-	HolderApplication app;
+	LifecycleData lifedata;
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
-	private SHController gc;
-	private ObjectType viewType = ObjectType.CREATED_STORY;
+	private LocalStoryController localCon;
+	private ServerStoryController serverCon;	
+	private enum Type {LOCAL, PUBLISHED};
+	private Type viewType;
+	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
+	private ProgressDialog progressDialog;
+	ArrayList<Story> currentStories;
 	
 	/**
 	 * Create the View Browse Stories activity
@@ -84,13 +94,12 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							viewType = ObjectType.CREATED_STORY;
+							new GetAllAuthorStories().execute();
 						} else if (itemPosition == 1) {
-							viewType = ObjectType.CACHED_STORY;
+							new GetAllCachedStories().execute();
 						} else if (itemPosition == 2) {
-							viewType = ObjectType.PUBLISHED_STORY;
+							new GetAllPublished().execute();
 						}
-						refreshStories();
 						return true;
 					}
 				});
@@ -111,17 +120,13 @@ public class ViewBrowseStories extends Activity {
 				Story story = gridArray.get(arg2);
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
-				if (viewType == ObjectType.PUBLISHED_STORY) {
-					UUID newStoryId = gc.cacheStory(story);
-					story = gc.getStory(newStoryId, ObjectType.CACHED_STORY);
-					app.setStoryType(ObjectType.CACHED_STORY);
-				} else {
-					app.setStoryType(viewType);
-				}
+				if (viewType == Type.PUBLISHED) {
+					localCon.cache(story);
+				} 
 				
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				app.setStory(story);
+				lifedata.setStory(story);
 				startActivity(intent);
 			}
 		});
@@ -147,8 +152,8 @@ public class ViewBrowseStories extends Activity {
 		case R.id.addNewStory:
 			intent = new Intent(this, EditStoryActivity.class);
 			// Pass it a boolean to indicate it is not editing
-			app.setFirstStory(true);
-			app.setEditing(false);
+			lifedata.setFirstStory(true);
+			lifedata.setEditing(false);
 			startActivity(intent);
 			return true;
 		case R.id.searchStories:
@@ -156,13 +161,18 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.lucky:
-			Story story = gc.getRandomStory();
-			UUID newId = gc.cacheStory(story);
-			story = gc.getStory(newId, ObjectType.CACHED_STORY);
-			app.setStory(story);
-			app.setStoryType(ObjectType.CACHED_STORY);
-			intent = new Intent(getBaseContext(), ViewStory.class);
-			startActivity(intent);
+			Story randomStory = serverCon.getRandomStory();
+			
+			if (randomStory != null) {			
+				localCon.cache(randomStory);
+				lifedata.setStory(randomStory);
+				intent = new Intent(getBaseContext(), ViewStory.class);
+				startActivity(intent);
+			} else {
+				Toast.makeText(getBaseContext(),
+						"No Published Stories Available", Toast.LENGTH_LONG)
+						.show();				
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -172,22 +182,117 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		app = (HolderApplication) this.getApplication();
+		lifedata = LifecycleData.getInstance();
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
 		setActionBar();
 		refreshStories();
 	}
-
+	
+	/**
+	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
+	 * shouldn't be dealing with networking.
+	 *
+	 */
+	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Published Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = serverCon.getAll();
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			viewType = Type.PUBLISHED;
+			refreshStories();
+		}
+	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetAllAuthorStories extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Your Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = localCon.getAllAuthorStories();
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			viewType = Type.LOCAL;
+			refreshStories();
+		}
+	}
+	
+	/**
+	 * Async task to get all cached stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetAllCachedStories extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Downloaded Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = localCon.getAllCachedStories();
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			viewType = Type.LOCAL;
+			refreshStories();
+		}
+	}	
+	
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.
 	 */
 	private void refreshStories() {
-		ArrayList<Story> newStories;
 		gridArray.clear();
-		gc = SHController.getInstance(this);
-		newStories = gc.getAllStories(viewType);
-		if (newStories != null) {
-			gridArray.addAll(newStories);
+		if (currentStories != null) {
+			gridArray.addAll(currentStories);
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}

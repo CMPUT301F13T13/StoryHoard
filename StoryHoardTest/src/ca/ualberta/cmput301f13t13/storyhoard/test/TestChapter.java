@@ -22,8 +22,11 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 
 /**
  * Class meant for the testing of the Chapter class in the StoryHoard
@@ -35,12 +38,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see Chapter
  */
 public class TestChapter 
-		extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		extends ActivityInstrumentationTestCase2<HelpGuide> {
 
 	public TestChapter() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
-
+	
 	/**
 	 * Tests creating a chapter two ways.
 	 */
@@ -73,18 +76,18 @@ public class TestChapter
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
-		Chapter criteria = new Chapter(null, null, null);
+		Chapter criteria = new Chapter(null, null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 0);
+		assertEquals(info.size(), 0);
 
 		// not empty arguments
 		UUID id = UUID.randomUUID();
 		UUID sId = UUID.randomUUID();
-		criteria = new Chapter(id, sId, null);
+		criteria = new Chapter(id, sId, null, true);
 		info = criteria.getSearchCriteria();
 
-		assertTrue(info.size() == 2);
+		assertEquals(info.size(), 2);
 		assertTrue(info.get("chapter_id").equals(id.toString()));
 		assertTrue(info.get("story_id").equals(sId.toString()));
 	}
@@ -92,29 +95,31 @@ public class TestChapter
 	/**
 	 * Tests the setters and getter methods
 	 */
-	@SuppressWarnings("unused")
 	public void testSettersGetters() {
 		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
 
-		UUID id = mockChapter.getId();
-		UUID storyId = mockChapter.getStoryId();
-		String text = mockChapter.getText();
-		ArrayList<Choice> choices = mockChapter.getChoices();
-		ArrayList<Media> photos = mockChapter.getPhotos();
-		ArrayList<Media> ills = mockChapter.getIllustrations();
+		UUID id = UUID.randomUUID();
+		UUID storyId = UUID.randomUUID();
+		String text = "hello";
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+		ArrayList<Media> photos = new ArrayList<Media>();
+		ArrayList<Media> ills = new ArrayList<Media>();
+		Boolean randomChoice = true;
 
-		mockChapter.setId(UUID.randomUUID());
-		mockChapter.setStoryId(UUID.randomUUID());
-		mockChapter.setText("sleepy :(");
-		mockChapter.setChoices(null);
-		mockChapter.setPhotos(null);
-		mockChapter.setIllustrations(null);
+		mockChapter.setId(id);
+		mockChapter.setStoryId(storyId);
+		mockChapter.setText(text);
+		mockChapter.setChoices(choices);
+		mockChapter.setPhotos(photos);
+		mockChapter.setIllustrations(ills);
+		mockChapter.setRandomChoice(randomChoice);
 
-		assertNotSame(id, mockChapter.getId());
-		assertNotSame(storyId, mockChapter.getStoryId());
-		assertNotSame(text, mockChapter.getText());
-		assertTrue(mockChapter.getChoices() == null);
-		assertTrue(mockChapter.getPhotos() == null);
-		assertTrue(mockChapter.getIllustrations() == null);
+		assertTrue(mockChapter.getId().equals(id));
+		assertTrue(mockChapter.getStoryId().equals(storyId));
+		assertTrue(mockChapter.getText().equals(text));
+		assertTrue(mockChapter.getChoices() != null);
+		assertTrue(mockChapter.getPhotos() != null);
+		assertTrue(mockChapter.getIllustrations() != null);
+		assertTrue(mockChapter.hasRandomChoice());
 	}
 }

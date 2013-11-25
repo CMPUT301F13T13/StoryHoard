@@ -19,9 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
  * Class meant for the testing of the ChapterManager class in the StoryHoard
@@ -33,20 +37,15 @@ import android.test.ActivityInstrumentationTestCase2;
  * 
  */
 public class TestChapterManager extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private ArrayList<Object> mockChapters;
+		ActivityInstrumentationTestCase2<HelpGuide> {
+	private ArrayList<Chapter> mockChapters;
 	private ChapterManager cm = null;
 	public TestChapterManager() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		cm = ChapterManager.getInstance(getActivity());
 	}
 
@@ -74,7 +73,6 @@ public class TestChapterManager extends
 		cm.insert(mockChapter);
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, mockChapter));
 	}
 
 	/**
@@ -92,10 +90,7 @@ public class TestChapterManager extends
 		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), null);
 
 		mockChapters = cm.retrieve(criteria);
-		assertTrue(mockChapters.size() == 2);
-		assertTrue(hasChapter(mockChapters, mockChapter));
-		assertTrue(hasChapter(mockChapters, mockChapter2));
-		assertFalse(hasChapter(mockChapters, mockChapter3));
+		assertEquals(mockChapters.size(), 2);
 	}
 
 	/**
@@ -108,7 +103,6 @@ public class TestChapterManager extends
 
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, mockChapter));
 
 		Chapter newChapter = (Chapter) mockChapters.get(0);
 
@@ -118,30 +112,40 @@ public class TestChapterManager extends
 		// make sure you can find new chapter
 		mockChapters = cm.retrieve(newChapter);
 		assertEquals(mockChapters.size(), 1);
-		assertTrue(hasChapter(mockChapters, newChapter));
 
 		// make sure old version no longer exists
 		Chapter compChap = (Chapter) mockChapters.get(0);
 		assertTrue(compChap.getText().equals(newChapter.getText()));
+		
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+	
+	/**
+	 * Tests the correct determining of whether a chapter exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
+		cm.insert(mockChapter);
+		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
+				"Lily drove");
+		
+		assertTrue(cm.existsLocally(mockChapter));
+		assertFalse(cm.existsLocally(mockChapter2));
 	}
 
 	/**
-	 * Checks whether a chapter is contained in a chapters ArrayList.
-	 * 
-	 * @param objs
-	 *            ArrayList of objects.
-	 * @param chap
-	 *            Object for which we are testing whether or not it is contained
-	 *            in the ArrayList.
-	 * @return Boolean
+	 * Tests synching a chapter, which is really already tested by
+	 * inserting and updating a chapter.
 	 */
-	public Boolean hasChapter(ArrayList<Object> objs, Chapter chap) {
-		for (Object object : objs) {
-			Chapter newChap = (Chapter) object;
-			if (newChap.getId().equals(chap.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
+	public void testSync() {
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
+		cm.syncChapter(mockChapter);
+		mockChapters = cm.retrieve(mockChapter);
+		assertEquals(mockChapters.size(), 1);
+	}	
 }
