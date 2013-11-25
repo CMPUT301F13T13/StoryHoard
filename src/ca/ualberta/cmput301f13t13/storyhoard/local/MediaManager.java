@@ -226,8 +226,8 @@ public class MediaManager implements StoringManager<Media>{
 		}	
 	}
 
-	public void syncDeletions(ArrayList<UUID> newMedias, UUID id) {
-		ArrayList<Media> oldMedias = retrieve(new Media(null, id, null, null, ""));
+	public void syncDeletions(ArrayList<UUID> newMedias, UUID chapId) {
+		ArrayList<Media> oldMedias = retrieve(new Media(null, chapId, null, null, ""));
 		
 		for (Media media : oldMedias) {
 			if (!newMedias.contains(media.getId())) {

@@ -96,9 +96,8 @@ public class ESUpdates {
 	 * 
 	 * @param story
 	 */
-	public void deleteStory(Story story, String server) throws IOException {
-		HttpDelete httpDelete = new HttpDelete(server
-				+ story.getId().toString());
+	public void deleteStory(String id, String server) throws IOException {
+		HttpDelete httpDelete = new HttpDelete(server + id);
 		httpDelete.addHeader("Accept", "application/json");
 
 		HttpResponse response = httpclient.execute(httpDelete);

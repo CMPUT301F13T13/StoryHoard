@@ -45,10 +45,6 @@ public class ServerStoryController implements SHController<Story>{
 		serverMan.update(story);
 	}
 	
-	public void unpublish(Story story) {
-		serverMan.remove(story);
-	}
-	
 	/**
 	 * Used to search for stories matching the given search criteria. Users can
 	 * either search by specifying the title or author of the story. All stories
@@ -88,7 +84,7 @@ public class ServerStoryController implements SHController<Story>{
 
 	@Override
 	public void remove(UUID objId) {
-		// TODO Auto-generated method stub
+		serverMan.remove(objId.toString());
 		
 	}	
 }

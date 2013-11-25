@@ -89,17 +89,20 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		UUID chapterId = photo.getChapterId();
 		String type = photo.getType();
 		Bitmap bm = photo.getBitmap();
-
+		String text = "text";
+		
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);
+		photo.setText(text);
 
 		path2 = createPath("img2.jpg");
 		photo.setPath(path2);
 
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
-		assertNotSame(type, photo.getType());
+		assertFalse(type.equals(photo.getType()));
+		assertFalse(text.equals(photo.getText()));
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
 	}
@@ -126,10 +129,8 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 			outStream.close();
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

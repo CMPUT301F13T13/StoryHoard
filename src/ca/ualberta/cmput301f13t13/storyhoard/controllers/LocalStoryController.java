@@ -70,7 +70,7 @@ public class LocalStoryController implements SHController<Story> {
 		storyMan.insert(story);
 	}
 	
-	private ArrayList<Story> retrieve(Story story) {
+	public ArrayList<Story> retrieve(Story story) {
 		return storyMan.retrieve(story);
 	}
 	
@@ -117,8 +117,7 @@ public class LocalStoryController implements SHController<Story> {
 	}
 	
 	@Override
-	public void remove(UUID objId) {
-		// TODO Auto-generated method stub
-		
+	public void remove(UUID id) {
+		storyMan.remove(id);
 	}		
 }

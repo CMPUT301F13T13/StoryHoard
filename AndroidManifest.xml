@@ -59,11 +59,6 @@
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
-            android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.ViewAllChaptersActivity"
-            android:label="@string/all_chapters"
-            android:uiOptions="splitActionBarWhenNarrow" >
-        </activity>
-        <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseChapters"
             android:label="@string/title_activity_view_browse_chapters" >
         </activity>

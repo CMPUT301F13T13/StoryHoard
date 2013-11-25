@@ -58,6 +58,9 @@ public class TestViewBrowseChapters extends
 		activity = getActivity();
 	}
 
+	/**
+	 * Tests that the ui widgets were correctly initialized.
+	 */
 	public void testPreConditions() {
 		storyChapters = (ListView) activity.findViewById(R.id.storyChapters);		
 		assertTrue(storyChapters != null);

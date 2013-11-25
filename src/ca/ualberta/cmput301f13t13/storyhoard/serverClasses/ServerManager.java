@@ -190,7 +190,7 @@ public class ServerManager {
 		// story already on server
 		if (esRetrieval.searchById(id, server) != null) {
 			try {
-				esUpdates.deleteStory(story, server);
+				esUpdates.deleteStory(id, server);
 				esUpdates.insertStory(story, server);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -212,9 +212,9 @@ public class ServerManager {
 	 * @param story
 	 * 			Story with id of the story you want to delete from server. 
 	 */
-	public void remove(Story story) { 
+	public void remove(String id) { 
 		try {
-			esUpdates.deleteStory(story, server);
+			esUpdates.deleteStory(id, server);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
@@ -237,7 +237,7 @@ public class ServerManager {
 	 * 
 	 * @param story
 	 */
-	public String prepareKeywords(String keywords) {
+	private String prepareKeywords(String keywords) {
 		String selection = "";
 
 		if (keywords == null) {

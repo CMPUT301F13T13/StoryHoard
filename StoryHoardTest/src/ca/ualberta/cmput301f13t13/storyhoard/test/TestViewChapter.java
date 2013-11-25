@@ -39,8 +39,6 @@ public class TestViewChapter extends
 	private ViewChapter activity;
 	private LifecycleData lifedata;
 
-	private LinearLayout photos;
-
 	private TextView chapterContent;
 	private ListView chapterChoices;
 	
@@ -65,16 +63,20 @@ public class TestViewChapter extends
 		// Setup the activity fields
 		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
-		photos = (LinearLayout) activity.findViewById(R.id.horizontalPhotos);
 				
 	}
-
+	
+	/**
+	 * Tests that the ui widgets were correctly initialized.
+	 */
 	public void testPreConditions() {
 		assertTrue(chapterContent != null);
 		assertTrue(chapterChoices != null);
-		assertTrue(photos != null);
 	}
 	
+	/**
+	 * Tests the ui widget containing chapter content contains what it should.
+	 */
 	@UiThreadTest
 	public void testChapterContent() {
 		assertTrue(chapterContent.getText().toString().equals("chapter"));
