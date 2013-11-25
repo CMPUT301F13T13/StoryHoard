@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,8 +83,7 @@ public class ViewBrowseChapters extends Activity {
 		setUpFields();
 		setOnItemClickListener();
 		data.clear();
-		data.addAll(chapCon.getChaptersByStory(story.getId()));
-		chapterAdapter.notifyDataSetChanged();
+		new GetStoryChapters().execute();
 	}
 
 	/**
@@ -124,4 +124,24 @@ public class ViewBrowseChapters extends Activity {
 			}
 		});
 	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all story chapters
+			data.addAll(chapCon.getChaptersByStory(story.getId()));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			chapterAdapter.notifyDataSetChanged();
+		}
+	}	
 }
