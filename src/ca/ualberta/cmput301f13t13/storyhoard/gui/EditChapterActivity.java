@@ -19,8 +19,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +75,7 @@ public class EditChapterActivity extends MediaActivity {
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
 	private View viewClicked;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,6 @@ public class EditChapterActivity extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setUpFields();
-		setRandomChoice();
 		updateICData();
 	}
 
@@ -92,39 +94,24 @@ public class EditChapterActivity extends MediaActivity {
 	 * Updates the view components depending on the chapter data.
 	 */
 	private void updateICData() {
-		// Set the chapter text, if new Chapter will simply be blank
-		choices.clear();
-		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
-
-		// any choices that have not been saved
-		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
-		for (Choice choice : myChoices) {
-			choices.add(choice);
+		story = lifedata.getStory();
+		if (lifedata.isEditing()) {
+			
+			// Editing an existing chapter
+			chapter = lifedata.getChapter();
+			chapterContent.setText(chapter.getText());
+		} else {
+			chapter = lifedata.getChapter();
+			if (chapter == null) {
+				
+				// Create a new chapter from the story's ID
+				chapter = new Chapter(story.getId(), "");
+				lifedata.setChapter(chapter);
+			}
 		}
-
-		choiceAdapter.notifyDataSetChanged();
-
-		// Getting illustrations
-		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
-
-		// Clean up illustrations layout
-		illustrations.removeAllViews();
-		// Insert Illustrations
-		// any images that have not been saved
-		illList.addAll(lifedata.getCurrImages());
-		for (Media img : illList) {
-			View v = insertImage(img, this, illustrations);
-			v.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					viewClicked = v;
-					dialBuilder.setDeleteDialog(EditChapterActivity.this,
-							viewClicked, illustrations);
-					return false;
-				}
-			});
-		}
-		lifedata.setCurrImage(null);
+		
+		setRandomChoice();
+		new SetUpChapter().execute();
 	}
 
 	/**
@@ -158,23 +145,68 @@ public class EditChapterActivity extends MediaActivity {
 				startActivity(intent);
 			}
 		});
-
-		story = lifedata.getStory();
-		if (lifedata.isEditing()) {
-			
-			// Editing an existing chapter
-			chapter = lifedata.getChapter();
-			chapterContent.setText(chapter.getText());
-		} else {
-			chapter = lifedata.getChapter();
-			if (chapter == null) {
-				
-				// Create a new chapter from the story's ID
-				chapter = new Chapter(story.getId(), "");
-				lifedata.setChapter(chapter);
-			}
-		}
 	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class SetUpChapter extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		EditChapterActivity.this, 
+	        		"Edit Chapter Activity",
+	        		"Loading Chapter...", 
+	        		true);
+	        
+			// Set the chapter text, if new Chapter will simply be blank
+			choices.clear();
+			choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
+			
+			// Clean up illustrations layout
+			illustrations.removeAllViews();
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			
+			// any choices that have not been saved
+			ArrayList<Choice> myChoices = lifedata.getCurrChoices();
+			for (Choice choice : myChoices) {
+				choices.add(choice);
+			}
+
+			// Getting illustrations
+			illList = mediaCon.getIllustrationsByChapter(chapter.getId());
+
+			// Insert any images that have not been saved
+			illList.addAll(lifedata.getCurrImages());
+			for (Media img : illList) {
+				View v = insertImage(img, EditChapterActivity.this, illustrations);
+				v.setOnLongClickListener(new OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						viewClicked = v;
+						dialBuilder.setDeleteDialog(EditChapterActivity.this,
+								viewClicked, illustrations);
+						return false;
+					}
+				});
+			}
+			lifedata.setCurrImage(null);			
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			choiceAdapter.notifyDataSetChanged();
+			progressDialog.dismiss();
+		}
+	}		
 
 	/**
 	 * Set onClick listener for setting random choice
