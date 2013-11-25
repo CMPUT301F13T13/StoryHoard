@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -187,15 +188,34 @@ public class ViewChapter extends MediaActivity {
 
 				UUID nextChap = choices.get(arg2).getNextChapter();
 				lifedata.setChapter(chapCon.getFullChapter(nextChap));
-
-				startActivity(intent);
-				// photos.removeAllViews();
 				illustrations.removeAllViews();
+				
+				startActivity(intent);
 				finish();
 			}
 		});
 	}
 
+//	/**
+//	 * Async task to get all author's stories in the database. Used so main UI thread does
+//	 * not have to interact with database and skip too many frames.
+//	 *
+//	 */
+//	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
+//		@Override
+//		protected synchronized Void doInBackground(Void... params) {
+//			// get all story chapters
+//			data.addAll(chapCon.getChaptersByStory(story.getId()));
+//			return null;
+//		}
+//		
+//		@Override 
+//		protected void onPostExecute(Void result) {
+//			super.onPostExecute(result);
+//			chapterAdapter.notifyDataSetChanged();
+//		}
+//	}	
+	
 	/**
 	 * Menu
 	 */

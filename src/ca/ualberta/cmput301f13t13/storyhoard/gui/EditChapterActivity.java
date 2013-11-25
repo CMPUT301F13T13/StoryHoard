@@ -161,12 +161,14 @@ public class EditChapterActivity extends MediaActivity {
 
 		story = lifedata.getStory();
 		if (lifedata.isEditing()) {
+			
 			// Editing an existing chapter
 			chapter = lifedata.getChapter();
 			chapterContent.setText(chapter.getText());
 		} else {
 			chapter = lifedata.getChapter();
 			if (chapter == null) {
+				
 				// Create a new chapter from the story's ID
 				chapter = new Chapter(story.getId(), "");
 				lifedata.setChapter(chapter);

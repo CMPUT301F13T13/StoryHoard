@@ -18,6 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
@@ -54,6 +56,8 @@ public class ViewBrowseStories extends Activity {
 	private ServerStoryController serverCon;	
 	private enum Type {LOCAL, PUBLISHED};
 	private Type viewType;
+	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
+	private ProgressDialog progressDialog;
 	ArrayList<Story> currentStories;
 	
 	/**
@@ -184,13 +188,23 @@ public class ViewBrowseStories extends Activity {
 		setActionBar();
 		refreshStories();
 	}
-
+	
 	/**
 	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
 	 * shouldn't be dealing with networking.
 	 *
 	 */
 	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Published Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// get all published stories
@@ -201,6 +215,7 @@ public class ViewBrowseStories extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			progressDialog.dismiss();
 			viewType = Type.PUBLISHED;
 			refreshStories();
 		}
@@ -212,6 +227,16 @@ public class ViewBrowseStories extends Activity {
 	 *
 	 */
 	private class GetAllAuthorStories extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Your Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// get all published stories
@@ -222,6 +247,7 @@ public class ViewBrowseStories extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			progressDialog.dismiss();
 			viewType = Type.LOCAL;
 			refreshStories();
 		}
@@ -233,6 +259,16 @@ public class ViewBrowseStories extends Activity {
 	 *
 	 */
 	private class GetAllCachedStories extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Getting All Downloaded Stories",
+	        		"Please wait while the stories are fetched", 
+	        		true);       
+	    };  
+	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// get all published stories
@@ -243,6 +279,7 @@ public class ViewBrowseStories extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			progressDialog.dismiss();
 			viewType = Type.LOCAL;
 			refreshStories();
 		}

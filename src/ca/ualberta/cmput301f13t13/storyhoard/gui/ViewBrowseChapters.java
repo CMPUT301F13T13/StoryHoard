@@ -18,6 +18,8 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -85,7 +87,7 @@ public class ViewBrowseChapters extends Activity {
 		data.clear();
 		new GetStoryChapters().execute();
 	}
-
+	
 	/**
 	 * Initialize private fields needed
 	 */
