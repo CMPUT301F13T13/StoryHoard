@@ -121,7 +121,7 @@ public class LocalStoryController implements SHController<Story> {
 		Story criteria = new Story(null, null, null, null, null);
 		return retrieve(criteria);
 	}
-
+	
 	@Override
 	public void remove(UUID objId) {
 		// TODO Auto-generated method stub

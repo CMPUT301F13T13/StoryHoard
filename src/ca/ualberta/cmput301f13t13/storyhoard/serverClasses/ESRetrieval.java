@@ -29,11 +29,25 @@ import org.apache.http.client.HttpClient;
 import java.util.ArrayList;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 public class ESRetrieval {
-	public static HttpClient httpclient = null; // Http Connector	
+	public static HttpClient httpclient = null; // Http Connector
 	public static Gson gson = null; // JSON Utilities
+	private static ESRetrieval self = null;
 
+	protected ESRetrieval() {
+		httpclient = new DefaultHttpClient();
+		gson = new Gson();
+	}
+	
+	public static ESRetrieval getInstance() {
+		if (self == null) {
+			self = new ESRetrieval();
+		}
+		return self;
+	}
+	
 	/**
 	 * Retrieves the http response provided and returns it as a json string.
 	 * @param response
@@ -66,7 +80,8 @@ public class ESRetrieval {
 		try {
 			HttpGet getRequest = new HttpGet(server + id + "?pretty=1");
 			getRequest.addHeader("Accept", "application/json");
-			HttpResponse response = httpclient.execute(getRequest);
+			HttpResponse response;
+			response = httpclient.execute(getRequest);
 			String status = response.getStatusLine().toString();
 			System.out.println(status);
 			String json = getEntityContent(response);
@@ -98,7 +113,8 @@ public class ESRetrieval {
 			searchRequest.setEntity(stringentity);
 		}
 		searchRequest.setHeader("Accept", "application/json");
-		HttpResponse response = httpclient.execute(searchRequest);
+		HttpResponse response;
+		response = httpclient.execute(searchRequest);
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 		String json = getEntityContent(response);

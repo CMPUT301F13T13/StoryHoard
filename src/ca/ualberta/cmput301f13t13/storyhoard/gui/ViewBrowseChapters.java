@@ -68,6 +68,7 @@ public class ViewBrowseChapters extends Activity {
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
 			lifedata.setEditing(false);
+			lifedata.setChapter(null);
 			lifedata.setStory(story);
 			startActivity(intent);
 			return true;

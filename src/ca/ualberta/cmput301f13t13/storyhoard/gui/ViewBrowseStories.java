@@ -160,8 +160,7 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story story = serverCon.getRandomStory();
-			
-			// no stories on server to choose from
+
 			if (story != null) {			
 				localCon.cache(story);
 				lifedata.setStory(story);

@@ -48,11 +48,6 @@ public class TestChoiceManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		cm = ChoiceManager.getInstance(getActivity());
 	}
 
@@ -108,6 +103,11 @@ public class TestChoiceManager extends
 	 * Tests retrieving all the choices of a chapter
 	 */
 	public void testGetAllChoices() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 

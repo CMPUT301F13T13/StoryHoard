@@ -81,6 +81,7 @@ public class Media {
 		this.id = id;
 		this.chapterId = chapterId;
 		this.type = type;
+		this.text = text;
 		bitmapString = "";
 		if (path != null) {
 			this.path = path;		

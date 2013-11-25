@@ -58,9 +58,7 @@ public class ViewChapter extends MediaActivity {
 	private ArrayList<Media> photoList;
 	private ArrayList<Media> illList;
 	private AdapterChoices choiceAdapter;
-	private AlertDialog photoDialog;
 	private LinearLayout illustrations;
-
 	private TextView chapterContent;
 	private ListView chapterChoices;
 
@@ -221,31 +219,5 @@ public class ViewChapter extends MediaActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private void addPhoto() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				ViewChapter.this);
-		// Set dialog title
-		alert.setTitle("Choose method:");
-		// Options that user may choose to add photo
-		final String[] methods = { "Take Photo", "Choose from Gallery" };
-		alert.setSingleChoiceItems(methods, -1,
-				new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-				case 0:
-					takePhoto(Media.PHOTO);
-					break;
-				case 1:
-					browseGallery(Media.PHOTO);
-					break;
-				}
-				photoDialog.dismiss();
-			}
-		});
-		photoDialog = alert.create();
-		photoDialog.show();
 	}
 }

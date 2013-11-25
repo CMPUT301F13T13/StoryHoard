@@ -121,7 +121,7 @@ public class EditChapterActivity extends MediaActivity {
 				@Override
 				public boolean onLongClick(View v) {
 					viewClicked = v;
-					dialBuilder.setDialog(EditChapterActivity.this, viewClicked, illustrations);
+					dialBuilder.setDeleteDialog(EditChapterActivity.this, viewClicked, illustrations);
 					return false;
 				}
 			});
@@ -154,9 +154,12 @@ public class EditChapterActivity extends MediaActivity {
 			chapter = lifedata.getChapter();
 			chapterContent.setText(chapter.getText());
 		} else {
-			// Create a new chapter from the story's ID
-			chapter = new Chapter(story.getId(), "");
-			lifedata.setChapter(chapter);
+			chapter = lifedata.getChapter();
+			if (chapter == null) {
+				// Create a new chapter from the story's ID
+				chapter = new Chapter(story.getId(), "");
+				lifedata.setChapter(chapter);
+			}
 		}
 	}
 
@@ -209,8 +212,8 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void addIllustration() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				EditChapterActivity.this);
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		lifedata.setChapter(chapter);
 		// Set dialog title
 		alert.setTitle("Choose method:");
 		// Options that user may choose to add illustration
@@ -258,6 +261,7 @@ public class EditChapterActivity extends MediaActivity {
 	
 		lifedata.setCurrChoices(null);
 		lifedata.setCurrImages(null);
+		lifedata.setChapter(null);
 
 		chapter.setText(chapterContent.getText().toString());
 		if (lifedata.isEditing()) {

@@ -19,17 +19,17 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class ImageDialogBuilder {
-	private AlertDialog illDialog;
+	private AlertDialog deleteDialog;
 
-	public AlertDialog getIllDialog() {
-		return illDialog;
+	public AlertDialog getDeleteDialog() {
+		return deleteDialog;
 	}
 
 	public void setIllDialog(AlertDialog illDialog) {
-		this.illDialog = illDialog;
+		this.deleteDialog = illDialog;
 	}
 
-	public void setDialog(final EditChapterActivity editChapterActivity,
+	public void setDeleteDialog(final EditChapterActivity editChapterActivity,
 			final View viewClicked, final LinearLayout illustrations) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(editChapterActivity);
 		alert.setTitle("Permanently delete illustration?");
@@ -51,10 +51,10 @@ public class ImageDialogBuilder {
 						case 1:
 							break;
 						}
-						illDialog.dismiss();
+						deleteDialog.dismiss();
 					}
 				});
-		illDialog = alert.create();
-		illDialog.show();
+		deleteDialog = alert.create();
+		deleteDialog.show();
 	}
 }

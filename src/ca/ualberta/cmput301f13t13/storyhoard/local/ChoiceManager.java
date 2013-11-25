@@ -82,7 +82,7 @@ public class ChoiceManager implements StoringManager<Choice> {
 	}
 
 	private void setContentValues(Choice choice) {
-		ContentValues values = new ContentValues();
+		values = new ContentValues();
 		values.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());		
 		values.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER, choice.getCurrentChapter().toString());
 		values.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER, choice.getNextChapter().toString());

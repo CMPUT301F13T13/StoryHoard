@@ -51,7 +51,8 @@ public abstract class MediaActivity extends Activity {
 	private String imageType;
 	private LifecycleData lifedata;
 	private ImageView imageView;
-	private String photoComment;
+	private String photoComment = "";
+	private AlertDialog photoDialog;
 
 	/**
 	 * Code for browsing gallery
@@ -87,35 +88,6 @@ public abstract class MediaActivity extends Activity {
 	 * @param imageFileUri
 	 */
 	public void takePhoto(String imageType) {
-
-		// gettting image text / annotation
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		// Set dialog title
-		alert.setTitle("Photo Comment:");
-		final EditText text = new EditText(this); 
-		text.setHint("Enter comment here");
-
-		// setting max length for comment
-		InputFilter[] fArray = new InputFilter[1];
-		fArray[0] = new InputFilter.LengthFilter(25);
-		text.setFilters(fArray);
-
-		alert.setView(text);
-		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {  
-				photoComment = text.getText().toString();
-				return;                  
-			}  
-		});  
-
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				return;   
-			}
-		});	
-
 		this.imageType = imageType;
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		imageFileUri = getUri();
@@ -123,6 +95,50 @@ public abstract class MediaActivity extends Activity {
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
+	public void addPhoto() {
+		// gettting image text / annotation
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		
+		// Set dialog title
+		alert.setTitle("Post a photo");
+		final EditText text = new EditText(this); 
+		text.setHint("Enter comment here");	
+		// setting max length for comment
+		InputFilter[] fArray = new InputFilter[1];
+		fArray[0] = new InputFilter.LengthFilter(50);
+		text.setFilters(fArray);
+		alert.setView(text);
+		
+		// Options that user may choose to add photo
+		final String[] methods = { "Take Photo", "Choose from Gallery" };
+		alert.setSingleChoiceItems(methods, -1,
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0:
+					photoComment = text.getText().toString();
+					takePhoto(Media.PHOTO);
+					break;
+				case 1:
+					photoComment = text.getText().toString();
+					browseGallery(Media.PHOTO);
+					break;
+				}
+				photoDialog.dismiss();
+			}
+		});
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				photoDialog.dismiss();
+				return;   
+			}
+		});		
+		
+		photoDialog = alert.create();
+		photoDialog.show();
+	}
 	/**
 	 * Adds an image into the gallery
 	 */
