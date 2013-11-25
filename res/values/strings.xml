@@ -23,7 +23,6 @@
     <string name="search_results">Search Results</string>
     <string name="empty">No stories were found!</string>
     <string name="set_random_choice">Set random choice</string>
-    
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
@@ -42,8 +41,10 @@
     <string name="no_text">No text</string>
     <string name="choiceText">Choice Text</string>
     <string name="title_activity_view_search_results">ViewSearchResults</string>
-    <string name= "browse_stories">Browse stories</string>
+    <string name="browse_stories">Browse stories</string>
     <string name="publish_story">Publish Story</string>
     <string name="save_changes">Save Changes</string>
+    <string name="title_activity_intro_screen">IntroScreen</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -67,6 +67,10 @@
             android:label="@string/title_activity_view_search_results"
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
+        <activity
+            android:name="ca.ualberta.cmput301f13t13.storyhoard.gui.IntroScreen"
+            android:label="@string/title_activity_intro_screen" >
+        </activity>
     </application>
 
 </manifest>
