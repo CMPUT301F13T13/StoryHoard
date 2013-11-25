@@ -53,8 +53,8 @@ public class ServerManager {
 	 * Initializes a new ServerManager.
 	 */
 	protected ServerManager() {
-		esUpdates = new ESUpdates();
-		esRetrieval = new ESRetrieval();
+		esUpdates = ESUpdates.getInstance();
+		esRetrieval = ESRetrieval.getInstance();
 	}
 
 	/**
@@ -109,10 +109,6 @@ public class ServerManager {
 
 
 	public ArrayList<Story> getAll() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
 		ArrayList<Story> stories = new ArrayList<Story>();
 		try {
 			stories = esRetrieval.retrieve(null, server);
@@ -133,7 +129,7 @@ public class ServerManager {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 		.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-
+		
 		String query = "{\"query\": {\"custom_score\" : {\"script\" : "
 				+ "\"random()\", \"query\" : {\"match_all\" : {}}}}, " +
 				"\"sort\" : {\"_score\" : {\"order\" :\"desc\"}}, \"size\" :" 

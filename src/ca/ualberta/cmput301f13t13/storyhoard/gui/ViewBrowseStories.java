@@ -21,7 +21,9 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,7 +96,7 @@ public class ViewBrowseStories extends Activity {
 							currentStories = localCon.getAllCachedStories();
 							viewType = Type.LOCAL;
 						} else if (itemPosition == 2) {
-							currentStories = serverCon.getAll();
+							new GetAllPublished().execute();
 							viewType = Type.PUBLISHED;
 						}
 						refreshStories();
@@ -159,11 +161,11 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.lucky:
-			Story story = serverCon.getRandomStory();
-
-			if (story != null) {			
-				localCon.cache(story);
-				lifedata.setStory(story);
+			Story randomStory = serverCon.getRandomStory();
+			
+			if (randomStory != null) {			
+				localCon.cache(randomStory);
+				lifedata.setStory(randomStory);
 				intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
 			} else {
@@ -187,6 +189,22 @@ public class ViewBrowseStories extends Activity {
 		refreshStories();
 	}
 
+	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = serverCon.getAll();
+			Log.d("set stories", "currentStories just got set");
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			refreshStories();
+		}
+	}
+	
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.

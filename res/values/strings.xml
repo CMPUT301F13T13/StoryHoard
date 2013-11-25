@@ -11,6 +11,7 @@
     <string name="authors">Authors</string>
     <string name="type">Story type</string>
     <string name="story">Story title</string>
+    <string name="story_image_cover">Cover Image</string>
     <string name="story_description">Story Description</string>
     <string name="new_title">New Story Title</string>
     <string name="new_author">New Story Author</string>

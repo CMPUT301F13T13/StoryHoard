@@ -75,7 +75,7 @@ public class SearchResultsActivity extends Activity {
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
-				R.layout.activity_view_browse_story, gridArray);
+				R.layout.browse_story_item, gridArray);
 		gridView.setAdapter(customGridAdapter);
 
 		// Setup the grid view click listener
