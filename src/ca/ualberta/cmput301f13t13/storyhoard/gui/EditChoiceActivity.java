@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -46,6 +47,7 @@ public class EditChoiceActivity extends Activity {
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
 	private Story story;
+	private Choice choice;
 	private Chapter fromChapter;
 	private Chapter toChapter;
 	private ChapterController chapCon;
@@ -74,12 +76,18 @@ public class EditChoiceActivity extends Activity {
 	 */
 	public void setUpFields() {
 		chapCon = ChapterController.getInstance(this);
-		
+
 		story = lifedata.getStory();
 		fromChapter = lifedata.getChapter();
+
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
+
+		if (lifedata.isEditingChoice()) {
+			choice = lifedata.getChoice();
+			choiceText.setText(choice.getText());
+		}
 
 		// Set up adapter
 		chapterAdapter = new AdapterChapters(this,
@@ -98,9 +106,16 @@ public class EditChoiceActivity extends Activity {
 					long arg3) {
 				toChapter = data.get(arg2);
 				String text = choiceText.getText().toString();
-				Choice addedChoice = new Choice(fromChapter.getId(), toChapter
-						.getId(), text);
-				lifedata.addToCurrChoices(addedChoice);
+				if (lifedata.isEditingChoice()) {
+					ChoiceController cc = ChoiceController.getInstance(getBaseContext());
+					choice.setText(text);
+					choice.setNextChapter(toChapter.getId());
+					cc.update(choice);
+				} else {
+					Choice addedChoice = new Choice(fromChapter.getId(),
+							toChapter.getId(), text);
+					lifedata.addToCurrChoices(addedChoice);
+				}
 				finish();
 			}
 		});

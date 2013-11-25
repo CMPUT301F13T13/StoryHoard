@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
@@ -11,10 +10,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 public class LifecycleData {
 	private boolean isEditing;
+	private boolean isEditingChoice;
 	private boolean firstStory;
 	private ArrayList<Story> storyList;
 	private Story story;
 	private Chapter chapter;
+	private Choice choice;
 	private Media currImage;
 	private ArrayList<Media> currentImages;
 	private ArrayList<Choice> currentChoices;
@@ -29,7 +30,22 @@ public class LifecycleData {
 		}
 		return self;
 	}
-
+	
+	public Choice getChoice() {
+		return choice;
+	}
+	
+	public void setChoice(Choice newChoice) {
+		this.choice = newChoice;
+	}
+	
+	public boolean isEditingChoice() {
+		return isEditingChoice;
+	}
+	
+	public void setEditingChoice(boolean editingChoice) {
+		this.isEditingChoice = editingChoice;
+	}
 	
 	public boolean isEditing() {
 		return isEditing;
