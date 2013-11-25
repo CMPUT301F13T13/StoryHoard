@@ -50,6 +50,7 @@ public class ViewBrowseChapters extends Activity {
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,6 @@ public class ViewBrowseChapters extends Activity {
 		
 		// Grab controllers and pull all chapters from story
 		chapCon = ChapterController.getInstance(this);
-		story = lifedata.getStory();
 		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
@@ -120,7 +120,6 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				lifedata.setEditing(true);
-				lifedata.setStory(story);
 				lifedata.setChapter(data.get(arg2));
 				startActivity(intent);
 			}
@@ -133,9 +132,21 @@ public class ViewBrowseChapters extends Activity {
 	 *
 	 */
 	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
+	    
+		@Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseChapters.this, 
+	        		"Fetching Chapters",
+	        		"Please wait...", 
+	        		true);       
+	    };  
+		
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// get all story chapters
+			story = lifedata.getStory();
 			data.addAll(chapCon.getChaptersByStory(story.getId()));
 			return null;
 		}
@@ -143,6 +154,7 @@ public class ViewBrowseChapters extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			progressDialog.dismiss();
 			chapterAdapter.notifyDataSetChanged();
 		}
 	}	

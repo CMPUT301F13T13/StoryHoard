@@ -18,7 +18,9 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -59,6 +62,7 @@ public class ViewChapter extends MediaActivity {
 	private LinearLayout illustrations;
 	private TextView chapterContent;
 	private ListView chapterChoices;
+	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,23 @@ public class ViewChapter extends MediaActivity {
 		updateData();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.view_chapter, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.addPhoto:
+			addPhoto();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	/**
 	 * Initializes the private fields needed.
 	 */
@@ -182,40 +203,44 @@ public class ViewChapter extends MediaActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// Go to the chapter in question
-				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
-
+	
 				UUID nextChap = choices.get(arg2).getNextChapter();
-				lifedata.setChapter(chapCon.getFullChapter(nextChap));
-
-				startActivity(intent);
-				// photos.removeAllViews();
-				illustrations.removeAllViews();
-				finish();
+				new LoadChapter().execute(nextChap);
 			}
 		});
 	}
 
 	/**
-	 * Menu
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
 	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.view_chapter, menu);
-		return true;
-	}
+	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		ViewChapter.this, 
+	        		"Loading Chapter",
+	        		"Please wait...", 
+	        		true);
 
-	/**
-	 * Menu
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.addPhoto:
-			addPhoto();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {	
+			lifedata.setChapter(chapCon.getFullChapter(params[0]));
+			return null;
 		}
-	}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			// Go to the chapter in question
+			Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+			startActivity(intent);
+			progressDialog.dismiss();
+			finish();
+		}
+	}		
 }
