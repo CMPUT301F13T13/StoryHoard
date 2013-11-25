@@ -18,8 +18,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;

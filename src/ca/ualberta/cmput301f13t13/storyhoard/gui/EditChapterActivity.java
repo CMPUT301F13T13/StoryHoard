@@ -17,11 +17,8 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +26,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
@@ -55,8 +53,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  * button. - This activity will also display the choices that exist or have been
  * added.
  * 
- * author: Alexander Wong
- * author: Kim Wu
+ * author: Alexander Wong author: Kim Wu
  */
 
 public class EditChapterActivity extends MediaActivity {
@@ -98,7 +95,7 @@ public class EditChapterActivity extends MediaActivity {
 		// Set the chapter text, if new Chapter will simply be blank
 		choices.clear();
 		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
-	
+
 		// any choices that have not been saved
 		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
 		for (Choice choice : myChoices) {
@@ -117,11 +114,12 @@ public class EditChapterActivity extends MediaActivity {
 		illList.addAll(lifedata.getCurrImages());
 		for (Media img : illList) {
 			View v = insertImage(img, this, illustrations);
-			v.setOnLongClickListener(new OnLongClickListener () {
+			v.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
 					viewClicked = v;
-					dialBuilder.setDeleteDialog(EditChapterActivity.this, viewClicked, illustrations);
+					dialBuilder.setDeleteDialog(EditChapterActivity.this,
+							viewClicked, illustrations);
 					return false;
 				}
 			});
@@ -147,6 +145,19 @@ public class EditChapterActivity extends MediaActivity {
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		viewChoices.setAdapter(choiceAdapter);
+
+		// handle setting up editing a choice
+		viewChoices.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				lifedata.setEditingChoice(true);
+				lifedata.setChoice(choices.get(arg2));
+				Intent intent = new Intent(EditChapterActivity.this,
+						EditChoiceActivity.class);
+				startActivity(intent);
+			}
+		});
 
 		story = lifedata.getStory();
 		if (lifedata.isEditing()) {
@@ -220,29 +231,29 @@ public class EditChapterActivity extends MediaActivity {
 		final String[] methods = { "Take Photo", "Choose from Gallery" };
 		alert.setSingleChoiceItems(methods, -1,
 				new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-				case 0:
-					takePhoto(Media.ILLUSTRATION);
-					break;
-				case 1:
-					browseGallery(Media.ILLUSTRATION);
-					break;
-				}
-				illustDialog.dismiss();
-			}
-		});
+					@Override
+					public void onClick(DialogInterface dialog, int item) {
+						switch (item) {
+						case 0:
+							takePhoto(Media.ILLUSTRATION);
+							break;
+						case 1:
+							browseGallery(Media.ILLUSTRATION);
+							break;
+						}
+						illustDialog.dismiss();
+					}
+				});
 
 		illustDialog = alert.create();
 		illustDialog.show();
 	}
 
 	private void addChoice() {
-		Intent intent = new Intent(getBaseContext(),
-				EditChoiceActivity.class);
+		Intent intent = new Intent(getBaseContext(), EditChoiceActivity.class);
 		lifedata.setChapter(chapter);
 		lifedata.setStory(story);
+		lifedata.setEditingChoice(false);
 		startActivity(intent);
 	}
 
@@ -256,9 +267,9 @@ public class EditChapterActivity extends MediaActivity {
 		// saving any choices
 		ArrayList<Choice> choices = lifedata.getCurrChoices();
 		for (Choice choice : choices) {
-				choiceCon.insert(choice);
+			choiceCon.insert(choice);
 		}
-	
+
 		lifedata.setCurrChoices(null);
 		lifedata.setCurrImages(null);
 		lifedata.setChapter(null);
@@ -269,7 +280,8 @@ public class EditChapterActivity extends MediaActivity {
 		} else {
 			chapCon.insert(chapter);
 			if (lifedata.isFirstStory()) {
-				LocalStoryController storyCon = LocalStoryController.getInstance(EditChapterActivity.this);
+				LocalStoryController storyCon = LocalStoryController
+						.getInstance(EditChapterActivity.this);
 				story.setFirstChapterId(chapter.getId());
 				storyCon.insert(story);
 				lifedata.setFirstStory(false);

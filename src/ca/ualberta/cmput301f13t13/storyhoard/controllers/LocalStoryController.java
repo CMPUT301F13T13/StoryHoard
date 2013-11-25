@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
