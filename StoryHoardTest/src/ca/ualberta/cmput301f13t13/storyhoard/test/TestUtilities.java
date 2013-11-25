@@ -16,13 +16,12 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
-
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class meant for the testing of the Utilities class in the StoryHoard
@@ -34,10 +33,10 @@ import android.test.ActivityInstrumentationTestCase2;
  * @see Utilities
  */
 public class TestUtilities extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<HelpGuide> {
 	
 	public TestUtilities() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	/**

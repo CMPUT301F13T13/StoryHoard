@@ -26,6 +26,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 
 /**
  * Class meant for the testing of the Chapter class in the StoryHoard
@@ -37,10 +38,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
  * @see Chapter
  */
 public class TestChapter 
-		extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		extends ActivityInstrumentationTestCase2<HelpGuide> {
 
 	public TestChapter() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 	
 	/**
