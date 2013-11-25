@@ -90,16 +90,12 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							currentStories = localCon.getAllAuthorStories();
-							viewType = Type.LOCAL;
+							new GetAllAuthorStories().execute();
 						} else if (itemPosition == 1) {
-							currentStories = localCon.getAllCachedStories();
-							viewType = Type.LOCAL;
+							new GetAllCachedStories().execute();
 						} else if (itemPosition == 2) {
 							new GetAllPublished().execute();
-							viewType = Type.PUBLISHED;
 						}
-						refreshStories();
 						return true;
 					}
 				});
@@ -189,21 +185,68 @@ public class ViewBrowseStories extends Activity {
 		refreshStories();
 	}
 
+	/**
+	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
+	 * shouldn't be dealing with networking.
+	 *
+	 */
 	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// get all published stories
 			currentStories = serverCon.getAll();
-			Log.d("set stories", "currentStories just got set");
 			return null;
 		}
 		
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			viewType = Type.PUBLISHED;
 			refreshStories();
 		}
 	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetAllAuthorStories extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = localCon.getAllAuthorStories();
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			viewType = Type.LOCAL;
+			refreshStories();
+		}
+	}
+	
+	/**
+	 * Async task to get all cached stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetAllCachedStories extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all published stories
+			currentStories = localCon.getAllCachedStories();
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			viewType = Type.LOCAL;
+			refreshStories();
+		}
+	}	
 	
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
