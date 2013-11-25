@@ -44,7 +44,11 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewB
 	
 	public TestChoiceController() {
 		super(ViewBrowseStories.class);
-		choiceCon = ChoiceController.getInstance(getActivity());
+	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		choiceCon = ChoiceController.getInstance(getActivity());	
 	}
 
 	/**

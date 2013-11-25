@@ -101,7 +101,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertFalse(type.equals(photo.getType()));
-		assertFalse(text.equals(photo.getText()));
+		assertTrue(text.equals(photo.getText()));
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
 	}

@@ -41,8 +41,8 @@ public class TestServerController extends
 
 	public void setUp() throws Exception {
 		super.setUp();
-		serverCon = ServerStoryController.getInstance(getActivity());
 		ServerManager.getInstance().setTestServer();
+		serverCon = ServerStoryController.getInstance(getActivity());
 	}
 
 	public void tearDown() throws Exception {

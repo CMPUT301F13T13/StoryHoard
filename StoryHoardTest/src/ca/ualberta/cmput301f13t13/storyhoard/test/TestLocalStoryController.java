@@ -110,7 +110,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		s2.setTitle("new");
 		lscon.update(s2);
 		
-		stories = lscon.retrieve(s1);
+		stories = lscon.retrieve(s2);
 		assertEquals(stories.size(), 1);
 		s2 = stories.get(0);
 		

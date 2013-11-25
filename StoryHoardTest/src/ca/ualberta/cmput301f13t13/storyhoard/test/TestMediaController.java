@@ -43,6 +43,10 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	
 	public TestMediaController() {
 		super(ViewBrowseStories.class);
+	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
 		mediaCon = MediaController.getInstance(getActivity());
 	}
 
@@ -51,9 +55,9 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	 */
 	public void testGetMediasByChapter() {
 		UUID chapId = UUID.randomUUID();
-		mockMedia = new Media(chapId, null, "bob went away");
+		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
-		mockMedia3 = new Media(UUID.randomUUID(), null,	"photo");
+		mockMedia3 = new Media(UUID.randomUUID(), null, Media.PHOTO);
 		mediaCon.insert(mockMedia3);
 
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
