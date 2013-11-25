@@ -123,8 +123,7 @@ public class LocalStoryController implements SHController<Story> {
 	}
 	
 	@Override
-	public void remove(UUID objId) {
-		// TODO Auto-generated method stub
-		
+	public void remove(UUID id) {
+		storyMan.remove(id);
 	}		
 }

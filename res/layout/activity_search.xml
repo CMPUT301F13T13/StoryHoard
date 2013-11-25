@@ -16,7 +16,7 @@
         <EditText
             android:id="@+id/story_name"
             android:layout_width="match_parent"
-            android:layout_height="45sp"
+            android:layout_height="0dip"
             android:layout_weight="1"
             android:layout_marginTop="50dp"
             android:ems="10"

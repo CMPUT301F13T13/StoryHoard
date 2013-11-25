@@ -62,12 +62,19 @@ public class TestEditChoiceActivity extends
 		chapters = (ListView) mActivity.findViewById(R.id.listAllLinkableChapters);
 	}
 
+	/**
+	 * Tests the ui widgets have been properly initialized.
+	 */
 	public void testPreConditions() {
 		assertTrue(mActivity != null);
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
 	} 
 	
+	/**
+	 * Tests setting the edit text for the widget containing choice
+	 * text.
+	 */
 	@UiThreadTest
 	public void testSetChoiceText() {
 		String title = "My choice";

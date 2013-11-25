@@ -63,6 +63,9 @@ public class TestEditStoryActivity extends
 		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
 	}
 	
+	/**
+	 * Tests the ui widgets have been properly initialized.
+	 */
 	public void testPreConditions() {
 		assertTrue(activity != null);
 		assertTrue(newTitle != null);
@@ -70,6 +73,9 @@ public class TestEditStoryActivity extends
 		assertTrue(newDescription != null);
 	}
 	
+	/**
+	 * Tests setting the title of a story on the ui widget.
+	 */
 	@UiThreadTest
 	public void testSetTitle() {
 		String title = "My Title";
@@ -77,6 +83,9 @@ public class TestEditStoryActivity extends
 		assertTrue(newTitle.getText().toString().equals(title));
 	}
 	
+	/**
+	 * Tests setting the author of a story on the ui widget.
+	 */
 	@UiThreadTest
 	public void testSetAuthor() {
 		String author = "The Best Author Ever";
@@ -84,6 +93,9 @@ public class TestEditStoryActivity extends
 		assertTrue(newAuthor.getText().toString().equals(author));
 	}
 	
+	/**
+	 * Tests setting the description of a story on the ui widget.
+	 */
 	@UiThreadTest
 	public void testSetDescription() {
 		String desc = "This is the story of a new description.";

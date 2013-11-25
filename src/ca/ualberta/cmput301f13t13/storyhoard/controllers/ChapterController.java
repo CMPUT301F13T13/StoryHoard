@@ -100,7 +100,7 @@ public class ChapterController implements SHController<Chapter>{
 	}
 
 	@Override
-	public void remove(UUID objId) {
-		// TODO Not implemented for this iteration of project
+	public void remove(UUID id) {
+		chapterMan.remove(id);
 	}	
 }

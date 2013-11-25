@@ -1,3 +1,19 @@
+/**
+ * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
@@ -13,6 +29,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * Class for testing the functionality of ChoiceController.java
+ * 
+ * @author sgil
+ *
+ */
 public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	private ChoiceController choiceCon;
 	private ArrayList<Choice> mockChoices;
@@ -26,23 +48,24 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewB
 	}
 
 	/**
-	 * Tests getting all chapters from a story.
+	 * Tests getting all chapters from a chapter.
 	 */
-	public void testGetChoicesByStory() {
-		mockChoice = new Choice(UUID.randomUUID(), "bob went away");
+	public void testGetChoicesByChapter() {
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, UUID.randomUUID(), "bob went away");
 		choiceCon.insert(mockChoice);
-		mockChoice2 = new Choice(mockChoice.getStoryId(),
-				"Lily drove");
+		mockChoice2 = new Choice(chapId, UUID.randomUUID(), "Lily drove");
 		choiceCon.insert(mockChoice2);
-		mockChoice3 = new Choice(UUID.randomUUID(), "Lily drove");
+		mockChoice3 = new Choice(UUID.randomUUID(), UUID.randomUUID(), 
+				"Lily drove");
 		choiceCon.insert(mockChoice3);
 
-		mockChoices = choiceCon.getChoicesByStory(mockChoice.getStoryId());
+		mockChoices = choiceCon.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 2);		
 	}
 	
 	/**
-	 * Tests getting all created chapters.
+	 * Tests getting all created choices.
 	 */
 	public void testGetAll() {
 		// Clearing database
@@ -50,55 +73,56 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewB
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
-		mockChoice = new Choice(UUID.randomUUID(), "bob went away");
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, chapId, "");
 		choiceCon.insert(mockChoice);
-		mockChoice2 = new Choice(mockChoice.getStoryId(),
-				"Lily drove");
+		mockChoice2 = new Choice(chapId, chapId, "");
 		choiceCon.insert(mockChoice2);
-		mockChoice3 = new Choice(UUID.randomUUID(), "Lily drove");
-		choiceCon.insert(mockChoice3);
 
 		mockChoices = choiceCon.getAll();
-		assertEquals(mockChoices.size(), 3);		
-	}
-
-	/**
-	 * Tests getting a full chapter back from the database (including
-	 * choices and media).
-	 */
-	public void testGetFullChoice() {
-		mockChoice = new Choice(UUID.randomUUID(), "bob went away");
-		Choice c1 = new Choice(mockChoice.getId(), UUID.randomUUID(), "c1");
-		Media m1 = new Media(mockChoice.getId(), null, Media.ILLUSTRATION);
-		choiceCon.insert(c1);
-		mediaCon.insert(m1);
-		choiceCon.insert(mockChoice);
-		
-		Choice newChoice = choiceCon.getFullChoice(mockChoice.getId());
-		assertEquals(newChoice.getChoices().size(), 1);
-		assertEquals(newChoice.getIllustrations().size(), 1);
-		assertTrue(mockChoice.getText().equals(newChoice.getText()));
+		assertEquals(mockChoices.size(), 2);		
 	}
 	
 	/**
-	 * Tests inserting, retrieving, and updating a chapter.
+	 * Tests inserting, retrieving, and updating a choice.
 	 */
 	public void testInsertRetrieveUpdate() {
-		mockChoice = new Choice(UUID.randomUUID(), "bob went away");
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, UUID.randomUUID(), "bob went away");
 		choiceCon.insert(mockChoice);
 		
-		mockChoices = choiceCon.retrieve(mockChoice);
+		mockChoices = choiceCon.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 1);
 		
 		mockChoice2 = mockChoices.get(0);
 		mockChoice2.setText("hello");
 		choiceCon.update(mockChoice2);
 		
-		mockChoices = choiceCon.retrieve(mockChoice);
+		mockChoices = choiceCon.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 1);	
 		mockChoice2 = mockChoices.get(0);
 		
 		assertFalse(mockChoice2.getText().equals(mockChoice.getText()));
 	}	
+	
+	/**
+	 * Tests retrieving a random choice from a chapter.
+	 */
+	public void testRandomChoice() {
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, chapId, "");
+		choiceCon.insert(mockChoice);
+		mockChoice2 = new Choice(chapId, chapId, "");
+		choiceCon.insert(mockChoice2);
+
+		Choice random = choiceCon.getRandomChoice(chapId);
+		assertNotNull(random);		
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
+	}
 	
 }
