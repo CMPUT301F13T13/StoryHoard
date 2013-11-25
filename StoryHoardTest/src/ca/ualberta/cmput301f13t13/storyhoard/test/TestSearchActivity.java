@@ -50,7 +50,7 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 	}
 
 	/**
-	 * Testing that the preconditions setup properly
+	 * Testing that the ui widgets setup properly
 	 */
 	public void testPreConditions() {
 		assertTrue(activity != null);
@@ -59,6 +59,9 @@ public class TestSearchActivity extends ActivityInstrumentationTestCase2<SearchA
 		assertTrue(spinner != null);
 	}
 	
+	/**
+	 * Tests setting the title on the title ui widget.
+	 */
 	@UiThreadTest
 	public void testSetTitle() {
 		String text = "The Best title Ever";

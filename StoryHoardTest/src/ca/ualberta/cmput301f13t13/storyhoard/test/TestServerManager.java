@@ -76,7 +76,7 @@ public class TestServerManager
 		assertEquals(chaps.size(), 2);
 		
 		// delete
-		sm.remove(story);
+		sm.remove(story.getId().toString());
 		story = sm.getById(story.getId());
 		assertNull(story);
 	}
@@ -111,7 +111,7 @@ public class TestServerManager
 		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
 		assertFalse(newStory.getTitle().equals(story.getTitle()));
 		
-		sm.remove(newStory);
+		sm.remove(newStory.getId().toString());
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class TestServerManager
 		ArrayList<Story> stories = sm.getAll();
 		assertTrue(stories.size() > 0);
 
-		sm.remove(mockStory1);
-		sm.remove(mockStory2);
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());
 	}
 	
 	/**
@@ -148,8 +148,8 @@ public class TestServerManager
 		// setting search criteria
 		ArrayList<Story> stories = sm.searchByKeywords("test");
 		assertEquals(stories.size(), 2);
-		sm.remove(mockStory1);
-		sm.remove(mockStory2);			
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());			
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class TestServerManager
 
 		Story story = sm.getRandom();
 		assertNotNull(story);
-		sm.remove(mockStory1);
-		sm.remove(mockStory2);		
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());		
 	}
 }

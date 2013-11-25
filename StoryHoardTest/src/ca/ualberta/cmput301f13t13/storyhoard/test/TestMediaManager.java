@@ -166,7 +166,50 @@ public class TestMediaManager extends
 		if(!temp.exists()){
 			Log.e("file","no image file at location :"+path);
 		}
-		
 		return path;
+	}	
+	
+	/**
+	 * Tests the correct determining of whether a media exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		UUID chapId = UUID.randomUUID();
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		mm.insert(mockMedia);
+		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
+		
+		assertTrue(mm.existsLocally(mockMedia));
+		assertFalse(mm.existsLocally(mockMedia2));
+	}
+
+	/**
+	 * Tests synching a media, which is really already tested by
+	 * inserting and updating a media.
+	 */
+	public void testSync() {
+		UUID chapId = UUID.randomUUID();
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		mm.syncMedia(mockMedia);
+		ArrayList<Media> mockMedias = mm.retrieve(mockMedia);
+		assertEquals(mockMedias.size(), 1);
+	}	
+	
+	/**
+	 * Tests synching the deletion of media.
+	 */
+	public void testSyncDeletion() {
+		UUID chapId = UUID.randomUUID();
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		mm.insert(mockMedia);
+		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
+		mm.insert(mockMedia2);
+		
+		ArrayList<UUID> newList = new ArrayList<UUID>();
+		newList.add(mockMedia.getId());
+		
+		mm.syncDeletions(newList, chapId);
+		ArrayList<Media> mockMedias = mm.retrieve(mockMedia2);
+		assertEquals(mockMedias.size(), 0);
 	}	
 }

@@ -237,7 +237,7 @@ public class ServerManager {
 	 * 
 	 * @param story
 	 */
-	public String prepareKeywords(String keywords) {
+	private String prepareKeywords(String keywords) {
 		String selection = "";
 
 		if (keywords == null) {

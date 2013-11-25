@@ -16,14 +16,13 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-
 import java.util.ArrayList;
-import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Class for testing the functionality of LocalStoryController.java
@@ -33,6 +32,9 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 public class TestLocalStoryController extends
 ActivityInstrumentationTestCase2<ViewBrowseStories> {
+	private ViewBrowseStories activity;
+	private LocalStoryController lscon;
+	
 
 	public TestLocalStoryController() {
 		super(ViewBrowseStories.class);
@@ -43,99 +45,105 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+		activity = getActivity();
+		lscon = LocalStoryController.getInstance(activity);
 	}
 
 	/**
-	 * Gets all the stories that are either cached, created by the author, or
-	 * published.
-	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
-	 *            CREATED_STORY.
-	 * @return Array list of all the stories the application asked for.
+	 * Tests using the controller to add stories and then get all cached
+	 * stories.
 	 */
-	public ArrayList<Story> getAllCachedStories() {
-		Story criteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
-		return retrieve(criteria);
-	}
-	
-	/**
-	 * Gets all the stories that are either cached, created by the author, or
-	 * published.
-	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
-	 *            CREATED_STORY.
-	 * @return Array list of all the stories the application asked for.
-	 */
-	public ArrayList<Story> getAllAuthorStories() {
-		Story criteria = new Story(null, null, null, null, phoneId);
-		return retrieve(criteria);
-	}
-	
-	public void cache(Story story) {
-		syncher.syncStoryFromServer(story);
-	}
-	
-	@Override
-	public void update(Story story) {
-		storyMan.update(story);
-	}
-	
-	@Override
-	public void insert(Story story) {
-		storyMan.insert(story);
-	}
-	
-	private ArrayList<Story> retrieve(Story story) {
-		return storyMan.retrieve(story);
-	}
-	
-	/**
-	 * Used to search for stories matching the given search criteria. Users can
-	 * either search by specifying the title or author of the story. All stories
-	 * that match will be retrieved.
-	 * 
-	 * @param title
-	 *            Title of the story user is looking for.
-	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY
-	 * 
-	 * @return ArrayList of stories that matched the search criteria.
-	 */
-	public ArrayList<Story> searchCachedStories(String title) {
-		Story criteria = new Story(null, title, null, null, Story.NOT_AUTHORS);
-		return storyMan.retrieve(criteria);
-	}	
-	
-	/**
-	 * Used to search for stories matching the given search criteria. Users can
-	 * either search by specifying the title or author of the story. All stories
-	 * that match will be retrieved.
-	 * 
-	 * @param title
-	 *            Title of the story user is looking for.
-	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY
-	 * 
-	 * @return ArrayList of stories that matched the search criteria.
-	 */
-	public ArrayList<Story> searchAuthorStories(String title) {
-		Story criteria = new Story(null, title, null, null, phoneId);
-		return storyMan.retrieve(criteria);
-	}
+	public void testCacheAndGetAllCached() {
+		ArrayList<Story> stories = new ArrayList<Story>();
 
-	@Override
-	public ArrayList<Story> getAll() {
-		Story criteria = new Story(null, null, null, null, null);
-		return retrieve(criteria);
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
+
+		lscon.insert(s1);
+		lscon.insert(s2);
+		lscon.insert(s3);
+		
+		stories = lscon.getAllCachedStories();
+
+		assertEquals(stories.size(), 2);
 	}
 	
-	@Override
-	public void remove(UUID id) {
-		storyMan.remove(id);
-	}	
+	/**
+	 * Tests using the controller to get all stories created by the author.
+	 */
+	public void getAllAuthorStories() {
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "34530");
+		
+		lscon.insert(s1);
+		lscon.insert(s2);
+		lscon.insert(s3);
+		
+		stories = lscon.getAllAuthorStories();
+		assertEquals(stories.size(), 2);
+	}
 	
+	/**
+	 * Tests inserting, retrieving, and updatig a story.
+	 */
+	public void testInsertLoadUpdate() {
+		ArrayList<Story> stories = new ArrayList<Story>();
+		// Insert some stories
+		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		lscon.insert(s1);
+		stories = lscon.retrieve(s1);
+		assertEquals(stories.size(), 1);
+		
+		Story s2 = stories.get(0);
+		s2.setAuthor("sds");
+		s2.setDescription("none");
+		s2.setTitle("new");
+		lscon.update(s2);
+		
+		stories = lscon.retrieve(s1);
+		assertEquals(stories.size(), 1);
+		s2 = stories.get(0);
+		
+		assertFalse(s1.getTitle().equals(s2.getTitle()));
+		assertFalse(s1.getAuthor().equals(s2.getAuthor()));
+		assertFalse(s1.getDescription().equals(s2.getDescription()));
+	}
+	
+	/**
+	 * Tests using the controller to test for a variety of different stories
+	 * that have been added / published.
+	 */
+	public void testSearchStory() {
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		// Insert some stories
+		Story s1 = new Story("Lily the cowy", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("Bob the hen", "me", "D: none", 
+				Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("Bob the cowy", "me", "D: none", 
+				"34532432423");
+		
+		lscon.insert(s1);
+		lscon.insert(s2);
+		lscon.insert(s3);
+
+		// title has cowy, cached stories
+		stories = lscon.searchCachedStories("cowy");
+		assertEquals(stories.size(), 1);
+
+		// created, title has bob and hen
+		stories = lscon.searchAuthorStories("Bob hen");
+		assertEquals(stories.size(), 1);
+	}
 }

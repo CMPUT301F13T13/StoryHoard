@@ -17,9 +17,11 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
@@ -171,4 +173,32 @@ public class TestStoryManager extends
 		mockStories = sm.retrieve(mockStory);
 		assertEquals(mockStories.size(), 0);
 	}
+	
+	/**
+	 * Tests the correct determining of whether a story exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		UUID chapId1 = UUID.randomUUID();
+		UUID chapId2 = UUID.randomUUID();
+		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(this.getActivity()));
+		sm.insert(mockStory);
+		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
+				"my chubby frog", "43545454353");
+		assertTrue(sm.existsLocally(mockStory));
+		assertFalse(sm.existsLocally(mockStory2));
+	}
+
+	/**
+	 * Tests synching a story, which is really already tested by
+	 * inserting and updating a story.
+	 */
+	public void testSync() {
+		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
+				Utilities.getPhoneId(this.getActivity()));
+		sm.syncStory(mockStory);
+		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
+		assertEquals(mockStorys.size(), 1);
+	}			
 }

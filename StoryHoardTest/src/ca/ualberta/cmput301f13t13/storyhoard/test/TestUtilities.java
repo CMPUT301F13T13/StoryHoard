@@ -41,15 +41,14 @@ public class TestUtilities extends
 	}
 
 	/**
-	 * Tests the get phoneId returns a string of phoneid 
+	 * Tests that the get phoneId returns a string of phoneid 
 	 */
-	
 	public void testGetPhoneId() {
 	assertFalse(Utilities.getPhoneId(this.getActivity()) == null);
 	}
 	
 	/** 
-	 * Tests getting the phoneid
+	 * Tests saving an image to the sd card.
 	 */
 	public void testSaveImageToSD() {
 		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);

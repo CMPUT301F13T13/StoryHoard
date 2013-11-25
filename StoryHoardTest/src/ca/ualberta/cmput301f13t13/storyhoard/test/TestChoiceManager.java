@@ -124,4 +124,32 @@ public class TestChoiceManager extends
 		ArrayList<Choice> mockChoices = cm.retrieve(criteria);
 		assertEquals(mockChoices.size(), 2);
 	}
+	
+	/**
+	 * Tests the correct determining of whether a choice exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		UUID chapId1 = UUID.randomUUID();
+		UUID chapId2 = UUID.randomUUID();
+		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
+		cm.insert(mockChoice);
+		Choice mockChoice2 = new Choice(chapId1, chapId2, "Lily drove");
+		
+		assertTrue(cm.existsLocally(mockChoice));
+		assertFalse(cm.existsLocally(mockChoice2));
+	}
+
+	/**
+	 * Tests synching a choice, which is really already tested by
+	 * inserting and updating a choice.
+	 */
+	public void testSync() {
+		UUID chapId1 = UUID.randomUUID();
+		UUID chapId2 = UUID.randomUUID();
+		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
+		cm.syncChoice(mockChoice);
+		ArrayList<Choice> mockChoices = cm.retrieve(mockChoice);
+		assertEquals(mockChoices.size(), 1);
+	}		
 }

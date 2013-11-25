@@ -68,6 +68,9 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 				
 	}
 
+	/**
+	 * Tests that the ui widgets were correctly initialized.
+	 */
 	public void testPreConditions() {
 		assertTrue(storyTitle != null);
 		assertTrue(storyAuthor != null);
@@ -75,16 +78,24 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		assertTrue(beginReading != null);
 	}
 	
+	/**
+	 * Tests setting the ui widget for story author.
 	@UiThreadTest
 	public void testAuthor() {
 		assertTrue(storyAuthor.getText().toString().equals("author"));
 	}	
-	
+
+	/**
+	 * Tests setting the ui widget for story title.
+	 */
 	@UiThreadTest
 	public void testTitle() {
 		assertTrue(storyTitle.getText().toString().equals("title"));
 	}	
 	
+	/**
+	 * Tests setting the ui widget for story description.
+	 */
 	@UiThreadTest
 	public void testSetDescription() {
 		assertTrue(storyDescription.getText().toString().equals("es"));

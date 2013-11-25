@@ -22,6 +22,7 @@ import java.util.UUID;
 import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
@@ -124,4 +125,29 @@ public class TestChapterManager extends
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
+	
+	/**
+	 * Tests the correct determining of whether a chapter exists locally
+	 * or not.
+	 */
+	public void testExistsLocally() {
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
+		cm.insert(mockChapter);
+		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
+				"Lily drove");
+		
+		assertTrue(cm.existsLocally(mockChapter));
+		assertFalse(cm.existsLocally(mockChapter2));
+	}
+
+	/**
+	 * Tests synching a chapter, which is really already tested by
+	 * inserting and updating a chapter.
+	 */
+	public void testSync() {
+		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
+		cm.syncChapter(mockChapter);
+		mockChapters = cm.retrieve(mockChapter);
+		assertEquals(mockChapters.size(), 1);
+	}	
 }
