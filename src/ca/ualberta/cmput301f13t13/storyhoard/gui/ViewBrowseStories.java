@@ -277,13 +277,13 @@ public class ViewBrowseStories extends Activity {
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
 		String helpInfo = "\t- To view downloaded, published, or your stories, "
-				+ "press the button at top left.\n"
+				+ "press the button at top left.\n\n"
 				+ "\t- To begin reading or editing a story, "
-				+ "simply click on one of the story icons.\n"
+				+ "simply click on one of the story icons.\n\n"
 				+ "\t- To search for a story by title, "
-				+ "press icon with magnifying glass.\n"
-				+ "\t- To view a random story, press icon with '?'\n"
-				+ "\t- To add a new story, press icon with '+'\n";
+				+ "press icon with magnifying glass.\n\n"
+				+ "\t- To view a random story, press icon with '?'\n\n"
+				+ "\t- To add a new story, press icon with '+'\n\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
 	}
