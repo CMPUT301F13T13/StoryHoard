@@ -9,8 +9,9 @@
     tools:context=".InfoActivity" >
 
     <TextView
+        android:id="@+id/infoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:hint="@string/info_hint"/>
 
 </RelativeLayout>
