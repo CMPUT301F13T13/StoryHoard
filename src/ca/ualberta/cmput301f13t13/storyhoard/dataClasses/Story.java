@@ -281,6 +281,7 @@ public class Story {
             return false;
     }	
 	
+    
 	/**
 	 * Returns the information of the story (id, title, author, PhoneId) that
 	 * could be used in searching for a story in the database. This information
@@ -322,5 +323,31 @@ public class Story {
 		for (String keyword : words) {
 			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
+	}
+
+	/**
+	 * Due to performance issues, Media objects don't actually hold Bitmaps.
+	 * A path to the location of the file is instead saved and used to 
+	 * retrieve bitmaps whenever needed. Media objects can also hold the
+	 * bitmaps after the have been converted to a string (Base64). 
+	 * </br>
+	 * Before a Story can be inserted into the server, all the images 
+	 * belonging to the story's chapters must have their bitmap strings
+	 * set. This is only done when the story is published to avoid doing
+	 * the expensive conversion unnecessarily (local stories only need to 
+	 * know the path).
+	 * </br>
+	 * 
+	 * This function takes care of setting all the Medias' bitmap strings.
+	 */
+	public void prepareChaptersForServer() {
+	
+	        // get any media associated with the chapters of the story
+	        ArrayList<Chapter> chaps = getChapters();
+	
+	        for (Chapter chap : chaps) {
+	                chap.prepareMediasForServer();
+	        }
+	        setChapters(chaps);
 	}
 }

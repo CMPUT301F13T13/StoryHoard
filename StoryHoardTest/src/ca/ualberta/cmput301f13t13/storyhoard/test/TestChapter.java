@@ -16,17 +16,25 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 
 /**
  * Class meant for the testing of the Chapter class in the StoryHoard
@@ -38,10 +46,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
  * @see Chapter
  */
 public class TestChapter 
-		extends ActivityInstrumentationTestCase2<HelpGuide> {
+		extends ActivityInstrumentationTestCase2<InfoActivity> {
 
 	public TestChapter() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 	
 	/**
@@ -121,5 +129,22 @@ public class TestChapter
 		assertTrue(mockChapter.getPhotos() != null);
 		assertTrue(mockChapter.getIllustrations() != null);
 		assertTrue(mockChapter.hasRandomChoice());
+	}
+	
+	/**
+	 * Tests converting all the bitmaps of the chapter's media into string format, base 64 so
+	 * they can be placed into the server.
+	 */
+	public void testPrepareMedia() {
+		String path = BogoPicGen.createPath("img1.jpg");
+		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
+		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
+		mockChapter.addPhoto(photo);
+		
+		mockChapter.prepareMediasForServer();
+		ArrayList<Media> photos = mockChapter.getPhotos();
+		photo = photos.get(0);
+		
+		assertFalse(photo.getBitmapString().equals(""));
 	}
 }

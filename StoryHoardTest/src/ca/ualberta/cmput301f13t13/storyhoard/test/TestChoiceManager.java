@@ -24,7 +24,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
@@ -39,11 +39,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  * @see ChoiceManager
  */
 public class TestChoiceManager extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	ChoiceManager cm = null;
 
 	public TestChoiceManager() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	protected void setUp() throws Exception {

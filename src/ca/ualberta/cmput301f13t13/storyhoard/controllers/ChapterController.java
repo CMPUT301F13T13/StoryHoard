@@ -39,13 +39,13 @@ public class ChapterController implements SHController<Chapter>{
 	 * @return ArrayList of the chapters.
 	 */
 	public ArrayList<Chapter> getChaptersByStory(UUID storyId) {
-		Chapter criteria = new Chapter(null, storyId, null);	
+		Chapter criteria = new Chapter(null, storyId, null, null);	
 		return chapterMan.retrieve(criteria);
 	}
 
 	@Override
 	public ArrayList<Chapter> getAll() {
-		return chapterMan.retrieve(new Chapter(null, null, null));
+		return chapterMan.retrieve(new Chapter(null, null, null, null));
 	}
 
 	public ArrayList<Chapter> getFullStoryChapters(UUID storyId) {
@@ -54,6 +54,7 @@ public class ChapterController implements SHController<Chapter>{
 		
 		for (Chapter chap : chaps) {
 			fillChapter(chap);
+			fullChaps.add(chap);
 		}
 		return fullChaps;
 	}

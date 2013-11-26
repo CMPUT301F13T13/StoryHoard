@@ -55,13 +55,11 @@ public abstract class MediaActivity extends Activity {
 	private AlertDialog photoDialog;
 
 	/**
-	 * Code for browsing gallery
-	 * </br>
-	 * CODE REUSE 
-	 * </br>
-	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code
-	 * </br>
-	 * Date: Nov. 7, 2013
+	 * Code for browsing gallery </br></br>
+	 * CODE REUSE </br>
+	 * URL: http://stackoverflow.com/questions/6016000/how-to-open-phones-gallery-through-code </br>
+	 * Date: Nov. 7, 2013 </br>
+	 * License:  CC-BY-SA  
 	 */
 	public void browseGallery(String imageType) {
 		this.imageType = imageType;
@@ -73,17 +71,13 @@ public abstract class MediaActivity extends Activity {
 	}
 
 	/**
-	 * Code for calling the camera app to take a photo.
-	 * </br>
-	 * CODE REUSE 
-	 * </br>
-	 * LonelyTweeter Camera Code from Lab 
-	 * </br>
-	 * Author: Joshua Charles
-	 * </br>
-	 * Campbell License: Unlicense 
-	 * </br>
-	 * Date: Nov. 7, 2013
+	 * Code for calling the camera app to take a photo. </br></br>
+	 * 
+	 * CODE REUSE </br>
+	 * LonelyTweeter Camera Code from Lab </br>
+	 * Author: Joshua Charles </br>
+	 * Campbell License: Unlicense </br>
+	 * Date: Nov. 7, 2013 </br>
 	 * 
 	 * @param imageFileUri
 	 */
@@ -95,6 +89,12 @@ public abstract class MediaActivity extends Activity {
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
+	/**
+	 * Sets up the dialog for taking a photo or browsing the gallery, and also
+	 * for adding a text comment to the photo. Then calls the either takePhoto()
+	 * or browseGallery() to actual complete the task of adding a photo to
+	 * the chapter.
+	 */
 	public void addPhoto() {
 		// gettting image text / annotation
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -103,6 +103,7 @@ public abstract class MediaActivity extends Activity {
 		alert.setTitle("Post a photo");
 		final EditText text = new EditText(this); 
 		text.setHint("Enter comment here");	
+		
 		// setting max length for comment
 		InputFilter[] fArray = new InputFilter[1];
 		fArray[0] = new InputFilter.LengthFilter(50);
@@ -139,8 +140,9 @@ public abstract class MediaActivity extends Activity {
 		photoDialog = alert.create();
 		photoDialog.show();
 	}
+	
 	/**
-	 * Adds an image into the gallery
+	 * Adds an image that was just taken with the camera app into the gallery.
 	 */
 	public void insertIntoGallery(Media image) {
 		Intent mediaScanIntent = new Intent(
@@ -151,6 +153,12 @@ public abstract class MediaActivity extends Activity {
 		this.sendBroadcast(mediaScanIntent);
 	}
 
+	/**
+	 * Determines what activity was just performed (either taking a
+	 * photo or choosing from the gallery), and creates a new Media
+	 * object to store in the LifecycleData class for other 
+	 * activity classes to use.
+	 */
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		lifedata = LifecycleData.getInstance();
@@ -177,12 +185,15 @@ public abstract class MediaActivity extends Activity {
 	}	
 
 	/**
-	 * Code for getting uri of a new file created for an image
+	 * Code for getting the Uri of a new file created for storing an image
+	 * which has just been taken by the camera app. </br> </br>
 	 * 
-	 * CODE REUSE LonelyTweeter Camera Code from Lab 
-	 * Author: Joshua Campbell 
-	 * License: Unlicense 
-	 * Date: Nov. 7, 2013
+	 * CODE REUSE </br>
+	 * LonelyTweeter Camera Code from Lab </br>
+	 * Author: Joshua Campbell </br>
+	 * License: Unlicense </br>
+	 * Date: Nov. 7, 2013 </br>
+	 * 
 	 * @return 
 	 */
 	private Uri getUri() {
@@ -201,11 +212,17 @@ public abstract class MediaActivity extends Activity {
 	}
 
 	/**
-	 * CODE REUSE URL:
-	 * http://android-er.blogspot.ca/2012/07/implement-gallery-like.html Date:
-	 * Nov. 7, 2013 Author: Andr.oid Eric
+	 * Inserts the bitmap of a Media object onto an imageView to display in
+	 * the activity. It also puts the Media object as the Tag of the imageView
+	 * so that later on if the image needs to be deleted or the text field 
+	 * needs to be read, we will know which object the bitmap belongs to. </br></br>
+	 * 
+	 * CODE REUSE </br> 
+	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html </br>
+	 * Date: Nov. 7, 2013 </br>
+	 * Author: Andr.oid Eric
 	 */
-	public View insertImage(Media img, Context context, LinearLayout main) {
+	protected View insertImage(Media img, Context context, LinearLayout main) {
 		Bitmap bm = decodeSampledBitmapFromUri(Uri.parse(img.getPath()), 
 				250, 250);
 		LinearLayout layout = new LinearLayout(context);
@@ -226,13 +243,18 @@ public abstract class MediaActivity extends Activity {
 	}		
 
 	/**
-	 * CODE REUSE
-	 * URL: http://stackoverflow.com/questions/3401579/get-filename-and-path-from-uri-from-mediastore
-	 * DATE: NOV. 9, 2013
+	 * Takes a uri, and from it finds the absolute path to the media. It 
+	 * returns the absolute path as a string. </br></br>
+	 * 
+	 * CODE REUSE </br>
+	 * URL: http://stackoverflow.com/questions/3401579/get-filename-and-path-from-uri-from-mediastore </br>
+	 * DATE: NOV. 9, 2013 </br>
+	 * License: CC- </br>
 	 * 
 	 * @param contentUri
+	 * 			Uri we want to find the path of. Note that it is of type Uri and not URI.
 	 * @param context
-	 * @return
+	 * @return the absolute path of the Uri as a string
 	 */
 	private String getRealPathFromURI(Uri contentUri, Context context) {
 		String[] proj = { MediaStore.Images.Media.DATA };
@@ -244,14 +266,15 @@ public abstract class MediaActivity extends Activity {
 	}	
 
 	/**
-	 * Calculates size for bitmap.
+	 * Calculates the size desired for bitmap. Only to be used by the 
+	 * decodeSampledBitmapFromUri method below. </br></br>
 	 * 
-	 * CODE REUSE
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
-	 * Date: Nov. 7, 2013
-	 * Author: Andr.oid Eric
+	 * CODE REUSE </br>
+	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html </br>
+	 * Date: Nov. 7, 2013 </br>
+	 * Author: Andr.oid Eric </br>
 	 */		
-	public static int calculateInSampleSize(BitmapFactory.Options options, 
+	private static int calculateInSampleSize(BitmapFactory.Options options, 
 			int reqWidth, int reqHeight) {
 		// Raw height and width of image
 		final int height = options.outHeight;
@@ -270,10 +293,14 @@ public abstract class MediaActivity extends Activity {
 	}	
 
 	/**
-	 * CODE REUSE
-	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html
-	 * Date: Nov. 7, 2013
-	 * Author: Andr.oid Eric
+	 * Decodes a Uri into a bitmap and also make sure the bitmap is scaled
+	 * down to the specified size. Only to be used by the insertImage()
+	 * method when setting a bitmap to an imageView. </br></br>
+	 * 
+	 * CODE REUSE </br>
+	 * URL: http://android-er.blogspot.ca/2012/07/implement-gallery-like.html </br>
+	 * Date: Nov. 7, 2013 </br>
+	 * Author: Andr.oid Eric </br>
 	 */	
 	private static Bitmap decodeSampledBitmapFromUri(Uri uri, 
 			int reqWidth, int reqHeight) {

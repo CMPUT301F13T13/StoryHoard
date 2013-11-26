@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301f13t13.storyhoard.gui;
+package ca.ualberta.cmput301f13t13.storyhoard.helpGuides;
 
 import android.app.Activity;
 //import ca.ualberta.cmput301f13t13.storyhoard.R.layout;

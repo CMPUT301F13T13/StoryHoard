@@ -54,7 +54,7 @@ public class ViewBrowseStories extends Activity {
 	private AdapterStories customGridAdapter;
 	private LocalStoryController localCon;
 	private ServerStoryController serverCon;	
-	private enum Type {LOCAL, PUBLISHED};
+	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private ProgressDialog progressDialog;
@@ -94,12 +94,13 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							new GetAllAuthorStories().execute();
+							viewType = Type.CREATED;
 						} else if (itemPosition == 1) {
-							new GetAllCachedStories().execute();
+							viewType = Type.CACHED;
 						} else if (itemPosition == 2) {
-							new GetAllPublished().execute();
+							viewType = Type.PUBLISHED;
 						}
+						new GetAllStories().execute();
 						return true;
 					}
 				});
@@ -121,7 +122,10 @@ public class ViewBrowseStories extends Activity {
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
-					localCon.cache(story);
+					new CacheStory().execute(story);
+					
+					// Add overwrite warning dialog here!
+					
 				} 
 				
 				// Handle going to view story activity
@@ -163,11 +167,8 @@ public class ViewBrowseStories extends Activity {
 		case R.id.lucky:
 			Story randomStory = serverCon.getRandomStory();
 			
-			if (randomStory != null) {			
-				localCon.cache(randomStory);
-				lifedata.setStory(randomStory);
-				intent = new Intent(getBaseContext(), ViewStory.class);
-				startActivity(intent);
+			if (randomStory != null) {	
+				new CacheStory().execute(randomStory);
 			} else {
 				Toast.makeText(getBaseContext(),
 						"No Published Stories Available", Toast.LENGTH_LONG)
@@ -190,25 +191,28 @@ public class ViewBrowseStories extends Activity {
 	}
 	
 	/**
-	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
-	 * shouldn't be dealing with networking.
+	 * Caches (and locally mirrors) a story in the phone's database. This includes 
+	 * converting all the encoded strings for the story's chapters
+	 * back to bitmaps, saving them on to the SD card, and inserts 
+	 * all the chapter's medias and choices. In order to increase performance for
+	 * some of those heavy operations, an async task is used.
 	 *
 	 */
-	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
+	private class CacheStory extends AsyncTask<Story, Void, Void>{
 	    @Override
 	    protected void onPreExecute()
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Getting All Published Stories",
-	        		"Please wait while the stories are fetched", 
+	        		"Downloading Story",
+	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
 		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = serverCon.getAll();
+		protected synchronized Void doInBackground(Story... params) {
+			localCon.cache(params[0]);
+			lifedata.setStory(params[0]);
 			return null;
 		}
 		
@@ -216,31 +220,37 @@ public class ViewBrowseStories extends Activity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
-			viewType = Type.PUBLISHED;
-			refreshStories();
+			Intent intent = new Intent(getBaseContext(), ViewStory.class);
+			startActivity(intent);
 		}
-	}
+	}	
+				
 	
 	/**
-	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * Async task to get all stories  of a type in the database. Used so main UI thread does
 	 * not have to interact with database and skip too many frames.
 	 *
 	 */
-	private class GetAllAuthorStories extends AsyncTask<Void, Void, Void>{
+	private class GetAllStories extends AsyncTask<Void, Void, Void>{
 	    @Override
 	    protected void onPreExecute()
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Getting All Your Stories",
-	        		"Please wait while the stories are fetched", 
+	        		"Fetching Stories",
+	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = localCon.getAllAuthorStories();
+			if (viewType == Type.CACHED) {
+				currentStories = localCon.getAllCachedStories();
+			} else if (viewType == Type.CREATED) {
+				currentStories = localCon.getAllAuthorStories();
+			} else {
+				currentStories = serverCon.getAll();
+			}
 			return null;
 		}
 		
@@ -248,39 +258,6 @@ public class ViewBrowseStories extends Activity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
-			viewType = Type.LOCAL;
-			refreshStories();
-		}
-	}
-	
-	/**
-	 * Async task to get all cached stories in the database. Used so main UI thread does
-	 * not have to interact with database and skip too many frames.
-	 *
-	 */
-	private class GetAllCachedStories extends AsyncTask<Void, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseStories.this, 
-	        		"Getting All Downloaded Stories",
-	        		"Please wait while the stories are fetched", 
-	        		true);       
-	    };  
-	    
-		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = localCon.getAllCachedStories();
-			return null;
-		}
-		
-		@Override 
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-			viewType = Type.LOCAL;
 			refreshStories();
 		}
 	}	

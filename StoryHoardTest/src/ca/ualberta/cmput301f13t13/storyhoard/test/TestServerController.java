@@ -16,12 +16,13 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.os.StrictMode;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -32,113 +33,109 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  *
  */
 public class TestServerController extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
-	private ServerStoryController serverCon;
+		ActivityInstrumentationTestCase2<InfoActivity> {
+	private static ServerStoryController serverCon;
+	private static final Story story = new Story(UUID.fromString(
+			"f1bda3a9-4560-4530-befc-2d58db9419b7"), 
+			"Harry Potter", "oprah", "the emo boy", "232");
+	private static final Story story2 = new Story(UUID.fromString(
+			"e4558e4e-5140-4838-be40-e4d5be0b5299"), 
+			"Ugly Duckling", "oprah", "the emo boy", "232");
 	
 	public TestServerController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
-	public void setUp() throws Exception {
-		super.setUp();
+	/** 
+	 * Tests no errors occruing while inserting a story.
+	 */
+	public void testAInsert() {
 		ServerManager.getInstance().setTestServer();
 		serverCon = ServerStoryController.getInstance(getActivity());
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		
+		try {
+			serverCon.insert(story);
+			serverCon.insert(story2);
+		} catch (Exception e) {
+			fail("error occrured in inserting story on server");
+		}
 	}
-
-	public void tearDown() throws Exception {
-		super.tearDown();
-		ServerManager.getInstance().setRealServer();
-	}
-
+	
 	/**
-	 * Tests getting all published stories.
+	 * Tests getting all published stories, also tests the insert worked.
 	 */
 	public void testPublishGetAll() {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-
-		serverCon.insert(story);
+		serverCon = ServerStoryController.getInstance(getActivity());
+		ServerManager.getInstance().setTestServer();
 		ArrayList<Story> stories = serverCon.getAll();
-		assertEquals(stories.size(), 1);
-
-		// delete
-		serverCon.remove(story.getId());
+		assertEquals(stories.size(), 2);
 	}	
 	
 	/**
 	 * Tests searching for a published story using keywords
-	 * found in its title.
+	 * found in its title. Also tests the insert worked.
 	 */
-	public void testSearchByTitle(String title) {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-
-		serverCon.insert(story);
+	public void testSearchByTitle() {
+		serverCon = ServerStoryController.getInstance(getActivity());
 		ArrayList<Story> stories = serverCon.searchByTitle("Harry");
 		assertEquals(stories.size(), 1);
-
-		// delete
-		serverCon.remove(story.getId());
 	}		
 	
 	
 	/**
-	 * Tests getting a random story.
+	 * Tests getting a random story. Also tests that the insert worked.
 	 */
 	public void testGetRandomStory() {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-		Story story2 = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-		
-		serverCon.insert(story);
-		serverCon.insert(story2);
-		story = serverCon.getRandomStory();
+		serverCon = ServerStoryController.getInstance(getActivity());
+		Story story = serverCon.getRandomStory();	
 		assertNotNull(story);
-
-		// delete
-		serverCon.remove(story.getId());
 	}
 
 	/**
-	 * Tests updating a published story.
+	 * Tests no errors occur while updating a published story.
 	 */
-	public void testUpdate() {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-
-		serverCon.insert(story);
-		ArrayList<Story> stories = serverCon.searchByTitle("Harry");
+	public void testUpdatePart1() {
+		serverCon = ServerStoryController.getInstance(getActivity());
+		Story newStory = new Story(story.getId(), "new title", "me","des", "123");
+		try {
+			serverCon.update(newStory);
+		} catch (Exception e) {
+			fail("error while updating story on server");
+		}
+	}
+	
+	/**
+	 * Tests the updating actually updated the story data.
+	 */
+	public void testUpdatePart2() {
+		serverCon = ServerStoryController.getInstance(getActivity());
+		ArrayList<Story> stories = serverCon.searchByTitle("new title");
 		assertEquals(stories.size(), 1);
-		Story newStory = stories.get(0);
-		newStory.setTitle("new title");
-		serverCon.update(newStory);
 		
-		stories = serverCon.searchByTitle("new title");
-		assertTrue(stories.size() > 1);
-
-		// delete
+		// cleaning server
 		serverCon.remove(story.getId());
 	}
 
 	/**
-	 * Tests removing story from server.
+	 * Tests no errors occur while removing story from server.
 	 */
-	public void testRemove() {
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-
-		serverCon.update(story);
-		ArrayList<Story> stories = serverCon.searchByTitle("Harry Potter");
-		assertTrue(stories.size() > 1);
-
+	public void testRemovePart1() {
 		// delete
-		serverCon.remove(story.getId());
-		stories = serverCon.searchByTitle("Harry Potter");
+		serverCon = ServerStoryController.getInstance(getActivity());
+		try {
+			serverCon.remove(story2.getId());
+		} catch (Exception e) {
+			fail("error while removing story from server");
+		}
+	}		
+	
+	/**
+	 * Tests that the story actually was removed.
+	 */
+	public void testRemovePart2() {
+		serverCon = ServerStoryController.getInstance(getActivity());
+		// delete
+		ArrayList<Story> stories = serverCon.searchByTitle("Duckling");
 		assertEquals(stories.size(), 0);
-		
 	}		
 }

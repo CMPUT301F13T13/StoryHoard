@@ -26,7 +26,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
@@ -36,7 +36,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * @author sgil
  *
  */
-public class TestChapterController extends ActivityInstrumentationTestCase2<HelpGuide> {
+public class TestChapterController extends ActivityInstrumentationTestCase2<InfoActivity> {
 	private Chapter mockChapter;
 	private Chapter mockChapter2;
 	private Chapter mockChapter3;
@@ -46,7 +46,7 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<Help
 	private MediaController mediaCon;
 	
 	public TestChapterController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 		// TODO Auto-generated constructor stub
 	}
 	/* (non-Javadoc)
@@ -96,6 +96,26 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<Help
 		assertEquals(mockChapters.size(), 3);		
 	}
 
+	/**
+	 * Tests getting a full chapter back from the database (including
+	 * choices and media).
+	 */
+	public void testGetFullStoryChapters() {
+		UUID storyId = UUID.randomUUID();
+		mockChapter = new Chapter(storyId, "bob went away");
+		Choice c1 = new Choice(mockChapter.getId(), UUID.randomUUID(), "c1");
+		Media m1 = new Media(mockChapter.getId(), null, Media.ILLUSTRATION);
+		choiceCon.insert(c1);
+		mediaCon.insert(m1);
+		chapCon.insert(mockChapter);
+		
+		ArrayList<Chapter> chaps = chapCon.getFullStoryChapters(storyId);
+		mockChapter = chaps.get(0);
+		assertEquals(mockChapter.getChoices().size(), 1);
+		assertEquals(mockChapter.getIllustrations().size(), 1);
+		assertTrue(mockChapter.getText().equals("bob went away"));
+	}
+	
 	/**
 	 * Tests getting a full chapter back from the database (including
 	 * choices and media).

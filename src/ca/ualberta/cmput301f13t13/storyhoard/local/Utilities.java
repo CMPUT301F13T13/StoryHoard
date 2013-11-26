@@ -17,8 +17,15 @@
 package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 
-import android.content.Context;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+
+import android.os.Environment;
 import android.provider.Settings;
 
 /**
@@ -45,5 +52,41 @@ public class Utilities {
 		String PhoneId = Settings.Secure.getString(context.getContentResolver(), 
 				Settings.Secure.ANDROID_ID);
 		return PhoneId;
+	}
+
+	/**
+	 * Saves a bitmap to a location on the phone's sd card. Returns
+	 * the path of where the image was saved to. </br></br>
+	 * 
+	 * CODE REUSE: </br>
+	 * This code was modified from the code at:</br>
+	 * URL: http://stackoverflow.com/questions/7021728/android-writing-bitmap-to-sdcard </br>
+	 * Date: Nov. 2, 2013 </br>
+	 * License`: CC-BY-SA
+	 */
+	public static String saveImageToSD(Bitmap bmp) {
+	        String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+	        File folderF = new File(folder);
+	        if (!folderF.exists()) {
+	                folderF.mkdir();
+	        }
+	
+	        String imageFilePath;
+	        imageFilePath = folder + "/"
+	                                + String.valueOf(System.currentTimeMillis()) + ".jpg";
+	        File imageFile = new File(imageFilePath);
+	
+	        FileOutputStream fout;
+	        try {
+	                fout = new FileOutputStream(imageFile);
+	                bmp.compress(Bitmap.CompressFormat.JPEG, 85, fout);
+	
+	                fout.flush();
+	                fout.close();
+	        } catch (IOException e) {
+	                e.printStackTrace();
+	        }
+	        
+	        return imageFilePath;
 	}	
 }

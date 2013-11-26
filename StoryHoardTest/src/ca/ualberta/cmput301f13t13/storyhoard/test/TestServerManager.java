@@ -18,12 +18,18 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -34,36 +40,30 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  *
  */
 public class TestServerManager 
-		extends ActivityInstrumentationTestCase2<HelpGuide>{
+		extends ActivityInstrumentationTestCase2<InfoActivity>{
 	private static ServerManager sm = null;
+	private static final Story story = new Story(UUID.fromString(
+			"f1bda3a9-4560-4530-befc-2d58db9419b7"), 
+			"Harry Potter", "oprah", "the emo boy", "232");
+	private static final Story story2 = new Story(UUID.fromString(
+			"e4558e4e-5140-4838-be40-e4d5be0b5299"), 
+			"Ugly Duckling", "oprah", "the emo boy", "232");
+	private static final Story story3 = new Story(UUID.fromString(
+			"e4558e4e-5140-4838-be40-e7d5be0b5277"), 
+			"remove me", "oprah", "the emo boy", "232");
+	private static  ArrayList<Story> stories;
 	
 	public TestServerManager() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
-	public void setUp() throws Exception {
-		super.setUp();
-		
+	/**
+	 * Tests no errors occur while inserting a story onto the server.
+	 */
+	public void testAAInsert() {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
-	}
-
-	public void tearDown() throws Exception {
-		super.tearDown();
-		sm = ServerManager.getInstance();
-		sm.setRealServer();
-	}
-	/**
-	 * Tests uploading and retrieving a story by id from the server. Also
-	 * tests removing a story from a server
-	 */
-	public void testGetByIdAndDelete() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
 		
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
 		Chapter chap2 = new Chapter(story.getId(), "he lughe");
 		Choice c1 = new Choice(chap.getId(), chap2.getId(), "hit me!");
@@ -71,123 +71,142 @@ public class TestServerManager
 		chap.addChoice(c1);
 		story.addChapter(chap);
 		story.addChapter(chap2);
-		
-		sm.update(story);
-		story = sm.getById(story.getId());
-		assertNotNull(story);
 
-		ArrayList<Chapter> chaps = story.getChapters();
-		assertEquals(chaps.size(), 2);
-		
-		// delete
-		sm.remove(story.getId().toString());
-		story = sm.getById(story.getId());
-		assertNull(story);
+		try {
+			sm.insert(story);
+			sm.insert(story2);
+			sm.insert(story3);
+		} catch (Exception e) {
+			fail("error while inserting story on server");
+		}
 	}
 	
 	/**
-	 * Tests updating a story on the server.
+	 * Tests the inserting worked by testing getting the story by its Id.
 	 */
-	public void testUpdateStory() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+	public void testGetById() {
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
 		
-		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
-				Utilities.getPhoneId(getActivity()));
-		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-
-		chap.addChoice(c1);
-		story.setFirstChapterId(chap.getId());
-		story.addChapter(chap);
-		
-		sm.update(story);
 		Story newStory = sm.getById(story.getId());
 		assertNotNull(newStory);
+	}
+	
+	/**
+	 * Tests no errors occurring while updating server.
+	 */
+	public void testUpdateStoryPart1() {
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
 		
-		newStory.setTitle("new title");
-		newStory.setAuthor("new author");
-		newStory.addChapter(new Chapter(newStory.getId(), "my text"));
+		Story newStory = new Story(story2.getId(), "new title", "new author", "new des", 
+				"125");
+		Chapter chap = new Chapter(story2.getId(), "on a dark cold night");
+		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
+		chap.addChoice(c1);
+		newStory.setFirstChapterId(chap.getId());
+		newStory.addChapter(chap);
 		
-		sm.update(newStory);
-		newStory = sm.getById(story.getId());
+		try {
+			sm.update(newStory);
+		} catch (Exception e) {
+			fail("error while updating story on server");
+		}
+	}
+	
+	/**
+	 * Tests the update actually did update the story.
+	 */
+	public void testUpdateStoryPart2() {
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
+		Story newStory = sm.getById(story2.getId());
 		assertNotNull(newStory);
 		
 		ArrayList<Chapter> chaps = newStory.getChapters();
-		assertEquals(chaps.size(), 2);
-		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
-		assertFalse(newStory.getTitle().equals(story.getTitle()));
+		assertEquals(chaps.size(), 1);
+		assertTrue(newStory.getAuthor().equals("new author"));
+		assertTrue(newStory.getTitle().equals("new title"));
 		
-		sm.remove(newStory.getId().toString());
+		// cleaning up server
+		sm.remove(story.getId().toString());
+		sm.remove(story2.getId().toString());
 	}
 
+	/**
+	 * Tests no errors occur while getting all stories on server.
+	 */
+	public void testAllPublishedStoriesPart1() {		
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
+	
+		try {
+			stories = sm.getAll();
+		} catch (Exception e) {
+			fail("error occured while getting all published stories on server");
+		}
+	}
+	
 	/**
 	 * Tests loading all created stories, and makes sure the results don't
 	 * include any stories not created by author.
 	 */
-	public void testGetAllPublishedStories() {		
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		
-		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
-				Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory1);
-		Story mockStory2 = new Story("My Frog", "Dr. Phil",
-				"my chubby frog", Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory2);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());
-		
-		// setting search criteria
+	public void testAllPublishedStoriesPart2() {		
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
+	
 		ArrayList<Story> stories = sm.getAll();
-		assertTrue(stories.size() > 0);
+		stories = sm.getAll();
+		stories = sm.getAll();
+		assertEquals(stories.size(), 3);
 	}
 	
 	/**
 	 * Tests searching for a story by keywords in the title.
 	 */
 	public void testSearchByKeywords() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		
-		Story mockStory1 = new Story("test My Cow", "Dr. Poe", "my chubby cow",
-				Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory1);
-		Story mockStory2 = new Story("test My Cow Again", "Dr. Phil",
-				"my chubby frog", Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory2);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());	
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
 		
 		// setting search criteria
-		ArrayList<Story> stories = sm.searchByKeywords("test");
-		assertEquals(stories.size(), 2);
+		ArrayList<Story> stories = sm.searchByKeywords("harry");
+		assertEquals(stories.size(), 1);
 	}
 	
 	/**
 	 * Tests getting a random story
 	 */
-	public void testRandomStory() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		
-		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
-				Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory1);
-		Story mockStory2 = new Story("My Frog", "Dr. Phil",
-				"my chubby frog", Utilities.getPhoneId(getActivity()));
-		sm.update(mockStory2);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());		
-		
+	public void testRandomStory() {	
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
 		Story story = sm.getRandom();
 		assertNotNull(story);
 	}
+	
+	/**
+	 * Tests no errors occur while removing story from server.
+	 */
+	public void testRemovePart1() {
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
+		
+		try {
+			sm.remove(story3.getId().toString());
+		} catch (Exception e) {
+			fail("error while removing story from server");
+		}
+	}		
+	
+	/**
+	 * Tests that the story actually was removed.
+	 */
+	public void testRemovePart2() {
+		sm = ServerManager.getInstance();
+		sm.setTestServer();
+		sm.remove(story3.getId().toString());
+		ArrayList<Story> stories = sm.getAll();
+		stories = sm.getAll();
+		stories = sm.getAll();
+		assertEquals(stories.size(), 2);
+	}	
 }

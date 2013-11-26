@@ -219,17 +219,6 @@ public class EditChapterActivity extends MediaActivity {
 	 *
 	 */
 	private class SaveChapter extends AsyncTask<Void, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {	
-	        progressDialog= ProgressDialog.show(
-	        		EditChapterActivity.this, 
-	        		"Saving Chapter",
-	        		"Please wait...", 
-	        		true);
-
-	    };  
-	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {	
 			// saving any illustrations
@@ -268,7 +257,6 @@ public class EditChapterActivity extends MediaActivity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
-			finish();
 		}
 	}		
 	
@@ -332,6 +320,7 @@ public class EditChapterActivity extends MediaActivity {
 
 	private void saveAction() {
 		new SaveChapter().execute();
+		finish();
 	}
 	
 	public void setMediaCon(MediaController mediaCon) {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -31,13 +31,13 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  *
  */
 public class TestLocalStoryController extends
-ActivityInstrumentationTestCase2<HelpGuide> {
-	private HelpGuide activity;
+ActivityInstrumentationTestCase2<InfoActivity> {
+	private InfoActivity activity;
 	private LocalStoryController lscon;
 	
 
 	public TestLocalStoryController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 		// TODO Auto-generated constructor stub
 	}
 	/* (non-Javadoc)
@@ -56,15 +56,11 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 	public void testCacheAndGetAllCached() {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
-		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 
-		lscon.insert(s1);
-		lscon.insert(s2);
-		lscon.insert(s3);
+		lscon.cache(s2);
+		lscon.cache(s3);
 		
 		stories = lscon.getAllCachedStories();
 

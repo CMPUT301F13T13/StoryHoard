@@ -8,11 +8,11 @@
     <string name="add_choice">Add Choice</string>
     <string name="connect_choice_to">Connect choice to:</string>
     <string name="title">Title</string>
-    <string name="authors">Authors</string>
+    <string name="authors">By:</string>
     <string name="type">Story type</string>
     <string name="story">Story title</string>
     <string name="story_image_cover">Cover Image</string>
-    <string name="story_description">Story Description</string>
+    <string name="story_description">Story Description:</string>
     <string name="new_title">New Story Title</string>
     <string name="new_author">New Story Author</string>
     <string name="new_description">New Story Description</string>
