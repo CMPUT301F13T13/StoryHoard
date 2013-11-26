@@ -156,6 +156,9 @@ public class EditStoryActivity extends Activity {
 			lifedata.setEditing(false);
 			lifedata.setFirstStory(true);
 			lifedata.setStory(newStory);
+		    Intent intent = new Intent(EditStoryActivity.this,
+		    EditChapterActivity.class);
+		    startActivity(intent);
 		}
 	}
 }
