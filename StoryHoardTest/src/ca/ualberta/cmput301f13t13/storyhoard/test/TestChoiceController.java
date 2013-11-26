@@ -23,7 +23,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
@@ -33,7 +33,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * @author sgil
  *
  */
-public class TestChoiceController extends ActivityInstrumentationTestCase2<HelpGuide> {
+public class TestChoiceController extends ActivityInstrumentationTestCase2<InfoActivity> {
 	private ChoiceController choiceCon;
 	private ArrayList<Choice> mockChoices;
 	private Choice mockChoice;
@@ -41,7 +41,7 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<HelpG
 	private Choice mockChoice3;
 	
 	public TestChoiceController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 	
 	protected void setUp() throws Exception {

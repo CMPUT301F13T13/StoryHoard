@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -31,13 +31,13 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  *
  */
 public class TestLocalStoryController extends
-ActivityInstrumentationTestCase2<HelpGuide> {
-	private HelpGuide activity;
+ActivityInstrumentationTestCase2<InfoActivity> {
+	private InfoActivity activity;
 	private LocalStoryController lscon;
 	
 
 	public TestLocalStoryController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 		// TODO Auto-generated constructor stub
 	}
 	/* (non-Javadoc)

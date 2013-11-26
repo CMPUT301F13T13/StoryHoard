@@ -22,7 +22,7 @@ import java.util.UUID;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
@@ -37,11 +37,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * 
  */
 public class TestChapterManager extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	private ArrayList<Chapter> mockChapters;
 	private ChapterManager cm = null;
 	public TestChapterManager() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	protected void setUp() throws Exception {

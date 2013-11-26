@@ -27,7 +27,7 @@ import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
@@ -41,12 +41,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * @see Media
  */
 public class TestMedia extends
-ActivityInstrumentationTestCase2<HelpGuide> {
+ActivityInstrumentationTestCase2<InfoActivity> {
 	private static String path;
 	private static String path2;
 	
 	public TestMedia() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	public void setUp() throws Exception {
@@ -62,7 +62,7 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 	 * Tests creating a media object.
 	 */
 	public void testCreateMedia() {
-		path = createPath("img1.jpg");
+		path = BogoPicGen.createPath("img1.jpg");
 		// Make photo
 		try {
 			@SuppressWarnings("unused")
@@ -80,7 +80,7 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		path = createPath("img1.jpg");
+		path = BogoPicGen.createPath("img1.jpg");
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 
 		UUID id = photo.getId();
@@ -94,7 +94,7 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 		photo.setType(Media.ILLUSTRATION);
 		photo.setText(text);
 
-		path2 = createPath("img2.jpg");
+		path2 = BogoPicGen.createPath("img2.jpg");
 		photo.setPath(path2);
 
 		assertNotSame(id, photo.getId());
@@ -103,45 +103,5 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 		assertTrue(text.equals(photo.getText()));
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
-	}
-	
-	/**
-	 * Creates a new bitmap, save sit on to SD card and sets path to it.
-	 */
-	public String createPath(String fname) {
-		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
-		File mFile1 = Environment.getExternalStorageDirectory();
-
-		String fileName = fname;
-
-		File mFile2 = new File(mFile1,fileName);
-		try {
-			FileOutputStream outStream;
-
-			outStream = new FileOutputStream(mFile2);
-
-			bm.compress(Bitmap.CompressFormat.JPEG, 75, outStream);
-
-			outStream.flush();
-
-			outStream.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		String path = mFile1.getAbsolutePath().toString()+"/"+fileName;
-
-		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+path); 
-
-		File temp=new File(path);
-
-		if(!temp.exists()){
-			Log.e("file","no image file at location :"+path);
-		}
-		
-		return path;
 	}
 }

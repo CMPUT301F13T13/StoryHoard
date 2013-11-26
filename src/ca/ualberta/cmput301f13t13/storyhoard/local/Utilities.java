@@ -56,8 +56,13 @@ public class Utilities {
 
 	/**
 	 * Saves a bitmap to a location on the phone's sd card. Returns
-	 * the path of where the image was saved to.
+	 * the path of where the image was saved to. </br></br>
 	 * 
+	 * CODE REUSE: </br>
+	 * This code was modified from the code at:</br>
+	 * URL: http://stackoverflow.com/questions/7021728/android-writing-bitmap-to-sdcard </br>
+	 * Date: Nov. 2, 2013 </br>
+	 * License`: CC-BY-SA
 	 */
 	public static String saveImageToSD(Bitmap bmp) {
 	        String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";

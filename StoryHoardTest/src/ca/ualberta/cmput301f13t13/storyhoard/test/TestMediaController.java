@@ -22,7 +22,7 @@ import java.util.UUID;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
@@ -33,7 +33,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  *
  */
 public class TestMediaController extends
-ActivityInstrumentationTestCase2<HelpGuide> {
+ActivityInstrumentationTestCase2<InfoActivity> {
 	private MediaController mediaCon;
 	private ArrayList<Media> mockMedias;
 	private Media mockMedia;
@@ -41,7 +41,7 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 	private Media mockMedia3;
 	
 	public TestMediaController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 	
 	protected void setUp() throws Exception {
@@ -112,6 +112,9 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 		
 	}	
 	
+	/**
+	 * Tests removing media from the database.
+	 */
 	public void testRemove() {
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);

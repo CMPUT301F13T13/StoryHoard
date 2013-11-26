@@ -28,7 +28,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChapterActivity;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -39,12 +39,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  *
  */
 public class TestServerManager 
-		extends ActivityInstrumentationTestCase2<HelpGuide>{
+		extends ActivityInstrumentationTestCase2<InfoActivity>{
 	private static ServerManager sm = null;
 	private Story story;
 	
 	public TestServerManager() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	public void setUp() throws Exception {

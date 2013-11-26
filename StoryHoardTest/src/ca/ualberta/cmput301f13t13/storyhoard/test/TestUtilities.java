@@ -18,7 +18,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
@@ -32,10 +32,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  * @see Utilities
  */
 public class TestUtilities extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	
 	public TestUtilities() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	/**

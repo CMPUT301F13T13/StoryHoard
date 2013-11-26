@@ -30,6 +30,10 @@ public class Syncher {
 		return self;
 	}
 
+	/**
+	 *
+	 * @param story
+	 */
 	public void syncStoryFromServer(Story story) {
 		ArrayList<UUID> medias = new ArrayList<UUID>();
 		storyMan.syncStory(story);

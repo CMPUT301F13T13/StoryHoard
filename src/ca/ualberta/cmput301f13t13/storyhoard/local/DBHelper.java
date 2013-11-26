@@ -38,17 +38,18 @@ public class DBHelper extends SQLiteOpenHelper {
 	/**
 	 * 
 	 * Gets a new instance of DbHelper. If one already exists, returns that one.
-	 * I.e. DbHelper is a singleton.
+	 * I.e. DbHelper is a singleton. </br></br>
+	 * 
+	 * CODE REUSE: </br>
+	 * The following code was modified from: </br>
+	 * URL: http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html </br>
+	 * When: September 17, 2013  </br>
+	 * Author: ALEX LOCKWOOD </br>
+	 * License: Creative Commons Attribution 2.5
 	 * 
 	 * @param context
 	 * @return DbHelper
 	 * 
-	 *         Citing: Idea to make this class a singleton as well as the code
-	 *         for the getInstance() is from:
-	 *         URL: http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html 
-	 *         When: September 17, 2013 
-	 *         Author: ALEX LOCKWOOD 
-	 *         License: Creative Commons Attribution 2.5
 	 */
 
 	public static DBHelper getInstance(Context context) {

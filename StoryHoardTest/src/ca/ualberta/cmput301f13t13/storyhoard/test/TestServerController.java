@@ -21,7 +21,7 @@ import android.os.StrictMode;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -32,11 +32,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  *
  */
 public class TestServerController extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	private ServerStoryController serverCon;
 	
 	public TestServerController() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	public void setUp() throws Exception {

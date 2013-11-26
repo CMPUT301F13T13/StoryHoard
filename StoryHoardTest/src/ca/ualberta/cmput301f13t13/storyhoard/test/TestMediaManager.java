@@ -29,7 +29,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
@@ -44,13 +44,13 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
  * @see MediaManager
  */
 public class TestMediaManager extends
-		ActivityInstrumentationTestCase2<HelpGuide> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	private MediaManager mm = null;
 	private static final String fname1 = "img1.jpg";
 	private static final String fname2 = "img2.jpg";
 	
 	public TestMediaManager() {
-		super(HelpGuide.class);
+		super(InfoActivity.class);
 	}
 
 	protected void setUp() throws Exception {
