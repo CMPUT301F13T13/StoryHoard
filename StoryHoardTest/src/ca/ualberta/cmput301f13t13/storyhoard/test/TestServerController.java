@@ -43,14 +43,6 @@ public class TestServerController extends
 		super.setUp();
 		ServerManager.getInstance().setTestServer();
 		serverCon = ServerStoryController.getInstance(getActivity());
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-	}
-
-	public void tearDown() throws Exception {
-		super.tearDown();
-		ServerManager.getInstance().setRealServer();
 	}
 
 	/**
@@ -62,10 +54,10 @@ public class TestServerController extends
 
 		serverCon.insert(story);
 		ArrayList<Story> stories = serverCon.getAll();
-		assertEquals(stories.size(), 1);
-
+		
 		// delete
 		serverCon.remove(story.getId());
+		assertEquals(stories.size(), 1);
 	}	
 	
 	/**
@@ -78,10 +70,11 @@ public class TestServerController extends
 
 		serverCon.insert(story);
 		ArrayList<Story> stories = serverCon.searchByTitle("Harry");
-		assertEquals(stories.size(), 1);
-
+		
 		// delete
 		serverCon.remove(story.getId());
+		
+		assertEquals(stories.size(), 1);
 	}		
 	
 	
@@ -97,10 +90,13 @@ public class TestServerController extends
 		serverCon.insert(story);
 		serverCon.insert(story2);
 		story = serverCon.getRandomStory();
-		assertNotNull(story);
-
+		
 		// delete
 		serverCon.remove(story.getId());
+		// delete
+		serverCon.remove(story2.getId());
+		
+		assertNotNull(story);
 	}
 
 	/**
@@ -118,10 +114,11 @@ public class TestServerController extends
 		serverCon.update(newStory);
 		
 		stories = serverCon.searchByTitle("new title");
-		assertTrue(stories.size() > 1);
-
+		
 		// delete
 		serverCon.remove(story.getId());
+		
+		assertTrue(stories.size() > 1);
 	}
 
 	/**

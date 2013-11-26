@@ -288,4 +288,14 @@ public class Chapter {
 
 		return info;
 	}
+
+	public void prepareMediasForServer() {
+		for (Media photo : photos) {
+		        photo.setBitmapString(photo.getBitmap());
+		}
+	
+		for (Media ill : illustrations) {
+		        ill.setBitmapString(ill.getBitmap());
+		}
+	}
 }

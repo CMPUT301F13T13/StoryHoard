@@ -56,15 +56,11 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 	public void testCacheAndGetAllCached() {
 		ArrayList<Story> stories = new ArrayList<Story>();
 
-		// Insert some stories
-		Story s1 = new Story("T: Lily the cow", "A: me", "D: none", 
-				Utilities.getPhoneId(getActivity()));
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 
-		lscon.insert(s1);
-		lscon.insert(s2);
-		lscon.insert(s3);
+		lscon.cache(s2);
+		lscon.cache(s3);
 		
 		stories = lscon.getAllCachedStories();
 

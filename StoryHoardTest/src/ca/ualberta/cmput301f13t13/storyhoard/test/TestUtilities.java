@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -51,7 +50,7 @@ public class TestUtilities extends
 	 */
 	public void testSaveImageToSD() {
 		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);
-		String path = Syncher.saveImageToSD(bmp);
+		String path = Utilities.saveImageToSD(bmp);
 		assertNotNull(path);
 	}
 }

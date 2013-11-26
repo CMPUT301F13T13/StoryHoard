@@ -41,7 +41,7 @@ public class ServerStoryController implements SHController<Story>{
 	}	
 	
 	public void publish(Story story) {
-		syncher.prepareStory(story);
+		story.prepareChaptersForServer();
 		serverMan.update(story);
 	}
 	

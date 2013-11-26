@@ -210,4 +210,8 @@ public class TestMediaManager extends
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia2);
 		assertEquals(mockMedias.size(), 0);
 	}	
+	
+	public void testRemove() {
+		
+	}
 }

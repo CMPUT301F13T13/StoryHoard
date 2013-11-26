@@ -56,11 +56,13 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
-		mockMedia3 = new Media(UUID.randomUUID(), null, Media.PHOTO);
+		mockMedia3 = new Media(UUID.randomUUID(), null, Media.ILLUSTRATION);
 		mediaCon.insert(mockMedia3);
 
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);		
+		mockMedias = mediaCon.getIllustrationsByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);	
 	}
 	
 	/**
@@ -109,4 +111,17 @@ ActivityInstrumentationTestCase2<HelpGuide> {
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
 	}	
+	
+	public void testRemove() {
+		UUID chapId = UUID.randomUUID();
+		mockMedia = new Media(chapId, null, Media.PHOTO);
+		mediaCon.insert(mockMedia);
+		
+		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);
+		
+		mediaCon.remove(mockMedia.getId());
+		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);
+	}
 }

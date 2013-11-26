@@ -54,11 +54,6 @@ public class TestServerManager
 		sm.setTestServer();
 	}
 
-	public void tearDown() throws Exception {
-		super.tearDown();
-		sm = ServerManager.getInstance();
-		sm.setRealServer();
-	}
 	/**
 	 * Tests uploading and retrieving a story by id from the server. Also
 	 * tests removing a story from a server
@@ -76,26 +71,21 @@ public class TestServerManager
 
 		sm.update(story);
 		story = sm.getById(story.getId());
+		// delete
+		sm.remove(story.getId().toString());
+		
 		assertNotNull(story);
 
 		ArrayList<Chapter> chaps = story.getChapters();
 		assertEquals(chaps.size(), 2);
-		
-		// delete
-		sm.remove(story.getId().toString());
 
 		story = sm.getById(story.getId());
-		assertNull(story);
 	}
 	
 	/**
 	 * Tests updating a story on the server.
 	 */
 	public void testUpdateStory() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -118,11 +108,11 @@ public class TestServerManager
 		assertNotNull(newStory);
 		
 		ArrayList<Chapter> chaps = newStory.getChapters();
+		sm.remove(newStory.getId().toString());
+		
 		assertEquals(chaps.size(), 2);
 		assertFalse(newStory.getAuthor().equals(story.getAuthor()));
 		assertFalse(newStory.getTitle().equals(story.getTitle()));
-		
-		sm.remove(newStory.getId().toString());
 	}
 
 	/**
@@ -140,12 +130,11 @@ public class TestServerManager
 		Story mockStory2 = new Story("My Frog", "Dr. Phil",
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory2);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());
 		
 		// setting search criteria
 		ArrayList<Story> stories = sm.getAll();
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());
 		assertTrue(stories.size() > 0);
 	}
 	
@@ -153,9 +142,6 @@ public class TestServerManager
 	 * Tests searching for a story by keywords in the title.
 	 */
 	public void testSearchByKeywords() {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
 		
 		Story mockStory1 = new Story("test My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
@@ -163,12 +149,11 @@ public class TestServerManager
 		Story mockStory2 = new Story("test My Cow Again", "Dr. Phil",
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory2);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());	
 		
 		// setting search criteria
 		ArrayList<Story> stories = sm.searchByKeywords("test");
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());	
 		assertTrue(stories.size() > 0);
 	}
 	
@@ -180,13 +165,8 @@ public class TestServerManager
 				Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory1);
 
-
-		sm.remove(mockStory1.getId().toString());
-
-		
-		
-		
 		Story story = sm.getRandom();
+		sm.remove(mockStory1.getId().toString());
 		assertNotNull(story);
 	}
 }
