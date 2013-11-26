@@ -48,5 +48,6 @@
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="title_activity_help_guide">HelpGuide</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_info">InfoActivity</string>
 
 </resources>
