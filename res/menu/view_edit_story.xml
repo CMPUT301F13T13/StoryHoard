@@ -9,5 +9,9 @@
         android:id="@+id/addfirstChapter"
         android:showAsAction="ifRoom"
         android:title="@string/save_changes"/>
+    <item 
+        android:id="@+id/unpublishStory"
+        android:showAsAction="ifRoom"
+        android:title="@string/unpublish_story"/>
 
 </menu>

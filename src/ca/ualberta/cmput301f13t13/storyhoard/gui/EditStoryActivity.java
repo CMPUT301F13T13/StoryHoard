@@ -48,7 +48,7 @@ public class EditStoryActivity extends Activity {
 	private EditText newDescription;
 	private Story newStory;
 	private LocalStoryController localCon;
-	private ServerStoryController serverCon;	
+	private ServerStoryController serverCon;
 	private ChapterController chapCon;
 
 	@Override
@@ -63,14 +63,17 @@ public class EditStoryActivity extends Activity {
 	}
 
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
-        setupFields();
+		setupFields();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_edit_story, menu);
+		if (!localCon.isPublishedStoryMyStory(newStory, getBaseContext())) {
+			menu.removeItem(R.id.unpublishStory);
+		}
 		return true;
 	}
 
@@ -84,6 +87,9 @@ public class EditStoryActivity extends Activity {
 		case R.id.addfirstChapter:
 			saveChanges();
 			finish();
+			return true;
+		case R.id.unpublishStory:
+			unpublishStory();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -112,7 +118,7 @@ public class EditStoryActivity extends Activity {
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
-		}		
+		}
 	}
 
 	private void publishStory() {
@@ -120,18 +126,24 @@ public class EditStoryActivity extends Activity {
 			// publish new story somehow
 			saveChanges();
 			new Update().execute();
-			Toast.makeText(getBaseContext(),
-					"Story published to server", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(getBaseContext(), "Story published to server",
+					Toast.LENGTH_SHORT).show();
 			finish();
 		} else {
 			Toast.makeText(getBaseContext(),
 					"Create a story before publishing", Toast.LENGTH_SHORT)
 					.show();
-		}		
+		}
 	}
 
-	private class Update extends AsyncTask<Void, Void, Void>{
+	private void unpublishStory() {
+		new UnPublish().execute(newStory.getId());
+		Toast.makeText(getBaseContext(), "Unpublished story from server",
+				Toast.LENGTH_SHORT).show();
+		finish();
+	}
+
+	private class Update extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// publish or update story
@@ -141,7 +153,7 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
-	private class unPublish extends AsyncTask<UUID, Void, Void>{
+	private class UnPublish extends AsyncTask<UUID, Void, Void>{
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {
 			// publish or update story
@@ -149,7 +161,7 @@ public class EditStoryActivity extends Activity {
 			return null;
 		}
 	}
-	
+
 	private void saveChanges() {
 		String title = newTitle.getText().toString();
 		String author = newAuthor.getText().toString();
@@ -161,14 +173,14 @@ public class EditStoryActivity extends Activity {
 			lifedata.setStory(newStory);
 			localCon.update(newStory);
 		} else {
-			newStory = new Story(title, author, description, 
+			newStory = new Story(title, author, description,
 					Utilities.getPhoneId(getBaseContext()));
 			lifedata.setEditing(false);
 			lifedata.setFirstStory(true);
 			lifedata.setStory(newStory);
-		    Intent intent = new Intent(EditStoryActivity.this,
-		    EditChapterActivity.class);
-		    startActivity(intent);
+			Intent intent = new Intent(EditStoryActivity.this,
+					EditChapterActivity.class);
+			startActivity(intent);
 		}
 	}
 }
