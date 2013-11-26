@@ -6,11 +6,12 @@ import android.content.Intent;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 
 public class IntroScreen extends Activity {
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_intro_screen);
+
 		Thread loadingTime = new Thread() {
 			public void run() {
 				try {
