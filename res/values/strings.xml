@@ -24,6 +24,7 @@
     <string name="search_results">Search Results</string>
     <string name="empty">No stories were found!</string>
     <string name="set_random_choice">Set random choice</string>
+    <string name="info_hint">Help info goes here</string>
 
     <string-array name="view_type_choices">
         <item>My Stories</item>
@@ -48,5 +49,6 @@
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="title_activity_help_guide">HelpGuide</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_info">InfoActivity</string>
 
 </resources>
