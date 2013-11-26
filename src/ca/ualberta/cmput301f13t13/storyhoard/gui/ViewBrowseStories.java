@@ -18,14 +18,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +36,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
@@ -53,13 +52,17 @@ public class ViewBrowseStories extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private LocalStoryController localCon;
-	private ServerStoryController serverCon;	
-	private enum Type {CREATED, CACHED, PUBLISHED};
+	private ServerStoryController serverCon;
+
+	private enum Type {
+		CREATED, CACHED, PUBLISHED
+	};
+
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private ProgressDialog progressDialog;
 	ArrayList<Story> currentStories;
-	
+
 	/**
 	 * Create the View Browse Stories activity
 	 */
@@ -119,15 +122,15 @@ public class ViewBrowseStories extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Story story = gridArray.get(arg2);
-				// Handle caching the story if it's a published story, 
+				// Handle caching the story if it's a published story,
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
 					new CacheStory().execute(story);
-					
+
 					// Add overwrite warning dialog here!
-					
-				} 
-				
+
+				}
+
 				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				lifedata.setStory(story);
@@ -166,14 +169,17 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story randomStory = serverCon.getRandomStory();
-			
-			if (randomStory != null) {	
+
+			if (randomStory != null) {
 				new CacheStory().execute(randomStory);
 			} else {
 				Toast.makeText(getBaseContext(),
 						"No Published Stories Available", Toast.LENGTH_LONG)
-						.show();				
+						.show();
 			}
+			return true;
+		case R.id.info:
+			getHelp();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -189,59 +195,50 @@ public class ViewBrowseStories extends Activity {
 		setActionBar();
 		refreshStories();
 	}
-	
+
 	/**
-	 * Caches (and locally mirrors) a story in the phone's database. This includes 
-	 * converting all the encoded strings for the story's chapters
-	 * back to bitmaps, saving them on to the SD card, and inserts 
-	 * all the chapter's medias and choices. In order to increase performance for
-	 * some of those heavy operations, an async task is used.
-	 *
+	 * Caches (and locally mirrors) a story in the phone's database. This
+	 * includes converting all the encoded strings for the story's chapters back
+	 * to bitmaps, saving them on to the SD card, and inserts all the chapter's
+	 * medias and choices. In order to increase performance for some of those
+	 * heavy operations, an async task is used.
+	 * 
 	 */
-	private class CacheStory extends AsyncTask<Story, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseStories.this, 
-	        		"Downloading Story",
-	        		"Please wait...", 
-	        		true);       
-	    };  
-	    
+	private class CacheStory extends AsyncTask<Story, Void, Void> {
+		@Override
+		protected void onPreExecute() {
+			progressDialog = ProgressDialog.show(ViewBrowseStories.this,
+					"Downloading Story", "Please wait...", true);
+		};
+
 		@Override
 		protected synchronized Void doInBackground(Story... params) {
 			localCon.cache(params[0]);
 			lifedata.setStory(params[0]);
 			return null;
 		}
-		
-		@Override 
+
+		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
 			Intent intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 		}
-	}	
-				
-	
+	}
+
 	/**
-	 * Async task to get all stories  of a type in the database. Used so main UI thread does
-	 * not have to interact with database and skip too many frames.
-	 *
+	 * Async task to get all stories of a type in the database. Used so main UI
+	 * thread does not have to interact with database and skip too many frames.
+	 * 
 	 */
-	private class GetAllStories extends AsyncTask<Void, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseStories.this, 
-	        		"Fetching Stories",
-	        		"Please wait...", 
-	        		true);       
-	    };  
-	    
+	private class GetAllStories extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected void onPreExecute() {
+			progressDialog = ProgressDialog.show(ViewBrowseStories.this,
+					"Fetching Stories", "Please wait...", true);
+		};
+
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			if (viewType == Type.CACHED) {
@@ -253,15 +250,15 @@ public class ViewBrowseStories extends Activity {
 			}
 			return null;
 		}
-		
-		@Override 
+
+		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
 			refreshStories();
 		}
-	}	
-	
+	}
+
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.
@@ -272,5 +269,22 @@ public class ViewBrowseStories extends Activity {
 			gridArray.addAll(currentStories);
 		}
 		customGridAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * Displays help guide for ViewBrowseStories
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- To view downloaded, published, or your stories, "
+				+ "press the button at top left.\n"
+				+ "\t- To begin reading or editing a story, "
+				+ "simply click on one of the story icons.\n"
+				+ "\t- To search for a story by title, "
+				+ "press icon with magnifying glass.\n"
+				+ "\t- To view a random story, press icon with '?'\n"
+				+ "\t- To add a new story, press icon with '+'\n";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
 	}
 }
