@@ -22,6 +22,7 @@ public class InfoActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		setUpFields();
+		setInfoText();
 	}
 
 	/**
@@ -29,6 +30,13 @@ public class InfoActivity extends Activity {
 	 */
 	public void setUpFields() {
 		infoText = (TextView) findViewById(R.id.infoText);
+	}
+	
+	/**
+	 * Sets the text to the appropriate help guide
+	 */
+	public void setInfoText() {
+		infoText.setText("Help guid goes here");
 	}
 
 	@Override
