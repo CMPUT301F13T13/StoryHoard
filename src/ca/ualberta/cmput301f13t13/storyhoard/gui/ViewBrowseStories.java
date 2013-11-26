@@ -38,6 +38,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
@@ -174,6 +175,10 @@ public class ViewBrowseStories extends Activity {
 						"No Published Stories Available", Toast.LENGTH_LONG)
 						.show();				
 			}
+			return true;
+		case R.id.info:
+			intent = new Intent(this,InfoActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

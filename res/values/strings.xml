@@ -47,8 +47,7 @@
     <string name="publish_story">Publish Story</string>
     <string name="save_changes">Save Changes</string>
     <string name="title_activity_intro_screen">IntroScreen</string>
-    <string name="title_activity_help_guide">HelpGuide</string>
+    <string name="title_activity_help_guide">Help Guide</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_info">InfoActivity</string>
 
 </resources>
