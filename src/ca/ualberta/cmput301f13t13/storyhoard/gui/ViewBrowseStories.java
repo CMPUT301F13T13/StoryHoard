@@ -122,8 +122,7 @@ public class ViewBrowseStories extends Activity {
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
-					localCon.cache(story);
-					// new CacheStory().execute(story);
+					new CacheStory().execute(story);
 					
 					// Add overwrite warning dialog here!
 					
@@ -169,11 +168,7 @@ public class ViewBrowseStories extends Activity {
 			Story randomStory = serverCon.getRandomStory();
 			
 			if (randomStory != null) {	
-				// new CacheStory().execute(randomStory);
-				localCon.cache(randomStory);
-				lifedata.setStory(randomStory);
-				intent = new Intent(getBaseContext(), ViewStory.class);
-				startActivity(intent);
+				new CacheStory().execute(randomStory);
 			} else {
 				Toast.makeText(getBaseContext(),
 						"No Published Stories Available", Toast.LENGTH_LONG)

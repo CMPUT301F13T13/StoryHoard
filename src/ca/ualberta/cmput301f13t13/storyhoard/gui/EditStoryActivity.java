@@ -81,6 +81,7 @@ public class EditStoryActivity extends Activity {
 			return true;
 		case R.id.addfirstChapter:
 			saveChanges();
+			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -120,6 +121,7 @@ public class EditStoryActivity extends Activity {
 			Toast.makeText(getBaseContext(),
 					"Story published to server", Toast.LENGTH_SHORT)
 					.show();
+			finish();
 		} else {
 			Toast.makeText(getBaseContext(),
 					"Create a story before publishing", Toast.LENGTH_SHORT)
@@ -151,14 +153,9 @@ public class EditStoryActivity extends Activity {
 		} else {
 			newStory = new Story(title, author, description, 
 					Utilities.getPhoneId(getBaseContext()));
-			Intent intent = new Intent(EditStoryActivity.this,
-					EditChapterActivity.class);
-
 			lifedata.setEditing(false);
 			lifedata.setFirstStory(true);
 			lifedata.setStory(newStory);
-			startActivity(intent);
 		}
-		finish();
 	}
 }
