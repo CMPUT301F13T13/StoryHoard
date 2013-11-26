@@ -50,5 +50,6 @@
     <string name="title_activity_help_guide">HelpGuide</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info">InfoActivity</string>
+    <string name="unpublish_story">Unpublish Story</string>
 
 </resources>
