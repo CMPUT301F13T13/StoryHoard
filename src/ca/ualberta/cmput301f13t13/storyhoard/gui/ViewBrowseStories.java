@@ -200,8 +200,8 @@ public class ViewBrowseStories extends Activity {
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Getting All Published Stories",
-	        		"Please wait while the stories are fetched", 
+	        		"Fetching All Published Stories",
+	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
@@ -232,8 +232,8 @@ public class ViewBrowseStories extends Activity {
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Getting All Your Stories",
-	        		"Please wait while the stories are fetched", 
+	        		"Fetching All Your Stories",
+	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
@@ -264,8 +264,8 @@ public class ViewBrowseStories extends Activity {
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Getting All Downloaded Stories",
-	        		"Please wait while the stories are fetched", 
+	        		"Fetching All Downloaded Stories",
+	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
