@@ -26,10 +26,8 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
@@ -43,12 +41,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * @see Media
  */
 public class TestMedia extends
-ActivityInstrumentationTestCase2<ViewBrowseStories> {
+ActivityInstrumentationTestCase2<HelpGuide> {
 	private static String path;
 	private static String path2;
 	
 	public TestMedia() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	public void setUp() throws Exception {
@@ -102,7 +100,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		assertNotSame(id, photo.getId());
 		assertNotSame(chapterId, photo.getChapterId());
 		assertFalse(type.equals(photo.getType()));
-		assertFalse(text.equals(photo.getText()));
+		assertTrue(text.equals(photo.getText()));
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
 	}

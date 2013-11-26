@@ -17,13 +17,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
 
+import android.os.StrictMode;
+import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
-
-import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Tests the functionality of the server story controller.
@@ -32,17 +32,20 @@ import android.test.ActivityInstrumentationTestCase2;
  *
  */
 public class TestServerController extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<HelpGuide> {
 	private ServerStoryController serverCon;
 	
 	public TestServerController() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	public void setUp() throws Exception {
 		super.setUp();
-		serverCon = ServerStoryController.getInstance(getActivity());
 		ServerManager.getInstance().setTestServer();
+		serverCon = ServerStoryController.getInstance(getActivity());
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 	}
 
 	public void tearDown() throws Exception {
@@ -115,7 +118,7 @@ public class TestServerController extends
 		serverCon.update(newStory);
 		
 		stories = serverCon.searchByTitle("new title");
-		assertEquals(stories.size(), 1);
+		assertTrue(stories.size() > 1);
 
 		// delete
 		serverCon.remove(story.getId());
@@ -129,12 +132,12 @@ public class TestServerController extends
 				Utilities.getPhoneId(getActivity()));
 
 		serverCon.update(story);
-		ArrayList<Story> stories = serverCon.getAll();
-		assertEquals(stories.size(), 1);
+		ArrayList<Story> stories = serverCon.searchByTitle("Harry Potter");
+		assertTrue(stories.size() > 1);
 
 		// delete
 		serverCon.remove(story.getId());
-		stories = serverCon.getAll();
+		stories = serverCon.searchByTitle("Harry Potter");
 		assertEquals(stories.size(), 0);
 		
 	}		

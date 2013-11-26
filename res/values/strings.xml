@@ -11,6 +11,7 @@
     <string name="authors">Authors</string>
     <string name="type">Story type</string>
     <string name="story">Story title</string>
+    <string name="story_image_cover">Cover Image</string>
     <string name="story_description">Story Description</string>
     <string name="new_title">New Story Title</string>
     <string name="new_author">New Story Author</string>
@@ -45,6 +46,7 @@
     <string name="publish_story">Publish Story</string>
     <string name="save_changes">Save Changes</string>
     <string name="title_activity_intro_screen">IntroScreen</string>
+    <string name="title_activity_help_guide">HelpGuide</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>

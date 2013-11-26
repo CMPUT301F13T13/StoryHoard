@@ -18,7 +18,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +50,7 @@ public class ViewBrowseChapters extends Activity {
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +86,9 @@ public class ViewBrowseChapters extends Activity {
 		setUpFields();
 		setOnItemClickListener();
 		data.clear();
-		data.addAll(chapCon.getChaptersByStory(story.getId()));
-		chapterAdapter.notifyDataSetChanged();
+		new GetStoryChapters().execute();
 	}
-
+	
 	/**
 	 * Initialize private fields needed
 	 */
@@ -94,7 +97,6 @@ public class ViewBrowseChapters extends Activity {
 		
 		// Grab controllers and pull all chapters from story
 		chapCon = ChapterController.getInstance(this);
-		story = lifedata.getStory();
 		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
@@ -118,10 +120,42 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				lifedata.setEditing(true);
-				lifedata.setStory(story);
 				lifedata.setChapter(data.get(arg2));
 				startActivity(intent);
 			}
 		});
 	}
+	
+	/**
+	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * not have to interact with database and skip too many frames.
+	 *
+	 */
+	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
+	    
+		@Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseChapters.this, 
+	        		"Fetching Chapters",
+	        		"Please wait...", 
+	        		true);       
+	    };  
+		
+		@Override
+		protected synchronized Void doInBackground(Void... params) {
+			// get all story chapters
+			story = lifedata.getStory();
+			data.addAll(chapCon.getChaptersByStory(story.getId()));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			chapterAdapter.notifyDataSetChanged();
+		}
+	}	
 }

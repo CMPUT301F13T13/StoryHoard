@@ -19,7 +19,9 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +48,7 @@ public class ViewStory extends Activity {
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
+	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -139,12 +142,42 @@ public class ViewStory extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Begin reading, go to first chapter
-				Intent intent = new Intent(getBaseContext(), ViewChapter.class);
 				UUID firstChapterID = story.getFirstChapterId();
-				lifedata.setChapter(chapterCon.getFullChapter(firstChapterID));
-				startActivity(intent);
-				finish();
+				new LoadChapter().execute(firstChapterID);
 			}
 		});
 	}
+	
+	/**
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
+	 */
+	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		ViewStory.this, 
+	        		"Loading Chapter",
+	        		"Please wait...", 
+	        		true);
+
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {	
+			lifedata.setChapter(chapterCon.getFullChapter(params[0]));
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			Intent intent = new Intent(getBaseContext(), ViewChapter.class);
+			startActivity(intent);
+			progressDialog.dismiss();
+
+		}
+	}		
 }

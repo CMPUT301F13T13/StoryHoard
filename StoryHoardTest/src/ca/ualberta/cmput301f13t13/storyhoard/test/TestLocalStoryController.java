@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -31,13 +31,13 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  *
  */
 public class TestLocalStoryController extends
-ActivityInstrumentationTestCase2<ViewBrowseStories> {
-	private ViewBrowseStories activity;
+ActivityInstrumentationTestCase2<HelpGuide> {
+	private HelpGuide activity;
 	private LocalStoryController lscon;
 	
 
 	public TestLocalStoryController() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 		// TODO Auto-generated constructor stub
 	}
 	/* (non-Javadoc)
@@ -110,7 +110,7 @@ ActivityInstrumentationTestCase2<ViewBrowseStories> {
 		s2.setTitle("new");
 		lscon.update(s2);
 		
-		stories = lscon.retrieve(s1);
+		stories = lscon.retrieve(s2);
 		assertEquals(stories.size(), 1);
 		s2 = stories.get(0);
 		

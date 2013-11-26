@@ -19,8 +19,10 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +75,7 @@ public class EditChapterActivity extends MediaActivity {
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
 	private View viewClicked;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,49 +87,34 @@ public class EditChapterActivity extends MediaActivity {
 	public void onResume() {
 		super.onResume();
 		setUpFields();
-		setRandomChoice();
 		updateICData();
 	}
 
-	/**
-	 * Updates the view components depending on the chapter data.
-	 */
-	private void updateICData() {
-		// Set the chapter text, if new Chapter will simply be blank
-		choices.clear();
-		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
-
-		// any choices that have not been saved
-		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
-		for (Choice choice : myChoices) {
-			choices.add(choice);
-		}
-
-		choiceAdapter.notifyDataSetChanged();
-
-		// Getting illustrations
-		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
-
-		// Clean up illustrations layout
-		illustrations.removeAllViews();
-		// Insert Illustrations
-		// any images that have not been saved
-		illList.addAll(lifedata.getCurrImages());
-		for (Media img : illList) {
-			View v = insertImage(img, this, illustrations);
-			v.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					viewClicked = v;
-					dialBuilder.setDeleteDialog(EditChapterActivity.this,
-							viewClicked, illustrations);
-					return false;
-				}
-			});
-		}
-		lifedata.setCurrImage(null);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.view_edit_chapter, menu);
+		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.addChoice:
+			addChoice();
+			return true;
+		case R.id.addIllus:
+			addIllustration();
+			return true;
+		case R.id.Save:
+			saveAction();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	/**
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
@@ -158,22 +146,132 @@ public class EditChapterActivity extends MediaActivity {
 				startActivity(intent);
 			}
 		});
-
+	}
+	
+	/**
+	 * Updates the view components depending on the chapter data.
+	 */
+	private void updateICData() {
+		progressDialog= ProgressDialog.show(
+        		EditChapterActivity.this, 
+        		"Edit Chapter Activity",
+        		"Loading Chapter...", 
+        		true);
+		
 		story = lifedata.getStory();
 		if (lifedata.isEditing()) {
+			
 			// Editing an existing chapter
 			chapter = lifedata.getChapter();
 			chapterContent.setText(chapter.getText());
 		} else {
 			chapter = lifedata.getChapter();
 			if (chapter == null) {
+				
 				// Create a new chapter from the story's ID
 				chapter = new Chapter(story.getId(), "");
 				lifedata.setChapter(chapter);
 			}
 		}
-	}
+		
+		setRandomChoice();
+		
+		// Set the chapter text, if new Chapter will simply be blank
+		choices.clear();
+		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
+		
+		// Clean up illustrations layout
+		illustrations.removeAllViews();
+		
+		// any choices that have not been saved
+		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
+		for (Choice choice : myChoices) {
+			choices.add(choice);
+		}
 
+		// Getting illustrations
+		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
+
+		// Insert any images that have not been saved
+		illList.addAll(lifedata.getCurrImages());
+		for (Media img : illList) {
+			View v = insertImage(img, EditChapterActivity.this, illustrations);
+			v.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					viewClicked = v;
+					dialBuilder.setDeleteDialog(EditChapterActivity.this,
+							viewClicked, illustrations);
+					return false;
+				}
+			});
+		}
+		lifedata.setCurrImage(null);
+		
+		choiceAdapter.notifyDataSetChanged();
+		
+		progressDialog.dismiss();
+	}
+	
+	/**
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
+	 */
+	private class SaveChapter extends AsyncTask<Void, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {	
+	        progressDialog= ProgressDialog.show(
+	        		EditChapterActivity.this, 
+	        		"Saving Chapter",
+	        		"Please wait...", 
+	        		true);
+
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Void... params) {	
+			// saving any illustrations
+			ArrayList<Media> ills = lifedata.getCurrImages();
+			for (Media ill : ills) {
+				mediaCon.insert(ill);
+			}
+
+			// saving any choices
+			ArrayList<Choice> choices = lifedata.getCurrChoices();
+			for (Choice choice : choices) {
+				choiceCon.insert(choice);
+			}
+
+			lifedata.setCurrChoices(null);
+			lifedata.setCurrImages(null);
+			lifedata.setChapter(null);
+
+			chapter.setText(chapterContent.getText().toString());
+			if (lifedata.isEditing()) {
+				chapCon.update(chapter);
+			} else {
+				chapCon.insert(chapter);
+				if (lifedata.isFirstStory()) {
+					LocalStoryController storyCon = LocalStoryController
+							.getInstance(EditChapterActivity.this);
+					story.setFirstChapterId(chapter.getId());
+					storyCon.insert(story);
+					lifedata.setFirstStory(false);
+				}
+			}
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			finish();
+		}
+	}		
+	
 	/**
 	 * Set onClick listener for setting random choice
 	 */
@@ -196,31 +294,6 @@ public class EditChapterActivity extends MediaActivity {
 		});
 	}
 
-	// MENU INFORMATION
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.view_edit_chapter, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		switch (item.getItemId()) {
-		case R.id.addChoice:
-			addChoice();
-			return true;
-		case R.id.addIllus:
-			addIllustration();
-			return true;
-		case R.id.Save:
-			saveAction();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 
 	private void addIllustration() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -258,38 +331,9 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void saveAction() {
-		// saving any illustrations
-		ArrayList<Media> ills = lifedata.getCurrImages();
-		for (Media ill : ills) {
-			mediaCon.insert(ill);
-		}
-
-		// saving any choices
-		ArrayList<Choice> choices = lifedata.getCurrChoices();
-		for (Choice choice : choices) {
-			choiceCon.insert(choice);
-		}
-
-		lifedata.setCurrChoices(null);
-		lifedata.setCurrImages(null);
-		lifedata.setChapter(null);
-
-		chapter.setText(chapterContent.getText().toString());
-		if (lifedata.isEditing()) {
-			chapCon.update(chapter);
-		} else {
-			chapCon.insert(chapter);
-			if (lifedata.isFirstStory()) {
-				LocalStoryController storyCon = LocalStoryController
-						.getInstance(EditChapterActivity.this);
-				story.setFirstChapterId(chapter.getId());
-				storyCon.insert(story);
-				lifedata.setFirstStory(false);
-			}
-		}
-		finish();
+		new SaveChapter().execute();
 	}
-
+	
 	public void setMediaCon(MediaController mediaCon) {
 		this.mediaCon = mediaCon;
 	}
@@ -297,5 +341,4 @@ public class EditChapterActivity extends MediaActivity {
 	public MediaController getMediaCon() {
 		return mediaCon;
 	}
-
 }

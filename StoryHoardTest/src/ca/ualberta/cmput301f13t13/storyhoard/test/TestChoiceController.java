@@ -19,15 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
-
-import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Class for testing the functionality of ChoiceController.java
@@ -35,7 +33,7 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author sgil
  *
  */
-public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestChoiceController extends ActivityInstrumentationTestCase2<HelpGuide> {
 	private ChoiceController choiceCon;
 	private ArrayList<Choice> mockChoices;
 	private Choice mockChoice;
@@ -43,8 +41,12 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<ViewB
 	private Choice mockChoice3;
 	
 	public TestChoiceController() {
-		super(ViewBrowseStories.class);
-		choiceCon = ChoiceController.getInstance(getActivity());
+		super(HelpGuide.class);
+	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		choiceCon = ChoiceController.getInstance(getActivity());	
 	}
 
 	/**

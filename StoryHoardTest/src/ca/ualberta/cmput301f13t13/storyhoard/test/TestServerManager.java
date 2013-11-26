@@ -18,12 +18,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.os.StrictMode;
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -34,15 +34,16 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  *
  */
 public class TestServerManager 
-		extends ActivityInstrumentationTestCase2<ViewBrowseStories>{
+		extends ActivityInstrumentationTestCase2<HelpGuide>{
 	private static ServerManager sm = null;
 	
 	public TestServerManager() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	public void setUp() throws Exception {
 		super.setUp();
+		
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 	}
@@ -57,6 +58,10 @@ public class TestServerManager
 	 * tests removing a story from a server
 	 */
 	public void testGetByIdAndDelete() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -84,6 +89,10 @@ public class TestServerManager
 	 * Tests updating a story on the server.
 	 */
 	public void testUpdateStory() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		Story story = new Story("Harry Potter", "oprah", "the emo boy", 
 				Utilities.getPhoneId(getActivity()));
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -118,6 +127,10 @@ public class TestServerManager
 	 * include any stories not created by author.
 	 */
 	public void testGetAllPublishedStories() {		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory1);
@@ -125,18 +138,22 @@ public class TestServerManager
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory2);
 
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());
+		
 		// setting search criteria
 		ArrayList<Story> stories = sm.getAll();
 		assertTrue(stories.size() > 0);
-
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());
 	}
 	
 	/**
 	 * Tests searching for a story by keywords in the title.
 	 */
 	public void testSearchByKeywords() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		Story mockStory1 = new Story("test My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory1);
@@ -144,17 +161,22 @@ public class TestServerManager
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory2);
 
+		sm.remove(mockStory1.getId().toString());
+		sm.remove(mockStory2.getId().toString());	
+		
 		// setting search criteria
 		ArrayList<Story> stories = sm.searchByKeywords("test");
 		assertEquals(stories.size(), 2);
-		sm.remove(mockStory1.getId().toString());
-		sm.remove(mockStory2.getId().toString());			
 	}
 	
 	/**
 	 * Tests getting a random story
 	 */
 	public void testRandomStory() {
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		Story mockStory1 = new Story("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory1);
@@ -162,9 +184,10 @@ public class TestServerManager
 				"my chubby frog", Utilities.getPhoneId(getActivity()));
 		sm.update(mockStory2);
 
-		Story story = sm.getRandom();
-		assertNotNull(story);
 		sm.remove(mockStory1.getId().toString());
 		sm.remove(mockStory2.getId().toString());		
+		
+		Story story = sm.getRandom();
+		assertNotNull(story);
 	}
 }

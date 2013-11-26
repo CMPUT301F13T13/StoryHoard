@@ -33,7 +33,7 @@ public class MediaController implements SHController<Media>{
 	
 	@Override
 	public ArrayList<Media> getAll() {
-		return mediaMan.retrieve(new Media(null, null, null));
+		return mediaMan.retrieve(new Media(null, null, null, null, null));
 	}
 
 	@Override

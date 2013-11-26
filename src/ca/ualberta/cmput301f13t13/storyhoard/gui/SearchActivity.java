@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -85,13 +86,22 @@ public class SearchActivity extends Activity {
 				if (validInput(title)) {
 					// Correct Input: will save data to database and refresh
 					// activity.
-					search(title);
+					new SearchKeywords().execute(title);
 				} else {   
 					// Invalid Input types
 					alertDialog();
 				}
 			}
 		});		
+	}
+	
+	private class SearchKeywords extends AsyncTask<String, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(String... params) {
+			// search for a story
+			search((String)params[0]);
+			return null;
+		}
 	}
 	
 	private void search(String title) {

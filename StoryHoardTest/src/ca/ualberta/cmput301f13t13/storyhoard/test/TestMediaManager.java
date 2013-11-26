@@ -23,19 +23,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
-import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
-
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
+import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 
 /**
  * Class meant for the testing of the MediaManager class in the StoryHoard
@@ -46,13 +44,13 @@ import android.util.Log;
  * @see MediaManager
  */
 public class TestMediaManager extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<HelpGuide> {
 	private MediaManager mm = null;
 	private static final String fname1 = "img1.jpg";
 	private static final String fname2 = "img2.jpg";
 	
 	public TestMediaManager() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	protected void setUp() throws Exception {

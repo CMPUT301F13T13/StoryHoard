@@ -19,15 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.backend.*;
+import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.*;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
-import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Class meant for the testing of the ChapterManager class in the StoryHoard
@@ -39,11 +37,11 @@ import android.test.ActivityInstrumentationTestCase2;
  * 
  */
 public class TestChapterManager extends
-		ActivityInstrumentationTestCase2<ViewBrowseStories> {
+		ActivityInstrumentationTestCase2<HelpGuide> {
 	private ArrayList<Chapter> mockChapters;
 	private ChapterManager cm = null;
 	public TestChapterManager() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 	}
 
 	protected void setUp() throws Exception {

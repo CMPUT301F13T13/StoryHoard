@@ -26,10 +26,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.HelpGuide;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 
 /**
  * Class for testing the functionality of ChapterController.java
@@ -37,7 +36,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
  * @author sgil
  *
  */
-public class TestChapterController extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestChapterController extends ActivityInstrumentationTestCase2<HelpGuide> {
 	private Chapter mockChapter;
 	private Chapter mockChapter2;
 	private Chapter mockChapter3;
@@ -47,7 +46,7 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<View
 	private MediaController mediaCon;
 	
 	public TestChapterController() {
-		super(ViewBrowseStories.class);
+		super(HelpGuide.class);
 		// TODO Auto-generated constructor stub
 	}
 	/* (non-Javadoc)
