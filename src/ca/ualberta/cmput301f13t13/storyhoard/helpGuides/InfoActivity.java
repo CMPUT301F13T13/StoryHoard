@@ -14,11 +14,16 @@ public class InfoActivity extends Activity {
 
 	private TextView infoText;
 	private Button closeButton;
+	private String info = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
+		Bundle extra = getIntent().getExtras();
+		if (extra != null) {
+			info = extra.getString("theHelp");
+		}
 	}
 
 	@Override
@@ -41,19 +46,21 @@ public class InfoActivity extends Activity {
 	 * Sets the text to the appropriate help guide
 	 */
 	public void setInfoText() {
-		infoText.setText("Help guid goes here");
+		if (info != null) {
+			infoText.setText(info);
+		}
 	}
-	
+
 	/**
 	 * Sets Close Button Listener
 	 */
 	public void setCloseListener() {
 		closeButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finish();
-				
+
 			}
 		});
 	}
