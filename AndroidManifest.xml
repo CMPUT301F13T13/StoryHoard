@@ -76,10 +76,6 @@
             android:name="ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity"
             android:label="@string/title_activity_help_guide" >
         </activity>
-        <activity
-            android:name="ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity"
-            android:label="@string/title_activity_info" >
-        </activity>
     </application>
 
 </manifest>

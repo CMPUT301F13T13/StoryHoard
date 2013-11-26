@@ -120,4 +120,8 @@ public class LocalStoryController implements SHController<Story> {
 	public void remove(UUID id) {
 		storyMan.remove(id);
 	}		
+	
+	public Boolean isPublishedStoryMyStory(Story story, Context context) {
+		return story.getPhoneId().equals(Utilities.getPhoneId(context));
+	}
 }
