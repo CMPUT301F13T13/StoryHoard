@@ -15,6 +15,8 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
+import java.util.UUID;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -139,7 +141,15 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
-
+	private class unPublish extends AsyncTask<UUID, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {
+			// publish or update story
+			serverCon.remove(params[0]);
+			return null;
+		}
+	}
+	
 	private void saveChanges() {
 		String title = newTitle.getText().toString();
 		String author = newAuthor.getText().toString();
