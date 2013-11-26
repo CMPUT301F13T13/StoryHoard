@@ -18,7 +18,7 @@
         android:id="@+id/closeButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:text="@string/close" />
         
 </RelativeLayout>
