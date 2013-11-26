@@ -122,6 +122,7 @@ public class ViewBrowseStories extends Activity {
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
 					localCon.cache(story);
+					// new CacheStory().execute(story);
 				} 
 				
 				// Handle going to view story activity
@@ -163,7 +164,8 @@ public class ViewBrowseStories extends Activity {
 		case R.id.lucky:
 			Story randomStory = serverCon.getRandomStory();
 			
-			if (randomStory != null) {			
+			if (randomStory != null) {	
+				// new CacheStory().execute(randomStory);
 				localCon.cache(randomStory);
 				lifedata.setStory(randomStory);
 				intent = new Intent(getBaseContext(), ViewStory.class);
@@ -188,6 +190,41 @@ public class ViewBrowseStories extends Activity {
 		setActionBar();
 		refreshStories();
 	}
+	
+	/**
+	 * Caches (and locally mirrors) a story in the phone's database. This includes 
+	 * converting all the encoded strings for the story's chapters
+	 * back to bitmaps, saving them on to the SD card, and inserts 
+	 * all the chapter's medias and choices. In order to increase performance for
+	 * some of those heavy operations, an async task is used.
+	 *
+	 */
+	private class CacheStory extends AsyncTask<Story, Void, Void>{
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        progressDialog= ProgressDialog.show(
+	        		ViewBrowseStories.this, 
+	        		"Downloading Story",
+	        		"Please wait...", 
+	        		true);       
+	    };  
+	    
+		@Override
+		protected synchronized Void doInBackground(Story... params) {
+			localCon.cache(params[0]);
+			lifedata.setStory(params[0]);
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			Intent intent = new Intent(getBaseContext(), ViewStory.class);
+			startActivity(intent);
+		}
+	}	
 	
 	/**
 	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
