@@ -59,7 +59,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  */
 
 public class EditChapterActivity extends MediaActivity {
-	private ImageDialogBuilder dialBuilder = new ImageDialogBuilder();
+	private DeleteImageDialog dialBuilder = new DeleteImageDialog();
 	LifecycleData lifedata;
 	private Story story;
 	private Chapter chapter;
@@ -151,7 +151,7 @@ public class EditChapterActivity extends MediaActivity {
 	/**
 	 * Updates the view components depending on the chapter data.
 	 */
-	private void updateICData() {
+	protected void updateICData() {
 		progressDialog= ProgressDialog.show(
         		EditChapterActivity.this, 
         		"Edit Chapter Activity",
@@ -202,7 +202,7 @@ public class EditChapterActivity extends MediaActivity {
 					viewClicked = v;
 					dialBuilder.setDeleteDialog(EditChapterActivity.this,
 							viewClicked, illustrations);
-					return false;
+					return true;
 				}
 			});
 		}

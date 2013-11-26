@@ -18,10 +18,12 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -54,6 +56,8 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 	 * stories.
 	 */
 	public void testCacheAndGetAllCached() {
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
@@ -141,5 +145,15 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		// created, title has bob and hen
 		stories = lscon.searchAuthorStories("Bob hen");
 		assertEquals(stories.size(), 1);
+		
+		// Clearing database
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+	}
+	
+	public void isPublishedStoryMyStory() {
+		Story story = new Story("sdfsf", "sfdsf", "des",Utilities.getPhoneId(getActivity()));
+		assertTrue(lscon.isPublishedStoryMyStory(story, getActivity()));
+		story.setPhoneId("3432");
+		assertFalse(lscon.isPublishedStoryMyStory(story, getActivity()));
 	}
 }

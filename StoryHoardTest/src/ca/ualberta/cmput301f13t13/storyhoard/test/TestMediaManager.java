@@ -56,8 +56,6 @@ public class TestMediaManager extends
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 		
 		mm = MediaManager.getInstance(getActivity());	

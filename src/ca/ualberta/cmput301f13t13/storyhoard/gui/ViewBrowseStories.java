@@ -57,6 +57,7 @@ public class ViewBrowseStories extends Activity {
 	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
+	private Story storyClicked;
 	private ProgressDialog progressDialog;
 	ArrayList<Story> currentStories;
 	
@@ -118,19 +119,17 @@ public class ViewBrowseStories extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Story story = gridArray.get(arg2);
+				storyClicked = gridArray.get(arg2);
+				lifedata.setStory(storyClicked);
+				
 				// Handle caching the story if it's a published story, 
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
-					new CacheStory().execute(story);
-					
+					new CacheStory().execute(storyClicked);
+					return;
 					// Add overwrite warning dialog here!
-					
 				} 
-				
-				// Handle going to view story activity
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				lifedata.setStory(story);
 				startActivity(intent);
 			}
 		});
@@ -219,7 +218,7 @@ public class ViewBrowseStories extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();
+			progressDialog.dismiss();			
 			Intent intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 		}

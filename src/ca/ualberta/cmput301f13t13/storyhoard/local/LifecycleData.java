@@ -129,4 +129,10 @@ public class LifecycleData {
 	public void setCurrImage(Media img) {
 		this.currImage = img;
 	}
+	public void removeIllustration(Media media) {
+		if (currentImages == null) {
+			return;
+		} 
+	    currentImages.remove(media);
+	}
 }
