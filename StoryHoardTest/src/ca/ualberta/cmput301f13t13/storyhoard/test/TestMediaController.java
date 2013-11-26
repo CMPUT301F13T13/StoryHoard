@@ -56,7 +56,7 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
-		mockMedia3 = new Media(UUID.randomUUID(), null, Media.ILLUSTRATION);
+		mockMedia3 = new Media(chapId, null, Media.ILLUSTRATION);
 		mediaCon.insert(mockMedia3);
 
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
@@ -125,6 +125,6 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		
 		mediaCon.remove(mockMedia.getId());
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
-		assertEquals(mockMedias.size(), 1);
+		assertEquals(mockMedias.size(), 0);
 	}
 }
