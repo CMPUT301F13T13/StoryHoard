@@ -74,7 +74,8 @@
         </activity>
         <activity
             android:name="ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity"
-            android:label="@string/title_activity_help_guide" >
+            android:label="@string/title_activity_help_guide"
+            android:theme="@android:style/Theme.Holo.Dialog">
         </activity>
     </application>
 
