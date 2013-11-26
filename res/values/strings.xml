@@ -49,6 +49,11 @@
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="title_activity_help_guide">Help Guide</string>
     <string name="hello_world">Hello world!</string>
+<<<<<<< HEAD
     <string name="close">Close</string>
+=======
+    <string name="title_activity_info">InfoActivity</string>
+    <string name="unpublish_story">Unpublish Story</string>
+>>>>>>> e087182f58dc9c4c262a0cea7a4cc66109485174
 
 </resources>
