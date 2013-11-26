@@ -54,7 +54,7 @@ public class ViewBrowseStories extends Activity {
 	private AdapterStories customGridAdapter;
 	private LocalStoryController localCon;
 	private ServerStoryController serverCon;	
-	private enum Type {LOCAL, PUBLISHED};
+	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private ProgressDialog progressDialog;
@@ -94,12 +94,13 @@ public class ViewBrowseStories extends Activity {
 					public boolean onNavigationItemSelected(int itemPosition,
 							long itemId) {
 						if (itemPosition == 0) {
-							new GetAllAuthorStories().execute();
+							viewType = Type.CREATED;
 						} else if (itemPosition == 1) {
-							new GetAllCachedStories().execute();
+							viewType = Type.CACHED;
 						} else if (itemPosition == 2) {
-							new GetAllPublished().execute();
+							viewType = Type.PUBLISHED;
 						}
+						new GetAllStories().execute();
 						return true;
 					}
 				});
@@ -123,6 +124,9 @@ public class ViewBrowseStories extends Activity {
 				if (viewType == Type.PUBLISHED) {
 					localCon.cache(story);
 					// new CacheStory().execute(story);
+					
+					// Add overwrite warning dialog here!
+					
 				} 
 				
 				// Handle going to view story activity
@@ -225,59 +229,33 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 		}
 	}	
+				
 	
 	/**
-	 * Async task to retrieve all stories currently on the server, needed because the main UI thread
-	 * shouldn't be dealing with networking.
-	 *
-	 */
-	private class GetAllPublished extends AsyncTask<Void, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseStories.this, 
-	        		"Fetching All Published Stories",
-	        		"Please wait...", 
-	        		true);       
-	    };  
-	    
-		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = serverCon.getAll();
-			return null;
-		}
-		
-		@Override 
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-			viewType = Type.PUBLISHED;
-			refreshStories();
-		}
-	}
-	
-	/**
-	 * Async task to get all author's stories in the database. Used so main UI thread does
+	 * Async task to get all stories  of a type in the database. Used so main UI thread does
 	 * not have to interact with database and skip too many frames.
 	 *
 	 */
-	private class GetAllAuthorStories extends AsyncTask<Void, Void, Void>{
+	private class GetAllStories extends AsyncTask<Void, Void, Void>{
 	    @Override
 	    protected void onPreExecute()
 	    {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseStories.this, 
-	        		"Fetching All Your Stories",
+	        		"Fetching Stories",
 	        		"Please wait...", 
 	        		true);       
 	    };  
 	    
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = localCon.getAllAuthorStories();
+			if (viewType == Type.CACHED) {
+				currentStories = localCon.getAllCachedStories();
+			} else if (viewType == Type.CREATED) {
+				currentStories = localCon.getAllAuthorStories();
+			} else {
+				currentStories = serverCon.getAll();
+			}
 			return null;
 		}
 		
@@ -285,39 +263,6 @@ public class ViewBrowseStories extends Activity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			progressDialog.dismiss();
-			viewType = Type.LOCAL;
-			refreshStories();
-		}
-	}
-	
-	/**
-	 * Async task to get all cached stories in the database. Used so main UI thread does
-	 * not have to interact with database and skip too many frames.
-	 *
-	 */
-	private class GetAllCachedStories extends AsyncTask<Void, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseStories.this, 
-	        		"Fetching All Downloaded Stories",
-	        		"Please wait...", 
-	        		true);       
-	    };  
-	    
-		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			// get all published stories
-			currentStories = localCon.getAllCachedStories();
-			return null;
-		}
-		
-		@Override 
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-			viewType = Type.LOCAL;
 			refreshStories();
 		}
 	}	
