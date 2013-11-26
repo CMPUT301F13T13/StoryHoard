@@ -15,9 +15,10 @@
         android:hint="@string/info_hint"/>
     
     <Button 
-        android:id="@+id/dismissButton"
-        android:layout_width="match_parent"
+        android:id="@+id/closeButton"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/dismiss" />
+        android:layout_alignParentEnd="true"
+        android:text="@string/close" />
+        
 </RelativeLayout>

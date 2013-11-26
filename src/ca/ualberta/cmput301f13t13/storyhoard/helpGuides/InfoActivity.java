@@ -13,7 +13,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 public class InfoActivity extends Activity {
 
 	private TextView infoText;
-	private Button dismissButton;
+	private Button closeButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class InfoActivity extends Activity {
 		super.onResume();
 		setUpFields();
 		setInfoText();
+		setCloseListener();
 	}
 
 	/**
@@ -33,7 +34,7 @@ public class InfoActivity extends Activity {
 	 */
 	public void setUpFields() {
 		infoText = (TextView) findViewById(R.id.infoText);
-		dismissButton = (Button) findViewById(R.id.dismissButton);
+		closeButton = (Button) findViewById(R.id.closeButton);
 	}
 
 	/**
@@ -42,17 +43,17 @@ public class InfoActivity extends Activity {
 	public void setInfoText() {
 		infoText.setText("Help guid goes here");
 	}
-
+	
 	/**
-	 * Implements the dismiss button - Simply finishes activity
+	 * Sets Close Button Listener
 	 */
-	public void setDismiss() {
-		dismissButton.setOnClickListener(new View.OnClickListener() {
-
+	public void setCloseListener() {
+		closeButton.setOnClickListener(new View.OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
 				finish();
-
+				
 			}
 		});
 	}

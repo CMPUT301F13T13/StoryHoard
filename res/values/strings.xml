@@ -49,6 +49,6 @@
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="title_activity_help_guide">Help Guide</string>
     <string name="hello_world">Hello world!</string>
-    <string name="dismiss">Dismiss</string>
+    <string name="close">Close</string>
 
 </resources>
