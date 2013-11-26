@@ -188,6 +188,7 @@ public class TestMediaManager extends
 	public void testSync() {
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		mockMedia.setBitmapString(mockMedia.getBitmap());
 		mm.syncMedia(mockMedia);
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia);
 		assertEquals(mockMedias.size(), 1);

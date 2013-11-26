@@ -156,18 +156,8 @@ public class TestServerManager
 		sm.setTestServer();
 	
 		ArrayList<Story> stories = sm.getAll();
-		assertEquals(stories.size(), 3);
-	}
-	
-	/**
-	 * Tests loading all created stories, and makes sure the results don't
-	 * include any stories not created by author.
-	 */
-	public void testGetAllPublishedStoriesPart2() {		
-		sm = ServerManager.getInstance();
-		sm.setTestServer();
-	
-		ArrayList<Story> stories = sm.getAll();
+		stories = sm.getAll();
+		stories = sm.getAll();
 		assertEquals(stories.size(), 3);
 	}
 	
@@ -213,8 +203,10 @@ public class TestServerManager
 	public void testRemovePart2() {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
-		
-		ArrayList<Story> stories = sm.searchByKeywords("remove");
-		assertEquals(stories.size(), 0);
+		sm.remove(story3.getId().toString());
+		ArrayList<Story> stories = sm.getAll();
+		stories = sm.getAll();
+		stories = sm.getAll();
+		assertEquals(stories.size(), 2);
 	}	
 }
