@@ -20,10 +20,6 @@ public class InfoActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
-		Bundle extra = getIntent().getExtras();
-		if (extra != null) {
-			info = extra.getString("theHelp");
-		}
 	}
 
 	@Override
@@ -46,9 +42,11 @@ public class InfoActivity extends Activity {
 	 * Sets the text to the appropriate help guide
 	 */
 	public void setInfoText() {
-		if (info != null) {
-			infoText.setText(info);
+		Bundle extra = getIntent().getExtras();
+		if (extra != null) {
+			info = extra.getString("theHelp");
 		}
+		infoText.setText(info);
 	}
 
 	/**
