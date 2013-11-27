@@ -19,14 +19,13 @@ package ca.ualberta.cmput301f13t13.storyhoard.serverClasses;
 
 /**
  * 
- * Role: A simple elastic search response. It will hold the response
+ * Role: A simple elastic search response object. It will hold the response
  * from the server, where _source is the content, in this case, a story
- * object. 
+ * object. </br></br>
  * 
- * </br>
- * CODE REUSE: This code was taken directly from 
- * </br>
- * URL: https:https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESUpdates.java
+ * CODE REUSE: </br>
+ * This code was modified from </br>
+ * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESUpdates.java </br>
  * </br>
  * Date: Nov. 4th, 2013 
  * </br>

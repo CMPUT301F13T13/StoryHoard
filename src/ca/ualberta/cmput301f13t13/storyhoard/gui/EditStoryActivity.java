@@ -54,12 +54,6 @@ public class EditStoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		try {
-			Class.forName("android.os.AsyncTask");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

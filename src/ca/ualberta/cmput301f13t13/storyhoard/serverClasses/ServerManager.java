@@ -29,18 +29,16 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.StoringManager;
 import android.os.StrictMode;
 
 /**
- * Role: Uses functions from the ESUpdates to add, remove, update, and 
- * search for stories that have been published onto the server. All 
- * operations except for retrieving stories are performed on a different
- * thread than the main UI thread.
+ * Role: Uses functions from the ESUpdates and ESRetrieval to add, remove, 
+ * update, and search for stories that have been published onto the server. 
+ * </br></br>
  * 
- * </br> 
  * Design Pattern: Singleton
  * 
  * @author Stephanie Gil
  * 
  * @see ESUpdates
- * @see StoringManager
+ * @see ESRetrieval
  */
 public class ServerManager {
 	private static ESRetrieval esRetrieval = null;
@@ -68,13 +66,13 @@ public class ServerManager {
 		return self;
 	}
 	
+	/**
+	 * Changes the server index. Only used for the junit tests so that
+	 * the tests can run in a clean index with no other stories in it.
+	 */
 	public void setTestServer() {
 		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/tests/";
 	}
-	
-	public void setRealServer() {
-		server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/";
-	}	
 
 	/**
 	 * Inserts a story story onto the server.The insertStory from the ESUpdates 
