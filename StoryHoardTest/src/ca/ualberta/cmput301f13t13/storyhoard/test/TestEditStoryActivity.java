@@ -27,11 +27,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditStoryActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
-
-
 /**
  * Tests the EditStoryActivity class.
- *
+ * 
  */
 public class TestEditStoryActivity extends
 		ActivityInstrumentationTestCase2<EditStoryActivity> {
@@ -40,13 +38,13 @@ public class TestEditStoryActivity extends
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	
+
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
 	}
 
 	@Override
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		super.setUp();
 		lifedata = LifecycleData.getInstance();
 		Story story = new Story("title", "author", "es", "432432");
@@ -57,12 +55,13 @@ public class TestEditStoryActivity extends
 		chapter.addChoice(c1);
 		lifedata.setChapter(chapter);
 		activity = getActivity();
-		
+
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
-		newDescription = (EditText) activity.findViewById(id.newStoryDescription);
+		newDescription = (EditText) activity
+				.findViewById(id.newStoryDescription);
 	}
-	
+
 	/**
 	 * Tests the ui widgets have been properly initialized.
 	 */
@@ -72,7 +71,7 @@ public class TestEditStoryActivity extends
 		assertTrue(newAuthor != null);
 		assertTrue(newDescription != null);
 	}
-	
+
 	/**
 	 * Tests setting the title of a story on the ui widget.
 	 */
@@ -82,7 +81,7 @@ public class TestEditStoryActivity extends
 		newTitle.setText(title);
 		assertTrue(newTitle.getText().toString().equals(title));
 	}
-	
+
 	/**
 	 * Tests setting the author of a story on the ui widget.
 	 */
@@ -92,7 +91,7 @@ public class TestEditStoryActivity extends
 		newAuthor.setText(author);
 		assertTrue(newAuthor.getText().toString().equals(author));
 	}
-	
+
 	/**
 	 * Tests setting the description of a story on the ui widget.
 	 */

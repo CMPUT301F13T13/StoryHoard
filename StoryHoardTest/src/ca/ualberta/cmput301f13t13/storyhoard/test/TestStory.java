@@ -26,10 +26,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
-import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Class meant for the testing of the Story class in the StoryHoard 
@@ -41,27 +38,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  */
 public class TestStory extends
 		ActivityInstrumentationTestCase2<InfoActivity> {
-	private ServerManager sm;
-
+	
 	public TestStory() {
 		super(InfoActivity.class);
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		sm = ServerManager.getInstance();	
-		sm.setTestServer();
-	}
-
-	public void tearDown() throws Exception {
-		super.tearDown();
-		sm = ServerManager.getInstance();
-		sm.setRealServer();
 	}
 	
 	/**

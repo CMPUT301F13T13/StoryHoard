@@ -23,14 +23,6 @@ public class DeleteImageDialog {
 	private AlertDialog deleteDialog;
 	private MediaController mediaCon;
 
-	public AlertDialog getDeleteDialog() {
-		return deleteDialog;
-	}
-
-	public void setIllDialog(AlertDialog illDialog) {
-		this.deleteDialog = illDialog;
-	}
-
 	public void setDeleteDialog(final EditChapterActivity editChapterActivity,
 			final View viewClicked, final LinearLayout illustrations) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(editChapterActivity);

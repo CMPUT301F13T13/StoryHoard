@@ -30,20 +30,20 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
  * Class for testing the functionality of MediaController.java
  * 
  * @author sgil
- *
+ * 
  */
 public class TestMediaController extends
-ActivityInstrumentationTestCase2<InfoActivity> {
+		ActivityInstrumentationTestCase2<InfoActivity> {
 	private MediaController mediaCon;
 	private ArrayList<Media> mockMedias;
 	private Media mockMedia;
 	private Media mockMedia2;
 	private Media mockMedia3;
-	
+
 	public TestMediaController() {
 		super(InfoActivity.class);
 	}
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		mediaCon = MediaController.getInstance(getActivity());
@@ -60,11 +60,11 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		mediaCon.insert(mockMedia3);
 
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
-		assertEquals(mockMedias.size(), 1);		
+		assertEquals(mockMedias.size(), 1);
 		mockMedias = mediaCon.getIllustrationsByChapter(chapId);
-		assertEquals(mockMedias.size(), 1);	
+		assertEquals(mockMedias.size(), 1);
 	}
-	
+
 	/**
 	 * Tests getting all created choices.
 	 */
@@ -73,17 +73,17 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
+
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, "bob went away");
 		mediaCon.insert(mockMedia);
-		mockMedia3 = new Media(UUID.randomUUID(), null,	"photo");
+		mockMedia3 = new Media(UUID.randomUUID(), null, "photo");
 		mediaCon.insert(mockMedia3);
 
 		mockMedias = mediaCon.getAll();
-		assertEquals(mockMedias.size(), 2);		
+		assertEquals(mockMedias.size(), 2);
 	}
-	
+
 	/**
 	 * Tests inserting, retrieving, and updating a choice.
 	 */
@@ -91,27 +91,27 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
-		
+
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
-		
+
 		mockMedia2 = mockMedias.get(0);
 		mockMedia2.setText("hello");
 		mediaCon.update(mockMedia2);
-		
+
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
-		assertEquals(mockMedias.size(), 1);	
+		assertEquals(mockMedias.size(), 1);
 		mockMedia2 = mockMedias.get(0);
-		
+
 		assertFalse(mockMedia2.getText().equals(mockMedia.getText()));
-		
+
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
-	}	
-	
+
+	}
+
 	/**
 	 * Tests removing media from the database.
 	 */
@@ -119,10 +119,10 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
-		
+
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
-		
+
 		mediaCon.remove(mockMedia.getId());
 		mockMedias = mediaCon.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 0);

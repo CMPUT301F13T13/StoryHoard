@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
-
-
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -39,8 +37,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  * 
  * @see Choice
  */
-public class TestChoice 
-		extends ActivityInstrumentationTestCase2<ViewBrowseStories> {
+public class TestChoice extends
+		ActivityInstrumentationTestCase2<ViewBrowseStories> {
 
 	public TestChoice() {
 		super(ViewBrowseStories.class);
@@ -48,7 +46,7 @@ public class TestChoice
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		LifecycleData lifedata = LifecycleData.getInstance();
 		lifedata.setEditing(false);
 		// Clearing database
@@ -57,13 +55,12 @@ public class TestChoice
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
-	
 	/**
 	 * Tests creating a choice.
 	 */
 	@SuppressWarnings("unused")
 	public void testCreateChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");

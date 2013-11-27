@@ -16,23 +16,14 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import android.graphics.Bitmap;
-import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 
@@ -45,13 +36,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
  * 
  * @see Chapter
  */
-public class TestChapter 
-		extends ActivityInstrumentationTestCase2<InfoActivity> {
+public class TestChapter extends ActivityInstrumentationTestCase2<InfoActivity> {
 
 	public TestChapter() {
 		super(InfoActivity.class);
 	}
-	
+
 	/**
 	 * Tests creating a chapter two ways.
 	 */
@@ -78,9 +68,9 @@ public class TestChapter
 	}
 
 	/**
-	 * Tests retrieving the search information places within the story, i.e. 
-	 * the id, title, author, description, and whether or not it was created 
-	 * by the author.
+	 * Tests retrieving the search information places within the story, i.e. the
+	 * id, title, author, description, and whether or not it was created by the
+	 * author.
 	 */
 	public void testSetSearchCriteria() {
 		// empty everything
@@ -130,21 +120,21 @@ public class TestChapter
 		assertTrue(mockChapter.getIllustrations() != null);
 		assertTrue(mockChapter.hasRandomChoice());
 	}
-	
+
 	/**
-	 * Tests converting all the bitmaps of the chapter's media into string format, base 64 so
-	 * they can be placed into the server.
+	 * Tests converting all the bitmaps of the chapter's media into string
+	 * format, base 64 so they can be placed into the server.
 	 */
 	public void testPrepareMedia() {
 		String path = BogoPicGen.createPath("img1.jpg");
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
 		mockChapter.addPhoto(photo);
-		
+
 		mockChapter.prepareMediasForServer();
 		ArrayList<Media> photos = mockChapter.getPhotos();
 		photo = photos.get(0);
-		
+
 		assertFalse(photo.getBitmapString().equals(""));
 	}
 }

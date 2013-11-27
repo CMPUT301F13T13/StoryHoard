@@ -17,7 +17,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
@@ -45,7 +44,7 @@ public class TestStoryManager extends
 	}
 
 	protected void setUp() throws Exception {
-		super.setUp();	
+		super.setUp();
 		sm = StoryManager.getInstance(getActivity());
 	}
 
@@ -87,7 +86,7 @@ public class TestStoryManager extends
 				Utilities.getPhoneId(this.getActivity()));
 
 		sm.insert(mockStory);
-		
+
 		// retrieving story in db that matches mockStory
 		mockStories = sm.retrieve(mockStory);
 		assertEquals(mockStories.size(), 1);
@@ -102,7 +101,7 @@ public class TestStoryManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
+
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -114,7 +113,8 @@ public class TestStoryManager extends
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, Utilities.getPhoneId(getActivity()));
+		Story mockCriteria = new Story(null, null, null, null,
+				Utilities.getPhoneId(getActivity()));
 		mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 2);
 
@@ -128,7 +128,7 @@ public class TestStoryManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
+
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory1);
@@ -140,7 +140,8 @@ public class TestStoryManager extends
 		sm.insert(mockStory3);
 
 		// setting search criteria
-		Story mockCriteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
+		Story mockCriteria = new Story(null, null, null, null,
+				Story.NOT_AUTHORS);
 		mockStories = sm.retrieve(mockCriteria);
 		assertEquals(mockStories.size(), 2);
 	}
@@ -155,7 +156,7 @@ public class TestStoryManager extends
 
 		mockStories = sm.retrieve(mockStory);
 		assertEquals(mockStories.size(), 1);
-		
+
 		Story newStory = (Story) mockStories.get(0);
 
 		newStory.setTitle("My Wizard newt");
@@ -171,14 +172,11 @@ public class TestStoryManager extends
 		mockStories = sm.retrieve(mockStory);
 		assertEquals(mockStories.size(), 0);
 	}
-	
+
 	/**
-	 * Tests the correct determining of whether a story exists locally
-	 * or not.
+	 * Tests the correct determining of whether a story exists locally or not.
 	 */
 	public void testExistsLocally() {
-		UUID chapId1 = UUID.randomUUID();
-		UUID chapId2 = UUID.randomUUID();
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory);
@@ -189,8 +187,8 @@ public class TestStoryManager extends
 	}
 
 	/**
-	 * Tests synching a story, which is really already tested by
-	 * inserting and updating a story.
+	 * Tests synching a story, which is really already tested by inserting and
+	 * updating a story.
 	 */
 	public void testSync() {
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
@@ -198,5 +196,5 @@ public class TestStoryManager extends
 		sm.syncStory(mockStory);
 		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
 		assertEquals(mockStorys.size(), 1);
-	}			
+	}
 }

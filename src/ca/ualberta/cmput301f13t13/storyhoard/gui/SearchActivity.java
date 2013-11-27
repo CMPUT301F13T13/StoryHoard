@@ -76,6 +76,31 @@ public class SearchActivity extends Activity {
 		setSearchListener();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.search, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.browse_stories:
+			Intent browse = new Intent(this, ViewBrowseStories.class);
+			startActivity(browse);
+			return true;
+		case R.id.add_story:
+			Intent add = new Intent(this, EditStoryActivity.class);
+			add.putExtra("isEditing", false);
+			startActivity(add);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	private void setSearchListener() {
 		searchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -117,8 +142,8 @@ public class SearchActivity extends Activity {
 		lifedata.setStoryList(stories);
 		Intent intent = new Intent(getBaseContext(),
 				SearchResultsActivity.class);
-		finish();
 		startActivity(intent);		
+		finish();
 	}
 	
 	private void alertDialog() {
@@ -159,7 +184,6 @@ public class SearchActivity extends Activity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
 			}
 		});
 	}
@@ -173,31 +197,4 @@ public class SearchActivity extends Activity {
 			return true;
 		}
 	}
-
-	// MENU INFORMATION
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		switch (item.getItemId()) {
-		case R.id.browse_stories:
-			Intent browse = new Intent(this, ViewBrowseStories.class);
-			startActivity(browse);
-			return true;
-		case R.id.add_story:
-			Intent add = new Intent(this, EditStoryActivity.class);
-			add.putExtra("isEditing", false);
-			startActivity(add);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
 }

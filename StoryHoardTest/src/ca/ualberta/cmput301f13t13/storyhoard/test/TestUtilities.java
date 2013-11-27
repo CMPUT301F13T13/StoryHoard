@@ -33,19 +33,19 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
  */
 public class TestUtilities extends
 		ActivityInstrumentationTestCase2<InfoActivity> {
-	
+
 	public TestUtilities() {
 		super(InfoActivity.class);
 	}
 
 	/**
-	 * Tests that the get phoneId returns a string of phoneid 
+	 * Tests that the get phoneId returns a string of phoneid
 	 */
 	public void testGetPhoneId() {
-	assertFalse(Utilities.getPhoneId(this.getActivity()) == null);
+		assertFalse(Utilities.getPhoneId(this.getActivity()) == null);
 	}
-	
-	/** 
+
+	/**
 	 * Tests saving an image to the sd card.
 	 */
 	public void testSaveImageToSD() {

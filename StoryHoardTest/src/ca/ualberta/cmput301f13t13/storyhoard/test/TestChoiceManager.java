@@ -23,7 +23,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
@@ -55,7 +54,7 @@ public class TestChoiceManager extends
 	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
@@ -74,7 +73,7 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
-		Story story = new Story("7 bugs", "Shamalan", "scary story", 
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
 		Chapter chap1 = new Chapter(storyId, "test");
@@ -107,7 +106,7 @@ public class TestChoiceManager extends
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
+
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 
@@ -124,10 +123,9 @@ public class TestChoiceManager extends
 		ArrayList<Choice> mockChoices = cm.retrieve(criteria);
 		assertEquals(mockChoices.size(), 2);
 	}
-	
+
 	/**
-	 * Tests the correct determining of whether a choice exists locally
-	 * or not.
+	 * Tests the correct determining of whether a choice exists locally or not.
 	 */
 	public void testExistsLocally() {
 		UUID chapId1 = UUID.randomUUID();
@@ -135,14 +133,14 @@ public class TestChoiceManager extends
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
 		cm.insert(mockChoice);
 		Choice mockChoice2 = new Choice(chapId1, chapId2, "Lily drove");
-		
+
 		assertTrue(cm.existsLocally(mockChoice));
 		assertFalse(cm.existsLocally(mockChoice2));
 	}
 
 	/**
-	 * Tests synching a choice, which is really already tested by
-	 * inserting and updating a choice.
+	 * Tests synching a choice, which is really already tested by inserting and
+	 * updating a choice.
 	 */
 	public void testSync() {
 		UUID chapId1 = UUID.randomUUID();
@@ -151,5 +149,5 @@ public class TestChoiceManager extends
 		cm.syncChoice(mockChoice);
 		ArrayList<Choice> mockChoices = cm.retrieve(mockChoice);
 		assertEquals(mockChoices.size(), 1);
-	}		
+	}
 }

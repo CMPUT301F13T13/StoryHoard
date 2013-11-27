@@ -113,7 +113,7 @@ public class ViewStory extends Activity {
 		actionBar.setDisplayShowTitleEnabled(true);
 		
 		story = lifedata.getStory();
-		// storyCover.setImageBitmap(focusedStory.getImage());
+
 		// Check no title
 		if (story.getTitle().equals("")) {
 			storyTitle.setText("<No Title>");
@@ -155,8 +155,7 @@ public class ViewStory extends Activity {
 	 */
 	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
 	    @Override
-	    protected void onPreExecute()
-	    {	
+	    protected void onPreExecute() {	
 	        progressDialog= ProgressDialog.show(
 	        		ViewStory.this, 
 	        		"Loading Chapter",

@@ -133,8 +133,7 @@ public class ViewBrowseChapters extends Activity {
 	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
 	    
 		@Override
-	    protected void onPreExecute()
-	    {
+	    protected void onPreExecute() {
 	        progressDialog= ProgressDialog.show(
 	        		ViewBrowseChapters.this, 
 	        		"Fetching Chapters",

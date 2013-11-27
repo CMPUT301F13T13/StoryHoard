@@ -32,7 +32,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 
 /**
@@ -48,7 +47,7 @@ public class TestMediaManager extends
 	private MediaManager mm = null;
 	private static final String fname1 = "img1.jpg";
 	private static final String fname2 = "img2.jpg";
-	
+
 	public TestMediaManager() {
 		super(InfoActivity.class);
 	}
@@ -57,8 +56,8 @@ public class TestMediaManager extends
 		super.setUp();
 		// Clearing database
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
-		mm = MediaManager.getInstance(getActivity());	
+
+		mm = MediaManager.getInstance(getActivity());
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class TestMediaManager extends
 	public void testAddLoadImage() {
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
 		Media mockMedia = new Media(chap.getId(), createPath(fname1), null);
-		
+
 		mm.insert(mockMedia);
 
 		ArrayList<Media> objects = mm.retrieve(mockMedia);
@@ -82,7 +81,7 @@ public class TestMediaManager extends
 	 */
 	public void testGetAllMedia() {
 		UUID chapId = UUID.randomUUID();
-		
+
 		Media m2 = new Media(chapId, createPath(fname1), Media.PHOTO);
 
 		mm.insert(m2);
@@ -101,18 +100,18 @@ public class TestMediaManager extends
 	 */
 	public void testUpdateMedia() {
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
-		
+
 		Media mockMedia = new Media(chap.getId(), null, null);
 		mm.insert(mockMedia);
-		
+
 		Media criteria = new Media(null, chap.getId(), null, null, "");
-		
+
 		ArrayList<Media> objects = mm.retrieve(criteria);
 		assertEquals(objects.size(), 1);
 
 		Media newM1 = (Media) objects.get(0);
 
-		newM1.setType(Media.ILLUSTRATION);		
+		newM1.setType(Media.ILLUSTRATION);
 		newM1.setPath(createPath(fname2));
 
 		mm.update(newM1);
@@ -125,7 +124,7 @@ public class TestMediaManager extends
 		assertFalse(newM1.getType().equals(Media.PHOTO));
 		assertFalse(newM1.getPath().equals(fname1));
 	}
-	
+
 	/**
 	 * Creates a new bitmap, save sit on to SD card and sets path to it.
 	 */
@@ -135,7 +134,7 @@ public class TestMediaManager extends
 
 		String fileName = fname;
 
-		File mFile2 = new File(mFile1,fileName);
+		File mFile2 = new File(mFile1, fileName);
 		try {
 			FileOutputStream outStream;
 
@@ -153,35 +152,34 @@ public class TestMediaManager extends
 			e.printStackTrace();
 		}
 
-		String path = mFile1.getAbsolutePath().toString()+"/"+fileName;
+		String path = mFile1.getAbsolutePath().toString() + "/" + fileName;
 
-		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+path); 
+		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-" + path);
 
-		File temp=new File(path);
+		File temp = new File(path);
 
-		if(!temp.exists()){
-			Log.e("file","no image file at location :"+path);
+		if (!temp.exists()) {
+			Log.e("file", "no image file at location :" + path);
 		}
 		return path;
-	}	
-	
+	}
+
 	/**
-	 * Tests the correct determining of whether a media exists locally
-	 * or not.
+	 * Tests the correct determining of whether a media exists locally or not.
 	 */
 	public void testExistsLocally() {
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
 		mm.insert(mockMedia);
 		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
-		
+
 		assertTrue(mm.existsLocally(mockMedia));
 		assertFalse(mm.existsLocally(mockMedia2));
 	}
 
 	/**
-	 * Tests synching a media, which is really already tested by
-	 * inserting and updating a media.
+	 * Tests synching a media, which is really already tested by inserting and
+	 * updating a media.
 	 */
 	public void testSync() {
 		UUID chapId = UUID.randomUUID();
@@ -190,8 +188,8 @@ public class TestMediaManager extends
 		mm.syncMedia(mockMedia);
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia);
 		assertEquals(mockMedias.size(), 1);
-	}	
-	
+	}
+
 	/**
 	 * Tests synching the deletion of media.
 	 */
@@ -201,16 +199,16 @@ public class TestMediaManager extends
 		mm.insert(mockMedia);
 		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
 		mm.insert(mockMedia2);
-		
+
 		ArrayList<UUID> newList = new ArrayList<UUID>();
 		newList.add(mockMedia.getId());
-		
+
 		mm.syncDeletions(newList, chapId);
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia2);
 		assertEquals(mockMedias.size(), 0);
-	}	
-	
+	}
+
 	public void testRemove() {
-		
+
 	}
 }

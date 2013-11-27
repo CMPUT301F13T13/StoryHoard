@@ -57,11 +57,7 @@ public class ViewBrowseStories extends Activity {
 	private AlertDialog overwriteDialog;
 	private LocalStoryController localCon;
 	private ServerStoryController serverCon;
-
-	private enum Type {
-		CREATED, CACHED, PUBLISHED
-	};
-
+	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private Story storyClicked;
@@ -77,6 +73,16 @@ public class ViewBrowseStories extends Activity {
 		setContentView(R.layout.activity_view_browse_stories);
 		setGridView();
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		lifedata = LifecycleData.getInstance();
+		serverCon = ServerStoryController.getInstance(this);
+		localCon = LocalStoryController.getInstance(this);
+		setActionBar();
+		refreshStories();
+	}	
 
 	private void setActionBar() {
 		// Set up the action bar to show a dropdown list.
@@ -113,67 +119,7 @@ public class ViewBrowseStories extends Activity {
 					}
 				});
 	}
-
-	private void setGridView() {
-		// Setup the grid view for the stories
-		gridView = (GridView) findViewById(R.id.gridStoriesView);
-		customGridAdapter = new AdapterStories(this,
-				R.layout.browse_story_item, gridArray);
-		gridView.setAdapter(customGridAdapter);
-
-		// Setup the grid view click listener
-		gridView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				storyClicked = gridArray.get(arg2);
-				lifedata.setStory(storyClicked);
-
-				// Handle caching the story if it's a published story,
-				// currently breaks downloaded stories
-				if (viewType == Type.PUBLISHED) {
-					// Add overwrite warning dialog here!
-					overwriteStory();
-					return;
-				}
-				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				startActivity(intent);
-			}
-		});
-	}
-
-	/**
-	 * Displays the dialog that handles choosing to overwrite a story or not. If
-	 * user chooses to potentially overwrite the story, return ture otherwise
-	 * return false
-	 */
-	private void overwriteStory() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Potentially overwrite local version of this story?");
-		final String[] overwriteChoices = { "Proceed", "Cancel" };
-		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case 0:
-					CacheStory storytoCache = new CacheStory();
-					storytoCache.execute(storyClicked, null, null);
-					//new CacheStory().equals(storyClicked);
-					//localCon.cache(storyClicked);
-					Intent intent = new Intent(getBaseContext(), ViewStory.class);
-					startActivity(intent);
-					break;
-				case 1:
-					break;
-				}
-				overwriteDialog.dismiss();
-			}
-		});
-		overwriteDialog = alert.create();
-		overwriteDialog.show();
-	}
-
+	
 	/**
 	 * Handle the creation of the View Browse Stories activity menu
 	 */
@@ -220,16 +166,77 @@ public class ViewBrowseStories extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		lifedata = LifecycleData.getInstance();
-		serverCon = ServerStoryController.getInstance(this);
-		localCon = LocalStoryController.getInstance(this);
-		setActionBar();
-		refreshStories();
+	
+	/**
+	 * Called whenever the spinner is updated. Will story array based on
+	 * whatever the general controller returns.
+	 */
+	private void refreshStories() {
+		gridArray.clear();
+		if (currentStories != null) {
+			gridArray.addAll(currentStories);
+		}
+		customGridAdapter.notifyDataSetChanged();
 	}
+	
+	private void setGridView() {
+		// Setup the grid view for the stories
+		gridView = (GridView) findViewById(R.id.gridStoriesView);
+		customGridAdapter = new AdapterStories(this,
+				R.layout.browse_story_item, gridArray);
+		gridView.setAdapter(customGridAdapter);
+
+		// Setup the grid view click listener
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				storyClicked = gridArray.get(arg2);
+				lifedata.setStory(storyClicked);
+
+				// Handle caching the story if it's a published story,
+				// currently breaks downloaded stories
+				if (viewType == Type.PUBLISHED) {
+					overwriteStory();
+					return;
+				}
+				Intent intent = new Intent(getBaseContext(), ViewStory.class);
+				startActivity(intent);
+			}
+		});
+	}
+
+	/**
+	 * Displays the dialog that handles choosing to overwrite a story or not. If
+	 * user chooses to potentially overwrite the story, return true otherwise
+	 * return false
+	 */
+	private void overwriteStory() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Potentially overwrite local version of this story?");
+		final String[] overwriteChoices = { "Proceed", "Cancel" };
+		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					CacheStory storytoCache = new CacheStory();
+					storytoCache.execute(storyClicked, null, null);
+					Intent intent = new Intent(getBaseContext(), ViewStory.class);
+					startActivity(intent);
+					break;
+				case 1:
+					break;
+				}
+				overwriteDialog.dismiss();
+			}
+		});
+		overwriteDialog = alert.create();
+		overwriteDialog.show();
+	}
+
+
 
 	/**
 	 * Caches (and locally mirrors) a story in the phone's database. This
@@ -292,18 +299,6 @@ public class ViewBrowseStories extends Activity {
 			progressDialog.dismiss();
 			refreshStories();
 		}
-	}
-
-	/**
-	 * Called whenever the spinner is updated. Will story array based on
-	 * whatever the general controller returns.
-	 */
-	private void refreshStories() {
-		gridArray.clear();
-		if (currentStories != null) {
-			gridArray.addAll(currentStories);
-		}
-		customGridAdapter.notifyDataSetChanged();
 	}
 
 	/**

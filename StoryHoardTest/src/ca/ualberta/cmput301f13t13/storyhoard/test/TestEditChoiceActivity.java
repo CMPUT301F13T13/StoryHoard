@@ -1,17 +1,17 @@
 /**
  * Copyright 2013 Alex Wong, Ashley Brown, Josh Tate, Kim Wu, Stephanie Gil
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
@@ -36,13 +36,13 @@ public class TestEditChoiceActivity extends
 	LifecycleData lifedata;
 	private EditText choiceText;
 	private ListView chapters;
-	
+
 	private EditChoiceActivity mActivity;
-	
+
 	public TestEditChoiceActivity() {
 		super(EditChoiceActivity.class);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -56,10 +56,11 @@ public class TestEditChoiceActivity extends
 		lifedata.setEditing(false);
 		lifedata.setStory(story);
 		lifedata.setChapter(new Chapter(story.getId(), null));
-		
+
 		mActivity = (EditChoiceActivity) getActivity();
 		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
-		chapters = (ListView) mActivity.findViewById(R.id.listAllLinkableChapters);
+		chapters = (ListView) mActivity
+				.findViewById(R.id.listAllLinkableChapters);
 	}
 
 	/**
@@ -69,16 +70,15 @@ public class TestEditChoiceActivity extends
 		assertTrue(mActivity != null);
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
-	} 
-	
+	}
+
 	/**
-	 * Tests setting the edit text for the widget containing choice
-	 * text.
+	 * Tests setting the edit text for the widget containing choice text.
 	 */
 	@UiThreadTest
 	public void testSetChoiceText() {
 		String title = "My choice";
 		choiceText.setText(title);
 		assertTrue(choiceText.getText().toString().equals(title));
-	}	
+	}
 }

@@ -6,17 +6,14 @@ import java.util.UUID;
 import android.content.Context;
 
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 public class ServerStoryController implements SHController<Story>{
 	private static ServerStoryController self = null;   
 	private static ServerManager serverMan;
-	private static Syncher syncher = null;
 
 	protected ServerStoryController(Context context) {
 		serverMan = ServerManager.getInstance();
-		syncher = Syncher.getInstance(context);
 	}
 	
 	public static ServerStoryController getInstance(Context context) {

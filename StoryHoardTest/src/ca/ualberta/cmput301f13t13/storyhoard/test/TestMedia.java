@@ -15,17 +15,11 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
@@ -33,31 +27,29 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
- * Class meant for the testing of the Media class in the StoryHoard 
- * application.
+ * Class meant for the testing of the Media class in the StoryHoard application.
  * 
  * @author Stephanie Gil
  * 
  * @see Media
  */
-public class TestMedia extends
-ActivityInstrumentationTestCase2<InfoActivity> {
+public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 	private static String path;
 	private static String path2;
-	
+
 	public TestMedia() {
 		super(InfoActivity.class);
 	}
 
 	public void setUp() throws Exception {
 		super.setUp();
-		
+
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
-	
+
 	/**
 	 * Tests creating a media object.
 	 */
@@ -66,8 +58,7 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		// Make photo
 		try {
 			@SuppressWarnings("unused")
-			Media photo = new Media(UUID.randomUUID(), path, 
-					Media.PHOTO);
+			Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 			Bitmap bm = BitmapFactory.decodeFile(path);
 			assertTrue(bm != null);
 		} catch (Exception e) {
@@ -88,7 +79,7 @@ ActivityInstrumentationTestCase2<InfoActivity> {
 		String type = photo.getType();
 		Bitmap bm = photo.getBitmap();
 		String text = "text";
-		
+
 		photo.setId(UUID.randomUUID());
 		photo.setChapterId(UUID.randomUUID());
 		photo.setType(Media.ILLUSTRATION);

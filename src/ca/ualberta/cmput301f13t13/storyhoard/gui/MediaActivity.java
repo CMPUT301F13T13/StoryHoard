@@ -96,7 +96,7 @@ public abstract class MediaActivity extends Activity {
 	 * the chapter.
 	 */
 	public void addPhoto() {
-		// gettting image text / annotation
+		// getting image text / annotation
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		
 		// Set dialog title

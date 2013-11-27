@@ -74,7 +74,6 @@ public class EditChapterActivity extends MediaActivity {
 	private ArrayList<Media> illList;
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
-	private View viewClicked;
 	private ProgressDialog progressDialog;
 
 	@Override
@@ -152,12 +151,6 @@ public class EditChapterActivity extends MediaActivity {
 	 * Updates the view components depending on the chapter data.
 	 */
 	protected void updateICData() {
-		progressDialog= ProgressDialog.show(
-        		EditChapterActivity.this, 
-        		"Edit Chapter Activity",
-        		"Loading Chapter...", 
-        		true);
-		
 		story = lifedata.getStory();
 		if (lifedata.isEditing()) {
 			
@@ -174,91 +167,48 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		}
 		
+		// set up choices
 		setRandomChoice();
 		
-		// Set the chapter text, if new Chapter will simply be blank
 		choices.clear();
 		choices.addAll(choiceCon.getChoicesByChapter(chapter.getId()));
-		
-		// Clean up illustrations layout
-		illustrations.removeAllViews();
 		
 		// any choices that have not been saved
 		ArrayList<Choice> myChoices = lifedata.getCurrChoices();
 		for (Choice choice : myChoices) {
 			choices.add(choice);
 		}
-
+		choiceAdapter.notifyDataSetChanged();
+		
+		setUpIllustrations();
+		
+	}
+	
+	/**
+	 * Retrieves and sets up the illustrations for the chapter.
+	 */
+	public void setUpIllustrations() {
+		// Clean up illustrations layout
+		illustrations.removeAllViews();
+	
 		// Getting illustrations
 		illList = mediaCon.getIllustrationsByChapter(chapter.getId());
 
 		// Insert any images that have not been saved
 		illList.addAll(lifedata.getCurrImages());
 		for (Media img : illList) {
-			View v = insertImage(img, EditChapterActivity.this, illustrations);
-			v.setOnLongClickListener(new OnLongClickListener() {
+			View view = insertImage(img, EditChapterActivity.this, illustrations);
+			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					viewClicked = v;
 					dialBuilder.setDeleteDialog(EditChapterActivity.this,
-							viewClicked, illustrations);
+							v, illustrations);
 					return true;
 				}
 			});
 		}
 		lifedata.setCurrImage(null);
-		
-		choiceAdapter.notifyDataSetChanged();
-		
-		progressDialog.dismiss();
-	}
-	
-	/**
-	 * Async task to get all the chapter information from the database, including media and 
-	 * choices.
-	 *
-	 */
-	private class SaveChapter extends AsyncTask<Void, Void, Void>{
-		@Override
-		protected synchronized Void doInBackground(Void... params) {	
-			// saving any illustrations
-			ArrayList<Media> ills = lifedata.getCurrImages();
-			for (Media ill : ills) {
-				mediaCon.insert(ill);
-			}
-
-			// saving any choices
-			ArrayList<Choice> choices = lifedata.getCurrChoices();
-			for (Choice choice : choices) {
-				choiceCon.insert(choice);
-			}
-
-			lifedata.setCurrChoices(null);
-			lifedata.setCurrImages(null);
-			lifedata.setChapter(null);
-
-			chapter.setText(chapterContent.getText().toString());
-			if (lifedata.isEditing()) {
-				chapCon.update(chapter);
-			} else {
-				chapCon.insert(chapter);
-				if (lifedata.isFirstStory()) {
-					LocalStoryController storyCon = LocalStoryController
-							.getInstance(EditChapterActivity.this);
-					story.setFirstChapterId(chapter.getId());
-					storyCon.insert(story);
-					lifedata.setFirstStory(false);
-				}
-			}
-			return null;
-		}
-		
-		@Override 
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-		}
-	}		
+	}	
 	
 	/**
 	 * Set onClick listener for setting random choice
@@ -323,11 +273,50 @@ public class EditChapterActivity extends MediaActivity {
 		finish();
 	}
 	
-	public void setMediaCon(MediaController mediaCon) {
-		this.mediaCon = mediaCon;
-	}
+	/**
+	 * Async task to get all the chapter information from the database, including media and 
+	 * choices.
+	 *
+	 */
+	private class SaveChapter extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected synchronized Void doInBackground(Void... params) {	
+			// saving any illustrations
+			ArrayList<Media> ills = lifedata.getCurrImages();
+			for (Media ill : ills) {
+				mediaCon.insert(ill);
+			}
 
-	public MediaController getMediaCon() {
-		return mediaCon;
-	}
+			// saving any choices
+			ArrayList<Choice> choices = lifedata.getCurrChoices();
+			for (Choice choice : choices) {
+				choiceCon.insert(choice);
+			}
+
+			lifedata.setCurrChoices(null);
+			lifedata.setCurrImages(null);
+			lifedata.setChapter(null);
+
+			chapter.setText(chapterContent.getText().toString());
+			if (lifedata.isEditing()) {
+				chapCon.update(chapter);
+			} else {
+				chapCon.insert(chapter);
+				if (lifedata.isFirstStory()) {
+					LocalStoryController storyCon = LocalStoryController
+							.getInstance(EditChapterActivity.this);
+					story.setFirstChapterId(chapter.getId());
+					storyCon.insert(story);
+					lifedata.setFirstStory(false);
+				}
+			}
+			return null;
+		}
+		
+		@Override 
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+		}
+	}		
 }
