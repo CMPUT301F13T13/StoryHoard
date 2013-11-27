@@ -140,7 +140,7 @@ public class EditStoryActivity extends Activity {
 		new UnPublish().execute(newStory.getId());
 		Toast.makeText(getBaseContext(), "Unpublished story from server",
 				Toast.LENGTH_SHORT).show();
-		finish();
+		
 	}
 
 	private class Update extends AsyncTask<Void, Void, Void> {

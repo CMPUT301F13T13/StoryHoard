@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,6 +54,7 @@ public class ViewBrowseStories extends Activity {
 	private GridView gridView;
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
+	private AlertDialog overwriteDialog;
 	private LocalStoryController localCon;
 	private ServerStoryController serverCon;
 
@@ -124,18 +128,50 @@ public class ViewBrowseStories extends Activity {
 					long arg3) {
 				storyClicked = gridArray.get(arg2);
 				lifedata.setStory(storyClicked);
-				
-				// Handle caching the story if it's a published story, 
+
+				// Handle caching the story if it's a published story,
 				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
-					new CacheStory().execute(storyClicked);
-					return;
 					// Add overwrite warning dialog here!
-				} 
+					overwriteStory();
+					return;
+				}
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
 			}
 		});
+	}
+
+	/**
+	 * Displays the dialog that handles choosing to overwrite a story or not. If
+	 * user chooses to potentially overwrite the story, return ture otherwise
+	 * return false
+	 */
+	private void overwriteStory() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Potentially overwrite local version of this story?");
+		final String[] overwriteChoices = { "Proceed", "Cancel" };
+		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					CacheStory storytoCache = new CacheStory();
+					storytoCache.execute(storyClicked, null, null);
+					//new CacheStory().equals(storyClicked);
+					//localCon.cache(storyClicked);
+					Intent intent = new Intent(getBaseContext(), ViewStory.class);
+					startActivity(intent);
+					break;
+				case 1:
+					break;
+				}
+				overwriteDialog.dismiss();
+			}
+		});
+		overwriteDialog = alert.create();
+		overwriteDialog.show();
 	}
 
 	/**
@@ -220,7 +256,7 @@ public class ViewBrowseStories extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();			
+			progressDialog.dismiss();
 			Intent intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
 		}
