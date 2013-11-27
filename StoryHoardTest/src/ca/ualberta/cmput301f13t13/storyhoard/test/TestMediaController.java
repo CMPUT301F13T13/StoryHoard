@@ -104,12 +104,6 @@ public class TestMediaController extends
 		mockMedia2 = mockMedias.get(0);
 
 		assertFalse(mockMedia2.getText().equals(mockMedia.getText()));
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
 	}
 
 	/**

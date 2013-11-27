@@ -23,6 +23,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -47,6 +48,11 @@ public class TestLocalStoryController extends
 		super.setUp();
 		activity = getActivity();
 		lscon = LocalStoryController.getInstance(activity);
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
 	/**
@@ -54,8 +60,6 @@ public class TestLocalStoryController extends
 	 * stories.
 	 */
 	public void testCacheAndGetAllCached() {
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
 		ArrayList<Story> stories = new ArrayList<Story>();
 
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
@@ -142,9 +146,6 @@ public class TestLocalStoryController extends
 		// created, title has bob and hen
 		stories = lscon.searchAuthorStories("Bob hen");
 		assertEquals(stories.size(), 1);
-
-		// Clearing database
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
 	public void isPublishedStoryMyStory() {

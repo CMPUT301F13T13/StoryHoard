@@ -15,11 +15,17 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
@@ -71,7 +77,7 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 	 */
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
-		path = BogoPicGen.createPath("img1.jpg");
+		path = createPath("img1.jpg");
 		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
 
 		UUID id = photo.getId();
@@ -85,7 +91,7 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 		photo.setType(Media.ILLUSTRATION);
 		photo.setText(text);
 
-		path2 = BogoPicGen.createPath("img2.jpg");
+		path2 = createPath("img2.jpg");
 		photo.setPath(path2);
 
 		assertNotSame(id, photo.getId());
@@ -95,4 +101,51 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 		assertTrue(photo.getBitmap() != null);
 		assertFalse(photo.getPath().equals(path));
 	}
+	
+	/**
+	 * Creates a new bitmap, save sit on to SD card and sets path to it.
+	 * Once again, this code is only for use in the JUnit tests.
+	 * 
+	 * CODE REUSE: </br>
+	 * This code was modified from the code at:</br>
+	 * URL: http://stackoverflow.com/questions/7021728/android-writing-bitmap-to-sdcard </br>
+	 * Date: Nov. 2, 2013 </br>
+	 * License`: CC-BY-SA
+	 */ 
+	public static String createPath(String fname) {
+		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
+		File mFile1 = Environment.getExternalStorageDirectory();
+
+		String fileName = fname;
+
+		File mFile2 = new File(mFile1,fileName);
+		try {
+			FileOutputStream outStream;
+
+			outStream = new FileOutputStream(mFile2);
+
+			bm.compress(Bitmap.CompressFormat.JPEG, 75, outStream);
+
+			outStream.flush();
+
+			outStream.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		String path = mFile1.getAbsolutePath().toString()+"/"+fileName;
+
+		Log.i("maull", "Your IMAGE ABSOLUTE PATH:-"+path); 
+
+		File temp=new File(path);
+
+		if(!temp.exists()){
+			Log.e("file","no image file at location :"+path);
+		}
+		
+		return path;
+	}	
 }

@@ -116,11 +116,6 @@ public class TestChapterManager extends
 		// make sure old version no longer exists
 		Chapter compChap = (Chapter) mockChapters.get(0);
 		assertTrue(compChap.getText().equals(newChapter.getText()));
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
 	/**

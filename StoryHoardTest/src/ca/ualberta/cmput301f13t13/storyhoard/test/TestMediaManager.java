@@ -32,6 +32,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 
 /**
@@ -54,7 +55,10 @@ public class TestMediaManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
 		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 
 		mm = MediaManager.getInstance(getActivity());
@@ -208,7 +212,10 @@ public class TestMediaManager extends
 		assertEquals(mockMedias.size(), 0);
 	}
 
+	/**
+	 * Tests removing a media from the database.
+	 */
 	public void testRemove() {
-
+		
 	}
 }

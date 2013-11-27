@@ -153,10 +153,5 @@ public class TestChapterController extends
 		mockChapter2 = mockChapters.get(0);
 
 		assertFalse(mockChapter2.getText().equals(mockChapter.getText()));
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 }

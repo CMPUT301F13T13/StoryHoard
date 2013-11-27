@@ -119,12 +119,6 @@ public class TestChoiceController extends
 
 		Choice random = choiceCon.getRandomChoice(chapId);
 		assertNotNull(random);
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
 	}
 
 }

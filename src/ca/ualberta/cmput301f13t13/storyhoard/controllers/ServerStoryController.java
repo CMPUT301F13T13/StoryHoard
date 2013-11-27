@@ -32,10 +32,14 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  * ESRetrieval and ESUpdates classes to do the actual interacting with the
  * server. </br></br>
  * 
+ * This class works as an adapter because it uses the methods available in 
+ * ServerManager and makes them fit in the methods required my this method
+ * for the activity classes to use with ease. </br></br>
+ * 
  * Note that it specifies different methods for different types of retrieval. 
  * Specifically, getAll(), getRandom(), and searchByTitle().  </br></br>
  * 
- * Desgin Pattern: Singleton, Adaptor
+ * Design Patterns: Singleton, Adaptor
  * 
  * @author Stephanie Gil
  * 
