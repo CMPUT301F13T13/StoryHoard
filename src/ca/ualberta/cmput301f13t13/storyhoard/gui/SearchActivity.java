@@ -136,7 +136,7 @@ public class SearchActivity extends Activity {
 		} else if (viewType == Type.CACHED) {
 			stories = localCon.searchCachedStories(title);
 		} else {
-			stories = serverCon.searchByTitle(title);
+			stories = serverCon.searchByKeywords(title);
 		}
 		
 		lifedata.setStoryList(stories);

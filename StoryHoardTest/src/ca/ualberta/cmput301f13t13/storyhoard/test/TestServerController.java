@@ -75,7 +75,7 @@ public class TestServerController extends
 	 */
 	public void testSearchByTitle() {
 		serverCon = ServerStoryController.getInstance(getActivity());
-		ArrayList<Story> stories = serverCon.searchByTitle("Harry");
+		ArrayList<Story> stories = serverCon.searchByKeywords("Harry");
 		assertEquals(stories.size(), 1);
 	}
 
@@ -107,7 +107,7 @@ public class TestServerController extends
 	 */
 	public void testUpdatePart2() {
 		serverCon = ServerStoryController.getInstance(getActivity());
-		ArrayList<Story> stories = serverCon.searchByTitle("new title");
+		ArrayList<Story> stories = serverCon.searchByKeywords("new title");
 		assertEquals(stories.size(), 1);
 
 		// cleaning server
@@ -133,7 +133,7 @@ public class TestServerController extends
 	public void testRemovePart2() {
 		serverCon = ServerStoryController.getInstance(getActivity());
 		// delete
-		ArrayList<Story> stories = serverCon.searchByTitle("Duckling");
+		ArrayList<Story> stories = serverCon.searchByKeywords("Duckling");
 		assertEquals(stories.size(), 0);
 	}
 }

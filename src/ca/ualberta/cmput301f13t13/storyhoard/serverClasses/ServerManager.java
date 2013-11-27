@@ -205,8 +205,9 @@ public class ServerManager {
 	 * Builds a query string to find all stories on the server that contain
 	 * the given keywords in their title. This method uses the retrieve
 	 * method in ESRetrieval to actually do the retrieval. </br></br>
-	 * </br>
-	 * It is also assumed that the string of keywords passed in contains
+	 * </br> Note also that the titles must contain ALL the keywords
+	 * in their title, not just at least one of them. </br>
+	 * It is also assumes that the string of keywords passed in contains
 	 * the keywords separated by whitespace. </br></br>
 	 * 
 	 * Example Call: </br>
@@ -243,16 +244,19 @@ public class ServerManager {
 	}
 
 	/**
-	 * Updates a story on the server. This is done by first removing the
-	 * story on the server with the deleteStory() method in ESUpdates, and 
-	 * then by re-inserting it using the insert() method in ESUpdates. 
-	 * </br></br>
+	 * This method first checks whether or not the story to be updated exists
+	 * on the server. If it doesn't, then the insert method is called. If it
+	 * does, then it updates the story currently on the server. </br></br>
+	 *  
+	 * Updating is done by first removing the story on the server with the 
+	 * deleteStory() method in ESUpdates, and then by re-inserting it using
+	 * the insert() method in ESUpdates. </br></br>
 	 * 
 	 * Example call: </br>
 	 * Assuming a story with the id below already exists on the server, </br>
 	 * UUID id = f1bda3a9-4560-4530-befc-2d58db9419b7; </br>
-	 * Story newStory = new Story(id, "new title", new author", null, null); </br>
-	 * update(newStory); </br></br>
+	 * Story newStory = new Story(id, "new title", new author", null, null); 
+	 * </br> update(newStory); </br></br>
 	 * 
 	 * The story on the server will now have the title "new title" and 
 	 * "new author", replacing whatever old values it had before. </br>
