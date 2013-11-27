@@ -138,6 +138,9 @@ public class LocalStoryController implements SHController<Story> {
 	}		
 	
 	public Boolean isPublishedStoryMyStory(Story story, Context context) {
+		if (story == null) {
+			return true;
+		}
 		return story.getPhoneId().equals(Utilities.getPhoneId(context));
 	}
 }
