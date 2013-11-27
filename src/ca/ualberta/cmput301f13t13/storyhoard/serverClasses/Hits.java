@@ -20,14 +20,14 @@ import java.util.Collection;
 
 
 /**
- * Role: Hits object for the elastic search.
- * </br>
- * CODE REUSE: This code was taken directly from 
- * </br>
+ * Role: A container for objects from the server, in this case,
+ * SimpleESResponses.</br></br>
+ * 
+ * CODE REUSE: </br>
+ *  This code was taken directly from </br>
  * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/Hits.java
  * </br>
- * Date: Nov. 4th, 2013 
- * </br>
+ * Date: Nov. 4th, 2013 </br>
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
 
  * @author Abram Hindle
@@ -41,6 +41,7 @@ public class Hits<T> {
 	    int total;
 	    double max_score;
 	    Collection<SimpleESResponse<T>> hits;
+	    
 	    public Collection<SimpleESResponse<T>> getHits() {
 	        return hits;
 	    }

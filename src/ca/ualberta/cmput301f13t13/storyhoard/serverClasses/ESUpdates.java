@@ -35,20 +35,17 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import com.google.gson.Gson;
 
 /**
- * Role: Interacts with the server by inserting, retrieving, updating, and
- * deleting story objects. This is the only class that directly interacts with
- * the server. It uses the HttpClient to talk to the server, and also Google's
- * gson to move Stories to and from the server.
+ * This class provides the necessary methods for any actual modifications
+ * to stories on the server. This includes deletion and insertion. It is 
+ * meant to be used only by the ServerManager class. </br></br>
  * 
- * </br>
- * Design Pattern: Singleton
+ * Desgin Pattern: Singleton </br></br>
  * 
- * </br>
- * CODE REUSE: This code is a modified version of the code at URL:
- * https://github
- * .com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301
- * /chenlei/ESUpdates.java Date: Nov. 4th, 2013 Licensed under CC0 (available at
- * http://creativecommons.org/choose/zero/)
+ * CODE REUSE: </br>
+ * This code is a modified version of the code at: </br>
+ * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESUpdates.java 
+ * </br>Date: Nov. 4th, 2013 </br>
+ * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
  * @author Abram Hindle
  * @author Chenlei Zhang
@@ -82,21 +79,31 @@ public class ESUpdates {
 	
 	/**
 	 * Deletes an entry (in this case a story object) specified by the id from
-	 * the server.
+	 * the server. You must specify the id as a string (but in the format of
+	 * a UUID), and the server as a string as well. In addition, output from
+	 * the server (the response's content) will also be printed out to
+	 * System.err. </br></br>
 	 * 
-	 * </br> Eg. Let's say the following story is on the server. 
-	 * </br> Story myStory = new Story(id, "The Cow", "John Wayne", 
+	 * Example call: </br>
+	 * Let's say the following story is on the server. </br>
+	 * </br> String id = f1bda3a9-4560-4530-befc-2d58db9419b7; 
+	 * 		Story myStory = new Story(id, "The Cow", "John Wayne", 
 	 * 								   "A story about a Cow", phoneId). 
-	 * </br> To delete myStory from the server, call
-	 * deleteStory(myStory);
+	 * </br> To delete myStory from the server, call </br>
+	 * String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/" </br>
+	 * String id = f1bda3a9-4560-4530-befc-2d58db9419b7; </br>
+	 * deleteStory(id, server); </br></br>
 	 * 
-	 * </br> The method also assumes that the story it is given does actually
-	 * exist on the server. An error would occur if a non-existing story tried
-	 * to be deleted form the server.
-	 * 
-	 * @param story
+	 * @param id
+	 * 			Must be a String in the valid format of a UUID. See example
+	 * 			above for the formatting of a UUID.
+	 * @param server
+	 * 			The location on elastic search to search for the responses.
+	 * 			It expects this information as a String.</br>
+	 * 			See the above example for an example of a valid server string
+	 * 			format.
 	 */
-	public void deleteStory(String id, String server) throws IOException {
+	protected void deleteStory(String id, String server) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(server + id);
 		httpDelete.addHeader("Accept", "application/json");
 
@@ -110,6 +117,7 @@ public class ESUpdates {
 		BufferedReader br = new BufferedReader(is);
 		String output;
 		System.err.println("Output from ESUpdates -> ");
+		
 		while ((output = br.readLine()) != null) {
 			System.err.println(output);
 		}
@@ -117,65 +125,6 @@ public class ESUpdates {
 		entity.consumeContent();
 		is.close();
 	}
-
-	/**
-	 * Searches for a story on the server by the story id. An exception will be
-	 * thrown if no story with a matching id is found on the server. </br>
-	 * 
-	 * </br>
-	 * </br> Example call
-	 * UUID id = 5231b533-ba17-4787-98a3-f2df37de2aD7;
-	 * </br>
-	 *  Story myStory = searchById(id.toString());
-	 *  </br> myStory is the story that was searched for, or null if it 
-	 *  didn't exist.
-	 * @param id
-	 *            Will be a 128-bit value UUID value that was converted to a
-	 *            String.
-	 */
-
-	/**
-	 * Allows for two different types of searching. The first, by keywords. The
-	 * second, is searching for all stories on the server.
-	 * 
-	 * <ol>
-	 * <li>Allows searching for stories by providing keywords that are found in
-	 * the title. There can be up to any number of keywords. This search will be
-	 * performed if the criteria provided (a story object in itself) does not
-	 * have "null" for the value of its title.
-	 * 
-	 * </br> Eg. Assume there is a story on the server whose title is "The bird
-	 * who smelt the flower and loved the cow." To retrieve it:
-	 * 
-	 * </br> Story criteria = new Story(null, "bird flower cow", null, null,
-	 * 									null) 
-	 * </br> String selection = "bird AND flower AND cow" 
-	 * </br> ArrayList<Object> stories = searchStories(criteria, selection); 
-	 * </br> The ArrayList stories will contain the story titled "The bird 
-	 * 		who smelt the flower and loved the cow."
-	 * </li>
-	 * 
-	 * <li>If the title on criteria is null, then the method searches for all
-	 * available stories on the server.
-	 * 
-	 * </br> Eg. To get all the stories currently on the server: 
-	 * </br> Story criteria = new Story(null, null, null, null, null) 
-	 * </br> String selection = "" 
-	 * </br> ArrayList<Object> stories = searchStories(criteria, selection); 
-	 * </br> The ArrayList stories will contain all available stories.
-	 * </li>
-	 * </ol>
-	 * 
-	 * @param criteria
-	 *            Story object with fields matching the story we want. For
-	 *            searching on the server (and not by id), we only search by
-	 *            story title, so criteria will either have all null fields
-	 *            (meaning user wants ALL stories) or will have keywords found
-	 *            in the title as its "title" field.
-	 * @param selection
-	 *            The selection string. Will either be empty or a keyword query.
-	 *            Eg. "bacon AND ham AND fish"
-	 */
 
 	/**
 	 * Inserts a story object into the server. The story must be a complete
@@ -187,7 +136,7 @@ public class ESUpdates {
 	 *            The complete story to post to server. It is first converted to
 	 *            a Json string, and then is posted onto the server.
 	 */
-	public void insertStory(Story story, String server) {
+	protected void insertStory(Story story, String server) {
 		HttpPost httpPost = new HttpPost(server + story.getId().toString());
 
 		StringEntity stringentity = null;

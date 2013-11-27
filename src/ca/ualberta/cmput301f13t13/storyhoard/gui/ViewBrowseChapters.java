@@ -18,7 +18,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +48,6 @@ public class ViewBrowseChapters extends Activity {
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
-	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +129,6 @@ public class ViewBrowseChapters extends Activity {
 	 *
 	 */
 	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
-	    
-		@Override
-	    protected void onPreExecute() {
-	        progressDialog= ProgressDialog.show(
-	        		ViewBrowseChapters.this, 
-	        		"Fetching Chapters",
-	        		"Please wait...", 
-	        		true);       
-	    };  
 		
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
@@ -152,7 +141,6 @@ public class ViewBrowseChapters extends Activity {
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();
 			chapterAdapter.notifyDataSetChanged();
 		}
 	}	

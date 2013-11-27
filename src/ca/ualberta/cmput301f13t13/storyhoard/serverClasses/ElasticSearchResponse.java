@@ -22,19 +22,14 @@ import java.util.Collection;
 
 /**
  * Role: Holds a collection of the SimpleESResponses. Needed when
- * doing an advanced elastic search which involves logical operators
- * in the query.
+ * doing an advanced elastic search which will possibly be retrieving
+ * more than one response from the server. </br></br>
  * 
- * </br>
- * Eg. Where story title has "dog AND cow OR hen"
- * 
- * </br>
- * CODE REUSE: This code was taken directly from 
- * </br>
+ * CODE REUSE: </br>
+ * This code was taken directly from: </br>
  * URL: https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ElasticSearchSearchResponse.java 
  * </br>
- * Date: Nov. 4th, 2013 
- * </br>
+ * Date: Nov. 4th, 2013 </br>
  * Licensed under CC0 (available at http://creativecommons.org/choose/zero/)
  * 
  * @author Abram Hindle

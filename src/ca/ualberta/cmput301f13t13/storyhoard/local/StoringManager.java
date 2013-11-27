@@ -17,7 +17,10 @@
 package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
+
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 
 /**
@@ -61,4 +64,6 @@ public interface StoringManager<A> {
 	public void remove(UUID objId);
 	
 	public Boolean existsLocally(A object);
+	
+	public String setSearchCriteria(A object, ArrayList<String> sArgs);
 }
