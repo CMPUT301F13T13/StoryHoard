@@ -199,7 +199,11 @@ public class ViewBrowseStories extends Activity {
 					long arg3) {
 				if (viewType == Type.PUBLISHED) {
 					storyCon.setCurrStoryComplete(gridArray.get(arg2));
-					overwriteStory();
+					if (storyMan.existsLocally(gridArray.get(arg2))) {
+						overwriteStory();
+					} else {
+						new CacheStory().execute();
+					}
 					return;
 				}
 				storyCon.setCurrStoryIncomplete(gridArray.get(arg2));

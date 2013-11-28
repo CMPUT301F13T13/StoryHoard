@@ -19,10 +19,14 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +39,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
+
 
 /**
  * Search Results activity
@@ -54,7 +60,9 @@ public class SearchResultsActivity extends Activity {
 	private StoryController storyCon;
 	private Syncher syncher;
 	private Boolean isPublished;
+	private StoryManager storyMan;
 	private ProgressDialog progressDialog;
+	private AlertDialog overwriteDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +78,7 @@ public class SearchResultsActivity extends Activity {
 		isPublished = intent.getBooleanExtra("isPublished", false);
 		syncher = Syncher.getInstance(this);
 		storyCon = StoryController.getInstance(this);
+		storyMan = StoryManager.getInstance(this);
 		emptyList = (TextView) findViewById(R.id.empty);
 		lifedata = LifecycleData.getInstance();
 
@@ -90,8 +99,20 @@ public class SearchResultsActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				new CacheStory().execute(gridArray.get(arg2));
+					long arg3) {		
+				if (isPublished) {
+					storyCon.setCurrStoryComplete(gridArray.get(arg2));
+					if (storyMan.existsLocally(gridArray.get(arg2))) {
+						overwriteStory();
+					} else {
+						new CacheStory().execute();
+					}
+				} else {
+					storyCon.setCurrStoryIncomplete(gridArray.get(arg2));
+					Intent intent = new Intent(getBaseContext(), ViewStory.class);
+					startActivity(intent);
+					finish();
+				}
 			}
 		});
 
@@ -129,6 +150,33 @@ public class SearchResultsActivity extends Activity {
 	}
 
 	/**
+	 * Displays the dialog that handles choosing to overwrite a story or not. If
+	 * user chooses to potentially overwrite the story, return true otherwise
+	 * return false
+	 */
+	private void overwriteStory() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Potentially overwrite local version of this story?");
+		final String[] overwriteChoices = { "Proceed", "Cancel" };
+		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					new CacheStory().execute();
+					break;
+				case 1:
+					break;
+				}
+				overwriteDialog.dismiss();
+			}
+		});
+		overwriteDialog = alert.create();
+		overwriteDialog.show();
+	}
+	
+	/**
 	 * Caches (and locally mirrors) a story in the phone's database. This
 	 * includes converting all the encoded strings for the story's chapters back
 	 * to bitmaps, saving them on to the SD card, and inserts all the chapter's
@@ -136,7 +184,7 @@ public class SearchResultsActivity extends Activity {
 	 * heavy operations, an async task is used.
 	 * 
 	 */
-	private class CacheStory extends AsyncTask<Story, Void, Void> {
+	private class CacheStory extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
@@ -145,14 +193,8 @@ public class SearchResultsActivity extends Activity {
 		}
 
 		@Override
-		protected synchronized Void doInBackground(Story... params) {
-			if (isPublished) {
-				syncher.cache(params[0]);
-				storyCon.setCurrStoryComplete(params[0]);
-			} else {
-				storyCon.setCurrStoryIncomplete(params[0]);
-			}
-
+		protected synchronized Void doInBackground(Void... params) {
+			syncher.cache(storyCon.getCurrStory());
 			return null;
 		}
 
