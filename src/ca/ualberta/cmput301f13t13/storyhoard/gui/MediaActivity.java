@@ -36,7 +36,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
@@ -52,7 +52,7 @@ public abstract class MediaActivity extends Activity {
 	private ImageView imageView;
 	private String photoComment = "";
 	private AlertDialog photoDialog;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 
 	/**
 	 * Code for browsing gallery </br></br>
@@ -163,7 +163,7 @@ public abstract class MediaActivity extends Activity {
 			Intent intent) {
 		if (resultCode == RESULT_OK) {
 			String path = "";
-			chapCon = ChapController.getInstance(this);
+			chapCon = ChapterController.getInstance(this);
 			Chapter chapter = chapCon.getCurrChapter();
 			Media photo = new Media(chapter.getId(), path , imageType);
 			photo.setText(photoComment);

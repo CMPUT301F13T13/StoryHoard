@@ -21,7 +21,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R.id;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -41,7 +41,7 @@ public class TestEditStoryActivity extends
 	private EditText newAuthor;
 	private EditText newDescription;
 	private StoryController storyCon;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
@@ -52,7 +52,7 @@ public class TestEditStoryActivity extends
 		super.setUp();
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 		Story story = new Story("title", "author", "es", "432432");
 		
 		lifedata.setEditing(true);

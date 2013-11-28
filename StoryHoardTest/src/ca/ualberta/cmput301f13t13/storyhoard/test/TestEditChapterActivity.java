@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -45,7 +45,7 @@ public class TestEditChapterActivity extends
 	private EditText chapterContent;
 	private LinearLayout illustrations;
 	private StoryController storyCon;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);
@@ -64,7 +64,7 @@ public class TestEditChapterActivity extends
 	public void testPreconditions() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 
 		Story story = new Story("title", "author", "es", "432432");
 		lifedata.setEditing(true);
@@ -92,7 +92,7 @@ public class TestEditChapterActivity extends
 	public void testChapterContent() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 
 		Story story = new Story("title", "author", "es", "432432");
 		lifedata.setEditing(true);
@@ -116,7 +116,7 @@ public class TestEditChapterActivity extends
 	public void testSetChapterContent() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 
 		Story story = new Story("title", "author", "es", "432432");
 		lifedata.setEditing(true);

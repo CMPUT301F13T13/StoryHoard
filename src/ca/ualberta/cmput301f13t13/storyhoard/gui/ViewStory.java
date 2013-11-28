@@ -30,7 +30,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -43,7 +43,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
  */
 public class ViewStory extends Activity {
 	LifecycleData lifedata;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 	private StoryController storyCon;
 	private Story story;
 	private TextView storyTitle;
@@ -104,7 +104,7 @@ public class ViewStory extends Activity {
 		// Initialize the activity fields
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(this);
-		chapCon = ChapController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);

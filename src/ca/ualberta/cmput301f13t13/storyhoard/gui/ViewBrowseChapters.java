@@ -27,7 +27,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
@@ -43,7 +43,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 public class ViewBrowseChapters extends Activity {
 	LifecycleData lifedata;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 	private StoryController storyCon;
 	private Story story;
 	private ListView storyChapters;
@@ -90,7 +90,7 @@ public class ViewBrowseChapters extends Activity {
 		lifedata = LifecycleData.getInstance();
 		
 		// Grab controllers and pull all chapters from story
-		chapCon = ChapController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		story = storyCon.getCurrStory();
 		

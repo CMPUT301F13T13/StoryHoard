@@ -6,19 +6,19 @@ import android.content.Context;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 
-public class ChoController {
+public class ChoiceController {
 	private static ChoiceManager choiceMan;
 	private static Choice choice;
-	private static ChoController self = null;
+	private static ChoiceController self = null;
 	
-	protected ChoController(Context context) {
+	protected ChoiceController(Context context) {
 		choiceMan = ChoiceManager.getInstance(context);
 		choice = new Choice(null, null, "");  // blank choice
 	}
 	
-	public static ChoController getInstance(Context context) {
+	public static ChoiceController getInstance(Context context) {
 		if (self == null) {
-			self = new ChoController(context);
+			self = new ChoiceController(context);
 		}
 		return self;
 	}

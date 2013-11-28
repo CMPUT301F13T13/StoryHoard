@@ -12,15 +12,15 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 
-public class ChapController {
+public class ChapterController {
 	private static MediaManager mediaMan;
 	private static ChapterManager chapMan;
 	private static ChoiceManager choiceMan;
 	private static Syncher syncher;
 	private static Chapter chapter;
-	private static ChapController self = null;
+	private static ChapterController self = null;
 	
-	protected ChapController(Context context) {
+	protected ChapterController(Context context) {
 		mediaMan = MediaManager.getInstance(context);
 		syncher = Syncher.getInstance(context);
 		chapMan = ChapterManager.getInstance(context);
@@ -28,9 +28,9 @@ public class ChapController {
 		chapter = new Chapter(null, null, "");  // blank chapter
 	}
 	
-	public static ChapController getInstance(Context context) {
+	public static ChapterController getInstance(Context context) {
 		if (self == null) {
-			self = new ChapController(context);
+			self = new ChapterController(context);
 		}
 		return self;
 	}
