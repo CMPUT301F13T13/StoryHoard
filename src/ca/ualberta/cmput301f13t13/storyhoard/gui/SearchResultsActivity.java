@@ -54,24 +54,25 @@ public class SearchResultsActivity extends Activity {
 	private StoryController storyCon;
 	private Syncher syncher;
 	private Boolean isPublished;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_search_results);	
+		setContentView(R.layout.activity_view_search_results);
 	}
 
 	@Override 
 	protected void onResume() {
 		super.onResume();
-		
+
 		Intent intent = getIntent();
 		isPublished = intent.getBooleanExtra("isPublished", false);
 		syncher = Syncher.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		emptyList = (TextView) findViewById(R.id.empty);
 		lifedata = LifecycleData.getInstance();
-		
+
 		ArrayList<Story> newStories = lifedata.getSearchResults();
 
 		if (newStories == null || newStories.size() == 0) {
@@ -90,24 +91,15 @@ public class SearchResultsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				if (isPublished) {
-					new CacheStory().execute(gridArray.get(arg2));
-				} else {
-					storyCon.setCurrStoryIncomplete(gridArray.get(arg2));
-				}
-
-				Intent intent = new Intent(getBaseContext(), ViewStory.class);
-				startActivity(intent);
-				finish();
+				new CacheStory().execute(gridArray.get(arg2));
 			}
-		});	
-		
-		
+		});
+
 		gridArray.clear();
 		gridArray.addAll(newStories);
 		emptyList.setText(" ");
 		// Setup the grid view for the stories
-		
+
 		customGridAdapter.notifyDataSetChanged();			
 	}
 
@@ -135,7 +127,7 @@ public class SearchResultsActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	/**
 	 * Caches (and locally mirrors) a story in the phone's database. This
 	 * includes converting all the encoded strings for the story's chapters back
@@ -145,25 +137,32 @@ public class SearchResultsActivity extends Activity {
 	 * 
 	 */
 	private class CacheStory extends AsyncTask<Story, Void, Void> {
-		private ProgressDialog progressDialog;
 
 		@Override
 		protected void onPreExecute() {
 			progressDialog = ProgressDialog.show(SearchResultsActivity.this,
 					"Downloading Story", "Please wait...", true);
-		};
+		}
 
 		@Override
 		protected synchronized Void doInBackground(Story... params) {
-			syncher.cache(params[0]);
-			storyCon.setCurrStoryComplete(params[0]);
+			if (isPublished) {
+				syncher.cache(params[0]);
+				storyCon.setCurrStoryComplete(params[0]);
+			} else {
+				storyCon.setCurrStoryIncomplete(params[0]);
+			}
+
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			Intent intent = new Intent(getBaseContext(), ViewStory.class);
+			startActivity(intent);
 			progressDialog.dismiss();
+			finish();
 		}
-	}	
+	}
 }
