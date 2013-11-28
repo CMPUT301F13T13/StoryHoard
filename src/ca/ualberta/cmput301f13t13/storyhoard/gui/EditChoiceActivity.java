@@ -27,8 +27,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -50,7 +52,9 @@ public class EditChoiceActivity extends Activity {
 	private Choice choice;
 	private Chapter fromChapter;
 	private Chapter toChapter;
-	private ChapterController chapCon;
+	private ChapController chapCon;
+	private StoryController storyCon;
+	private ChoController choiceCon;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +70,7 @@ public class EditChoiceActivity extends Activity {
 		setAddChoiceListener();
 
 		data.clear();
-		UUID mystory = story.getId();
-		data.addAll(chapCon.getChaptersByStory(mystory));
+		data.addAll(story.getChapters());
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -75,17 +78,19 @@ public class EditChoiceActivity extends Activity {
 	 * Initializes the private fields needed
 	 */
 	public void setUpFields() {
-		chapCon = ChapterController.getInstance(this);
-
-		story = lifedata.getStory();
-		fromChapter = lifedata.getChapter();
+		chapCon = ChapController.getInstance(this);
+		storyCon = StoryController.getInstance(this);
+		choiceCon = ChoController.getInstance(this);
+		
+		story = storyCon.getCurrStory();
+		fromChapter = chapCon.getCurrChapter();
 
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
 
 		if (lifedata.isEditingChoice()) {
-			choice = lifedata.getChoice();
+			choice = choiceCon.getCurrChoice();
 			choiceText.setText(choice.getText());
 		}
 
@@ -107,15 +112,14 @@ public class EditChoiceActivity extends Activity {
 				toChapter = data.get(arg2);
 				String text = choiceText.getText().toString();
 				if (lifedata.isEditingChoice()) {
-					ChoiceController cc = ChoiceController.getInstance(getBaseContext());
-					choice.setText(text);
-					choice.setNextChapter(toChapter.getId());
-					cc.update(choice);
+					choiceCon.setText(text);
+					choiceCon.setChapterTo(toChapter.getId());
 				} else {
 					Choice addedChoice = new Choice(fromChapter.getId(),
 							toChapter.getId(), text);
-					lifedata.addToCurrChoices(addedChoice);
+					choiceCon.setCurrChoice(addedChoice);
 				}
+				chapCon.addChoice(choiceCon.getCurrChoice());
 				finish();
 			}
 		});

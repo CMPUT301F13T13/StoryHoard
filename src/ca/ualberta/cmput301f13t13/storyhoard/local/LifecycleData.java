@@ -90,7 +90,7 @@ public class LifecycleData {
 	public ArrayList<Story> getStoryList() {
 		return this.storyList;
 	}
-	public void setStoryList(ArrayList<Story> stories) {
+	public void setSearchResults(ArrayList<Story> stories) {
 		storyList = stories;
 	}
 	public ArrayList<Media> getCurrImages() {

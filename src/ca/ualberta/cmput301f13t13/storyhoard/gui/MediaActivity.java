@@ -36,6 +36,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
@@ -53,6 +54,7 @@ public abstract class MediaActivity extends Activity {
 	private ImageView imageView;
 	private String photoComment = "";
 	private AlertDialog photoDialog;
+	private ChapController chapCon;
 
 	/**
 	 * Code for browsing gallery </br></br>
@@ -161,7 +163,6 @@ public abstract class MediaActivity extends Activity {
 	 */
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		lifedata = LifecycleData.getInstance();
 		if (resultCode == RESULT_OK) {
 			String path = "";
 			Chapter chapter = LifecycleData.getInstance().getChapter();
@@ -174,9 +175,7 @@ public abstract class MediaActivity extends Activity {
 				photo.setPath(imageFileUri.getPath());
 				insertIntoGallery(photo);
 			}
-
-			lifedata.addToCurrImages(photo);
-			lifedata.setCurrImage(photo);
+			chapCon.addMedia(photo);
 		} else if (resultCode == RESULT_CANCELED) {
 			System.out.println("cancelled action");
 		} else {

@@ -30,6 +30,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
@@ -46,10 +47,10 @@ public class EditStoryActivity extends Activity {
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
-	private Story newStory;
-	private LocalStoryController localCon;
+	private StoryController storyCon;
 	private ServerStoryController serverCon;
-	private ChapterController chapCon;
+	private LocalStoryController localCon;
+	private Story newStory;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +93,9 @@ public class EditStoryActivity extends Activity {
 
 	private void setupFields() {
 		lifedata = LifecycleData.getInstance();
-		serverCon = ServerStoryController.getInstance(this);
 		localCon = LocalStoryController.getInstance(this);
-		chapCon = ChapterController.getInstance(this);
+		storyCon = StoryController.getInstance(this);
+		serverCon = ServerStoryController.getInstance(this);
 
 		setContentView(R.layout.activity_edit_story);
 
@@ -108,7 +109,7 @@ public class EditStoryActivity extends Activity {
 
 		// Check if we are editing the story or making a new story
 		if (lifedata.isEditing()) {
-			newStory = lifedata.getStory();
+			newStory = storyCon.getCurrStory();
 			newTitle.setText(newStory.getTitle());
 			newAuthor.setText(newStory.getAuthor());
 			newDescription.setText(newStory.getDescription());
@@ -141,8 +142,7 @@ public class EditStoryActivity extends Activity {
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			// publish or update story
-			newStory.setChapters(chapCon.getFullStoryChapters(newStory.getId()));
-			serverCon.update(newStory);
+			storyCon.pushChangesToServer();
 			return null;
 		}
 	}
@@ -161,17 +161,16 @@ public class EditStoryActivity extends Activity {
 		String author = newAuthor.getText().toString();
 		String description = newDescription.getText().toString();
 		if (lifedata.isEditing()) {
-			newStory.setAuthor(author);
-			newStory.setTitle(title);
-			newStory.setDescription(description);
-			lifedata.setStory(newStory);
-			localCon.update(newStory);
+			storyCon.editAuthor(author);
+			storyCon.editTitle(title);
+			storyCon.editDescription(description);
+			storyCon.pushChangesToDb();
 		} else {
 			newStory = new Story(title, author, description,
 					Utilities.getPhoneId(getBaseContext()));
 			lifedata.setEditing(false);
 			lifedata.setFirstStory(true);
-			lifedata.setStory(newStory);
+			storyCon.setCurrStoryComplete(newStory);
 			Intent intent = new Intent(EditStoryActivity.this,
 					EditChapterActivity.class);
 			startActivity(intent);

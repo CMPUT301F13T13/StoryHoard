@@ -131,17 +131,21 @@ public class SearchActivity extends Activity {
 	
 	private void search(String title) {
 		ArrayList<Story> stories = new ArrayList<Story>();
-		if (viewType == Type.AUTHOR) {
-			stories = localCon.searchAuthorStories(title);
-		} else if (viewType == Type.CACHED) {
-			stories = localCon.searchCachedStories(title);
-		} else {
-			stories = serverCon.searchByKeywords(title);
-		}
-		
-		lifedata.setStoryList(stories);
 		Intent intent = new Intent(getBaseContext(),
 				SearchResultsActivity.class);
+		
+		if (viewType == Type.AUTHOR) {
+			stories = localCon.searchAuthorStories(title);
+			intent.putExtra("isPublished", false);
+		} else if (viewType == Type.CACHED) {
+			stories = localCon.searchCachedStories(title);
+			intent.putExtra("isPublished", false);
+		} else {
+			stories = serverCon.searchByKeywords(title);
+			intent.putExtra("isPublished", true);
+		}
+		
+		lifedata.setSearchResults(stories);
 		startActivity(intent);		
 		finish();
 	}

@@ -15,18 +15,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.LinearLayout;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 public class DeleteImageDialog {
 	private AlertDialog deleteDialog;
-	private MediaController mediaCon;
+	private ChapController chapCon;
 
 	public void setDeleteDialog(final EditChapterActivity editChapterActivity,
 			final View viewClicked, final LinearLayout illustrations) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(editChapterActivity);
-		alert.setTitle("Permanently delete illustration?");
+		alert.setTitle("Delete illustration?");
 		final String[] methods = { "yes", "no" };
 		alert.setSingleChoiceItems(methods, -1,
 				new DialogInterface.OnClickListener() {
@@ -34,11 +35,10 @@ public class DeleteImageDialog {
 					public void onClick(DialogInterface dialog, int item) {
 						switch (item) {
 						case 0:
-							mediaCon = MediaController.getInstance(editChapterActivity);
+							chapCon = ChapController.getInstance(editChapterActivity);
 							Media media = (Media) viewClicked.getTag();
-							mediaCon.remove(media.getId());
+							chapCon.removeIllustration(media);
 							illustrations.removeView(viewClicked);
-							LifecycleData.getInstance().removeIllustration(media);
 							editChapterActivity.updateICData();
 							break;
 						case 1:

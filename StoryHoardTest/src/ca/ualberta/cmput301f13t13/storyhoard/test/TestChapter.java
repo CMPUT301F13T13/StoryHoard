@@ -57,17 +57,6 @@ public class TestChapter extends ActivityInstrumentationTestCase2<InfoActivity> 
 	}
 
 	/**
-	 * Tests adding a choice to a chapter.
-	 */
-	public void testAddChoice() {
-		Chapter chapter = new Chapter(UUID.randomUUID(), "hello there");
-		Choice choice = new Choice(chapter.getId(), UUID.randomUUID(), "rawr");
-		chapter.addChoice(choice);
-
-		assertEquals(chapter.getChoices().size(), 1);
-	}
-
-	/**
 	 * Tests retrieving the search information places within the story, i.e. the
 	 * id, title, author, description, and whether or not it was created by the
 	 * author.
@@ -119,22 +108,5 @@ public class TestChapter extends ActivityInstrumentationTestCase2<InfoActivity> 
 		assertTrue(mockChapter.getPhotos() != null);
 		assertTrue(mockChapter.getIllustrations() != null);
 		assertTrue(mockChapter.hasRandomChoice());
-	}
-
-	/**
-	 * Tests converting all the bitmaps of the chapter's media into string
-	 * format, base 64 so they can be placed into the server.
-	 */
-	public void testPrepareMedia() {
-		String path = BogoPicGen.createPath("img1.jpg");
-		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
-		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
-		mockChapter.addPhoto(photo);
-
-		mockChapter.prepareMediasForServer();
-		ArrayList<Media> photos = mockChapter.getPhotos();
-		photo = photos.get(0);
-
-		assertFalse(photo.getBitmapString().equals(""));
 	}
 }

@@ -28,7 +28,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
@@ -43,7 +44,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 public class ViewBrowseChapters extends Activity {
 	LifecycleData lifedata;
-	private ChapterController chapCon;
+	private ChapController chapCon;
+	private StoryController storyCon;
 	private Story story;
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
@@ -69,8 +71,6 @@ public class ViewBrowseChapters extends Activity {
 			Intent intent = new Intent(getBaseContext(),
 					EditChapterActivity.class);
 			lifedata.setEditing(false);
-			lifedata.setChapter(null);
-			lifedata.setStory(story);
 			startActivity(intent);
 			return true;
 		}
@@ -82,8 +82,6 @@ public class ViewBrowseChapters extends Activity {
 		super.onResume();
 		setUpFields();
 		setOnItemClickListener();
-		data.clear();
-		new GetStoryChapters().execute();
 	}
 	
 	/**
@@ -93,7 +91,9 @@ public class ViewBrowseChapters extends Activity {
 		lifedata = LifecycleData.getInstance();
 		
 		// Grab controllers and pull all chapters from story
-		chapCon = ChapterController.getInstance(this);
+		chapCon = ChapController.getInstance(this);
+		storyCon = StoryController.getInstance(this);
+		story = storyCon.getCurrStory();
 		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
@@ -102,6 +102,10 @@ public class ViewBrowseChapters extends Activity {
 		chapterAdapter = new AdapterChapters(this,
 				R.layout.browse_chapter_item, data);
 		storyChapters.setAdapter(chapterAdapter);
+		
+		data.clear();
+		data.addAll(story.getChapters());
+		chapterAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -117,31 +121,9 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				lifedata.setEditing(true);
-				lifedata.setChapter(data.get(arg2));
+				chapCon.setCurrChapterComplete(data.get(arg2));
 				startActivity(intent);
 			}
 		});
 	}
-	
-	/**
-	 * Async task to get all author's stories in the database. Used so main UI thread does
-	 * not have to interact with database and skip too many frames.
-	 *
-	 */
-	private class GetStoryChapters extends AsyncTask<Void, Void, Void>{
-		
-		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			// get all story chapters
-			story = lifedata.getStory();
-			data.addAll(chapCon.getChaptersByStory(story.getId()));
-			return null;
-		}
-		
-		@Override 
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			chapterAdapter.notifyDataSetChanged();
-		}
-	}	
 }

@@ -19,17 +19,21 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
@@ -47,6 +51,9 @@ public class SearchResultsActivity extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private TextView emptyList;
+	private StoryController storyCon;
+	private LocalStoryController localCon;
+	private Boolean isPublished;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +64,11 @@ public class SearchResultsActivity extends Activity {
 	@Override 
 	protected void onResume() {
 		super.onResume();
-
-		lifedata = LifecycleData.getInstance();
+		
+		Intent intent = getIntent();
+		isPublished = intent.getBooleanExtra("isPublished", false);
+		localCon = LocalStoryController.getInstance(this);
+		storyCon = StoryController.getInstance(this);
 		emptyList = (TextView) findViewById(R.id.empty);
 
 		ArrayList<Story> newStories = lifedata.getStoryList();
@@ -84,10 +94,11 @@ public class SearchResultsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// Handle going to view story activity
-				lifedata = LifecycleData.getInstance();
-				Story story = gridArray.get(arg2);
-				lifedata.setStory(story);
+				if (isPublished) {
+					new CacheStory().execute(gridArray.get(arg2));
+				} else {
+					storyCon.setCurrStoryIncomplete(gridArray.get(arg2));
+				}
 
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
@@ -120,4 +131,35 @@ public class SearchResultsActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	/**
+	 * Caches (and locally mirrors) a story in the phone's database. This
+	 * includes converting all the encoded strings for the story's chapters back
+	 * to bitmaps, saving them on to the SD card, and inserts all the chapter's
+	 * medias and choices. In order to increase performance for some of those
+	 * heavy operations, an async task is used.
+	 * 
+	 */
+	private class CacheStory extends AsyncTask<Story, Void, Void> {
+		private ProgressDialog progressDialog;
+
+		@Override
+		protected void onPreExecute() {
+			progressDialog = ProgressDialog.show(SearchResultsActivity.this,
+					"Downloading Story", "Please wait...", true);
+		};
+
+		@Override
+		protected synchronized Void doInBackground(Story... params) {
+			localCon.cache(params[0]);
+			storyCon.setCurrStoryComplete(params[0]);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+		}
+	}	
 }

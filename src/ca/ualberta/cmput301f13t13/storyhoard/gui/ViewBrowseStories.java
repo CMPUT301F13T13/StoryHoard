@@ -152,7 +152,7 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story randomStory = serverCon.getRandomStory();
-			storyCon.setCurrStoryFromServer(randomStory);
+			storyCon.setCurrStoryComplete(randomStory);
 
 			if (randomStory != null) {
 				new CacheStory().execute();
@@ -195,11 +195,11 @@ public class ViewBrowseStories extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (viewType == Type.PUBLISHED) {
-					storyCon.setCurrStoryFromServer(gridArray.get(arg2));
+					storyCon.setCurrStoryComplete(gridArray.get(arg2));
 					overwriteStory();
 					return;
 				}
-				storyCon.setCurrStoryFromMemory(gridArray.get(arg2));
+				storyCon.setCurrStoryIncomplete(gridArray.get(arg2));
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
 			}
