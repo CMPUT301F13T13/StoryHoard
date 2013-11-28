@@ -40,6 +40,12 @@ public class AdapterChapters extends ArrayAdapter<Chapter> {
 	int layoutResourceID;
 	ArrayList<Chapter> data = new ArrayList<Chapter>();
 
+	/**
+	 * Constructor initalizes the adapter chapters array adapter. Holds onto the data in the class itself
+	 * @param context
+	 * @param layoutResourceId
+	 * @param data
+	 */
 	public AdapterChapters(Context context, int layoutResourceId,
 			ArrayList<Chapter> data) {
 		super(context, layoutResourceId, data);

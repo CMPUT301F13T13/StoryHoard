@@ -108,6 +108,7 @@ public class TestServerController extends
 	public void testUpdatePart2() {
 		serverCon = ServerStoryController.getInstance(getActivity());
 		ArrayList<Story> stories = serverCon.searchByKeywords("new title");
+		stories = serverCon.searchByKeywords("new title");
 		assertEquals(stories.size(), 1);
 
 		// cleaning server

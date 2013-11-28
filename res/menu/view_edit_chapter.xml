@@ -2,18 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="always"
+        android:title="@string/info"/>
+    <item
         android:id="@+id/addIllus"
         android:icon="@drawable/illust"
         android:showAsAction="always"
-        android:title="add Image"/>
+        android:title="@string/add_image"/>
     <item
         android:id="@+id/addChoice"
         android:showAsAction="always"
-        android:title="add Choice"/>
+        android:title="@string/add_choice"/>
     <item
         android:id="@+id/Save"
         android:icon="@drawable/save"
         android:showAsAction="always"
-        android:title="Save"/>
+        android:title="@string/save_changes"/>
 
 </menu>

@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="always"
+        android:title="@string/info"/>
+    <item
         android:id="@+id/publishStory"
         android:showAsAction="ifRoom"
         android:title="@string/publish_story"/>
@@ -9,7 +14,7 @@
         android:id="@+id/addfirstChapter"
         android:showAsAction="ifRoom"
         android:title="@string/save_changes"/>
-    <item 
+    <item
         android:id="@+id/unpublishStory"
         android:showAsAction="ifRoom"
         android:title="@string/unpublish_story"/>

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
+
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="always"
+        android:title="@string/info"/>
     <item
         android:id="@+id/addPhoto"
         android:icon="@drawable/camera"
         android:showAsAction="ifRoom"
-        android:title="Add photo"/>
+        android:title="@string/add_photo"/>
+
 </menu>

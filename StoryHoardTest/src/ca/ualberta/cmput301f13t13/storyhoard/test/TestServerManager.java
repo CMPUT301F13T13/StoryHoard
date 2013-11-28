@@ -196,7 +196,7 @@ public class TestServerManager extends
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		sm.remove(story3.getId().toString());
-		stories = sm.getAll();
+		sm.remove(story3.getId().toString());
 		stories = sm.getAll();
 		stories = sm.getAll();
 		assertEquals(stories.size(), 2);
