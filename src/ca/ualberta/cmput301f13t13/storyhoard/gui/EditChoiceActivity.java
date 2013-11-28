@@ -26,8 +26,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -50,9 +50,9 @@ public class EditChoiceActivity extends Activity {
 	private Choice choice;
 	private Chapter fromChapter;
 	private Chapter toChapter;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 	private StoryController storyCon;
-	private ChoController choiceCon;
+	private ChoiceController choiceCon;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,9 +76,9 @@ public class EditChoiceActivity extends Activity {
 	 * Initializes the private fields needed
 	 */
 	public void setUpFields() {
-		chapCon = ChapController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
-		choiceCon = ChoController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
 		
 		story = storyCon.getCurrStory();
 		fromChapter = chapCon.getCurrChapter();

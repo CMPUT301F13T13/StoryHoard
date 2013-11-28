@@ -22,7 +22,7 @@ import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -42,7 +42,7 @@ public class TestEditChoiceActivity extends
 	private EditText choiceText;
 	private ListView chapters;
 	private StoryController storyCon;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 	private EditChoiceActivity mActivity;
 
 	public TestEditChoiceActivity() {
@@ -64,7 +64,7 @@ public class TestEditChoiceActivity extends
 	public void testPreConditions() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 		
 		Story story = new Story("title", "author", "es", "432432");
 		lifedata.setEditing(false);
@@ -91,7 +91,7 @@ public class TestEditChoiceActivity extends
 	public void testSetChoiceText() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
-		chapCon = ChapController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
 		
 		Story story = new Story("title", "author", "es", "432432");
 		lifedata.setEditing(false);

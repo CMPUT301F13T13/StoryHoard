@@ -34,8 +34,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -66,8 +66,8 @@ public class EditChapterActivity extends MediaActivity {
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private StoryController storyCon;
-	private ChapController chapCon;
-	private ChoController choiceCon;
+	private ChapterController chapCon;
+	private ChoiceController choiceCon;
 	
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
@@ -116,9 +116,9 @@ public class EditChapterActivity extends MediaActivity {
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
 	private void setUpFields() {
-		chapCon = ChapController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
-		choiceCon = ChoController.getInstance(this);
+		choiceCon = ChoiceController.getInstance(this);
 
 		lifedata = LifecycleData.getInstance();
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);

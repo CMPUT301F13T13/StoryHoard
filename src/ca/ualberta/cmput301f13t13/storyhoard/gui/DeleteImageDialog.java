@@ -15,12 +15,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.LinearLayout;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
 public class DeleteImageDialog {
 	private AlertDialog deleteDialog;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 
 	public void setDeleteDialog(final EditChapterActivity editChapterActivity,
 			final View viewClicked, final LinearLayout illustrations) {
@@ -33,7 +33,7 @@ public class DeleteImageDialog {
 					public void onClick(DialogInterface dialog, int item) {
 						switch (item) {
 						case 0:
-							chapCon = ChapController.getInstance(editChapterActivity);
+							chapCon = ChapterController.getInstance(editChapterActivity);
 							Media media = (Media) viewClicked.getTag();
 							chapCon.removeIllustration(media);
 							illustrations.removeView(viewClicked);

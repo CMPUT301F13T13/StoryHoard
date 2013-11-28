@@ -33,7 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
@@ -48,7 +48,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
  */
 public class ViewChapter extends MediaActivity {
 	LifecycleData lifedata;
-	private ChapController chapCon;
+	private ChapterController chapCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private AdapterChoices choiceAdapter;
@@ -93,7 +93,7 @@ public class ViewChapter extends MediaActivity {
 	 */
 	public void setUpFields() {
 		lifedata = LifecycleData.getInstance();
-		chapCon = ChapController.getInstance(this);
+		chapCon = ChapterController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);

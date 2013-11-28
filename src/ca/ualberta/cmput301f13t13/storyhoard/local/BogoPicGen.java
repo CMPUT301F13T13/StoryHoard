@@ -11,10 +11,10 @@ import android.util.Log;
 
 /**
  * This class is not really part of the StoryHoard application. It is only used
- * for generating bitmaps in the StoryHoard unit tests.
+ * for generating bitmaps in the StoryHoard unit tests. </br></br>
  * 
  * CODE RE-USE </br>
- * This class was taken directly from: </br>
+ * This class was taken directly from: </br></br>
  * 
  * URL: https://github.com/abramhindle/BogoPicGen </br>
  * Date: Nov. 17, 2013 </br>
