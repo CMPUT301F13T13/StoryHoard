@@ -33,8 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 
 /**
@@ -72,7 +72,7 @@ public class SearchResultsActivity extends Activity {
 		emptyList = (TextView) findViewById(R.id.empty);
 		lifedata = LifecycleData.getInstance();
 		
-		ArrayList<Story> newStories = lifedata.getStoryList();
+		ArrayList<Story> newStories = lifedata.getSearchResults();
 
 		if (newStories == null || newStories.size() == 0) {
 			Toast.makeText(getBaseContext(),

@@ -32,8 +32,8 @@ import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Handles viewing the story metadata.

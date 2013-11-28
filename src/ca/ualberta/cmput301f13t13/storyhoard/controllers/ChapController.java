@@ -89,6 +89,16 @@ public class ChapController {
 	public void addRandomChoice() {
 		chapter.getChoices().add(choiceMan.getRandomChoice(chapter.getId()));
 	}
+	
+	public void updateChoice(Choice newChoice) {
+		for (Choice oldChoice : chapter.getChoices()) {
+			if (oldChoice.getId().equals(newChoice.getId())) {
+				chapter.getChoices().remove(oldChoice);
+				break;
+			}
+		}
+		chapter.getChoices().add(newChoice);
+	}	
 
 	public void addMedia(Media photo) {
 		if (photo.getType() == Media.PHOTO) {

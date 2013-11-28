@@ -19,7 +19,6 @@ package ca.ualberta.cmput301f13t13.storyhoard.gui;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -36,12 +35,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Add Chapter Activity
@@ -67,6 +67,8 @@ public class EditChapterActivity extends MediaActivity {
 	private EditText chapterContent;
 	private StoryController storyCon;
 	private ChapController chapCon;
+	private ChoController choiceCon;
+	
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
 	private LinearLayout illustrations;
@@ -116,6 +118,7 @@ public class EditChapterActivity extends MediaActivity {
 	private void setUpFields() {
 		chapCon = ChapController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
+		choiceCon = ChoController.getInstance(this);
 
 		lifedata = LifecycleData.getInstance();
 		chapterContent = (EditText) findViewById(R.id.chapterEditText);
@@ -134,7 +137,7 @@ public class EditChapterActivity extends MediaActivity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				lifedata.setEditingChoice(true);
-				chapCon.addChoice(choices.get(arg2));
+				choiceCon.setCurrChoice(choices.get(arg2));
 				Intent intent = new Intent(EditChapterActivity.this,
 						EditChoiceActivity.class);
 				startActivity(intent);
@@ -267,7 +270,11 @@ public class EditChapterActivity extends MediaActivity {
 				storyCon.pushChangesToDb();
 				lifedata.setFirstStory(false);
 			}
-			storyCon.addChapter(chapter);
+			if (lifedata.isEditing()) {
+				storyCon.updateChapter(chapter);
+			} else {
+				storyCon.addChapter(chapter);
+			}
 			return null;
 		}
 		

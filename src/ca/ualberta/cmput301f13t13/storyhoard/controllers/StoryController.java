@@ -109,6 +109,16 @@ public class StoryController {
 		story.setChapters(chaps);
 	}	
 
+	public void updateChapter(Chapter chapter) {
+		for (Chapter chap : story.getChapters()) {
+			if (chap.getId().equals(chapter.getId())) {
+				story.getChapters().remove(chap);
+				break;
+			}
+		}
+		story.getChapters().add(chapter);
+	}
+	
 	/**
 	 * Due to performance issues, Media objects don't actually hold Bitmaps.
 	 * A path to the location of the file is instead saved and used to 

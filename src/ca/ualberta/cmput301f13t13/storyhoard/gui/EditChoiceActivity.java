@@ -31,8 +31,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Activity class for adding and editing a choice.
@@ -112,12 +112,12 @@ public class EditChoiceActivity extends Activity {
 				if (lifedata.isEditingChoice()) {
 					choiceCon.editText(text);
 					choiceCon.editChapterTo(toChapter.getId());
+					chapCon.updateChoice(choiceCon.getCurrChoice());
 				} else {
 					Choice addedChoice = new Choice(fromChapter.getId(),
 							toChapter.getId(), text);
-					choiceCon.setCurrChoice(addedChoice);
+					chapCon.addChoice(addedChoice);
 				}
-				chapCon.addChoice(choiceCon.getCurrChoice());
 				finish();
 			}
 		});

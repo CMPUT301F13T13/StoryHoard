@@ -36,8 +36,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
@@ -104,6 +104,8 @@ public class ViewChapter extends MediaActivity {
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
+		
+		setNextChapterListener();
 	}
 
 	/**
@@ -132,8 +134,8 @@ public class ViewChapter extends MediaActivity {
 	}
 	
 	public void insertChoices() {
-		choices.clear();
-		choices = chapter.getChoices();
+		choices.addAll(chapter.getChoices());
+		
 		// Check for no choices
 		if (choices.isEmpty()) {
 			chapterContent.setText(chapterContent.getText()
@@ -143,9 +145,9 @@ public class ViewChapter extends MediaActivity {
 				chapCon.addRandomChoice();
 				chapter = chapCon.getCurrChapter();
 			}
-			choices.addAll(choices);
-
 		}
+		choices.clear();
+		choices.addAll(chapter.getChoices());
 		choiceAdapter.notifyDataSetChanged();		
 	}
 

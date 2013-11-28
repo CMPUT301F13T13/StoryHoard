@@ -30,8 +30,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * Takes a storyID bundle, displays all the chapters related to that story. Used
@@ -120,7 +120,7 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				lifedata.setEditing(true);
-				chapCon.setCurrChapterComplete(data.get(arg2));
+				chapCon.setCurrChapter(data.get(arg2).getId());
 				startActivity(intent);
 			}
 		});
