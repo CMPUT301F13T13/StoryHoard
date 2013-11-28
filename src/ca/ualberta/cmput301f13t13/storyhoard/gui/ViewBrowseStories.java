@@ -220,7 +220,7 @@ public class ViewBrowseStories extends Activity {
 	 */
 	private void overwriteStory() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Potentially overwrite local version of this story?");
+		alert.setTitle("Overwrite local version of this story?");
 		final String[] overwriteChoices = { "Proceed", "Cancel" };
 		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
 

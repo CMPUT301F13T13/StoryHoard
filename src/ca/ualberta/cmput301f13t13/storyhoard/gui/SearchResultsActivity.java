@@ -22,11 +22,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.storage.StorageManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -156,7 +155,7 @@ public class SearchResultsActivity extends Activity {
 	 */
 	private void overwriteStory() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Potentially overwrite local version of this story?");
+		alert.setTitle("Overwrite local version of this story?");
 		final String[] overwriteChoices = { "Proceed", "Cancel" };
 		alert.setSingleChoiceItems(overwriteChoices, -1, new OnClickListener() {
 
