@@ -22,10 +22,8 @@ import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
-import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -63,7 +61,7 @@ public class TestStory extends
 		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
-		story.addChapter(chapter);
+		story.getChapters().add(chapter);
 		assertEquals(story.getChapters().size(), 1);
 	}
 
@@ -120,27 +118,4 @@ public class TestStory extends
 		assertTrue(mockStory.getChapters() == null);
 		assertNotSame(mockStory.getFirstChapterId(), firstChapId);
 	}
-	
-	/**
-	 * Tests converting all the bitmaps of the story's chapters' media into string format, base 64 so
-	 * they can be placed into the server.
-	 */
-	public void testPrepareChaptersMedia() {
-		Story mockStory = new Story("title1", "author1", "desc1",
-				Utilities.getPhoneId(this.getActivity()));
-		String path = BogoPicGen.createPath("img1.jpg");
-		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
-		Chapter mockChapter = new Chapter(UUID.randomUUID(), "chap texty");
-		mockChapter.addPhoto(photo);
-		
-		mockStory.addChapter(mockChapter);
-		mockStory.prepareChaptersForServer();
-		
-		ArrayList<Chapter> chapters = mockStory.getChapters();
-		mockChapter = chapters.get(0);
-		ArrayList<Media> photos = mockChapter.getPhotos();
-		photo = photos.get(0);
-		
-		assertFalse(photo.getBitmapString().equals(""));
-	}	
 }
