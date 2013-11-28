@@ -36,8 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -204,9 +202,9 @@ public class EditChapterActivity extends MediaActivity {
 			public void onClick(View v) {
 				// If checked, set random choice on chapter
 				if (randChoiceCheck.isChecked()) {
-					chapCon.setRandomChoice(true);
+					chapCon.editRandomChoice(true);
 				} else {
-					chapCon.setRandomChoice(false);
+					chapCon.editRandomChoice(false);
 				}
 			}
 		});

@@ -27,13 +27,12 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
+import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Activity for editing the story metadata (title, author, description, and
@@ -48,8 +47,8 @@ public class EditStoryActivity extends Activity {
 	private EditText newAuthor;
 	private EditText newDescription;
 	private StoryController storyCon;
-	private ServerStoryController serverCon;
-	private LocalStoryController localCon;
+	private StoryManager storyMan;
+	private ServerManager serverMan;
 	private Story newStory;
 
 	@Override
@@ -66,7 +65,7 @@ public class EditStoryActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_edit_story, menu);
-		if (!localCon.isPublishedStoryMyStory(newStory, getBaseContext())) {
+		if (!storyMan.isPublishedStoryMyStory(newStory, getBaseContext())) {
 			menu.removeItem(R.id.unpublishStory);
 		}
 		return true;
@@ -93,9 +92,9 @@ public class EditStoryActivity extends Activity {
 
 	private void setupFields() {
 		lifedata = LifecycleData.getInstance();
-		localCon = LocalStoryController.getInstance(this);
+		storyMan = StoryManager.getInstance(this);
 		storyCon = StoryController.getInstance(this);
-		serverCon = ServerStoryController.getInstance(this);
+		serverMan = ServerManager.getInstance();
 
 		setContentView(R.layout.activity_edit_story);
 
@@ -151,7 +150,7 @@ public class EditStoryActivity extends Activity {
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {
 			// publish or update story
-			serverCon.remove(params[0]);
+			serverMan.remove(params[0].toString());
 			return null;
 		}
 	}

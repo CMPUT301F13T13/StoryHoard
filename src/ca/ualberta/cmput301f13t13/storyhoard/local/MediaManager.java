@@ -234,5 +234,17 @@ public class MediaManager implements StoringManager<Media>{
 				remove(media.getId());
 			}
 		}
+	}
+
+	public ArrayList<Media> getPhotosByChapter(UUID chapterId) {
+		return retrieve(new Media(null, chapterId, null, Media.PHOTO, ""));		
+	}
+
+	public ArrayList<Media> getIllustrationsByChapter(UUID chapterId) {
+		return retrieve(new Media(null, chapterId, null, Media.ILLUSTRATION, ""));		
+	}
+
+	public ArrayList<Media> getAll() {
+		return retrieve(new Media(null, null, null, null, null));
 	}	
 }

@@ -231,4 +231,20 @@ public class ChapterManager implements StoringManager<Chapter> {
 			insert(chap);
 		}
 	}
+
+	public ArrayList<Chapter> getAll() {
+		return retrieve(new Chapter(null, null, null, null));
+	}
+
+	/**
+	 * Retrieves all the chapters that are in a given story.
+	 * 
+	 * @param storyId
+	 *            Id of the story the chapters are wanted from.
+	 * @return ArrayList of the chapters.
+	 */
+	public ArrayList<Chapter> getChaptersByStory(UUID storyId) {
+		Chapter criteria = new Chapter(null, storyId, null, null);	
+		return retrieve(criteria);
+	}
 }

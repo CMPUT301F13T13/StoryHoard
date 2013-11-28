@@ -25,7 +25,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
-import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 
 /**
  * Class meant for the testing of the Chapter class in the StoryHoard

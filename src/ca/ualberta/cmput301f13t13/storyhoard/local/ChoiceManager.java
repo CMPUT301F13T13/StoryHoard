@@ -18,6 +18,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import android.content.ContentValues;
@@ -222,5 +223,36 @@ public class ChoiceManager implements StoringManager<Choice> {
 		} else {
 			insert(choice);
 		}	
+	}
+
+	public ArrayList<Choice> getChoicesByChapter(UUID chapterId) {
+		return retrieve(new Choice(null, chapterId, null, null));		
+	}
+
+	public ArrayList<Choice> getAll() {
+		return retrieve(new Choice(null, null, null, null));
+	}
+
+	/**
+	 * Retrieves a random choice from the choice.
+	 * 
+	 * @param choiceID
+	 *            Id of  the choices that the choice is for.
+	 * 
+	 * @param chapterId TODO
+	 * @return a choice
+	 */
+	public Choice getRandomChoice(UUID chapterId) {
+		ArrayList<Choice> choices = getChoicesByChapter(chapterId);
+		
+		if (choices.size() == 0) {
+			return null;
+		}
+		Random rand = new Random(); 
+		int num = rand.nextInt(choices.size());
+		Choice choice = choices.get(num);
+		choice.setText("I'm feeling lucky...");
+	
+		return choice;
 	}	
 }

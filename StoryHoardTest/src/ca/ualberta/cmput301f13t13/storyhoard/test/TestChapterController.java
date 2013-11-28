@@ -66,13 +66,13 @@ public class TestChapterController extends
 	 */
 	public void testGetChaptersByStory() {
 		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
-		chapCon.insert(mockChapter);
+		chapCon.update(mockChapter);
 		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
-		chapCon.insert(mockChapter2);
+		chapCon.update(mockChapter2);
 		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
-		chapCon.insert(mockChapter3);
+		chapCon.update(mockChapter3);
 
-		mockChapters = chapCon.getChaptersByStory(mockChapter.getStoryId());
+		mockChapters = chapCon.chapterMan.getChaptersByStory(mockChapter.getStoryId());
 		assertEquals(mockChapters.size(), 2);
 	}
 

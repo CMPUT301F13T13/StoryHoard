@@ -32,10 +32,10 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 
 /**
  * Search Results activity
@@ -52,7 +52,7 @@ public class SearchResultsActivity extends Activity {
 	private AdapterStories customGridAdapter;
 	private TextView emptyList;
 	private StoryController storyCon;
-	private LocalStoryController localCon;
+	private StoryManager storyMan;
 	private Boolean isPublished;
 
 	@Override
@@ -67,7 +67,7 @@ public class SearchResultsActivity extends Activity {
 		
 		Intent intent = getIntent();
 		isPublished = intent.getBooleanExtra("isPublished", false);
-		localCon = LocalStoryController.getInstance(this);
+		storyMan = StoryManager.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		emptyList = (TextView) findViewById(R.id.empty);
 
@@ -151,7 +151,7 @@ public class SearchResultsActivity extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Story... params) {
-			localCon.cache(params[0]);
+			storyMan.cache(params[0]);
 			storyCon.setCurrStoryComplete(params[0]);
 			return null;
 		}

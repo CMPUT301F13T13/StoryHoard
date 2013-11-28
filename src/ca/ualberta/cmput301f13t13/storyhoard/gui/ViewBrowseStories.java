@@ -36,12 +36,12 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Class which displays all stories in a grid, handles different view types.
@@ -56,8 +56,8 @@ public class ViewBrowseStories extends Activity {
 	private ArrayList<Story> gridArray = new ArrayList<Story>();
 	private AdapterStories customGridAdapter;
 	private AlertDialog overwriteDialog;
-	private LocalStoryController localCon;
-	private ServerStoryController serverCon;
+	private StoryManager storyMan;
+	private ServerManager serverMan;
 	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
@@ -80,8 +80,8 @@ public class ViewBrowseStories extends Activity {
 		super.onResume();
 		storyCon = StoryController.getInstance(this);
 		lifedata = LifecycleData.getInstance();
-		serverCon = ServerStoryController.getInstance(this);
-		localCon = LocalStoryController.getInstance(this);
+		serverMan = ServerManager.getInstance();
+		storyMan = StoryManager.getInstance(this);
 		setActionBar();
 		refreshStories();
 	}	
@@ -151,7 +151,7 @@ public class ViewBrowseStories extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.lucky:
-			Story randomStory = serverCon.getRandomStory();
+			Story randomStory = serverMan.getRandom();
 			storyCon.setCurrStoryComplete(randomStory);
 
 			if (randomStory != null) {
@@ -255,7 +255,7 @@ public class ViewBrowseStories extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			localCon.cache(storyCon.getCurrStory());
+			storyMan.cache(storyCon.getCurrStory());
 			return null;
 		}
 
@@ -283,11 +283,11 @@ public class ViewBrowseStories extends Activity {
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
 			if (viewType == Type.CACHED) {
-				currentStories = localCon.getAllCachedStories();
+				currentStories = storyMan.getAllCachedStories();
 			} else if (viewType == Type.CREATED) {
-				currentStories = localCon.getAllAuthorStories();
+				currentStories = storyMan.getAllAuthorStories();
 			} else {
-				currentStories = serverCon.getAll();
+				currentStories = serverMan.getAll();
 			}
 			return null;
 		}

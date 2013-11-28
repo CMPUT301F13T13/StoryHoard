@@ -17,7 +17,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -112,8 +110,8 @@ public class EditChoiceActivity extends Activity {
 				toChapter = data.get(arg2);
 				String text = choiceText.getText().toString();
 				if (lifedata.isEditingChoice()) {
-					choiceCon.setText(text);
-					choiceCon.setChapterTo(toChapter.getId());
+					choiceCon.editText(text);
+					choiceCon.editChapterTo(toChapter.getId());
 				} else {
 					Choice addedChoice = new Choice(fromChapter.getId(),
 							toChapter.getId(), text);

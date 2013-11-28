@@ -59,9 +59,9 @@ public class TestMediaController extends
 		mockMedia3 = new Media(chapId, null, Media.ILLUSTRATION);
 		mediaCon.insert(mockMedia3);
 
-		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
-		mockMedias = mediaCon.getIllustrationsByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getIllustrationsByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
 	}
 
@@ -80,7 +80,7 @@ public class TestMediaController extends
 		mockMedia3 = new Media(UUID.randomUUID(), null, "photo");
 		mediaCon.insert(mockMedia3);
 
-		mockMedias = mediaCon.getAll();
+		mockMedias = mediaCon.mediaMan.getAll();
 		assertEquals(mockMedias.size(), 2);
 	}
 
@@ -92,14 +92,14 @@ public class TestMediaController extends
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
 
-		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
 
 		mockMedia2 = mockMedias.get(0);
 		mockMedia2.setText("hello");
 		mediaCon.update(mockMedia2);
 
-		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
 		mockMedia2 = mockMedias.get(0);
 
@@ -114,11 +114,11 @@ public class TestMediaController extends
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mediaCon.insert(mockMedia);
 
-		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
 
 		mediaCon.remove(mockMedia.getId());
-		mockMedias = mediaCon.getPhotosByChapter(chapId);
+		mockMedias = mediaCon.mediaMan.getPhotosByChapter(chapId);
 		assertEquals(mockMedias.size(), 0);
 	}
 }

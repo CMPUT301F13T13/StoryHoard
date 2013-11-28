@@ -65,10 +65,10 @@ public class TestLocalStoryController extends
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 
-		lscon.cache(s2);
-		lscon.cache(s3);
+		lscon.storyMan.cache(s2);
+		lscon.storyMan.cache(s3);
 
-		stories = lscon.getAllCachedStories();
+		stories = lscon.storyMan.getAllCachedStories(lscon);
 
 		assertEquals(stories.size(), 2);
 	}
@@ -90,7 +90,7 @@ public class TestLocalStoryController extends
 		lscon.insert(s2);
 		lscon.insert(s3);
 
-		stories = lscon.getAllAuthorStories();
+		stories = lscon.storyMan.getAllAuthorStories(lscon);
 		assertEquals(stories.size(), 2);
 	}
 
@@ -140,19 +140,19 @@ public class TestLocalStoryController extends
 		lscon.insert(s3);
 
 		// title has cowy, cached stories
-		stories = lscon.searchCachedStories("cowy");
+		stories = lscon.storyMan.searchCachedStories("cowy");
 		assertEquals(stories.size(), 1);
 
 		// created, title has bob and hen
-		stories = lscon.searchAuthorStories("Bob hen");
+		stories = lscon.storyMan.searchAuthorStories("Bob hen");
 		assertEquals(stories.size(), 1);
 	}
 
 	public void isPublishedStoryMyStory() {
 		Story story = new Story("sdfsf", "sfdsf", "des",
 				Utilities.getPhoneId(getActivity()));
-		assertTrue(lscon.isPublishedStoryMyStory(story, getActivity()));
+		assertTrue(lscon.storyMan.isPublishedStoryMyStory(story, getActivity()));
 		story.setPhoneId("3432");
-		assertFalse(lscon.isPublishedStoryMyStory(story, getActivity()));
+		assertFalse(lscon.storyMan.isPublishedStoryMyStory(story, getActivity()));
 	}
 }

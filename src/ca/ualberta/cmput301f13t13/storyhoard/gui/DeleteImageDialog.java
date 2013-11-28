@@ -16,9 +16,7 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.widget.LinearLayout;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 public class DeleteImageDialog {
 	private AlertDialog deleteDialog;

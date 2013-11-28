@@ -62,7 +62,7 @@ public class TestChoiceController extends
 				"Lily drove");
 		choiceCon.insert(mockChoice3);
 
-		mockChoices = choiceCon.getChoicesByChapter(chapId);
+		mockChoices = choiceCon.choiceMan.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 2);
 	}
 
@@ -81,7 +81,7 @@ public class TestChoiceController extends
 		mockChoice2 = new Choice(chapId, chapId, "");
 		choiceCon.insert(mockChoice2);
 
-		mockChoices = choiceCon.getAll();
+		mockChoices = choiceCon.choiceMan.getAll();
 		assertEquals(mockChoices.size(), 2);
 	}
 
@@ -93,14 +93,14 @@ public class TestChoiceController extends
 		mockChoice = new Choice(chapId, UUID.randomUUID(), "bob went away");
 		choiceCon.insert(mockChoice);
 
-		mockChoices = choiceCon.getChoicesByChapter(chapId);
+		mockChoices = choiceCon.choiceMan.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 1);
 
 		mockChoice2 = mockChoices.get(0);
 		mockChoice2.setText("hello");
 		choiceCon.update(mockChoice2);
 
-		mockChoices = choiceCon.getChoicesByChapter(chapId);
+		mockChoices = choiceCon.choiceMan.getChoicesByChapter(chapId);
 		assertEquals(mockChoices.size(), 1);
 		mockChoice2 = mockChoices.get(0);
 
@@ -117,7 +117,7 @@ public class TestChoiceController extends
 		mockChoice2 = new Choice(chapId, chapId, "");
 		choiceCon.insert(mockChoice2);
 
-		Choice random = choiceCon.getRandomChoice(chapId);
+		Choice random = choiceCon.choiceMan.getRandomChoice(chapId);
 		assertNotNull(random);
 	}
 

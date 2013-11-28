@@ -33,10 +33,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Search Activity
@@ -51,8 +51,8 @@ public class SearchActivity extends Activity {
 	private Button searchButton;
 	private EditText titleInput;
 	private Spinner spinner;
-	private LocalStoryController localCon;
-	private ServerStoryController serverCon;
+	private StoryManager storyMan;
+	private ServerManager serverMan;
 	private LifecycleData lifedata;
 	private enum Type {AUTHOR, CACHED, PUBLISHED};
 	private Type viewType = Type.AUTHOR;
@@ -67,8 +67,8 @@ public class SearchActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		lifedata = LifecycleData.getInstance();
-		serverCon = ServerStoryController.getInstance(this);
-		localCon = LocalStoryController.getInstance(this);
+		serverMan = ServerManager.getInstance();
+		storyMan = StoryManager.getInstance(this);
 		searchButton = (Button) findViewById(R.id.searchButton);
 		titleInput = (EditText) findViewById(R.id.story_name);
 		spinner = (Spinner) findViewById(R.id.search_spinner);
@@ -135,13 +135,13 @@ public class SearchActivity extends Activity {
 				SearchResultsActivity.class);
 		
 		if (viewType == Type.AUTHOR) {
-			stories = localCon.searchAuthorStories(title);
+			stories = storyMan.searchAuthorStories(title);
 			intent.putExtra("isPublished", false);
 		} else if (viewType == Type.CACHED) {
-			stories = localCon.searchCachedStories(title);
+			stories = storyMan.searchCachedStories(title);
 			intent.putExtra("isPublished", false);
 		} else {
-			stories = serverCon.searchByKeywords(title);
+			stories = serverMan.searchByKeywords(title);
 			intent.putExtra("isPublished", true);
 		}
 		

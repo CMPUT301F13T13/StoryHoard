@@ -50,7 +50,6 @@ public abstract class MediaActivity extends Activity {
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 	private Uri imageFileUri;
 	private String imageType;
-	private LifecycleData lifedata;
 	private ImageView imageView;
 	private String photoComment = "";
 	private AlertDialog photoDialog;

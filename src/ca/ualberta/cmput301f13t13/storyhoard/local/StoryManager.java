@@ -20,13 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve story
@@ -45,6 +44,7 @@ public class StoryManager implements StoringManager<Story> {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 	private static String phoneId = null;
+	private Syncher syncher;
 	protected ContentValues values;
 	protected String selection;
 	protected String[] sArgs;
@@ -56,6 +56,7 @@ public class StoryManager implements StoringManager<Story> {
 	protected StoryManager(Context context) {
 		helper = DBHelper.getInstance(context);
 		phoneId = Utilities.getPhoneId(context);
+		syncher = Syncher.getInstance(context);
 	}
 
 	/**
@@ -242,5 +243,85 @@ public class StoryManager implements StoringManager<Story> {
 		} else {
 			insert(story);
 		}
+	}
+
+	/**
+	 * Gets all the stories that are either cached, created by the author, or
+	 * published.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
+	 *            CREATED_STORY.
+	 * @param localStoryController TODO
+	 * @return Array list of all the stories the application asked for.
+	 */
+	public ArrayList<Story> getAllCachedStories() {
+		Story criteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
+		return retrieve(criteria);
+	}
+
+	/**
+	 * Gets all the stories that are either cached, created by the author, or
+	 * published.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
+	 *            CREATED_STORY.
+	 * @param localStoryController TODO
+	 * @return Array list of all the stories the application asked for.
+	 */
+	public ArrayList<Story> getAllAuthorStories() {
+		Story criteria = new Story(null, null, null, null, phoneId);
+		return retrieve(criteria);
+	}
+
+	public void cache(Story story) {
+		syncher.syncStoryFromServer(story);
+	}
+
+	/**
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @param title
+	 *            Title of the story user is looking for.
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public ArrayList<Story> searchAuthorStories(String title) {
+		Story criteria = new Story(null, title, null, null, phoneId);
+		return retrieve(criteria);
+	}
+
+	/**
+	 * Used to search for stories matching the given search criteria. Users can
+	 * either search by specifying the title or author of the story. All stories
+	 * that match will be retrieved.
+	 * 
+	 * @param type
+	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * 
+	 * @param title
+	 *            Title of the story user is looking for.
+	 * @return ArrayList of stories that matched the search criteria.
+	 */
+	public ArrayList<Story> searchCachedStories(String title) {
+		Story criteria = new Story(null, title, null, null, Story.NOT_AUTHORS);
+		return retrieve(criteria);
+	}
+
+	public Story getStoryById(UUID id) {
+		Story criteria = new Story(id, null, null, null, null);
+		return retrieve(criteria).get(0);
+	}
+
+	public Boolean isPublishedStoryMyStory(Story story, Context context) {
+		if (story == null) {
+			return true;
+		}
+		return story.getPhoneId().equals(Utilities.getPhoneId(context));
 	}	
 }
