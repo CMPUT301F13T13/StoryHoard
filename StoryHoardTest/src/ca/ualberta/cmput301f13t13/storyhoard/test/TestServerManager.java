@@ -123,12 +123,6 @@ public class TestServerManager extends
 		// cleaning up server
 		sm.remove(story.getId().toString());
 		sm.remove(story2.getId().toString());
-	}
-
-	/**
-	 * Tests no errors occur while getting all stories on server.
-	 */
-	public void testAllPublishedStoriesPart1() {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 
@@ -196,8 +190,6 @@ public class TestServerManager extends
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		sm.remove(story3.getId().toString());
-		sm.remove(story3.getId().toString());
-		stories = sm.getAll();
 		stories = sm.getAll();
 		assertEquals(stories.size(), 2);
 	}

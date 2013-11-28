@@ -312,8 +312,8 @@ public class ViewBrowseStories extends Activity {
 				+ "simply click on one of the story icons.\n\n"
 				+ "\t- To search for a story by title, "
 				+ "press icon with magnifying glass.\n\n"
-				+ "\t- To view a random story, press icon with '?'\n\n"
-				+ "\t- To add a new story, press icon with '+'\n\n";
+				+ "\t- To view a random story, press '?' icon\n\n"
+				+ "\t- To add a new story, press '+' icon\n\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
 	}
