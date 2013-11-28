@@ -54,16 +54,10 @@ public interface SHController<A> {
 	 */
 	public ArrayList<A> getAll();
 	
-	/**
-	 * Inserts an object into the database or server.
-	 * 
-	 * @param object
-	 */
-	public void insert(A object);
 	
 	/**
 	 * Updates and an object. The object passed contains the new data to be
-	 * updated with.
+	 * updated with. 
 	 * 
 	 * @param object
 	 */

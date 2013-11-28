@@ -256,30 +256,7 @@ public class Story {
 		this.phoneId = phoneId;
 	}
 	
-    /**
-     * Adds a chapter onto the story object. If the story
-     * has no chapters when the new chapter is added, the
-     * firstChapterId will also be set for the story.
-     * 
-     * If the story needs to be updated in the database
-     * (due to now having a firstChapterId), then it will
-     * return true so the front end will know to use the
-     * OwnStoryManager to update the story data.
-     * 
-     * If the story already had its firstChapterId set, then
-     * there is no need to update it in the database, therefore
-     * the function will return False.
-     */
-    public Boolean addChapter(Chapter chapter) {
-            if (firstChapterId == null) {
-                    // set first chapter id
-                    firstChapterId = chapter.getId();
-                    chapters.add(chapter);
-                    return true;
-            }
-            chapters.add(chapter);
-            return false;
-    }	
+ 
 	
     
 	/**
@@ -298,7 +275,7 @@ public class Story {
 		}
 
 		if (title != null) {
-			multiWord(info);
+			splitKeywords(info);
 		}
 
 		if (phoneId != null) {
@@ -315,7 +292,7 @@ public class Story {
 	 * 
 	 * @param info
 	 */
-	private void multiWord(HashMap<String, String> info) {
+	private void splitKeywords(HashMap<String, String> info) {
 		List<String> words;
 
 		words = Arrays.asList(title.split("\\s+"));
@@ -323,31 +300,5 @@ public class Story {
 		for (String keyword : words) {
 			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
 		}
-	}
-
-	/**
-	 * Due to performance issues, Media objects don't actually hold Bitmaps.
-	 * A path to the location of the file is instead saved and used to 
-	 * retrieve bitmaps whenever needed. Media objects can also hold the
-	 * bitmaps after the have been converted to a string (Base64). 
-	 * </br>
-	 * Before a Story can be inserted into the server, all the images 
-	 * belonging to the story's chapters must have their bitmap strings
-	 * set. This is only done when the story is published to avoid doing
-	 * the expensive conversion unnecessarily (local stories only need to 
-	 * know the path).
-	 * </br>
-	 * 
-	 * This function takes care of setting all the Medias' bitmap strings.
-	 */
-	public void prepareChaptersForServer() {
-	
-	        // get any media associated with the chapters of the story
-	        ArrayList<Chapter> chaps = getChapters();
-	
-	        for (Chapter chap : chaps) {
-	                chap.prepareMediasForServer();
-	        }
-	        setChapters(chaps);
 	}
 }

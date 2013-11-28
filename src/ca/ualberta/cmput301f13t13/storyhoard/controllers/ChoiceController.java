@@ -70,15 +70,10 @@ public class ChoiceController implements SHController<Choice>{
 	public ArrayList<Choice> getAll() {
 		return choiceMan.retrieve(new Choice(null, null, null, null));
 	}
-	
-	@Override
-	public void insert(Choice choice) {
-		choiceMan.insert(choice);
-	}
 
 	@Override
 	public void update(Choice choice) {
-		choiceMan.update(choice);
+		choiceMan.syncChoice(choice);
 	}
 
 	@Override

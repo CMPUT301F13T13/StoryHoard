@@ -53,13 +53,8 @@ public class MediaController implements SHController<Media>{
 	}
 
 	@Override
-	public void insert(Media media) {
-		mediaMan.insert(media);
-	}
-
-	@Override
 	public void update(Media media) {
-		mediaMan.update(media);
+		mediaMan.syncMedia(media);
 	}
 	
 	@Override

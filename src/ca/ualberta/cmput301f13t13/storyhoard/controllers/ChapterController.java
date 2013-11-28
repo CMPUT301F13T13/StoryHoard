@@ -107,13 +107,8 @@ public class ChapterController implements SHController<Chapter>{
 	}
 
 	@Override
-	public void insert(Chapter chapter) {
-		chapterMan.insert(chapter);
-	}
-
-	@Override
 	public void update(Chapter chapter) {
-		chapterMan.update(chapter);
+		chapterMan.syncChapter(chapter);
 	}
 
 	@Override

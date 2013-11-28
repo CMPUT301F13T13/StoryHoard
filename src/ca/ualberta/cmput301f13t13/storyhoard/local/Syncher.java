@@ -41,6 +41,32 @@ public class Syncher {
 		for (Chapter chap : story.getChapters()) {
 			for (Media photo : chap.getPhotos()) {
 				medias.add(photo.getId());
+				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
+				photo.setPath(path);
+				mediaMan.syncMedia(photo);
+			}
+			for (Media ill : chap.getIllustrations()) {
+				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
+				ill.setPath(path);
+				medias.add(ill.getId());
+				mediaMan.syncMedia(ill);
+			}
+			for (Choice choice : chap.getChoices()) {
+				choiceMan.syncChoice(choice);
+			}
+			chapMan.syncChapter(chap);
+			mediaMan.syncDeletions(medias, chap.getId());
+		}
+	}
+	
+	
+	public void syncStoryFromMemory(Story story) {
+		ArrayList<UUID> medias = new ArrayList<UUID>();
+		storyMan.syncStory(story);
+		
+		for (Chapter chap : story.getChapters()) {
+			for (Media photo : chap.getPhotos()) {
+				medias.add(photo.getId());
 				mediaMan.syncMedia(photo);
 			}
 			for (Media ill : chap.getIllustrations()) {
@@ -53,5 +79,5 @@ public class Syncher {
 			chapMan.syncChapter(chap);
 			mediaMan.syncDeletions(medias, chap.getId());
 		}
-	}
+	}	
 }

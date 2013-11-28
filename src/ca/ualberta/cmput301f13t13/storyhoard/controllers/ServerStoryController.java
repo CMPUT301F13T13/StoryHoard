@@ -103,11 +103,6 @@ public class ServerStoryController implements SHController<Story>{
 	 * @param story
 	 * 			Story to be inserted into the server.
 	 */
-	@Override
-	public void insert(Story story) {
-			story.prepareChaptersForServer();
-			serverMan.update(story);
-	}
 
 	/**
 	 * Uses the update method in ServerManager to insert a story onto the 

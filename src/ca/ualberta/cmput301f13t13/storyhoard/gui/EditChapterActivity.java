@@ -284,13 +284,13 @@ public class EditChapterActivity extends MediaActivity {
 			// saving any illustrations
 			ArrayList<Media> ills = lifedata.getCurrImages();
 			for (Media ill : ills) {
-				mediaCon.insert(ill);
+				mediaCon.update(ill);
 			}
 
 			// saving any choices
 			ArrayList<Choice> choices = lifedata.getCurrChoices();
 			for (Choice choice : choices) {
-				choiceCon.insert(choice);
+				choiceCon.update(choice);
 			}
 
 			lifedata.setCurrChoices(null);
@@ -301,12 +301,12 @@ public class EditChapterActivity extends MediaActivity {
 			if (lifedata.isEditing()) {
 				chapCon.update(chapter);
 			} else {
-				chapCon.insert(chapter);
+				chapCon.update(chapter);
 				if (lifedata.isFirstStory()) {
 					LocalStoryController storyCon = LocalStoryController
 							.getInstance(EditChapterActivity.this);
 					story.setFirstChapterId(chapter.getId());
-					storyCon.insert(story);
+					storyCon.update(story);
 					lifedata.setFirstStory(false);
 				}
 			}

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
@@ -36,7 +37,7 @@ public class LocalStoryController implements SHController<Story> {
 		syncher = Syncher.getInstance(context);
 		phoneId = Utilities.getPhoneId(context);
 	}
-	
+
 	public static LocalStoryController getInstance(Context context) {
 		if (self == null) {
 			self = new LocalStoryController(context);
@@ -57,7 +58,7 @@ public class LocalStoryController implements SHController<Story> {
 		Story criteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
 		return retrieve(criteria);
 	}
-	
+
 	/**
 	 * Gets all the stories that are either cached, created by the author, or
 	 * published.
@@ -71,25 +72,25 @@ public class LocalStoryController implements SHController<Story> {
 		Story criteria = new Story(null, null, null, null, phoneId);
 		return retrieve(criteria);
 	}
-	
+
 	public void cache(Story story) {
 		syncher.syncStoryFromServer(story);
 	}
-	
+
 	@Override
 	public void update(Story story) {
-		storyMan.update(story);
+		syncher.syncStoryFromMemory(story);
 	}
-	
-	@Override
-	public void insert(Story story) {
-		storyMan.insert(story);
+
+	public Story getStoryById(UUID id) {
+		Story criteria = new Story(id, null, null, null, null);
+		return retrieve(criteria).get(0);
 	}
 	
 	public ArrayList<Story> retrieve(Story story) {
 		return storyMan.retrieve(story);
 	}
-	
+
 	/**
 	 * Used to search for stories matching the given search criteria. Users can
 	 * either search by specifying the title or author of the story. All stories
@@ -107,7 +108,7 @@ public class LocalStoryController implements SHController<Story> {
 		Story criteria = new Story(null, title, null, null, Story.NOT_AUTHORS);
 		return storyMan.retrieve(criteria);
 	}	
-	
+
 	/**
 	 * Used to search for stories matching the given search criteria. Users can
 	 * either search by specifying the title or author of the story. All stories
@@ -131,12 +132,12 @@ public class LocalStoryController implements SHController<Story> {
 		Story criteria = new Story(null, null, null, null, null);
 		return retrieve(criteria);
 	}
-	
+
 	@Override
 	public void remove(UUID id) {
 		storyMan.remove(id);
 	}		
-	
+
 	public Boolean isPublishedStoryMyStory(Story story, Context context) {
 		if (story == null) {
 			return true;

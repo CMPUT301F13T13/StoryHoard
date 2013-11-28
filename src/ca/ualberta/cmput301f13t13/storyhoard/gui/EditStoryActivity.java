@@ -142,7 +142,7 @@ public class EditStoryActivity extends Activity {
 		protected synchronized Void doInBackground(Void... params) {
 			// publish or update story
 			newStory.setChapters(chapCon.getFullStoryChapters(newStory.getId()));
-			serverCon.insert(newStory);
+			serverCon.update(newStory);
 			return null;
 		}
 	}

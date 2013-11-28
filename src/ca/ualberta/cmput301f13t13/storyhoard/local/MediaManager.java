@@ -222,8 +222,6 @@ public class MediaManager implements StoringManager<Media>{
 		if (existsLocally(media)) {
 			update(media);
 		} else {
-			String path = Utilities.saveImageToSD(media.getBitmapFromString());
-			media.setPath(path);
 			insert(media);
 		}	
 	}

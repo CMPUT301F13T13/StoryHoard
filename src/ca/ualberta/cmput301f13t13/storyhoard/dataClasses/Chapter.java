@@ -238,35 +238,6 @@ public class Chapter {
 		this.illustrations = illustrations;
 	}
 
-	// OTHER METHODS
-
-	/**
-	 * Adds a choice to the chapter.
-	 * 
-	 * @param choice
-	 */
-	public void addChoice(Choice choice) {
-		choices.add(choice);
-	}
-
-	/**
-	 * Adds a photo to the chapter
-	 * 
-	 * @param photo
-	 */
-	public void addPhoto(Media photo) {
-		photos.add(photo);
-	}
-
-	/**
-	 * Adds an illustration to the chapter.
-	 * 
-	 * @param i
-	 */
-	public void addIllustration(Media i) {
-		illustrations.add(i);
-	}
-
 	/**
 	 * Returns the information of the chapter (id, storyId) that could be used
 	 * in searching for a chapter in the database. This information is returned
@@ -287,15 +258,5 @@ public class Chapter {
 		}
 
 		return info;
-	}
-
-	public void prepareMediasForServer() {
-		for (Media photo : photos) {
-		        photo.setBitmapString(photo.getBitmap());
-		}
-	
-		for (Media ill : illustrations) {
-		        ill.setBitmapString(ill.getBitmap());
-		}
 	}
 }

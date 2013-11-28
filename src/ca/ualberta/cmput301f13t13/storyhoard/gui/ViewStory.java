@@ -30,7 +30,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
@@ -42,7 +43,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  */
 public class ViewStory extends Activity {
 	LifecycleData lifedata;
-	private ChapterController chapterCon;	
+	private ChapController chapCon;
+	private StoryController storyCon;
 	private Story story;
 	private TextView storyTitle;
 	private TextView storyAuthor;
@@ -101,7 +103,6 @@ public class ViewStory extends Activity {
 		
 		// Initialize the activity fields
 		lifedata = LifecycleData.getInstance();
-		chapterCon = ChapterController.getInstance(this);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);
@@ -112,7 +113,7 @@ public class ViewStory extends Activity {
 		actionBar.setTitle("Story Information");
 		actionBar.setDisplayShowTitleEnabled(true);
 		
-		story = lifedata.getStory();
+		story = storyCon.getCurrStory();
 
 		// Check no title
 		if (story.getTitle().equals("")) {
@@ -166,7 +167,7 @@ public class ViewStory extends Activity {
 	    
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {	
-			lifedata.setChapter(chapterCon.getFullChapter(params[0]));
+			chapCon.setCurrChapter(params[0]);
 			return null;
 		}
 		

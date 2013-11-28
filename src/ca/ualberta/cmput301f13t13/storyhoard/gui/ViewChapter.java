@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.MediaController;
@@ -50,13 +51,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
  */
 public class ViewChapter extends MediaActivity {
 	LifecycleData lifedata;
-	private ChapterController chapCon;
-	private ChoiceController choiceCon;
-	private MediaController mediaCon;
+	private ChapController chapCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private ArrayList<Media> photoList;
-	private ArrayList<Media> illList;
 	private AdapterChoices choiceAdapter;
 	private LinearLayout illustrations;
 	private TextView chapterContent;
@@ -99,15 +96,12 @@ public class ViewChapter extends MediaActivity {
 	 */
 	public void setUpFields() {
 		lifedata = LifecycleData.getInstance();
-		chapCon = ChapterController.getInstance(this);
-		choiceCon = ChoiceController.getInstance(this);
-		mediaCon = MediaController.getInstance(this);
+		chapCon = ChapController.getInstance(this);
 
 		// Setup the activity fields
 		chapterContent = (TextView) findViewById(R.id.chapterContent);
 		chapterChoices = (ListView) findViewById(R.id.chapterChoices);
 		illustrations = (LinearLayout) findViewById(R.id.horizontalIllustraions);
-		// photos = (LinearLayout) findViewById(R.id.horizontalPhotos);
 
 		// Setup the choices and choice adapters
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
@@ -119,7 +113,7 @@ public class ViewChapter extends MediaActivity {
 	 * Gets the new chapter and updates the view's components.
 	 */
 	public void updateData() {	
-		chapter = lifedata.getChapter();
+		chapter = chapCon.getCurrChapter();
 
 		// Check to see if the chapter exists, else terminate
 		if (chapter == null) {
@@ -142,45 +136,34 @@ public class ViewChapter extends MediaActivity {
 	
 	public void insertChoices() {
 		choices.clear();
-		ArrayList<Choice> chapChoices = chapter.getChoices();
+		choices = chapter.getChoices();
 		// Check for no choices
-		if (chapChoices.isEmpty()) {
+		if (choices.isEmpty()) {
 			chapterContent.setText(chapterContent.getText()
 					+ "\n\n<No Choices>");
 		} else {
-			if (chapter.hasRandomChoice() && chapChoices.size() > 1) {
-				chapChoices.add(choiceCon.getRandomChoice(chapter.getId()));
+			if (chapter.hasRandomChoice() && choices.size() > 1) {
+				chapCon.addRandomChoice();
+				chapter = chapCon.getCurrChapter();
 			}
-			choices.addAll(chapChoices);
+			choices.addAll(choices);
 
 		}
 		choiceAdapter.notifyDataSetChanged();		
 	}
 
 	public void insertIllustrations() {
-		illList = chapter.getIllustrations();
-
-		// photos.removeAllViews();
 		illustrations.removeAllViews();
 
 		// Insert Illustrations
-		for (Media ill : illList) {
+		for (Media ill : chapter.getIllustrations()) {
 			insertImage(ill, this, illustrations);
 		}		
 	}
 	
-	public void insertPhotos() {
-		// Insert Photos
-		Media img = lifedata.getCurrImage();
-		if (img != null) {
-			mediaCon.insert(img);
-			lifedata.setCurrImage(null);
-			lifedata.setCurrImages(null);
-		}
-		
+	public void insertPhotos() {		
 		// set listener to display photo text on click 
-		photoList = mediaCon.getPhotosByChapter(chapter.getId());
-		for (Media photo : photoList) {
+		for (Media photo : chapter.getPhotos()) {
 			View v = insertImage(photo, this, illustrations);
 			v.setOnClickListener(new OnClickListener () {
 				@Override
@@ -228,7 +211,7 @@ public class ViewChapter extends MediaActivity {
 	    
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {	
-			lifedata.setChapter(chapCon.getFullChapter(params[0]));
+			chapCon.setCurrChapter(params[0]);
 			return null;
 		}
 		

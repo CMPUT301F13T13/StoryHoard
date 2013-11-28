@@ -38,6 +38,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.LocalStoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ServerStoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
@@ -60,7 +61,7 @@ public class ViewBrowseStories extends Activity {
 	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
-	private Story storyClicked;
+	private StoryController storyCon;
 	private ProgressDialog progressDialog;
 	ArrayList<Story> currentStories;
 
@@ -77,6 +78,7 @@ public class ViewBrowseStories extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		storyCon = StoryController.getInstance(this);
 		lifedata = LifecycleData.getInstance();
 		serverCon = ServerStoryController.getInstance(this);
 		localCon = LocalStoryController.getInstance(this);
@@ -150,9 +152,10 @@ public class ViewBrowseStories extends Activity {
 			return true;
 		case R.id.lucky:
 			Story randomStory = serverCon.getRandomStory();
+			storyCon.setCurrStoryFromServer(randomStory);
 
 			if (randomStory != null) {
-				new CacheStory().execute(randomStory);
+				new CacheStory().execute();
 			} else {
 				Toast.makeText(getBaseContext(),
 						"No Published Stories Available", Toast.LENGTH_LONG)
@@ -191,15 +194,12 @@ public class ViewBrowseStories extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				storyClicked = gridArray.get(arg2);
-				lifedata.setStory(storyClicked);
-
-				// Handle caching the story if it's a published story,
-				// currently breaks downloaded stories
 				if (viewType == Type.PUBLISHED) {
+					storyCon.setCurrStoryFromServer(gridArray.get(arg2));
 					overwriteStory();
 					return;
 				}
+				storyCon.setCurrStoryFromMemory(gridArray.get(arg2));
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
 			}
@@ -222,7 +222,7 @@ public class ViewBrowseStories extends Activity {
 				switch (which) {
 				case 0:
 					CacheStory storytoCache = new CacheStory();
-					storytoCache.execute(storyClicked, null, null);
+					storytoCache.execute();
 					Intent intent = new Intent(getBaseContext(), ViewStory.class);
 					startActivity(intent);
 					break;
@@ -246,7 +246,7 @@ public class ViewBrowseStories extends Activity {
 	 * heavy operations, an async task is used.
 	 * 
 	 */
-	private class CacheStory extends AsyncTask<Story, Void, Void> {
+	private class CacheStory extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected void onPreExecute() {
 			progressDialog = ProgressDialog.show(ViewBrowseStories.this,
@@ -254,9 +254,8 @@ public class ViewBrowseStories extends Activity {
 		};
 
 		@Override
-		protected synchronized Void doInBackground(Story... params) {
-			localCon.cache(params[0]);
-			lifedata.setStory(params[0]);
+		protected synchronized Void doInBackground(Void... params) {
+			localCon.cache(storyCon.getCurrStory());
 			return null;
 		}
 
