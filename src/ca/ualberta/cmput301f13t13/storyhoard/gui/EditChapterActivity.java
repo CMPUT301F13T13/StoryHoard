@@ -71,7 +71,6 @@ public class EditChapterActivity extends MediaActivity {
 	private AlertDialog illustDialog;
 	private LinearLayout illustrations;
 	private CheckBox randChoiceCheck;
-	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +156,7 @@ public class EditChapterActivity extends MediaActivity {
 			// Create a new chapter from the story's ID
 			chapter = new Chapter(story.getId(), "");
 			chapCon.setCurrChapterComplete(chapter);
+			lifedata.setEditing(true);
 		}
 		
 		// set up choices
@@ -213,7 +213,7 @@ public class EditChapterActivity extends MediaActivity {
 
 	private void addIllustration() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
+		chapCon.editText(chapterContent.getText().toString());
 		
 		// Set dialog title
 		alert.setTitle("Choose method:");
@@ -241,6 +241,7 @@ public class EditChapterActivity extends MediaActivity {
 	}
 
 	private void addChoice() {
+		chapCon.editText(chapterContent.getText().toString());
 		Intent intent = new Intent(getBaseContext(), EditChoiceActivity.class);
 		lifedata.setEditingChoice(false);
 		startActivity(intent);
@@ -248,7 +249,6 @@ public class EditChapterActivity extends MediaActivity {
 
 	private void saveAction() {
 		new SaveChapter().execute();
-		finish();
 	}
 	
 	/**
@@ -259,22 +259,22 @@ public class EditChapterActivity extends MediaActivity {
 	private class SaveChapter extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected synchronized Void doInBackground(Void... params) {	
-			// saving any illustrations
+			chapCon.editText(chapterContent.getText().toString());
 			chapCon.pushChangesToDb();
-
-			chapter.setText(chapterContent.getText().toString());
+			
 			if (lifedata.isFirstStory()) {
 				storyCon.editFirstChapterId(chapter.getId());
 				storyCon.pushChangesToDb();
 				lifedata.setFirstStory(false);
 			}
+			storyCon.addChapter(chapter);
 			return null;
 		}
 		
 		@Override 
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();
+			finish();
 		}
 	}		
 }

@@ -84,4 +84,8 @@ public class Syncher {
 		}
 		mediaMan.syncDeletions(medias, chap.getId());
 	}		
+	
+	public void cache(Story story) {
+		syncStoryFromServer(story);
+	}	
 }

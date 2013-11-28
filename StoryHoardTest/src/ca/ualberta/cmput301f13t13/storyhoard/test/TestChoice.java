@@ -24,9 +24,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -46,13 +43,6 @@ public class TestChoice extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-
-		LifecycleData lifedata = LifecycleData.getInstance();
-		lifedata.setEditing(false);
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
 	/**
@@ -78,6 +68,7 @@ public class TestChoice extends
 	 * the choice id and the chapter id to which it belongs.
 	 */
 	public void testSetSearchCriteria() {
+
 		// empty everything
 		Choice criteria = new Choice(null, null, null, null);
 		HashMap<String, String> info = criteria.getSearchCriteria();

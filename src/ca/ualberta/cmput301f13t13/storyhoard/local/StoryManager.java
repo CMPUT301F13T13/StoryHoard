@@ -44,7 +44,6 @@ public class StoryManager implements StoringManager<Story> {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 	private static String phoneId = null;
-	private Syncher syncher;
 	protected ContentValues values;
 	protected String selection;
 	protected String[] sArgs;
@@ -56,7 +55,6 @@ public class StoryManager implements StoringManager<Story> {
 	protected StoryManager(Context context) {
 		helper = DBHelper.getInstance(context);
 		phoneId = Utilities.getPhoneId(context);
-		syncher = Syncher.getInstance(context);
 	}
 
 	/**
@@ -273,10 +271,6 @@ public class StoryManager implements StoringManager<Story> {
 	public ArrayList<Story> getAllAuthorStories() {
 		Story criteria = new Story(null, null, null, null, phoneId);
 		return retrieve(criteria);
-	}
-
-	public void cache(Story story) {
-		syncher.syncStoryFromServer(story);
 	}
 
 	/**

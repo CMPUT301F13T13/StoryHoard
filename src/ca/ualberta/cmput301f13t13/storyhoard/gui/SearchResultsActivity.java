@@ -35,7 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
-import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 
 /**
  * Search Results activity
@@ -52,7 +52,7 @@ public class SearchResultsActivity extends Activity {
 	private AdapterStories customGridAdapter;
 	private TextView emptyList;
 	private StoryController storyCon;
-	private StoryManager storyMan;
+	private Syncher syncher;
 	private Boolean isPublished;
 
 	@Override
@@ -67,10 +67,11 @@ public class SearchResultsActivity extends Activity {
 		
 		Intent intent = getIntent();
 		isPublished = intent.getBooleanExtra("isPublished", false);
-		storyMan = StoryManager.getInstance(this);
+		syncher = Syncher.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		emptyList = (TextView) findViewById(R.id.empty);
-
+		lifedata = LifecycleData.getInstance();
+		
 		ArrayList<Story> newStories = lifedata.getStoryList();
 
 		if (newStories == null || newStories.size() == 0) {
@@ -78,11 +79,6 @@ public class SearchResultsActivity extends Activity {
 					"No stories matched your search.", Toast.LENGTH_LONG)
 					.show();	
 		} 
-		
-		gridArray.clear();
-		gridArray.addAll(newStories);
-		emptyList.setText(" ");
-		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
 				R.layout.browse_story_item, gridArray);
@@ -102,8 +98,16 @@ public class SearchResultsActivity extends Activity {
 
 				Intent intent = new Intent(getBaseContext(), ViewStory.class);
 				startActivity(intent);
+				finish();
 			}
 		});	
+		
+		
+		gridArray.clear();
+		gridArray.addAll(newStories);
+		emptyList.setText(" ");
+		// Setup the grid view for the stories
+		
 		customGridAdapter.notifyDataSetChanged();			
 	}
 
@@ -151,7 +155,7 @@ public class SearchResultsActivity extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Story... params) {
-			storyMan.cache(params[0]);
+			syncher.cache(params[0]);
 			storyCon.setCurrStoryComplete(params[0]);
 			return null;
 		}

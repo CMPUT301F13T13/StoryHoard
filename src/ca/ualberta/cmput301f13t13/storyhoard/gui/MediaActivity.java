@@ -39,7 +39,6 @@ import android.widget.LinearLayout;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 
 /**
  * @author sgil
@@ -164,7 +163,8 @@ public abstract class MediaActivity extends Activity {
 			Intent intent) {
 		if (resultCode == RESULT_OK) {
 			String path = "";
-			Chapter chapter = LifecycleData.getInstance().getChapter();
+			chapCon = ChapController.getInstance(this);
+			Chapter chapter = chapCon.getCurrChapter();
 			Media photo = new Media(chapter.getId(), path , imageType);
 			photo.setText(photoComment);
 			if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {

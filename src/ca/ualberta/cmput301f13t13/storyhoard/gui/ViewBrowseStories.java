@@ -41,6 +41,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
@@ -57,6 +58,7 @@ public class ViewBrowseStories extends Activity {
 	private AdapterStories customGridAdapter;
 	private AlertDialog overwriteDialog;
 	private StoryManager storyMan;
+	private Syncher syncher;
 	private ServerManager serverMan;
 	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
@@ -82,6 +84,7 @@ public class ViewBrowseStories extends Activity {
 		lifedata = LifecycleData.getInstance();
 		serverMan = ServerManager.getInstance();
 		storyMan = StoryManager.getInstance(this);
+		syncher = Syncher.getInstance(this);
 		setActionBar();
 		refreshStories();
 	}	
@@ -223,8 +226,6 @@ public class ViewBrowseStories extends Activity {
 				case 0:
 					CacheStory storytoCache = new CacheStory();
 					storytoCache.execute();
-					Intent intent = new Intent(getBaseContext(), ViewStory.class);
-					startActivity(intent);
 					break;
 				case 1:
 					break;
@@ -255,16 +256,16 @@ public class ViewBrowseStories extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			storyMan.cache(storyCon.getCurrStory());
+			syncher.cache(storyCon.getCurrStory());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();
 			Intent intent = new Intent(getBaseContext(), ViewStory.class);
 			startActivity(intent);
+			progressDialog.dismiss();
 		}
 	}
 

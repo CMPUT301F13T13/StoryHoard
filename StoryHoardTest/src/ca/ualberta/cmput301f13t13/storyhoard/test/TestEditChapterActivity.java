@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -42,6 +44,8 @@ public class TestEditChapterActivity extends
 	private ListView viewChoices;
 	private EditText chapterContent;
 	private LinearLayout illustrations;
+	private StoryController storyCon;
+	private ChapController chapCon;
 
 	public TestEditChapterActivity() {
 		super(EditChapterActivity.class);
@@ -52,27 +56,30 @@ public class TestEditChapterActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		lifedata = LifecycleData.getInstance();
-
-		Story story = new Story("title", "author", "es", "432432");
-		lifedata.setEditing(true);
-		lifedata.setStory(story);
-		Chapter chapter = new Chapter(story.getId(), "chapter");
-		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
-		chapter.addChoice(c1);
-		lifedata.setChapter(chapter);
-		activity = getActivity();
-
-		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
-		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
-		illustrations = (LinearLayout) activity
-				.findViewById(R.id.editHorizontalIllustrations);
 	}
 
 	/**
 	 * Tests that all the gui elements have been instantiated and are not null.
 	 */
 	public void testPreconditions() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
+
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
+		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
+		illustrations = (LinearLayout) activity
+				.findViewById(R.id.editHorizontalIllustrations);
+		
 		assertTrue(activity != null);
 		assertTrue(chapterContent != null);
 		assertTrue(viewChoices != null);
@@ -83,12 +90,48 @@ public class TestEditChapterActivity extends
 	 * Tests the content / text of the chapter is right.
 	 */
 	public void testChapterContent() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
+
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
+		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
+		illustrations = (LinearLayout) activity
+				.findViewById(R.id.editHorizontalIllustrations);
+		
 		String content = chapterContent.getText().toString();
 		assertTrue(content.equals("chapter"));
 	}
 
 	@UiThreadTest
 	public void testSetChapterContent() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
+
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		chapterContent = (EditText) activity.findViewById(R.id.chapterEditText);
+		viewChoices = (ListView) activity.findViewById(R.id.chapterEditChoices);
+		illustrations = (LinearLayout) activity
+				.findViewById(R.id.editHorizontalIllustrations);
+		
 		String title = "My chap";
 		chapterContent.setText(title);
 		assertTrue(chapterContent.getText().toString().equals(title));

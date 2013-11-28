@@ -103,6 +103,8 @@ public class ViewStory extends Activity {
 		
 		// Initialize the activity fields
 		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(this);
+		chapCon = ChapController.getInstance(this);
 		storyTitle = (TextView) findViewById(R.id.storyTitle);
 		storyAuthor = (TextView) findViewById(R.id.storyAuthor);
 		storyDescription = (TextView) findViewById(R.id.storyDescription);

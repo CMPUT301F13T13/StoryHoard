@@ -25,6 +25,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -45,7 +46,6 @@ public class TestStoryManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		sm = StoryManager.getInstance(getActivity());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class TestStoryManager extends
 
 		// first chapter of story
 		Chapter mockChapter = new Chapter(mockStory.getId(), "my first chapter");
-		mockStory.addChapter(mockChapter);
+		mockStory.getChapters().add(mockChapter);
 		mockStory.setFirstChapterId(mockChapter.getId());
 
 		return mockStory;
@@ -69,6 +69,8 @@ public class TestStoryManager extends
 	 * again to make sure it was properly saved.
 	 */
 	public void testCacheLoadStory() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog",
 				"32432423");
 
@@ -82,6 +84,8 @@ public class TestStoryManager extends
 	 * Tests adding and loading a story from the local storage
 	 */
 	public void testAddLoadStory() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 
@@ -97,6 +101,8 @@ public class TestStoryManager extends
 	 * include any stories not created by author.
 	 */
 	public void testGetAllAuthorStories() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -124,6 +130,8 @@ public class TestStoryManager extends
 	 * Tests loading all cached stories.
 	 */
 	public void testGetAllCachedStories() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -150,6 +158,8 @@ public class TestStoryManager extends
 	 * Tests editing story
 	 */
 	public void testEditStory() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		Story mockStory = newMockStory("My Wizard Mouse", "JK ROlling",
 				"before the edit...", Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory);
@@ -177,6 +187,8 @@ public class TestStoryManager extends
 	 * Tests the correct determining of whether a story exists locally or not.
 	 */
 	public void testExistsLocally() {
+		sm = StoryManager.getInstance(getActivity());
+		
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.insert(mockStory);
@@ -191,10 +203,69 @@ public class TestStoryManager extends
 	 * updating a story.
 	 */
 	public void testSync() {
+		sm = StoryManager.getInstance(getActivity());
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
 		sm.syncStory(mockStory);
 		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
 		assertEquals(mockStorys.size(), 1);
 	}
+	
+	/**
+	 * Tests using the controller to add stories and then get all cached
+	 * stories.
+	 */
+	public void testCacheAndGetAllCached() {
+		sm = StoryManager.getInstance(getActivity());
+		ArrayList<Story> stories = new ArrayList<Story>();
+		Syncher syncher = Syncher.getInstance(getActivity());
+		
+		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
+		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
+
+		syncher.cache(s2);
+		syncher.cache(s3);
+
+		stories = sm.getAllCachedStories();
+
+		assertEquals(stories.size(), 2);
+	}
+	
+	/**
+	 * Tests using the controller to test for a variety of different stories
+	 * that have been added / published.
+	 */
+	public void testSearchStory() {
+		sm = StoryManager.getInstance(getActivity());
+		
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		// Insert some stories
+		Story s1 = new Story("Lily the cowy", "me", "D: none",
+				Utilities.getPhoneId(getActivity()));
+		Story s2 = new Story("Bob the hen", "me", "D: none",
+				Utilities.getPhoneId(getActivity()));
+		Story s3 = new Story("Bob the cowy", "me", "D: none", "34532432423");
+
+		sm.insert(s1);
+		sm.insert(s2);
+		sm.insert(s3);
+
+		// title has cowy, cached stories
+		stories = sm.searchCachedStories("cowy");
+		assertEquals(stories.size(), 1);
+
+		// created, title has bob and hen
+		stories = sm.searchAuthorStories("Bob hen");
+		assertEquals(stories.size(), 1);
+	}
+
+	public void isPublishedStoryMyStory() {
+		sm = StoryManager.getInstance(getActivity());
+		Story story = new Story("sdfsf", "sfdsf", "des",
+				Utilities.getPhoneId(getActivity()));
+		assertTrue(sm.isPublishedStoryMyStory(story, getActivity()));
+		story.setPhoneId("3432");
+		assertFalse(sm.isPublishedStoryMyStory(story, getActivity()));
+	}	
 }

@@ -39,6 +39,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 public class TestChapterManager extends
 		ActivityInstrumentationTestCase2<InfoActivity> {
 	private ArrayList<Chapter> mockChapters;
+	private Chapter mockChapter;
+	private Chapter mockChapter2;
+	private Chapter mockChapter3;
 	private ChapterManager cm = null;
 
 	public TestChapterManager() {
@@ -47,18 +50,19 @@ public class TestChapterManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		cm = ChapterManager.getInstance(getActivity());
 	}
 
 	/**
 	 * Create a new mock chapter without choices.
 	 */
 	public Chapter newMockChapter(UUID storyId, String text) {
+		cm = ChapterManager.getInstance(getActivity());
+		
 		// chapter object
 		Chapter mockChapter = new Chapter(storyId, text);
 		Choice choice = new Choice(storyId, mockChapter.getId(),
 				UUID.randomUUID(), "pick me!");
-		mockChapter.addChoice(choice);
+		mockChapter.getChoices().add(choice);
 
 		return mockChapter;
 	}
@@ -68,6 +72,7 @@ public class TestChapterManager extends
 	 * database.
 	 */
 	public void testAddLoadChapter() {
+		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 
 		cm.insert(mockChapter);
@@ -79,6 +84,7 @@ public class TestChapterManager extends
 	 * Tests retrieving all the chapters of a story
 	 */
 	public void testGetAllChapters() {
+		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 		cm.insert(mockChapter);
 		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
@@ -98,6 +104,7 @@ public class TestChapterManager extends
 	 * chapter.
 	 */
 	public void testUpdateChapter() {
+		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "hi there");
 		cm.insert(mockChapter);
 
@@ -122,6 +129,7 @@ public class TestChapterManager extends
 	 * Tests the correct determining of whether a chapter exists locally or not.
 	 */
 	public void testExistsLocally() {
+		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 		cm.insert(mockChapter);
 		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
@@ -136,9 +144,48 @@ public class TestChapterManager extends
 	 * updating a chapter.
 	 */
 	public void testSync() {
+		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 		cm.syncChapter(mockChapter);
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
 	}
+	/**
+	 * Tests getting all chapters from a story.
+	 */
+	public void testGetChaptersByStory() {
+		cm = ChapterManager.getInstance(getActivity());
+		
+		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
+		cm.update(mockChapter);
+		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
+		cm.update(mockChapter2);
+		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
+		cm.update(mockChapter3);
+
+		mockChapters = cm.getChaptersByStory(mockChapter.getStoryId());
+		assertEquals(mockChapters.size(), 2);
+	}
+
+	/**
+	 * Tests getting all created chapters.
+	 */
+	public void testGetAll() {
+		cm = ChapterManager.getInstance(getActivity());
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+
+		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
+		cm.insert(mockChapter);
+		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
+		cm.insert(mockChapter2);
+		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
+		cm.insert(mockChapter3);
+
+		mockChapters = cm.getAll();
+		assertEquals(mockChapters.size(), 3);
+	}	
 }

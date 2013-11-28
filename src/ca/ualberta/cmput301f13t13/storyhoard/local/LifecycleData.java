@@ -13,12 +13,6 @@ public class LifecycleData {
 	private boolean isEditingChoice;
 	private boolean firstStory;
 	private ArrayList<Story> storyList;
-	private Story story;
-	private Chapter chapter;
-	private Choice choice;
-	private Media currImage;
-	private ArrayList<Media> currentImages;
-	private ArrayList<Choice> currentChoices;
 	private static LifecycleData self = null;
 	
 	protected LifecycleData() {
@@ -31,13 +25,6 @@ public class LifecycleData {
 		return self;
 	}
 	
-	public Choice getChoice() {
-		return choice;
-	}
-	
-	public void setChoice(Choice newChoice) {
-		this.choice = newChoice;
-	}
 	
 	public boolean isEditingChoice() {
 		return isEditingChoice;
@@ -63,76 +50,10 @@ public class LifecycleData {
 		this.firstStory = firstStory;
 	}
 
-	public Story getStory() {
-		return story;
-	}
-
-	public void setStory(Story story) {
-		this.story = story;
-	}
-
-	public Chapter getChapter() {
-		return chapter;
-	}
-
-	public void setChapter(Chapter chapter) {
-		this.chapter = chapter;
-	}
-	
-	public UUID getChapterID() {
-		return this.chapter.getId();
-	}
-	
-	public UUID getStoryID() {
-		return this.story.getId();
-	}
-
 	public ArrayList<Story> getStoryList() {
 		return this.storyList;
 	}
 	public void setSearchResults(ArrayList<Story> stories) {
 		storyList = stories;
-	}
-	public ArrayList<Media> getCurrImages() {
-		if (currentImages == null) {
-			return new ArrayList<Media>();
-		}
-		return this.currentImages;
-	}
-	public void setCurrImages(ArrayList<Media> medias) {
-		this.currentImages = medias;
-	}
-	public void addToCurrImages(Media media) {
-		if (currentImages == null) {
-			currentImages = new ArrayList<Media>();
-		}
-		this.currentImages.add(media);
-	}
-	public ArrayList<Choice> getCurrChoices() {
-		if (currentChoices == null) {
-			return new ArrayList<Choice>();
-		}
-		return this.currentChoices;
-	}
-	public void setCurrChoices(ArrayList<Choice> choices) {
-		this.currentChoices = choices;
-	}
-	public void addToCurrChoices(Choice choice) {
-		if (currentChoices == null) {
-			currentChoices = new ArrayList<Choice>();
-		}
-		this.currentChoices.add(choice);
-	}	
-	public Media getCurrImage() {
-		return currImage;
-	}
-	public void setCurrImage(Media img) {
-		this.currImage = img;
-	}
-	public void removeIllustration(Media media) {
-		if (currentImages == null) {
-			return;
-		} 
-	    currentImages.remove(media);
 	}
 }

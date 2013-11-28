@@ -214,9 +214,6 @@ public class ServerManager {
 	 * String keywords = "dog cat blue sky";
 	 * ArrayList<Story> stories = searchByKeywords(keywords); </br></br>
 	 * 
-	 * One more thing to note is that this operation is currently done on the
-	 * main UI thread of the android application, which is why the 
-	 * ThreadPolicy code is needed.
 	 * 
 	 * @param keywords
 	 * 			The keywords that you want appearing in the title of the
@@ -224,9 +221,6 @@ public class ServerManager {
 	 * 			by whitespace.
 	 */ 
 	public ArrayList<Story> searchByKeywords(String keywords) {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-		.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
 		
 		String selection = prepareKeywords(keywords);
 		String query = "{\"query\" : {\"query_string\" : {\"default_field\""

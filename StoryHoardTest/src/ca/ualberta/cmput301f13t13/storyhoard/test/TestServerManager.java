@@ -36,13 +36,10 @@ public class TestServerManager extends
 	private static ServerManager sm = null;
 	private static final Story story = new Story(
 			UUID.fromString("f1bda3a9-4560-4530-befc-2d58db9419b7"),
-			"Harry Potter", "oprah", "the emo boy", "232");
+			"Harry Potter test", "oprah", "the emo boy", "232");
 	private static final Story story2 = new Story(
 			UUID.fromString("e4558e4e-5140-4838-be40-e4d5be0b5299"),
-			"Ugly Duckling", "oprah", "the emo boy", "232");
-	private static final Story story3 = new Story(
-			UUID.fromString("e4558e4e-5140-4838-be40-e7d5be0b5277"),
-			"remove me", "oprah", "the emo boy", "232");
+			"Ugly Duckling test", "oprah", "the emo boy", "232");
 	private static ArrayList<Story> stories;
 
 	public TestServerManager() {
@@ -52,7 +49,7 @@ public class TestServerManager extends
 	/**
 	 * Tests no errors occur while inserting a story onto the server.
 	 */
-	public void testAAInsert() {
+	public void testInsert() {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 
@@ -64,13 +61,10 @@ public class TestServerManager extends
 		story.addChapter(chap);
 		story.addChapter(chap2);
 
-		try {
-			sm.insert(story);
-			sm.insert(story2);
-			sm.insert(story3);
-		} catch (Exception e) {
-			fail("error while inserting story on server");
-		}
+		sm.insert(story);
+		sm.insert(story2);
+		sm.insert(story3);
+
 	}
 
 	/**
@@ -95,9 +89,9 @@ public class TestServerManager extends
 				"new des", "125");
 		Chapter chap = new Chapter(story2.getId(), "on a dark cold night");
 		Choice c1 = new Choice(chap.getId(), UUID.randomUUID(), "hit me!");
-		chap.addChoice(c1);
+		chap.getChoices().add(c1);
 		newStory.setFirstChapterId(chap.getId());
-		newStory.addChapter(chap);
+		newStory.getChapters().add(chap);
 
 		try {
 			sm.update(newStory);

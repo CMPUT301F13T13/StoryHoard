@@ -48,6 +48,9 @@ public class TestMediaManager extends
 	private MediaManager mm = null;
 	private static final String fname1 = "img1.jpg";
 	private static final String fname2 = "img2.jpg";
+	private Media mockMedia;
+	private Media mockMedia3;
+	private ArrayList<Media> mockMedias;
 
 	public TestMediaManager() {
 		super(InfoActivity.class);
@@ -213,9 +216,53 @@ public class TestMediaManager extends
 	}
 
 	/**
-	 * Tests removing a media from the database.
+	 * Tests removing media from the database.
 	 */
 	public void testRemove() {
-		
+		UUID chapId = UUID.randomUUID();
+		mockMedia = new Media(chapId, null, Media.PHOTO);
+		mm.insert(mockMedia);
+
+		mockMedias = mm.getPhotosByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);
+
+		mm.remove(mockMedia.getId());
+		mockMedias = mm.getPhotosByChapter(chapId);
+		assertEquals(mockMedias.size(), 0);
 	}
+	
+	/**
+	 * Tests getting all chapters from a chapter.
+	 */
+	public void testGetMediasByChapter() {
+		UUID chapId = UUID.randomUUID();
+		mockMedia = new Media(chapId, null, Media.PHOTO);
+		mm.insert(mockMedia);
+		mockMedia3 = new Media(chapId, null, Media.ILLUSTRATION);
+		mm.insert(mockMedia3);
+
+		mockMedias = mm.getPhotosByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);
+		mockMedias = mm.getIllustrationsByChapter(chapId);
+		assertEquals(mockMedias.size(), 1);
+	}
+
+	/**
+	 * Tests getting all created choices.
+	 */
+	public void testGetAll() {
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+
+		UUID chapId = UUID.randomUUID();
+		mockMedia = new Media(chapId, null, "bob went away");
+		mm.insert(mockMedia);
+		mockMedia3 = new Media(UUID.randomUUID(), null, "photo");
+		mm.insert(mockMedia3);
+
+		mockMedias = mm.getAll();
+		assertEquals(mockMedias.size(), 2);
+	}	
 }

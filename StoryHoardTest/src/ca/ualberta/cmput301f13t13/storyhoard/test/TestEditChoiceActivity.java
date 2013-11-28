@@ -15,12 +15,17 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
+import java.util.UUID;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.LifecycleData;
@@ -36,7 +41,8 @@ public class TestEditChoiceActivity extends
 	LifecycleData lifedata;
 	private EditText choiceText;
 	private ListView chapters;
-
+	private StoryController storyCon;
+	private ChapController chapCon;
 	private EditChoiceActivity mActivity;
 
 	public TestEditChoiceActivity() {
@@ -50,23 +56,29 @@ public class TestEditChoiceActivity extends
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		lifedata = LifecycleData.getInstance();
-		Story story = new Story("title", "author", "es", "432432");
-
-		lifedata.setEditing(false);
-		lifedata.setStory(story);
-		lifedata.setChapter(new Chapter(story.getId(), null));
-
-		mActivity = (EditChoiceActivity) getActivity();
-		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
-		chapters = (ListView) mActivity
-				.findViewById(R.id.listAllLinkableChapters);
 	}
 
 	/**
 	 * Tests the ui widgets have been properly initialized.
 	 */
 	public void testPreConditions() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
+		
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(false);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+
+		mActivity = (EditChoiceActivity) getActivity();
+		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
+		chapters = (ListView) mActivity
+				.findViewById(R.id.listAllLinkableChapters);
+		
 		assertTrue(mActivity != null);
 		assertTrue(choiceText != null);
 		assertTrue(chapters != null);
@@ -77,6 +89,23 @@ public class TestEditChoiceActivity extends
 	 */
 	@UiThreadTest
 	public void testSetChoiceText() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
+		
+		Story story = new Story("title", "author", "es", "432432");
+		lifedata.setEditing(false);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+
+		mActivity = (EditChoiceActivity) getActivity();
+		choiceText = (EditText) mActivity.findViewById(R.id.choiceText);
+		chapters = (ListView) mActivity
+				.findViewById(R.id.listAllLinkableChapters);
+		
 		String title = "My choice";
 		choiceText.setText(title);
 		assertTrue(choiceText.getText().toString().equals(title));

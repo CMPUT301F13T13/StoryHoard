@@ -41,6 +41,15 @@ public class TestChapter extends ActivityInstrumentationTestCase2<InfoActivity> 
 		super(InfoActivity.class);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.test.ActivityInstrumentationTestCase2#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
 	/**
 	 * Tests creating a chapter two ways.
 	 */

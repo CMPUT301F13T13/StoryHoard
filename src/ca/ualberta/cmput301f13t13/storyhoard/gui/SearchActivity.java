@@ -127,6 +127,12 @@ public class SearchActivity extends Activity {
 			search((String)params[0]);
 			return null;
 		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);	
+			finish();
+		}
 	}
 	
 	private void search(String title) {
@@ -144,10 +150,8 @@ public class SearchActivity extends Activity {
 			stories = serverMan.searchByKeywords(title);
 			intent.putExtra("isPublished", true);
 		}
-		
 		lifedata.setSearchResults(stories);
-		startActivity(intent);		
-		finish();
+		startActivity(intent);	
 	}
 	
 	private void alertDialog() {

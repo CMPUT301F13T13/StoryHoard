@@ -40,6 +40,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 public class TestChoiceManager extends
 		ActivityInstrumentationTestCase2<InfoActivity> {
 	ChoiceManager cm = null;
+	private ArrayList<Choice> mockChoices;
+	private Choice mockChoice;
+	private Choice mockChoice2;
+	private Choice mockChoice3;
 
 	public TestChoiceManager() {
 		super(InfoActivity.class);
@@ -47,13 +51,13 @@ public class TestChoiceManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		cm = ChoiceManager.getInstance(getActivity());
 	}
 
 	/**
 	 * Tests adding a choice (saving locally to database)
 	 */
 	public void testSaveLoadChoice() {
+		cm = ChoiceManager.getInstance(getActivity());
 		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
@@ -73,6 +77,7 @@ public class TestChoiceManager extends
 	 * Tests saving, loading and editing a choice.
 	 */
 	public void testEditChoice() {
+		cm = ChoiceManager.getInstance(getActivity());
 		Story story = new Story("7 bugs", "Shamalan", "scary story",
 				Utilities.getPhoneId(this.getActivity()));
 		UUID storyId = story.getId();
@@ -102,6 +107,8 @@ public class TestChoiceManager extends
 	 * Tests retrieving all the choices of a chapter
 	 */
 	public void testGetAllChoices() {
+		cm = ChoiceManager.getInstance(getActivity());
+		
 		// Clearing database
 		DBHelper helper = DBHelper.getInstance(this.getActivity());
 		helper.close();
@@ -128,6 +135,8 @@ public class TestChoiceManager extends
 	 * Tests the correct determining of whether a choice exists locally or not.
 	 */
 	public void testExistsLocally() {
+		cm = ChoiceManager.getInstance(getActivity());
+		
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
@@ -143,6 +152,7 @@ public class TestChoiceManager extends
 	 * updating a choice.
 	 */
 	public void testSync() {
+		cm = ChoiceManager.getInstance(getActivity());
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
@@ -150,4 +160,37 @@ public class TestChoiceManager extends
 		ArrayList<Choice> mockChoices = cm.retrieve(mockChoice);
 		assertEquals(mockChoices.size(), 1);
 	}
+	
+	/**
+	 * Tests getting all chapters from a chapter.
+	 */
+	public void testGetChoicesByChapter() {
+		cm = ChoiceManager.getInstance(getActivity());
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, UUID.randomUUID(), "bob went away");
+		cm.insert(mockChoice);
+		mockChoice2 = new Choice(chapId, UUID.randomUUID(), "Lily drove");
+		cm.insert(mockChoice2);
+		mockChoice3 = new Choice(UUID.randomUUID(), UUID.randomUUID(),
+				"Lily drove");
+		cm.insert(mockChoice3);
+
+		mockChoices = cm.getChoicesByChapter(chapId);
+		assertEquals(mockChoices.size(), 2);
+	}
+
+	/**
+	 * Tests retrieving a random choice from a chapter.
+	 */
+	public void testRandomChoice() {
+		cm = ChoiceManager.getInstance(getActivity());
+		UUID chapId = UUID.randomUUID();
+		mockChoice = new Choice(chapId, chapId, "");
+		cm.insert(mockChoice);
+		mockChoice2 = new Choice(chapId, chapId, "");
+		cm.insert(mockChoice2);
+
+		Choice random = cm.getRandomChoice(chapId);
+		assertNotNull(random);
+	}	
 }

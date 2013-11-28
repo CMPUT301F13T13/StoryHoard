@@ -21,6 +21,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.EditText;
 import ca.ualberta.cmput301f13t13.storyhoard.R.id;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -38,6 +40,8 @@ public class TestEditStoryActivity extends
 	private EditText newTitle;
 	private EditText newAuthor;
 	private EditText newDescription;
+	private StoryController storyCon;
+	private ChapController chapCon;
 
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
@@ -47,13 +51,16 @@ public class TestEditStoryActivity extends
 	public void setUp() throws Exception {
 		super.setUp();
 		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapController.getInstance(getActivity());
 		Story story = new Story("title", "author", "es", "432432");
+		
 		lifedata.setEditing(true);
-		lifedata.setStory(story);
+		storyCon.setCurrStoryComplete(story);
 		Chapter chapter = new Chapter(story.getId(), "chapter");
 		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
-		chapter.addChoice(c1);
-		lifedata.setChapter(chapter);
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
 		activity = getActivity();
 
 		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
