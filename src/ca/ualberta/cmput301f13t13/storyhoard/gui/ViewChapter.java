@@ -38,6 +38,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
+
 /**
  * Views the chapter provided through the intent. Does not allow going backwards
  * through the activity stack.
@@ -83,11 +85,14 @@ public class ViewChapter extends MediaActivity {
 		case R.id.addPhoto:
 			addPhoto();
 			return true;
+		case R.id.info:
+			getHelp();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	/**
 	 * Initializes the private fields needed.
 	 */
@@ -104,14 +109,14 @@ public class ViewChapter extends MediaActivity {
 		choiceAdapter = new AdapterChoices(this, R.layout.browse_choice_item,
 				choices);
 		chapterChoices.setAdapter(choiceAdapter);
-		
+
 		setNextChapterListener();
 	}
 
 	/**
 	 * Gets the new chapter and updates the view's components.
 	 */
-	public void updateData() {	
+	public void updateData() {
 		chapter = chapCon.getCurrChapter();
 
 		// Check to see if the chapter exists, else terminate
@@ -127,15 +132,15 @@ public class ViewChapter extends MediaActivity {
 		} else {
 			chapterContent.setText(chapter.getText());
 		}
-		
+
 		insertChoices();
 		insertIllustrations();
 		insertPhotos();
 	}
-	
+
 	public void insertChoices() {
 		choices.addAll(chapter.getChoices());
-		
+
 		// Check for no choices
 		if (choices.isEmpty()) {
 			chapterContent.setText(chapterContent.getText()
@@ -148,7 +153,7 @@ public class ViewChapter extends MediaActivity {
 		}
 		choices.clear();
 		choices.addAll(chapter.getChoices());
-		choiceAdapter.notifyDataSetChanged();		
+		choiceAdapter.notifyDataSetChanged();
 	}
 
 	public void insertIllustrations() {
@@ -157,24 +162,24 @@ public class ViewChapter extends MediaActivity {
 		// Insert Illustrations
 		for (Media ill : chapter.getIllustrations()) {
 			insertImage(ill, this, illustrations);
-		}		
+		}
 	}
-	
-	public void insertPhotos() {		
-		// set listener to display photo text on click 
+
+	public void insertPhotos() {
+		// set listener to display photo text on click
 		for (Media photo : chapter.getPhotos()) {
 			View v = insertImage(photo, this, illustrations);
-			v.setOnClickListener(new OnClickListener () {
+			v.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Media media = (Media) v.getTag();
-					Toast.makeText(getBaseContext(),
-							media.getText(), Toast.LENGTH_LONG).show();	
+					Toast.makeText(getBaseContext(), media.getText(),
+							Toast.LENGTH_LONG).show();
 				}
-			});		
-		}		
+			});
+		}
 	}
-	
+
 	/**
 	 * Sets up the onClick listener for the button to flip to the next chapter
 	 * (selecting a choice).
@@ -184,7 +189,7 @@ public class ViewChapter extends MediaActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-	
+
 				UUID nextChap = choices.get(arg2).getNextChapter();
 				new LoadChapter().execute(nextChap);
 			}
@@ -192,29 +197,25 @@ public class ViewChapter extends MediaActivity {
 	}
 
 	/**
-	 * Async task to get all the chapter information from the database, including media and 
-	 * choices.
-	 *
+	 * Async task to get all the chapter information from the database,
+	 * including media and choices.
+	 * 
 	 */
-	private class LoadChapter extends AsyncTask<UUID, Void, Void>{
-	    @Override
-	    protected void onPreExecute()
-	    {	
-	        progressDialog= ProgressDialog.show(
-	        		ViewChapter.this, 
-	        		"Loading Chapter",
-	        		"Please wait...", 
-	        		true);
-
-	    };  
-	    
+	private class LoadChapter extends AsyncTask<UUID, Void, Void> {
 		@Override
-		protected synchronized Void doInBackground(UUID... params) {	
+		protected void onPreExecute() {
+			progressDialog = ProgressDialog.show(ViewChapter.this,
+					"Loading Chapter", "Please wait...", true);
+
+		};
+
+		@Override
+		protected synchronized Void doInBackground(UUID... params) {
 			chapCon.setCurrChapter(params[0]);
 			return null;
 		}
-		
-		@Override 
+
+		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			// Go to the chapter in question
@@ -223,5 +224,25 @@ public class ViewChapter extends MediaActivity {
 			progressDialog.dismiss();
 			finish();
 		}
-	}		
+	}
+
+	/**
+	 * Displays the help guide for the View Chapter activity
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Illustrations and photo data are contained "+
+				"in the scrollable view on the top of the screen.\n\n "+
+				"\t- To view illustration/photo text, click on the image.\n\n"+
+				"\t- To annotate the photo to the story, click on the camera icon "+
+				"located on the top right corner of the screen.\n\n"+
+				"\t- To navigate to another chapter, please select one of "+
+				"the available choices as listed below the chapter content.\n\n"+
+				"\t- Should no choices be available, the dialog '<No Choices>' "+
+				"will appear. \n\n"+
+				"\t- To return to the story page, press the back button on your "+
+				"mobile device. \n";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
+	}
 }

@@ -34,6 +34,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
  * Handles viewing the story metadata.
@@ -90,6 +91,9 @@ public class ViewStory extends Activity {
 		case R.id.editStoryMetaData:
 			intent = new Intent(this, EditStoryActivity.class);
 			startActivity(intent);
+			return true;
+		case R.id.info:
+			getHelp();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -182,4 +186,21 @@ public class ViewStory extends Activity {
 
 		}
 	}		
+	
+	/**
+	 * Displays the help guide for the View Story activity
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Story data is displayed on this screen, "+
+				"arranged from top to bottom by 'Title', 'Author', and "+
+				"'Description'.\n\n "+
+				"\t- To read the story, press the 'Begin Reading' button.\n\n"+
+				"\t- To edit the story content, press the 'Edit Story' button.\n\n"+
+				"\t- To edit the story settings, press the 'Settings' button.\n\n"+
+				"\t- To navigate back to the main screen, press the back button on "+
+				"your mobile device.\n";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
+	}
 }

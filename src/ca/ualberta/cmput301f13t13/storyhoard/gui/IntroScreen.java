@@ -15,7 +15,7 @@ public class IntroScreen extends Activity {
 		Thread loadingTime = new Thread() {
 			public void run() {
 				try {
-					sleep(6000);
+					sleep(3000);
 					Intent intent = new Intent(IntroScreen.this,
 							ViewBrowseStories.class);
 					startActivity(intent);
