@@ -143,8 +143,8 @@ public class TestChoiceManager extends
 		cm.insert(mockChoice);
 		Choice mockChoice2 = new Choice(chapId1, chapId2, "Lily drove");
 
-		assertTrue(cm.existsLocally(mockChoice));
-		assertFalse(cm.existsLocally(mockChoice2));
+		assertTrue(cm.existsLocally(mockChoice.getId()));
+		assertFalse(cm.existsLocally(mockChoice2.getId()));
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class TestChoiceManager extends
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();
 		Choice mockChoice = new Choice(chapId1, chapId2, "bob went away");
-		cm.syncChoice(mockChoice);
+		cm.sync(mockChoice, mockChoice.getId());
 		ArrayList<Choice> mockChoices = cm.retrieve(mockChoice);
 		assertEquals(mockChoices.size(), 1);
 	}

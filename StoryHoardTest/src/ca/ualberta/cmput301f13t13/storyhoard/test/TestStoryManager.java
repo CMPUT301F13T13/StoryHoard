@@ -191,11 +191,10 @@ public class TestStoryManager extends
 		
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
+		
+		assertFalse(sm.existsLocally(mockStory.getId()));
 		sm.insert(mockStory);
-		Story mockStory2 = newMockStory("My Frog", "Dr. Phil",
-				"my chubby frog", "43545454353");
-		assertTrue(sm.existsLocally(mockStory));
-		assertFalse(sm.existsLocally(mockStory2));
+		assertTrue(sm.existsLocally(mockStory.getId()));
 	}
 
 	/**

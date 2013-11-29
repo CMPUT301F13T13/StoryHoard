@@ -135,8 +135,8 @@ public class TestChapterManager extends
 		Chapter mockChapter2 = newMockChapter(mockChapter.getStoryId(),
 				"Lily drove");
 
-		assertTrue(cm.existsLocally(mockChapter));
-		assertFalse(cm.existsLocally(mockChapter2));
+		assertTrue(cm.existsLocally(mockChapter.getId()));
+		assertFalse(cm.existsLocally(mockChapter2.getId()));
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class TestChapterManager extends
 	public void testSync() {
 		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
-		cm.syncChapter(mockChapter);
+		cm.sync(mockChapter, mockChapter.getId());
 		mockChapters = cm.retrieve(mockChapter);
 		assertEquals(mockChapters.size(), 1);
 	}
@@ -166,26 +166,4 @@ public class TestChapterManager extends
 		mockChapters = cm.getChaptersByStory(mockChapter.getStoryId());
 		assertEquals(mockChapters.size(), 2);
 	}
-
-	/**
-	 * Tests getting all created chapters.
-	 */
-	public void testGetAll() {
-		cm = ChapterManager.getInstance(getActivity());
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
-		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
-		cm.insert(mockChapter);
-		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
-		cm.insert(mockChapter2);
-		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
-		cm.insert(mockChapter3);
-
-		mockChapters = cm.getAll();
-		assertEquals(mockChapters.size(), 3);
-	}	
 }

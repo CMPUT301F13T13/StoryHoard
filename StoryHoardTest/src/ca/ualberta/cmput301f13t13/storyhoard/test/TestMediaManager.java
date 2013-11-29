@@ -180,8 +180,8 @@ public class TestMediaManager extends
 		mm.insert(mockMedia);
 		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
 
-		assertTrue(mm.existsLocally(mockMedia));
-		assertFalse(mm.existsLocally(mockMedia2));
+		assertTrue(mm.existsLocally(mockMedia.getId()));
+		assertFalse(mm.existsLocally(mockMedia2.getId()));
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class TestMediaManager extends
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
 		mockMedia.setBitmapString(mockMedia.getBitmap());
-		mm.sync(mockMedia);
+		mm.sync(mockMedia, mockMedia.getId());
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia);
 		assertEquals(mockMedias.size(), 1);
 	}
@@ -246,23 +246,4 @@ public class TestMediaManager extends
 		mockMedias = mm.getIllustrationsByChapter(chapId);
 		assertEquals(mockMedias.size(), 1);
 	}
-
-	/**
-	 * Tests getting all created choices.
-	 */
-	public void testGetAll() {
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
-		UUID chapId = UUID.randomUUID();
-		mockMedia = new Media(chapId, null, "bob went away");
-		mm.insert(mockMedia);
-		mockMedia3 = new Media(UUID.randomUUID(), null, "photo");
-		mm.insert(mockMedia3);
-
-		mockMedias = mm.getAll();
-		assertEquals(mockMedias.size(), 2);
-	}	
 }

@@ -101,7 +101,7 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 	 * Tests using the story controller to edit the story's firstChapId.
 	 * @param id
 	 */
-	public void testEditFirstChapterId(UUID id) {
+	public void testEditFirstChapterId() {
 		StoryController sc = StoryController.getInstance(getActivity());
 		Story mockStory = new Story("title1", "author1", "desc1",
 				Utilities.getPhoneId(this.getActivity()));;
@@ -110,7 +110,7 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		assertNotNull(sc.getCurrStory().getFirstChapterId());
 	}
 	
-	public void testEditTitleAuthorDescription(String title) {
+	public void testEditTitleAuthorDescription() {
 		StoryController sc = StoryController.getInstance(getActivity());
 		
 		Story mockStory = new Story("title1", "author1", "desc1",
@@ -120,19 +120,25 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		sc.editAuthor("new");
 		sc.editDescription("new");
 		mockStory = sc.getCurrStory();
-		assertFalse(mockStory.);
+		assertTrue(mockStory.getTitle().equals("new"));
+		assertTrue(mockStory.getAuthor().equals("new"));
+		assertTrue(mockStory.getDescription().equals("new"));
 	}
 	
-	
 
-	public void updateChapter(Chapter chapter) {
-		for (Chapter chap : story.getChapters()) {
-			if (chap.getId().equals(chapter.getId())) {
-				story.getChapters().remove(chap);
-				break;
-			}
-		}
-		story.getChapters().add(chapter);
+	public void testUpdateChapter() {
+		StoryController sc = StoryController.getInstance(getActivity());
+		Story mockStory = new Story("title1", "author1", "desc1",
+				Utilities.getPhoneId(this.getActivity()));
+		Chapter chap = new Chapter(mockStory.getId(), "old");
+		sc.setCurrStoryComplete(mockStory);
+		sc.addChapter(chap);
+		chap.setText("new");
+		sc.updateChapter(chap);
+		
+		ArrayList<Chapter> chaps = sc.getCurrStory().getChapters();
+		assertEquals(chaps.size(), 1);
+		assertTrue(chaps.get(0).getText().equals("new"));
 	}	
 
 }
