@@ -1,11 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/info"
-        android:title="@string/info"
-        android:icon="@drawable/info"
-        android:showAsAction="ifRoom"/>
-    <item
 		android:id="@+id/searchStories"
 		android:title="@string/searchStories"
         android:icon="@drawable/search"
@@ -17,8 +12,14 @@
         android:showAsAction="ifRoom"/>
     <item
         android:id="@+id/addNewStory"
+        android:title="@string/add_new_story"
         android:icon="@drawable/add"
-        android:showAsAction="ifRoom"
-        android:title="@string/add_new_story"/>
+        android:showAsAction="ifRoom"/>
+    
+       <item
+        android:id="@+id/info"
+        android:title="@string/info"
+        android:icon="@drawable/info"
+        android:showAsAction="ifRoom"/> 
 
 </menu>
