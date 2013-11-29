@@ -2,20 +2,23 @@
 
     <item
         android:id="@+id/info"
+        android:title="@string/info"
         android:icon="@drawable/info"
-        android:showAsAction="always"/>
+        android:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/searchStories"
+		android:id="@+id/searchStories"
+		android:title="@string/searchStories"
         android:icon="@drawable/search"
-        android:showAsAction="always"/>
+        android:showAsAction="ifRoom"/>
     <item
         android:id="@+id/lucky"
+        android:title="@string/lucky"
         android:icon="@drawable/random"
-        android:showAsAction="always"/>
+        android:showAsAction="ifRoom"/>
     <item
         android:id="@+id/addNewStory"
         android:icon="@drawable/add"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/add_new_story"/>
 
 </menu>

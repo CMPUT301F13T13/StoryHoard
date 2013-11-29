@@ -279,9 +279,8 @@ public class ViewBrowseStories extends Activity {
 	private class GetAllStories extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected void onPreExecute() {
-			progressDialog = ProgressDialog.show(ViewBrowseStories.this,
-					"Fetching Stories", "Please wait...", true);
-		};
+			setContentView(R.layout.activity_intro_screen);
+		}
 
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
@@ -298,8 +297,9 @@ public class ViewBrowseStories extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			progressDialog.dismiss();
 			refreshStories();
+			setContentView(R.layout.activity_view_browse_stories);
+			setGridView();
 		}
 	}
 
