@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -167,9 +168,12 @@ public class ViewChapter extends MediaActivity {
 		
 		// Add photo bar
 		LinearLayout layout = new LinearLayout(this);
+
+		layout.setLayoutParams(new LayoutParams(85, 250));
 		layout.setGravity(Gravity.CENTER);
 
 		ImageView imageView = new ImageView(this);
+		imageView.setLayoutParams(new LayoutParams(85, 250));
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageView.setImageDrawable(getResources().getDrawable(R.drawable.photo_banner));
 		layout.addView(imageView);

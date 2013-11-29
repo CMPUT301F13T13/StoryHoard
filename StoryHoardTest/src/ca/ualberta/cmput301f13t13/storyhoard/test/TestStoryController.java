@@ -119,6 +119,8 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		sc.editTitle("new");
 		sc.editAuthor("new");
 		sc.editDescription("new");
+		mockStory = sc.getCurrStory();
+		assertFalse(mockStory.);
 	}
 	
 	
