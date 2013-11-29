@@ -110,7 +110,7 @@ public class ChapterController {
 	}
 	
 	public void pushChangesToDb() {
-		chapMan.syncChapter(chapter);
+		chapMan.sync(chapter, chapter.getId());
 		syncher.syncChapterParts(chapter);
 	}
 }

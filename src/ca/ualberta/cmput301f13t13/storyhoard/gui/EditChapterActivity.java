@@ -40,7 +40,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 /**
  * Add Chapter Activity
@@ -59,7 +58,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 public class EditChapterActivity extends MediaActivity {
 	private DeleteImageDialog dialBuilder = new DeleteImageDialog();
 	LifecycleData lifedata;
-	private Story story;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private ListView viewChoices;
@@ -148,7 +146,6 @@ public class EditChapterActivity extends MediaActivity {
 	 * Updates the view components depending on the chapter data.
 	 */
 	protected void updateICData() {
-		story = storyCon.getCurrStory();
 		if (lifedata.isEditing()) {
 			
 			// Editing an existing chapter
@@ -156,7 +153,7 @@ public class EditChapterActivity extends MediaActivity {
 			chapterContent.setText(chapter.getText());
 		} else {
 			// Create a new chapter from the story's ID
-			chapter = new Chapter(story.getId(), "");
+			chapter = new Chapter(storyCon.getCurrStory().getId(), "");
 			chapCon.setCurrChapterComplete(chapter);
 			lifedata.setEditing(true);
 		}

@@ -123,7 +123,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 		return results;
 	}
 
-	public void setupSearch(Chapter criteria) {
+	private void setupSearch(Chapter criteria) {
 		sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
 
@@ -149,6 +149,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 * @param newChapter
 	 *            Holds the new data that will be used to update.
 	 */
+	@Override
 	public void update(Chapter newChapter) {
 		setContentValues(newChapter);
 		Chapter newC = (Chapter) newChapter;
@@ -189,6 +190,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 *            Holds the arguments to be passed into the selection string.
 	 * @return selection The selection string.
 	 */
+	@Override
 	public String setSearchCriteria(Chapter chapter, ArrayList<String> sArgs) {
 		HashMap<String, String> chapCrit = chapter.getSearchCriteria();
 		String selection = "";
@@ -208,10 +210,6 @@ public class ChapterManager extends StoringManager<Chapter> {
 		return selection;
 	}
 
-	public ArrayList<Chapter> getAll() {
-		return retrieve(new Chapter(null, null, null, null));
-	}
-
 	/**
 	 * Retrieves all the chapters that are in a given story.
 	 * 
@@ -224,6 +222,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 		return retrieve(criteria);
 	}
 
+	@Override
 	public Chapter getById(UUID id) {
 		ArrayList<Chapter> result = retrieve(new Chapter(id, null, null, null));	
 		if (result.size() != 1) {

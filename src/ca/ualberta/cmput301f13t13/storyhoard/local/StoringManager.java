@@ -74,12 +74,11 @@ public abstract class StoringManager<A> {
 	 */
 	public abstract void update(A newObject);
 	
-
-	public void remove(UUID objId) {
-		// hook, optional implementation for this iteration
-	}
-	
 	public abstract A getById(UUID id);
 	
 	public abstract String setSearchCriteria(A object, ArrayList<String> sArgs);
+	
+	public void remove(UUID objId) {
+		// hook, optional implementation for this iteration
+	}
 }

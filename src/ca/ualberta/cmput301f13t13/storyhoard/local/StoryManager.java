@@ -81,6 +81,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * </br> OwnStoryManager sm = new OwnStoryManager.getInstance();
 	 * </br> sm.insert(story);
 	 */
+	@Override
 	public void insert(Story story) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		setContentValues(story);
@@ -93,6 +94,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * @param newStory
 	 *            Contains the changes to the story.
 	 */
+	@Override
 	public void update(Story newStory) {
 		setContentValues(newStory);
 		Story newS = (Story) newStory;
@@ -109,6 +111,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * @param criteria
 	 *            Holds the search criteria.
 	 */
+	@Override
 	public ArrayList<Story> retrieve(Story criteria) {
 		ArrayList<Story> results = new ArrayList<Story>();
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -138,7 +141,7 @@ public class StoryManager extends StoringManager<Story> {
 		return results;
 	}
 	
-	protected void setUpSearch(Story criteria) {
+	private void setUpSearch(Story criteria) {
 		sArgs = null;
 		projection = new String[]{ 
 				StoryTable.COLUMN_NAME_STORY_ID,
@@ -163,7 +166,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * Sets up the ContentValues for inserting or updating the database.
 	 * @param story
 	 */
-	protected void setContentValues(Story story) {
+	private void setContentValues(Story story) {
 		UUID chapterId = story.getFirstChapterId();
 
 		// Insert story
@@ -194,6 +197,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * @return String The selection string, i.e. the where clause that will be
 	 *         used in the sql query.
 	 */
+	@Override
 	public String setSearchCriteria(Story story, ArrayList<String> sArgs) {
 		HashMap<String, String> storyCrit = story.getSearchCriteria();
 
@@ -281,6 +285,7 @@ public class StoryManager extends StoringManager<Story> {
 		return retrieve(criteria);
 	}
 
+	@Override
 	public Story getById(UUID id) {
 		ArrayList<Story> result = retrieve(new Story(id, null, null, null, null));
 		if (result.size() != 1) {

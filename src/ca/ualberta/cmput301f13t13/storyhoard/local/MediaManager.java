@@ -92,6 +92,7 @@ public class MediaManager extends StoringManager<Media>{
 		values.put(MediaTable.COLUMN_NAME_TYPE, media.getType());;
 		values.put(MediaTable.COLUMN_NAME_TEXT, media.getText());		
 	}
+	
 	/**
 	 * Retrieves a media media from the database.
 	 * 
@@ -128,7 +129,7 @@ public class MediaManager extends StoringManager<Media>{
 	}
 	
 
-	public void setUpSearch(Media criteria) {
+	private void setUpSearch(Media criteria) {
 		sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
 		projection = new String[]{
@@ -157,6 +158,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * @param newMedia
 	 * 			Contains the changes to the media.
 	 */	
+	@Override
 	public void update(Media newMedia) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		setContentValues(newMedia);
@@ -179,6 +181,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * @return String
 	 * 			The selection string.
 	 */	
+	@Override
 	public String setSearchCriteria(Media media, ArrayList<String> sArgs) {
 		HashMap<String,String> medCrit = media.getSearchCriteria();
 		String selection = "";
@@ -198,6 +201,7 @@ public class MediaManager extends StoringManager<Media>{
 		return selection;
 	}
 
+	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		// Delete entry 
@@ -224,10 +228,7 @@ public class MediaManager extends StoringManager<Media>{
 		return retrieve(new Media(null, chapterId, null, Media.ILLUSTRATION, ""));		
 	}
 
-	public ArrayList<Media> getAll() {
-		return retrieve(new Media(null, null, null, null, null));
-	}
-
+	@Override
 	public Media getById(UUID id) {
 		ArrayList<Media> result = retrieve(new Media(id, null, null, null, null));
 		if (result.size() != 1) {

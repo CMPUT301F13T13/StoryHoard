@@ -31,7 +31,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 /**
  * Activity class for adding and editing a choice.
@@ -45,10 +44,6 @@ public class EditChoiceActivity extends Activity {
 	private ListView chapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
-	private Story story;
-	private Choice choice;
-	private Chapter fromChapter;
-	private Chapter toChapter;
 	private ChapterController chapCon;
 	private StoryController storyCon;
 	private ChoiceController choiceCon;
@@ -67,7 +62,7 @@ public class EditChoiceActivity extends Activity {
 		setAddChoiceListener();
 
 		data.clear();
-		data.addAll(story.getChapters());
+		data.addAll(storyCon.getCurrStory().getChapters());
 		chapterAdapter.notifyDataSetChanged();
 	}
 
@@ -78,17 +73,13 @@ public class EditChoiceActivity extends Activity {
 		chapCon = ChapterController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		choiceCon = ChoiceController.getInstance(this);
-		
-		story = storyCon.getCurrStory();
-		fromChapter = chapCon.getCurrChapter();
 
 		// Set up activity fields
 		choiceText = (EditText) findViewById(R.id.choiceText);
 		chapters = (ListView) findViewById(R.id.listAllLinkableChapters);
 
 		if (lifedata.isEditingChoice()) {
-			choice = choiceCon.getCurrChoice();
-			choiceText.setText(choice.getText());
+			choiceText.setText(choiceCon.getCurrChoice().getText());
 		}
 
 		// Set up adapter
@@ -106,14 +97,14 @@ public class EditChoiceActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				toChapter = data.get(arg2);
+				Chapter toChapter = data.get(arg2);
 				String text = choiceText.getText().toString();
 				if (lifedata.isEditingChoice()) {
 					choiceCon.editText(text);
 					choiceCon.editChapterTo(toChapter.getId());
 					chapCon.updateChoice(choiceCon.getCurrChoice());
 				} else {
-					Choice addedChoice = new Choice(fromChapter.getId(),
+					Choice addedChoice = new Choice(chapCon.getCurrChapter().getId(),
 							toChapter.getId(), text);
 					chapCon.addChoice(addedChoice);
 				}

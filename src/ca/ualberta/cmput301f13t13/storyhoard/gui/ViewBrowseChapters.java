@@ -30,7 +30,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
@@ -45,7 +44,6 @@ public class ViewBrowseChapters extends Activity {
 	LifecycleData lifedata;
 	private ChapterController chapCon;
 	private StoryController storyCon;
-	private Story story;
 	private ListView storyChapters;
 	private AdapterChapters chapterAdapter;
 	private ArrayList<Chapter> data = new ArrayList<Chapter>();
@@ -95,7 +93,6 @@ public class ViewBrowseChapters extends Activity {
 		// Grab controllers and pull all chapters from story
 		chapCon = ChapterController.getInstance(this);
 		storyCon = StoryController.getInstance(this);
-		story = storyCon.getCurrStory();
 		
 		// Set up activity field
 		storyChapters = (ListView) findViewById(R.id.storyChapters);
@@ -106,7 +103,7 @@ public class ViewBrowseChapters extends Activity {
 		storyChapters.setAdapter(chapterAdapter);
 		
 		data.clear();
-		data.addAll(story.getChapters());
+		data.addAll(storyCon.getCurrStory().getChapters());
 		chapterAdapter.notifyDataSetChanged();
 	}
 

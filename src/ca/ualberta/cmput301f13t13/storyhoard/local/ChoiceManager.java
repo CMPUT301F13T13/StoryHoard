@@ -177,6 +177,7 @@ public class ChoiceManager extends StoringManager<Choice> {
 	 * @return String
 	 * 			The selection string.
 	 */
+	@Override
 	public String setSearchCriteria(Choice choice, ArrayList<String> sArgs) {
 		HashMap<String,String> choiceCrit = choice.getSearchCriteria();		
 
