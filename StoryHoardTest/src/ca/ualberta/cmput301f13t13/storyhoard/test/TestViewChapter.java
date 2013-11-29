@@ -23,10 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 
 /**
@@ -51,14 +51,16 @@ public class TestViewChapter extends
 	 * Tests that the ui widgets were correctly initialized.
 	 */
 	public void testPreConditions() {
-		lifedata = LifecycleData.getInstance();
 		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		StoryController storyCon = StoryController.getInstance(getActivity());
 		
 		Story story = new Story("title", "author", "es", "432432");
 		Chapter chapter = new Chapter(story.getId(), "chapter");
 		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
 		chapter.getChoices().add(c1);
 		
+		storyCon.setCurrStoryComplete(story);
+		storyCon.addChapter(chapter);
 		chapCon.setCurrChapterComplete(chapter);
 
 		activity = getActivity();
@@ -76,14 +78,16 @@ public class TestViewChapter extends
 	 */
 	@UiThreadTest
 	public void testChapterContent() {
-		lifedata = LifecycleData.getInstance();
 		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		StoryController storyCon = StoryController.getInstance(getActivity());
 		
 		Story story = new Story("title", "author", "es", "432432");
 		Chapter chapter = new Chapter(story.getId(), "chapter");
 		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
 		chapter.getChoices().add(c1);
 		
+		storyCon.setCurrStoryComplete(story);
+		storyCon.addChapter(chapter);
 		chapCon.setCurrChapterComplete(chapter);
 
 		activity = getActivity();

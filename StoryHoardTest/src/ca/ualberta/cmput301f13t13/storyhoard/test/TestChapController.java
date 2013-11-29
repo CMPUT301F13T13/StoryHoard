@@ -20,6 +20,7 @@ public class TestChapController extends ActivityInstrumentationTestCase2<Activit
 	 * Tests adding a choice to a chapter.
 	 */
 	public void testAddChoice() {
+		
 		Chapter chapter = new Chapter(UUID.randomUUID(), "hello there");
 		Choice choice = new Choice(chapter.getId(), UUID.randomUUID(), "rawr");
 		chapter.addChoice(choice);

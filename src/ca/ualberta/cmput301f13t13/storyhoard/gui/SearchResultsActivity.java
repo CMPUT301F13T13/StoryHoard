@@ -132,8 +132,7 @@ public class SearchResultsActivity extends Activity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.browse_stories:
-			Intent browse = new Intent(this, ViewBrowseStories.class);
-			startActivity(browse);
+			finish();
 			return true;
 		case R.id.add_story:
 			Intent add = new Intent(this, EditStoryActivity.class);

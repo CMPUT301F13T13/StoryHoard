@@ -22,10 +22,11 @@ import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
 
 /**
@@ -38,7 +39,6 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	private TextView storyAuthor;
 	private TextView storyDescription;
 	private Button beginReading;
-	private LifecycleData lifedata;
 
 	public TestViewStory() {
 		super(ViewStory.class);
@@ -49,14 +49,23 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		lifedata = LifecycleData.getInstance();
+	}
+
+	/**
+	 * Tests that the ui widgets were correctly initialized.
+	 */
+	public void testPreConditions() {
+		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		StoryController storyCon = StoryController.getInstance(getActivity());
 
 		Story story = new Story("title", "author", "es", "432432");
 		Chapter chapter = new Chapter(story.getId(), "chapter");
 		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
-		chapter.addChoice(c1);
-		story.addChapter(chapter);
-		lifedata.setStory(story);
+		chapter.getChoices().add(c1);
+		story.getChapters().add(chapter);
+		
+		storyCon.setCurrStoryComplete(story);
+		chapCon.setCurrChapterComplete(chapter);
 
 		activity = getActivity();
 
@@ -65,13 +74,7 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		storyDescription = (TextView) activity
 				.findViewById(R.id.storyDescription);
 		beginReading = (Button) activity.findViewById(R.id.viewFirstChapter);
-
-	}
-
-	/**
-	 * Tests that the ui widgets were correctly initialized.
-	 */
-	public void testPreConditions() {
+		
 		assertTrue(storyTitle != null);
 		assertTrue(storyAuthor != null);
 		assertTrue(storyDescription != null);
@@ -79,24 +82,33 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 	}
 
 	/**
-	 * Tests setting the ui widget for story author.
-	 * 
-	 * @UiThreadTest public void testAuthor() {
-	 *               assertTrue(storyAuthor.getText().
-	 *               toString().equals("author")); }
-	 * 
-	 *               /** Tests setting the ui widget for story title.
+	 * Tests letting activity set ui widgest and reading their values to make sure
+	 * they are what they should be.
 	 */
 	@UiThreadTest
-	public void testTitle() {
-		assertTrue(storyTitle.getText().toString().equals("title"));
-	}
+	public void testTitleDescriptionAuthor() {
+		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		StoryController storyCon = StoryController.getInstance(getActivity());
 
-	/**
-	 * Tests setting the ui widget for story description.
-	 */
-	@UiThreadTest
-	public void testSetDescription() {
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.getChoices().add(c1);
+		story.getChapters().add(chapter);
+		
+		storyCon.setCurrStoryComplete(story);
+		chapCon.setCurrChapterComplete(chapter);
+
+		activity = getActivity();
+
+		storyTitle = (TextView) activity.findViewById(R.id.storyTitle);
+		storyAuthor = (TextView) activity.findViewById(R.id.storyAuthor);
+		storyDescription = (TextView) activity
+				.findViewById(R.id.storyDescription);
+		beginReading = (Button) activity.findViewById(R.id.viewFirstChapter);
+		
+		assertTrue(storyTitle.getText().toString().equals("title"));
 		assertTrue(storyDescription.getText().toString().equals("es"));
+		assertTrue(storyAuthor.getText().toString().equals("author"));
 	}
 }

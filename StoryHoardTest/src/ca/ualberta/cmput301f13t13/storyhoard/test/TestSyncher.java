@@ -11,8 +11,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
+import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
+import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
@@ -27,6 +31,11 @@ public class TestSyncher extends ActivityInstrumentationTestCase2<InfoActivity> 
 	 * will either be updating the data, inserting new data, or deleting media.
 	 */
 	public void testSyncStoryFromServer() {
+		StoryManager storyMan = StoryManager.getInstance(getActivity());
+		ChapterManager chapMan = ChapterManager.getInstance(getActivity());
+		MediaManager mediaMan = MediaManager.getInstance(getActivity());
+		ChoiceManager choiceMan = ChoiceManager.getInstance(getActivity());
+		
 		Syncher syncher = Syncher.getInstance(getActivity());
 		LocalStoryController lsCon = LocalStoryController
 				.getInstance(getActivity());
