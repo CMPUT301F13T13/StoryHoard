@@ -22,6 +22,7 @@ import android.test.UiThreadTest;
 import android.widget.ListView;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
@@ -35,8 +36,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewChapter;
 public class TestViewChapter extends
 		ActivityInstrumentationTestCase2<ViewChapter> {
 	private ViewChapter activity;
-	private LifecycleData lifedata;
-
 	private TextView chapterContent;
 	private ListView chapterChoices;
 
@@ -46,28 +45,28 @@ public class TestViewChapter extends
 
 	@Override
 	public void setUp() throws Exception {
-		lifedata = LifecycleData.getInstance();
-
-		Story story = new Story("title", "author", "es", "432432");
-		Chapter chapter = new Chapter(story.getId(), "chapter");
-		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
-		chapter.addChoice(c1);
-		story.addChapter(chapter);
-		lifedata.setStory(story);
-		lifedata.setChapter(chapter);
-
-		activity = getActivity();
-
-		// Setup the activity fields
-		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
-		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
-
 	}
 
 	/**
 	 * Tests that the ui widgets were correctly initialized.
 	 */
 	public void testPreConditions() {
+		lifedata = LifecycleData.getInstance();
+		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.getChoices().add(c1);
+		
+		chapCon.setCurrChapterComplete(chapter);
+
+		activity = getActivity();
+
+		// Setup the activity fields
+		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
+		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
+		
 		assertTrue(chapterContent != null);
 		assertTrue(chapterChoices != null);
 	}
@@ -77,6 +76,22 @@ public class TestViewChapter extends
 	 */
 	@UiThreadTest
 	public void testChapterContent() {
+		lifedata = LifecycleData.getInstance();
+		ChapterController chapCon = ChapterController.getInstance(getActivity());
+		
+		Story story = new Story("title", "author", "es", "432432");
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapter.getChoices().add(c1);
+		
+		chapCon.setCurrChapterComplete(chapter);
+
+		activity = getActivity();
+
+		// Setup the activity fields
+		chapterContent = (TextView) activity.findViewById(R.id.chapterContent);
+		chapterChoices = (ListView) activity.findViewById(R.id.chapterChoices);
+		
 		assertTrue(chapterContent.getText().toString().equals("chapter"));
 	}
 }

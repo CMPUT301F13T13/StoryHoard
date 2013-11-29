@@ -19,6 +19,10 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		super(InfoActivity.class);
 	}
 	
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
 	/**
 	 * Tests saving /updating changes to a story or a new story in memory to 
 	 * the server

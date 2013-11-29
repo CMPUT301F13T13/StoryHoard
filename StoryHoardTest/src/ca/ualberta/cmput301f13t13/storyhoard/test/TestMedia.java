@@ -29,8 +29,6 @@ import android.util.Log;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
  * Class meant for the testing of the Media class in the StoryHoard application.
@@ -49,11 +47,6 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 
 	public void setUp() throws Exception {
 		super.setUp();
-
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 
 	/**
@@ -104,7 +97,7 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 	
 	/**
 	 * Creates a new bitmap, save sit on to SD card and sets path to it.
-	 * Once again, this code is only for use in the JUnit tests.
+	 * This code is only for use in the JUnit tests. </br></br>
 	 * 
 	 * CODE REUSE: </br>
 	 * This code was modified from the code at:</br>

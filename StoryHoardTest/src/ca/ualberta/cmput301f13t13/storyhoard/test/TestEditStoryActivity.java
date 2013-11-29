@@ -50,6 +50,12 @@ public class TestEditStoryActivity extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+	}
+
+	/**
+	 * Tests the ui widgets have been properly initialized.
+	 */
+	public void testPreConditions() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(getActivity());
 		chapCon = ChapterController.getInstance(getActivity());
@@ -67,12 +73,7 @@ public class TestEditStoryActivity extends
 		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
 		newDescription = (EditText) activity
 				.findViewById(id.newStoryDescription);
-	}
-
-	/**
-	 * Tests the ui widgets have been properly initialized.
-	 */
-	public void testPreConditions() {
+		
 		assertTrue(activity != null);
 		assertTrue(newTitle != null);
 		assertTrue(newAuthor != null);
@@ -84,6 +85,24 @@ public class TestEditStoryActivity extends
 	 */
 	@UiThreadTest
 	public void testSetTitle() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
+		Story story = new Story("title", "author", "es", "432432");
+		
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
+		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
+		newDescription = (EditText) activity
+				.findViewById(id.newStoryDescription);
+		
 		String title = "My Title";
 		newTitle.setText(title);
 		assertTrue(newTitle.getText().toString().equals(title));
@@ -94,6 +113,24 @@ public class TestEditStoryActivity extends
 	 */
 	@UiThreadTest
 	public void testSetAuthor() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
+		Story story = new Story("title", "author", "es", "432432");
+		
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
+		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
+		newDescription = (EditText) activity
+				.findViewById(id.newStoryDescription);
+		
 		String author = "The Best Author Ever";
 		newAuthor.setText(author);
 		assertTrue(newAuthor.getText().toString().equals(author));
@@ -104,6 +141,24 @@ public class TestEditStoryActivity extends
 	 */
 	@UiThreadTest
 	public void testSetDescription() {
+		lifedata = LifecycleData.getInstance();
+		storyCon = StoryController.getInstance(getActivity());
+		chapCon = ChapterController.getInstance(getActivity());
+		Story story = new Story("title", "author", "es", "432432");
+		
+		lifedata.setEditing(true);
+		storyCon.setCurrStoryComplete(story);
+		Chapter chapter = new Chapter(story.getId(), "chapter");
+		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
+		chapCon.setCurrChapterComplete(chapter);
+		chapCon.addChoice(c1);
+		activity = getActivity();
+
+		newTitle = (EditText) activity.findViewById(id.newStoryTitle);
+		newAuthor = (EditText) activity.findViewById(id.newStoryAuthor);
+		newDescription = (EditText) activity
+				.findViewById(id.newStoryDescription);
+		
 		String desc = "This is the story of a new description.";
 		newDescription.setText(desc);
 		assertTrue(newDescription.getText().toString().equals(desc));

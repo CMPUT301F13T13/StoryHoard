@@ -51,7 +51,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
  * 
  */
 public class ViewChapter extends MediaActivity {
-	LifecycleData lifedata;
 	private ChapterController chapCon;
 	private Chapter chapter;
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
@@ -99,7 +98,6 @@ public class ViewChapter extends MediaActivity {
 	 * Initializes the private fields needed.
 	 */
 	public void setUpFields() {
-		lifedata = LifecycleData.getInstance();
 		chapCon = ChapterController.getInstance(this);
 
 		// Setup the activity fields

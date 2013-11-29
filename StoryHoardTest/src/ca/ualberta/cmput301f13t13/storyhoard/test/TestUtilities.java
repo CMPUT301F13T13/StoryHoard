@@ -18,6 +18,7 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
@@ -38,6 +39,10 @@ public class TestUtilities extends
 		super(InfoActivity.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
 	/**
 	 * Tests that the get phoneId returns a string of phoneid
 	 */
@@ -52,5 +57,17 @@ public class TestUtilities extends
 		Bitmap bmp = BogoPicGen.generateBitmap(50, 50);
 		String path = Utilities.saveImageToSD(bmp);
 		assertNotNull(path);
+	}
+	
+	/**
+	 * Tests that the method can correctly identify a story created by the
+	 * author.
+	 */
+	public void testIsPublishedStoryMyStory() {
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
+				Utilities.getPhoneId(this.getActivity()));
+		Story story2 = new Story("7 bugs", "Shamalan", "scary story", "1");
+		assertTrue(Utilities.isPublishedStoryMyStory(story, getActivity()));
+		assertFalse(Utilities.isPublishedStoryMyStory(story2, getActivity()));
 	}
 }

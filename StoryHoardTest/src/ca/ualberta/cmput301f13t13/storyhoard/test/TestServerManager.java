@@ -40,6 +40,10 @@ public class TestServerManager extends
 		super(InfoActivity.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
 	public void testUpdateStory() {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();

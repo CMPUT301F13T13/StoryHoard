@@ -18,7 +18,11 @@ package ca.ualberta.cmput301f13t13.storyhoard.test;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.GridView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseStories;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Test case for the activity to view all stories
@@ -37,14 +41,23 @@ public class TestViewBrowseStories extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		activity = getActivity();
-		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
 	}
 
 	/**
 	 * Testing that the preconditions setup properly
 	 */
 	public void testPreConditions() {
+		StoryController sc = StoryController.getInstance(getActivity());
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
+				Utilities.getPhoneId(this.getActivity()));
+		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
+		story.getChapters().add(chapter);
+		sc.setCurrStoryComplete(story);
+		
+		activity = getActivity();
+		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
+		
 		assertTrue(gridView != null);
+		assertEquals(gridView.getCount(), 1);
 	}
 }

@@ -205,7 +205,7 @@ public class TestStoryManager extends
 		sm = StoryManager.getInstance(getActivity());
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
-		sm.sync(mockStory);
+		sm.sync(mockStory, mockStory.getId());
 		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
 		assertEquals(mockStorys.size(), 1);
 	}
@@ -258,13 +258,4 @@ public class TestStoryManager extends
 		stories = sm.searchAuthorStories("Bob hen");
 		assertEquals(stories.size(), 1);
 	}
-
-	public void isPublishedStoryMyStory() {
-		sm = StoryManager.getInstance(getActivity());
-		Story story = new Story("sdfsf", "sfdsf", "des",
-				Utilities.getPhoneId(getActivity()));
-		assertTrue(sm.isPublishedStoryMyStory(story, getActivity()));
-		story.setPhoneId("3432");
-		assertFalse(sm.isPublishedStoryMyStory(story, getActivity()));
-	}	
 }

@@ -43,17 +43,17 @@ public class TestSearchActivity extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-
-		activity = getActivity();
-		searchButton = (Button) activity.findViewById(R.id.searchButton);
-		titleInput = (EditText) activity.findViewById(R.id.story_name);
-		spinner = (Spinner) activity.findViewById(R.id.search_spinner);
 	}
 
 	/**
 	 * Testing that the ui widgets setup properly
 	 */
 	public void testPreConditions() {
+		activity = getActivity();
+		searchButton = (Button) activity.findViewById(R.id.searchButton);
+		titleInput = (EditText) activity.findViewById(R.id.story_name);
+		spinner = (Spinner) activity.findViewById(R.id.search_spinner);
+		
 		assertTrue(activity != null);
 		assertTrue(searchButton != null);
 		assertTrue(titleInput != null);
@@ -65,6 +65,11 @@ public class TestSearchActivity extends
 	 */
 	@UiThreadTest
 	public void testSetTitle() {
+		activity = getActivity();
+		searchButton = (Button) activity.findViewById(R.id.searchButton);
+		titleInput = (EditText) activity.findViewById(R.id.story_name);
+		spinner = (Spinner) activity.findViewById(R.id.search_spinner);
+		
 		String text = "The Best title Ever";
 		titleInput.setText(text);
 		assertTrue(titleInput.getText().toString().equals(text));

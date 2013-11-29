@@ -41,6 +41,11 @@ public class TestStory extends
 		super(InfoActivity.class);
 	}
 	
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
+	
 	/**
 	 * Tests creating a story without chapters.
 	 */

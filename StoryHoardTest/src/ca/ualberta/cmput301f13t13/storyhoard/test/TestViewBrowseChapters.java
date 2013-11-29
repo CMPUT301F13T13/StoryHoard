@@ -15,15 +15,10 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.UUID;
-
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.GridView;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.gui.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseChapters;
 
 /**
@@ -36,7 +31,7 @@ public class TestViewBrowseChapters extends
 		ActivityInstrumentationTestCase2<ViewBrowseChapters> {
 	private ListView storyChapters;
 	private ViewBrowseChapters activity;
-	private LifecycleData lifedata;
+	private GridView gridView;
 
 	public TestViewBrowseChapters() {
 		super(ViewBrowseChapters.class);
@@ -45,23 +40,16 @@ public class TestViewBrowseChapters extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		lifedata = LifecycleData.getInstance();
-
-		Story story = new Story("title", "author", "es", "432432");
-		Chapter chapter = new Chapter(story.getId(), "chapter");
-		Choice c1 = new Choice(chapter.getId(), UUID.randomUUID(), "c1");
-		chapter.addChoice(c1);
-		story.addChapter(chapter);
-		lifedata.setStory(story);
-
-		activity = getActivity();
 	}
 
 	/**
 	 * Tests that the ui widgets were correctly initialized.
 	 */
 	public void testPreConditions() {
+		activity = getActivity();
+		gridView = (GridView) activity.findViewById(R.id.gridStoriesView); 
 		storyChapters = (ListView) activity.findViewById(R.id.storyChapters);
 		assertTrue(storyChapters != null);
+		assertTrue(gridView != null);
 	}
 }

@@ -58,19 +58,14 @@ public class TestMediaManager extends
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-
-		mm = MediaManager.getInstance(getActivity());
 	}
 
 	/**
 	 * Tests adding and loading an image.
 	 */
 	public void testAddLoadImage() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
 		Media mockMedia = new Media(chap.getId(), createPath(fname1), null);
 
@@ -87,6 +82,13 @@ public class TestMediaManager extends
 	 * Tests getting all photos, and all illustrations belonging to a chapter.
 	 */
 	public void testGetAllMedia() {
+		mm = MediaManager.getInstance(getActivity());
+		
+		// Clearing database
+		DBHelper helper = DBHelper.getInstance(this.getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
+		
 		UUID chapId = UUID.randomUUID();
 
 		Media m2 = new Media(chapId, createPath(fname1), Media.PHOTO);
@@ -106,6 +108,8 @@ public class TestMediaManager extends
 	 * Tests updating a chapter's media.
 	 */
 	public void testUpdateMedia() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
 
 		Media mockMedia = new Media(chap.getId(), null, null);
@@ -136,6 +140,8 @@ public class TestMediaManager extends
 	 * Creates a new bitmap, save sit on to SD card and sets path to it.
 	 */
 	public String createPath(String fname) {
+		mm = MediaManager.getInstance(getActivity());
+		
 		Bitmap bm = BogoPicGen.generateBitmap(50, 50);
 		File mFile1 = Environment.getExternalStorageDirectory();
 
@@ -175,6 +181,8 @@ public class TestMediaManager extends
 	 * Tests the correct determining of whether a media exists locally or not.
 	 */
 	public void testExistsLocally() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
 		mm.insert(mockMedia);
@@ -189,6 +197,8 @@ public class TestMediaManager extends
 	 * updating a media.
 	 */
 	public void testSync() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
 		mockMedia.setBitmapString(mockMedia.getBitmap());
@@ -201,6 +211,8 @@ public class TestMediaManager extends
 	 * Tests synching the deletion of media.
 	 */
 	public void testSyncDeletion() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		UUID chapId = UUID.randomUUID();
 		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
 		mm.insert(mockMedia);
@@ -219,6 +231,8 @@ public class TestMediaManager extends
 	 * Tests removing media from the database.
 	 */
 	public void testRemove() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mm.insert(mockMedia);
@@ -235,6 +249,8 @@ public class TestMediaManager extends
 	 * Tests getting all chapters from a chapter.
 	 */
 	public void testGetMediasByChapter() {
+		mm = MediaManager.getInstance(getActivity());
+		
 		UUID chapId = UUID.randomUUID();
 		mockMedia = new Media(chapId, null, Media.PHOTO);
 		mm.insert(mockMedia);
