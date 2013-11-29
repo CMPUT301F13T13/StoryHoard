@@ -22,12 +22,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -162,6 +165,16 @@ public class ViewChapter extends MediaActivity {
 		for (Media ill : chapter.getIllustrations()) {
 			insertImage(ill, this, illustrations);
 		}
+		
+		// Add photo bar
+		LinearLayout layout = new LinearLayout(this);
+		layout.setGravity(Gravity.CENTER);
+
+		ImageView imageView = new ImageView(this);
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		imageView.setImageDrawable(getResources().getDrawable(R.drawable.photo_banner));
+		layout.addView(imageView);
+		illustrations.addView(layout);
 	}
 
 	public void insertPhotos() {
