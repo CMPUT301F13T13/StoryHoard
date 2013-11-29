@@ -33,14 +33,30 @@ import java.util.UUID;
  * @see ChoiceManager
  * @see MediaManager
  */
-public interface StoringManager<A> {
+public abstract class StoringManager<A> {
 
+	public Boolean existsLocally(UUID id) {
+		A object = getById(id);
+		if (object == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public void sync(A object, UUID id) {
+		if (existsLocally(id)) {
+			update(object);
+		} else {
+			insert(object);
+		}	
+	}
+	
 	/**
 	 * Inserts an object into the database.
 	 * 
 	 * @param object
 	 */
-	public void insert(A object);
+	public abstract void insert(A object);
 
 	/**
 	 * Retrieves an object(s) from the database.
@@ -49,18 +65,21 @@ public interface StoringManager<A> {
 	 * 
 	 * @return objects
 	 */
-	public ArrayList<A> retrieve(A criteria);
+	public abstract ArrayList<A> retrieve(A criteria);
 
 	/**
 	 * Updates an object in the database.
 	 * 
 	 * @param newObject
 	 */
-	public void update(A newObject);
+	public abstract void update(A newObject);
+	
 
-	public void remove(UUID objId);
+	public void remove(UUID objId) {
+		// hook, optional implementation for this iteration
+	}
 	
-	public Boolean existsLocally(A object);
+	public abstract A getById(UUID id);
 	
-	public String setSearchCriteria(A object, ArrayList<String> sArgs);
+	public abstract String setSearchCriteria(A object, ArrayList<String> sArgs);
 }

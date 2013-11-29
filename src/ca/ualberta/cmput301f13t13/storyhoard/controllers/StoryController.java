@@ -5,28 +5,18 @@ import java.util.UUID;
 
 import android.content.Context;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 public class StoryController {
 	private static Story story;
-	private static ChapterManager chapMan;
-	private static MediaManager mediaMan;
-	private static ChoiceManager choiceMan;
 	private static ServerManager serverMan;
 	private static Syncher syncher;
 	private static StoryController self;
 
 	protected StoryController(Context context) {
-		chapMan = ChapterManager.getInstance(context);
-		choiceMan = ChoiceManager.getInstance(context);
-		mediaMan = MediaManager.getInstance(context);
 		syncher = Syncher.getInstance(context);
 		serverMan = ServerManager.getInstance();
 		story = new Story("", "", "", "");  // blank story
@@ -41,29 +31,14 @@ public class StoryController {
 	
 	public void setCurrStoryIncomplete(Story aStory) {
 		story = aStory;
-		story.setChapters(getFullStoryChapters(story.getId()));
+		story.setChapters(syncher.syncChaptersFromDb(story.getId()));
 	}
 	
-	private ArrayList<Chapter> getFullStoryChapters(UUID storyId) {
-		ArrayList<Chapter> chaps = chapMan.getChaptersByStory(storyId);
-		ArrayList<Chapter> fullChaps = new ArrayList<Chapter>();
-		
-		for (Chapter chap : chaps) {
-			chap.setChoices(choiceMan.retrieve(new Choice(null, 
-					chap.getId(), null, null)));
-			chap.setIllustrations(mediaMan.retrieve(new Media(null, 
-					chap.getId(), null, Media.ILLUSTRATION, "")));
-			chap.setPhotos(mediaMan.retrieve(new Media(null, 
-					chap.getId(), null, Media.PHOTO, "")));	
-			fullChaps.add(chap);
-		}
-		return fullChaps;
-	}	
 	
 	public void setCurrStoryComplete(Story aStory) {
 		story = aStory;
 	}
-
+	
 	public Story getCurrStory() {
 		return story;
 	}
@@ -135,7 +110,6 @@ public class StoryController {
 	 * This function takes care of setting all the Medias' bitmap strings.
 	 */
 	private void prepareChaptersForServer() {
-
 		// get any media associated with the chapters of the story
 		ArrayList<Chapter> chaps = story.getChapters();
 
@@ -154,7 +128,7 @@ public class StoryController {
 			ill.setBitmapString(ill.getBitmap());
 		}
 	}	
-
+	
 	public void pushChangesToServer() {
 		prepareChaptersForServer();
 		serverMan.update(story);

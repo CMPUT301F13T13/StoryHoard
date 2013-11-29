@@ -206,7 +206,7 @@ public class TestStoryManager extends
 		sm = StoryManager.getInstance(getActivity());
 		Story mockStory = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
-		sm.syncStory(mockStory);
+		sm.sync(mockStory);
 		ArrayList<Story> mockStorys = sm.retrieve(mockStory);
 		assertEquals(mockStorys.size(), 1);
 	}
@@ -223,8 +223,8 @@ public class TestStoryManager extends
 		Story s2 = new Story("T: Bob the cow", "A: me", "D: none", "343423");
 		Story s3 = new Story("T: Bob the cow", "A: me", "D: none", "45643543");
 
-		syncher.cache(s2);
-		syncher.cache(s3);
+		syncher.syncStoryFromServer(s2);
+		syncher.syncStoryFromServer(s3);
 
 		stories = sm.getAllCachedStories();
 

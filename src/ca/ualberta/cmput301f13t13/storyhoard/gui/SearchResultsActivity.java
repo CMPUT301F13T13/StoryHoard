@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
@@ -101,7 +100,7 @@ public class SearchResultsActivity extends Activity {
 					long arg3) {		
 				if (isPublished) {
 					storyCon.setCurrStoryComplete(gridArray.get(arg2));
-					if (storyMan.existsLocally(gridArray.get(arg2))) {
+					if (storyMan.existsLocally(gridArray.get(arg2).getId())) {
 						overwriteStory();
 					} else {
 						new CacheStory().execute();
@@ -118,8 +117,6 @@ public class SearchResultsActivity extends Activity {
 		gridArray.clear();
 		gridArray.addAll(newStories);
 		emptyList.setText(" ");
-		// Setup the grid view for the stories
-
 		customGridAdapter.notifyDataSetChanged();			
 	}
 
@@ -193,7 +190,7 @@ public class SearchResultsActivity extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			syncher.cache(storyCon.getCurrStory());
+			syncher.syncStoryFromServer(storyCon.getCurrStory());
 			return null;
 		}
 

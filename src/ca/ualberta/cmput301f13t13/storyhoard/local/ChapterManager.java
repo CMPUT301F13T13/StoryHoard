@@ -40,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChapterTable;
  * @see Chapter
  * @see StoringManager
  */
-public class ChapterManager implements StoringManager<Chapter> {
+public class ChapterManager extends StoringManager<Chapter> {
 	private static DBHelper helper = null;
 	private static ChapterManager self = null;
 	protected ContentValues values;
@@ -149,7 +149,6 @@ public class ChapterManager implements StoringManager<Chapter> {
 	 * @param newChapter
 	 *            Holds the new data that will be used to update.
 	 */
-	@Override
 	public void update(Chapter newChapter) {
 		setContentValues(newChapter);
 		Chapter newC = (Chapter) newChapter;
@@ -209,29 +208,6 @@ public class ChapterManager implements StoringManager<Chapter> {
 		return selection;
 	}
 
-	@Override
-	public void remove(UUID id) {
-		// Not implemented in this iteration of the project
-	}
-	
-	@Override
-	public Boolean existsLocally(Chapter chap) {
-		Chapter crit = new Chapter(chap.getId(), null, null, null);
-		ArrayList<Chapter> chapters = retrieve(crit);
-		if (chapters.size() != 1) {
-			return false;
-		}
-		return true;		
-	}
-
-	public void syncChapter(Chapter chap) {
-		if (existsLocally(chap)) {
-			update(chap);
-		} else {
-			insert(chap);
-		}
-	}
-
 	public ArrayList<Chapter> getAll() {
 		return retrieve(new Chapter(null, null, null, null));
 	}
@@ -246,5 +222,13 @@ public class ChapterManager implements StoringManager<Chapter> {
 	public ArrayList<Chapter> getChaptersByStory(UUID storyId) {
 		Chapter criteria = new Chapter(null, storyId, null, null);	
 		return retrieve(criteria);
+	}
+
+	public Chapter getById(UUID id) {
+		ArrayList<Chapter> result = retrieve(new Chapter(id, null, null, null));	
+		if (result.size() != 1) {
+			return null;
+		}
+		return result.get(0);
 	}
 }

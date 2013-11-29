@@ -40,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
  * @see Media
  * @see StoringManager
  */
-public class MediaManager implements StoringManager<Media>{
+public class MediaManager extends StoringManager<Media>{
 	private static DBHelper helper = null;
 	private static MediaManager self = null;
 	protected ContentValues values;
@@ -157,7 +157,6 @@ public class MediaManager implements StoringManager<Media>{
 	 * @param newMedia
 	 * 			Contains the changes to the media.
 	 */	
-	@Override
 	public void update(Media newMedia) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		setContentValues(newMedia);
@@ -199,31 +198,12 @@ public class MediaManager implements StoringManager<Media>{
 		return selection;
 	}
 
-	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		// Delete entry 
 		selection = MediaTable.COLUMN_NAME_MEDIA_ID + " LIKE ?";
 		sArgs = new String[]{ String.valueOf(id)};
 		db.delete(MediaTable.TABLE_NAME, selection, sArgs);
-	}
-	
-	@Override
-	public Boolean existsLocally(Media media) {
-		Media crit = new Media(media.getId(), null, null, null, "");
-		ArrayList<Media> medias = retrieve(crit);
-		if (medias.size() != 1) {
-			return false;
-		}
-		return true;		
-	}
-
-	public void syncMedia(Media media) {
-		if (existsLocally(media)) {
-			update(media);
-		} else {
-			insert(media);
-		}	
 	}
 
 	public void syncDeletions(ArrayList<UUID> newMedias, UUID chapId) {
@@ -246,5 +226,13 @@ public class MediaManager implements StoringManager<Media>{
 
 	public ArrayList<Media> getAll() {
 		return retrieve(new Media(null, null, null, null, null));
+	}
+
+	public Media getById(UUID id) {
+		ArrayList<Media> result = retrieve(new Media(id, null, null, null, null));
+		if (result.size() != 1) {
+			return null;
+		}
+		return result.get(0);
 	}	
 }

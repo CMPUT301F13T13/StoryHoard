@@ -41,7 +41,7 @@ public class AdapterChapters extends ArrayAdapter<Chapter> {
 	ArrayList<Chapter> data = new ArrayList<Chapter>();
 
 	/**
-	 * Constructor initalizes the adapter chapters array adapter. Holds onto the data in the class itself
+	 * Constructor initializes the adapter chapters array adapter. Holds onto the data in the class itself
 	 * @param context
 	 * @param layoutResourceId
 	 * @param data

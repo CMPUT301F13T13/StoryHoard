@@ -39,7 +39,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
@@ -265,15 +264,16 @@ public class EditChapterActivity extends MediaActivity {
 			chapCon.editText(chapterContent.getText().toString());
 			chapCon.pushChangesToDb();
 			
-			if (lifedata.isFirstStory()) {
-				storyCon.editFirstChapterId(chapter.getId());
-				storyCon.pushChangesToDb();
-				lifedata.setFirstStory(false);
-			}
 			if (lifedata.isEditing()) {
 				storyCon.updateChapter(chapter);
 			} else {
 				storyCon.addChapter(chapter);
+			}
+			 
+			if (lifedata.isFirstStory()) {
+				storyCon.editFirstChapterId(chapter.getId());
+				storyCon.pushChangesToDb();
+				lifedata.setFirstStory(false);
 			}
 			return null;
 		}

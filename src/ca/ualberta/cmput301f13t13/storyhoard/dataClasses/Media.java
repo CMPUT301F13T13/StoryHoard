@@ -27,8 +27,8 @@ import android.util.Base64;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
 
 /**
- * Role: A container to hold media information. The media can be a photo or
- * an illustration.
+ * Role: A data class to hold media information. The media can be a photo or
+ * an illustration. 
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -248,14 +248,11 @@ public class Media {
 	 */
 	private String getStringFromBitmap(Bitmap bitmapPicture) {
 		final int COMPRESSION_QUALITY = 100;
-		String encodedImage;
-		ByteArrayOutputStream byteArrayBitmapStream 
-		= new ByteArrayOutputStream();
+		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
 		bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 
 				COMPRESSION_QUALITY, byteArrayBitmapStream);
 		byte[] b = byteArrayBitmapStream.toByteArray();
-		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-		return encodedImage;
+		return Base64.encodeToString(b, Base64.DEFAULT);
 	}	
 
 	/**
@@ -269,7 +266,6 @@ public class Media {
 	 * Author: Manav
 	 */
 	private Bitmap getBitmapFromString(String string) {
-
 		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 
 				0, decodedString.length);

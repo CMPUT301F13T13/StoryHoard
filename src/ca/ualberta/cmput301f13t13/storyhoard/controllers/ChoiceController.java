@@ -4,15 +4,12 @@ import java.util.UUID;
 
 import android.content.Context;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
 
 public class ChoiceController {
-	private static ChoiceManager choiceMan;
 	private static Choice choice;
 	private static ChoiceController self = null;
 	
 	protected ChoiceController(Context context) {
-		choiceMan = ChoiceManager.getInstance(context);
 		choice = new Choice(null, null, "");  // blank choice
 	}
 	
@@ -38,8 +35,4 @@ public class ChoiceController {
 	public void editChapterTo(UUID id) {
 		choice.setNextChapter(id);
 	}
-	
-	public void pushChangesToDb() {
-		choiceMan.syncChoice(choice);
-	}	
 }

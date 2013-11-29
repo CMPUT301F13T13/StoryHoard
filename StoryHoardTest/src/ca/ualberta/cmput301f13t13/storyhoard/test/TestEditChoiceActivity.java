@@ -26,9 +26,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.EditChoiceActivity;
+import ca.ualberta.cmput301f13t13.storyhoard.gui.LifecycleData;
 
 /**
  * Test case for the activity to edit choices

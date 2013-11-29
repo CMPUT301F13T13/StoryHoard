@@ -28,9 +28,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
-import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -47,7 +45,6 @@ public class EditStoryActivity extends Activity {
 	private EditText newAuthor;
 	private EditText newDescription;
 	private StoryController storyCon;
-	private StoryManager storyMan;
 	private ServerManager serverMan;
 	private Story newStory;
 
@@ -65,7 +62,7 @@ public class EditStoryActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_edit_story, menu);
-		if (!storyMan.isPublishedStoryMyStory(newStory, getBaseContext())) {
+		if (!Utilities.isPublishedStoryMyStory(newStory, getBaseContext())) {
 			menu.removeItem(R.id.unpublishStory);
 		}
 		return true;
@@ -92,7 +89,6 @@ public class EditStoryActivity extends Activity {
 
 	private void setupFields() {
 		lifedata = LifecycleData.getInstance();
-		storyMan = StoryManager.getInstance(this);
 		storyCon = StoryController.getInstance(this);
 		serverMan = ServerManager.getInstance();
 

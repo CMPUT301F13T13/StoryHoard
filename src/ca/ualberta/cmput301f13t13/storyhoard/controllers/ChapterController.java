@@ -39,6 +39,10 @@ public class ChapterController {
 		chapter = getFullChapter(id);
 	}
 	
+	public void setCurrChapterComplete(Chapter aChapter) {
+		chapter = aChapter;
+	}		
+	
 	private Chapter getFullChapter(UUID chapId) {
 		ArrayList<Chapter> chapters = chapMan.retrieve(new Chapter(chapId, null, null, null));
 
@@ -56,10 +60,6 @@ public class ChapterController {
 				chapter.getId(), null, Media.PHOTO, "")));	
 		return chapter;
 	}
-	
-	public void setCurrChapterComplete(Chapter aChapter) {
-		chapter = aChapter;
-	}	
 	
 	public Chapter getCurrChapter() {
 		return chapter;

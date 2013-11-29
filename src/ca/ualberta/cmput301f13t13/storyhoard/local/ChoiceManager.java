@@ -43,7 +43,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChoiceTable;
  *
  */
 
-public class ChoiceManager implements StoringManager<Choice> {
+public class ChoiceManager extends StoringManager<Choice> {
 	private static DBHelper helper = null;
 	private static ChoiceManager self = null;
 	protected ContentValues values;
@@ -206,31 +206,9 @@ public class ChoiceManager implements StoringManager<Choice> {
 		sArgs = new String[]{ String.valueOf(id)};
 		db.delete(ChoiceTable.TABLE_NAME, selection, sArgs);
 	}
-	
-	@Override
-	public Boolean existsLocally(Choice choice) {
-		Choice crit = new Choice(choice.getId(), null, null, null);
-		ArrayList<Choice> choices = retrieve(crit);
-		if (choices.size() != 1) {
-			return false;
-		}
-		return true;		
-	}
-
-	public void syncChoice(Choice choice) {
-		if (existsLocally(choice)) {
-			update(choice);
-		} else {
-			insert(choice);
-		}	
-	}
 
 	public ArrayList<Choice> getChoicesByChapter(UUID chapterId) {
 		return retrieve(new Choice(null, chapterId, null, null));		
-	}
-
-	public ArrayList<Choice> getAll() {
-		return retrieve(new Choice(null, null, null, null));
 	}
 
 	/**
@@ -254,5 +232,14 @@ public class ChoiceManager implements StoringManager<Choice> {
 		choice.setText("I'm feeling lucky...");
 	
 		return choice;
+	}
+
+	@Override
+	public Choice getById(UUID id) {
+		ArrayList<Choice> result = retrieve(new Choice(id, null, null, null));
+		if (result.size() != 1) {
+			return null;
+		}
+		return result.get(0);
 	}	
 }

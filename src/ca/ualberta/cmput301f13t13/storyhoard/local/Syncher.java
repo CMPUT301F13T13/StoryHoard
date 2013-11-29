@@ -30,41 +30,11 @@ public class Syncher {
 		return self;
 	}
 
-	/**
-	 *
-	 * @param story
-	 */
-	public void syncStoryFromServer(Story story) {
-		ArrayList<UUID> medias = new ArrayList<UUID>();
-		storyMan.syncStory(story);
-
-		for (Chapter chap : story.getChapters()) {
-			for (Media photo : chap.getPhotos()) {
-				medias.add(photo.getId());
-				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
-				photo.setPath(path);
-				mediaMan.syncMedia(photo);
-			}
-			for (Media ill : chap.getIllustrations()) {
-				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
-				ill.setPath(path);
-				medias.add(ill.getId());
-				mediaMan.syncMedia(ill);
-			}
-			for (Choice choice : chap.getChoices()) {
-				choiceMan.syncChoice(choice);
-			}
-			chapMan.syncChapter(chap);
-			mediaMan.syncDeletions(medias, chap.getId());
-		}
-	}
-
-
 	public void syncStoryFromMemory(Story story) {
-		storyMan.syncStory(story);
+		storyMan.sync(story, story.getId());
 		for (Chapter chap : story.getChapters()) {
 			syncChapterParts(chap);
-			chapMan.syncChapter(chap);
+			chapMan.sync(chap, chap.getId());
 		}
 	}	
 
@@ -73,19 +43,56 @@ public class Syncher {
 
 		for (Media photo : chap.getPhotos()) {
 			medias.add(photo.getId());
-			mediaMan.syncMedia(photo);
+			mediaMan.sync(photo, photo.getId());
 		}
 		for (Media ill : chap.getIllustrations()) {
 			medias.add(ill.getId());
-			mediaMan.syncMedia(ill);
+			mediaMan.sync(ill, ill.getId());
 		}
 		for (Choice choice : chap.getChoices()) {
-			choiceMan.syncChoice(choice);
+			choiceMan.sync(choice, choice.getId());
 		}
 		mediaMan.syncDeletions(medias, chap.getId());
 	}		
 	
-	public void cache(Story story) {
-		syncStoryFromServer(story);
+	public void syncStoryFromServer(Story story) {
+		ArrayList<UUID> medias = new ArrayList<UUID>();
+		storyMan.sync(story, story.getId());
+
+		for (Chapter chap : story.getChapters()) {
+			for (Media photo : chap.getPhotos()) {
+				medias.add(photo.getId());
+				String path = Utilities.saveImageToSD(photo.getBitmapFromString());
+				photo.setPath(path);
+				mediaMan.sync(photo, photo.getId());
+			}
+			for (Media ill : chap.getIllustrations()) {
+				String path = Utilities.saveImageToSD(ill.getBitmapFromString());
+				ill.setPath(path);
+				medias.add(ill.getId());
+				mediaMan.sync(ill, ill.getId());
+			}
+			for (Choice choice : chap.getChoices()) {
+				choiceMan.sync(choice, choice.getId());
+			}
+			chapMan.sync(chap, chap.getId());
+			mediaMan.syncDeletions(medias, chap.getId());
+		}
+	}
+
+	public ArrayList<Chapter> syncChaptersFromDb(UUID storyId) {
+		ArrayList<Chapter> chaps = chapMan.getChaptersByStory(storyId);
+		ArrayList<Chapter> fullChaps = new ArrayList<Chapter>();
+		
+		for (Chapter chap : chaps) {
+			chap.setChoices(choiceMan.retrieve(new Choice(null, 
+					chap.getId(), null, null)));
+			chap.setIllustrations(mediaMan.retrieve(new Media(null, 
+					chap.getId(), null, Media.ILLUSTRATION, "")));
+			chap.setPhotos(mediaMan.retrieve(new Media(null, 
+					chap.getId(), null, Media.PHOTO, "")));	
+			fullChaps.add(chap);
+		}
+		return fullChaps;
 	}	
 }

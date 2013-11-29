@@ -40,7 +40,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
  * @see Story
  * @see StoringManager
  */
-public class StoryManager implements StoringManager<Story> {
+public class StoryManager extends StoringManager<Story> {
 	private static DBHelper helper = null;
 	private static StoryManager self = null;
 	private static String phoneId = null;
@@ -81,7 +81,6 @@ public class StoryManager implements StoringManager<Story> {
 	 * </br> OwnStoryManager sm = new OwnStoryManager.getInstance();
 	 * </br> sm.insert(story);
 	 */
-	@Override
 	public void insert(Story story) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		setContentValues(story);
@@ -94,7 +93,6 @@ public class StoryManager implements StoringManager<Story> {
 	 * @param newStory
 	 *            Contains the changes to the story.
 	 */
-	@Override
 	public void update(Story newStory) {
 		setContentValues(newStory);
 		Story newS = (Story) newStory;
@@ -111,7 +109,6 @@ public class StoryManager implements StoringManager<Story> {
 	 * @param criteria
 	 *            Holds the search criteria.
 	 */
-	@Override
 	public ArrayList<Story> retrieve(Story criteria) {
 		ArrayList<Story> results = new ArrayList<Story>();
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -220,29 +217,6 @@ public class StoryManager implements StoringManager<Story> {
 		return selection;
 	}
 
-	@Override
-	public void remove(UUID id) {
-		// Not implemented for this iteration of the project
-	}	
-	
-	@Override
-	public Boolean existsLocally(Story story) {
-		Story crit = new Story(story.getId(), null, null, null, null);
-		ArrayList<Story> stories = retrieve(crit);
-		if (stories.size() != 1) {
-			return false;
-		}
-		return true;		
-	}
-
-	public void syncStory(Story story) {
-		if (existsLocally(story)) {
-			update(story);
-		} else {
-			insert(story);
-		}
-	}
-
 	/**
 	 * Gets all the stories that are either cached, created by the author, or
 	 * published.
@@ -307,15 +281,11 @@ public class StoryManager implements StoringManager<Story> {
 		return retrieve(criteria);
 	}
 
-	public Story getStoryById(UUID id) {
-		Story criteria = new Story(id, null, null, null, null);
-		return retrieve(criteria).get(0);
-	}
-
-	public Boolean isPublishedStoryMyStory(Story story, Context context) {
-		if (story == null) {
-			return true;
+	public Story getById(UUID id) {
+		ArrayList<Story> result = retrieve(new Story(id, null, null, null, null));
+		if (result.size() != 1) {
+			return null;
 		}
-		return story.getPhoneId().equals(Utilities.getPhoneId(context));
-	}	
+		return result.get(0);
+	}
 }

@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -87,4 +89,11 @@ public class Utilities {
 	        
 	        return imageFilePath;
 	}	
+	
+	public static Boolean isPublishedStoryMyStory(Story story, Context context) {
+		if (story == null) {
+			return true;
+		}
+		return story.getPhoneId().equals(Utilities.getPhoneId(context));
+	}		
 }

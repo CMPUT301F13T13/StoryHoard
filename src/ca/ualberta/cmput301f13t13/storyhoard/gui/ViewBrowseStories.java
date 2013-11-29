@@ -37,7 +37,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.LifecycleData;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
@@ -62,7 +61,6 @@ public class ViewBrowseStories extends Activity {
 	private ServerManager serverMan;
 	private enum Type {CREATED, CACHED, PUBLISHED};
 	private Type viewType;
-	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private StoryController storyCon;
 	private ProgressDialog progressDialog;
 	ArrayList<Story> currentStories;
@@ -199,7 +197,7 @@ public class ViewBrowseStories extends Activity {
 					long arg3) {
 				if (viewType == Type.PUBLISHED) {
 					storyCon.setCurrStoryComplete(gridArray.get(arg2));
-					if (storyMan.existsLocally(gridArray.get(arg2))) {
+					if (storyMan.existsLocally(gridArray.get(arg2).getId())) {
 						overwriteStory();
 					} else {
 						new CacheStory().execute();
@@ -260,7 +258,7 @@ public class ViewBrowseStories extends Activity {
 
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
-			syncher.cache(storyCon.getCurrStory());
+			syncher.syncStoryFromServer(storyCon.getCurrStory());
 			return null;
 		}
 
