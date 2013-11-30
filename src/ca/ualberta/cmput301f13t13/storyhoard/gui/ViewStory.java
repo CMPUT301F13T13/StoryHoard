@@ -36,7 +36,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
- * Handles viewing the story metadata.
+ * Handles viewing the story details. Will display the story title, author, and
+ * the description. Will also allow the user to navigate to the edit story
+ * details activity, as well as the view chapter and view browse chapters
+ * activity.
  * 
  * @author Alexander Wong
  * 

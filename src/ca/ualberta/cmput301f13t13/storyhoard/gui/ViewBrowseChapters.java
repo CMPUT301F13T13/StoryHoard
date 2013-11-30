@@ -33,10 +33,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
- * Takes a storyID bundle, displays all the chapters related to that story. Used
- * for editing chapters.
+ * When a specific story exists, the activity gets the chapters associated
+ * with the story and displays them for the user. 
+ * This activity allows a user to add a new chapter to the current story,
+ * as well as edit the chapters in the current story.
  * 
- * @author alexanderwwong
+ * @author Alexander Wong
  * @author Kim Wu
  */
 

@@ -33,8 +33,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
- * Activity for editing the story metadata (title, author, description, and
- * cover image).
+ * Activity for editing the story details (title, author, description, and
+ * cover image). 
+ * Also allows a user to publish the story to the server,
+ * or if the user owns the story, to unpublish the story from the server.
  * 
  * @author Alexander Wong
  * 
