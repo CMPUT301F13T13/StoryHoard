@@ -65,7 +65,7 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
-		Media mockMedia = new Media(chap.getId(), createPath(fname1), null);
+		Media mockMedia = new Media(chap.getId(), createPath(fname1), null, "");
 
 		mm.insert(mockMedia);
 
@@ -84,7 +84,7 @@ public class TestMediaManager extends
 		
 		Chapter chap = new Chapter(UUID.randomUUID(), "lala");
 
-		Media mockMedia = new Media(chap.getId(), null, null);
+		Media mockMedia = new Media(chap.getId(), null, null, "");
 		mm.insert(mockMedia);
 
 		Media criteria = new Media(null, chap.getId(), null, null, "");
@@ -156,9 +156,9 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		UUID chapId = UUID.randomUUID();
-		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO, "");
 		mm.insert(mockMedia);
-		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
+		Media mockMedia2 = new Media(chapId, null, Media.PHOTO, "");
 
 		assertTrue(mm.existsLocally(mockMedia.getId()));
 		assertFalse(mm.existsLocally(mockMedia2.getId()));
@@ -172,7 +172,7 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		UUID chapId = UUID.randomUUID();
-		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO, "");
 		mockMedia.setBitmapString(mockMedia.getBitmap());
 		mm.sync(mockMedia, mockMedia.getId());
 		ArrayList<Media> mockMedias = mm.retrieve(mockMedia);
@@ -186,9 +186,9 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		UUID chapId = UUID.randomUUID();
-		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO);
+		Media mockMedia = new Media(chapId, createPath(fname1), Media.PHOTO, "");
 		mm.insert(mockMedia);
-		Media mockMedia2 = new Media(chapId, null, Media.PHOTO);
+		Media mockMedia2 = new Media(chapId, null, Media.PHOTO, "");
 		mm.insert(mockMedia2);
 
 		ArrayList<UUID> newList = new ArrayList<UUID>();
@@ -206,7 +206,7 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		UUID chapId = UUID.randomUUID();
-		mockMedia = new Media(chapId, null, Media.PHOTO);
+		mockMedia = new Media(chapId, null, Media.PHOTO, "");
 		mm.insert(mockMedia);
 
 		mockMedias = mm.getPhotosByChapter(chapId);
@@ -224,9 +224,9 @@ public class TestMediaManager extends
 		mm = MediaManager.getInstance(getActivity());
 		
 		UUID chapId = UUID.randomUUID();
-		mockMedia = new Media(chapId, null, Media.PHOTO);
+		mockMedia = new Media(chapId, null, Media.PHOTO, "");
 		mm.insert(mockMedia);
-		mockMedia3 = new Media(chapId, null, Media.ILLUSTRATION);
+		mockMedia3 = new Media(chapId, null, Media.ILLUSTRATION, "");
 		mm.insert(mockMedia3);
 
 		mockMedias = mm.getPhotosByChapter(chapId);

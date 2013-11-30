@@ -37,7 +37,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
 /**
@@ -166,16 +165,16 @@ public abstract class MediaActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		if (resultCode == RESULT_OK) {
-			String path = "";
+			Media photo = null;
 			chapCon = ChapterController.getInstance(this);
-			Chapter chapter = chapCon.getCurrChapter();
-			Media photo = new Media(chapter.getId(), path , imageType);
-			photo.setText(photoComment);
 			if (requestCode == BROWSE_GALLERY_ACTIVITY_REQUEST_CODE) {
-				imageFileUri = intent.getData();
-				photo.setPath(getRealPathFromURI(imageFileUri, this));
+				photo = new Media(chapCon.getCurrChapter().getId(), 
+						getRealPathFromURI(intent.getData(), this), 
+						imageType, photoComment);
 			} else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-				photo.setPath(imageFileUri.getPath());
+				photo = new Media(chapCon.getCurrChapter().getId(), 
+						imageFileUri.getPath(), 
+						imageType, photoComment);
 				insertIntoGallery(photo);
 			}
 			chapCon.addMedia(photo);
