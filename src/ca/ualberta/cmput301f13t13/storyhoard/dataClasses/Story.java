@@ -16,12 +16,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.dataClasses;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
 
 /**
  * Role: A container to hold story information. This includes id, author, 
@@ -43,7 +38,9 @@ public class Story {
 	public static final String NOT_AUTHORS = "not";
 
 	/**
-	 * Initializes a new story object without need an id as an argument.
+	 * Initializes a new story object without needing to specify an id as an 
+	 * argument. A random unique id will be automatically generated when this 
+	 * constructor is used, and it will be a UUID.
 	 * 
 	 * @param title
 	 *            Story title
@@ -57,27 +54,22 @@ public class Story {
 	public Story(String title, String author, String description, 
 			      String phoneId) {
 		this.id = UUID.randomUUID();
-		if (author != null) {
-			this.author = author.trim();
-		}
-		if (title != null) {
-			this.title = title.trim();
-		}
-		if (description != null) {
-			this.description = description.trim();
-		}
+		this.author = author;
+		this.title = title;
+		this.description = description;
 		this.phoneId = phoneId;
 		this.firstChapterId = null;
 		chapters = new ArrayList<Chapter>();
 	}
 
 	/**
-	 * Initializes a new story object with an id. Usually used when making a
-	 * story object that will be holding search criteria since you can
-	 * specify the id of the story.
+	 * Initializes a new story object by specifying an id as the first 
+	 * parameter. Usually used when making a story object that will be 
+	 * holding search criteria since you can specify the id of the story
+	 * that you would like to search for.
 	 * 
 	 * @param id
-	 * 			  Story's unique id.
+	 * 			  Story's unique id, must be a UUID.
 	 * @param title
 	 *            Story title
 	 * @param author
@@ -100,28 +92,30 @@ public class Story {
 
 	/**
 	 * Initializes a new story object from data taken from the database.
+	 * Should only be used by the StoryManager class when making a new story
+	 * from the data just retrieved from the database.
 	 * 
 	 * @param id
-	 * 			  Story's unique id.
+	 * 			  Story's unique id, must be a UUID.
 	 * @param title
-	 *            Story title
+	 *            Story title, must be null or a string.
 	 * @param author
-	 *            Story author
+	 *            Story author. Must be null or a string.
 	 * @param description
-	 *            Story description
+	 *            Story description, must be null or a string.
 	 * @param chapterId
+	 * 			  Id of the story's first chapter, must be a UUID.
 	 * @param phoneId
-	 *            The android id of the phone the story was made on
+	 *            The android id of the phone the story was made on. Must be
+	 *            a string.
 	 */
 	public Story(String id, String title, String author, String description,
-			String chapterId, String phoneId) {
+			UUID chapterId, String phoneId) {
 		this.id = UUID.fromString(id);
 		this.author = author;
 		this.title = title;
 		this.description = description;
-		if (chapterId != null) {
-			this.firstChapterId = UUID.fromString(chapterId);
-		}
+		this.firstChapterId = chapterId;
 		this.chapters = new ArrayList<Chapter>();
 		this.phoneId = phoneId;
 	}
@@ -129,63 +123,110 @@ public class Story {
 	// GETTERS
 
 	/**
-	 * Returns the Id of the story.
+	 * Returns the Id of the story as a UUID. </br></br>
 	 * 
-	 * @return id
+	 * Example:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = myStory.getId();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be something like: "5231b533-ba17-4787-98a3-f2df37de2aD7"
+	 * 
 	 */
 	public UUID getId() {
 		return this.id;
 	}
 
 	/**
-	 * Returns the title of the story.
+	 * Returns the title of the story as a String (or null is the story title 
+	 * was null).</br></br>
 	 * 
-	 * @return title
+	 * Example:</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = myStory.getId();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be: "title"
+	 * 
 	 */
 	public String getTitle() {
 		return this.title;
 	}
 
 	/**
-	 * Returns the author of the story.
+	 * Returns the author of the story as a String (or null is the story author
+	 * was null).</br></br>
 	 * 
-	 * @return author
+	 * Example:</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = myStory.getId();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be: "author"
+	 * 
 	 */
 	public String getAuthor() {
 		return this.author;
 	}
 
 	/**
-	 * Returns the description of the story.
+	 * Returns the description of the story as a String (or null is the story 
+	 * title was null).</br></br>
 	 * 
-	 * @return description
+	 * Example:</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = myStory.getId();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be: "desc"
 	 */
 	public String getDescription() {
 		return this.description;
 	}
 
 	/**
-	 * Returns the chapters of the story.
+	 * Returns the chapters of the story as an array list of chapters.
+	 * If the story had no chapters, because of the way stories get
+	 * initialized, an empty array list will be returned not null. </br></br>
 	 * 
-	 * @return chapters
+	 * Example call: </br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * ArrayList<Chapter> chaps = myStory.getChapters();</br></br>
+	 * 
+	 * chaps is now an empty array list of chapters.
+	 * 
 	 */
 	public ArrayList<Chapter> getChapters() {
 		return this.chapters;
 	}
 
 	/**
-	 * Returns the first chapter of the story.
+	 * Returns the description of the story as a String (or null is the story 
+	 * title was null).</br></br>
 	 * 
-	 * @return firstChapter
+	 * Example:</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID chapid = UUID.randomUUID();</br>
+	 * myStory.setFirstChapterId(chapid);</br>
+	 * System.out.println(myStory.getFirstChapterId());</br></br>
+	 * 
+	 * Output would be something like: "5231b533-ba17-4787-98a3-f2df37de2aD7"
 	 */
 	public UUID getFirstChapterId() {
 		return this.firstChapterId;
 	}
 
 	/**
-	 * Return the android id of the phone that made this story
+	 * Returns the description of the story as a String (or null is the story 
+	 * title was null).</br></br>
 	 * 
-	 * @return phone id
+	 * Example:</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID phoneId = myStory.getPhoneId();</br>
+	 * System.out.println(phoneId);</br></br>
+	 * 
+	 * Output would be: "123"
 	 */
 	public String getPhoneId() {
 		return this.phoneId;
@@ -194,21 +235,35 @@ public class Story {
 	// SETTERS
 
 	/**
-	 * Set the Id of the story.
+	 * Set the Id of the story. The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * meStory.setId(id);</br>
 	 * 
 	 * @param id
+	 * 		New Story id. Must be a UUID or null.
 	 */
 	public void setId(UUID id) {
 		this.id = id;
 	}
 
 	/**
-	 * Set the title of the story.
+	 * Set the title of the story. Title must be a string.
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * meStory.setId(id);</br>
 	 * 
 	 * @param title
+	 * 		The new story title. Must be a string or null.
 	 */
 	public void setTitle(String title) {
-		this.title = title.trim();
+		this.title = title;
 	}
 
 	/**
@@ -217,7 +272,7 @@ public class Story {
 	 * @param author
 	 */
 	public void setAuthor(String author) {
-		this.author = author.trim();
+		this.author = author;
 	}
 
 	/**
@@ -226,7 +281,7 @@ public class Story {
 	 * @param description
 	 */
 	public void setDescription(String description) {
-		this.description = description.trim();
+		this.description = description;
 	}
 
 	/**
@@ -254,51 +309,5 @@ public class Story {
 	 */
 	public void setPhoneId(String phoneId) {
 		this.phoneId = phoneId;
-	}
-	
- 
-	
-    
-	/**
-	 * Returns the information of the story (id, title, author, PhoneId) that
-	 * could be used in searching for a story in the database. This information
-	 * is returned in a HashMap where the keys are the corresponding Story 
-	 * Table column names.
-	 * 
-	 * @return HashMap
-	 */
-	public HashMap<String, String> getSearchCriteria() {
-		HashMap<String, String> info = new HashMap<String, String>();
-
-		if (id != null) {
-			info.put(StoryTable.COLUMN_NAME_STORY_ID, id.toString());
-		}
-
-		if (title != null) {
-			splitKeywords(info);
-		}
-
-		if (phoneId != null) {
-			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
-		}
-
-		return info;
-	}
-
-	/**
-	 * Splits up the string for the title into keywords so a search
-	 * to find stories with titles containing the keywords will
-	 * be possible.
-	 * 
-	 * @param info
-	 */
-	private void splitKeywords(HashMap<String, String> info) {
-		List<String> words;
-
-		words = Arrays.asList(title.split("\\s+"));
-		
-		for (String keyword : words) {
-			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
-		}
 	}
 }

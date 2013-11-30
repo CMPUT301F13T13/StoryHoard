@@ -18,7 +18,8 @@
             android:layout_marginTop="100dp"
             android:hint="@string/story"
             android:textColor="#472312"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textIsSelectable="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -26,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:paddingLeft="25dp" >
+        android:paddingLeft="25dp"
+        android:paddingStart="25dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,17 +42,20 @@
             android:layout_height="wrap_content"
             android:hint="@string/new_author"
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:textColor="#6c3f29"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="25dp"
+        android:paddingStart="25dp"
         android:text="@string/story_description"
         android:textSize="15sp" />
 
@@ -59,14 +64,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="2dp"
         android:layout_weight="0.10"
         android:hint="@string/new_description"
         android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:textColor="#6c3f29"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:textIsSelectable="true" />
 
     <Button
         android:id="@+id/viewFirstChapter"

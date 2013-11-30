@@ -17,7 +17,9 @@
 package ca.ualberta.cmput301f13t13.storyhoard.local;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import android.content.ContentValues;
@@ -125,13 +127,18 @@ public class StoryManager extends StoringManager<Story> {
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			String storyId = cursor.getString(0);
+			String firstchap = cursor.getString(4);
+			UUID firstchapUUID = null;
+			if (firstchap != null) {
+				firstchapUUID = UUID.fromString(firstchap);
+			}
 
 			Story story = new Story(
 					storyId, 
 					cursor.getString(1), // title
 					cursor.getString(2), // author
 					cursor.getString(3), // description
-					cursor.getString(4), // first chapter id
+					firstchapUUID, // first chapter id
 					cursor.getString(5) // phoneId
 					);
 			results.add(story);
@@ -199,14 +206,14 @@ public class StoryManager extends StoringManager<Story> {
 	 */
 	@Override
 	public String setSearchCriteria(Story story, ArrayList<String> sArgs) {
-		HashMap<String, String> storyCrit = story.getSearchCriteria();
+		HashMap<String, String> storyCrit = getSearchCriteria(story);
+		splitKeywords(storyCrit, story.getTitle());
 
 		// Setting search criteria
 		String selection = "1 LIKE ?";
 		sArgs.add("1");
 		
 		for (String key : storyCrit.keySet()) {
-			
 			if (key.equals(StoryTable.COLUMN_NAME_PHONE_ID) 
 					&& story.getPhoneId().equals(Story.NOT_AUTHORS)) {
 				selection += " AND " + key	+ " NOT LIKE ?"; 
@@ -219,6 +226,47 @@ public class StoryManager extends StoringManager<Story> {
 		}
 		
 		return selection;
+	}
+	
+	/**
+	 * Returns the information of the story (id, title, author, PhoneId) that
+	 * could be used in searching for a story in the database. This information
+	 * is returned in a HashMap where the keys are the corresponding Story 
+	 * Table column names.
+	 * 
+	 * @return HashMap
+	 */
+	public HashMap<String, String> getSearchCriteria(Story story) {
+		HashMap<String, String> info = new HashMap<String, String>();
+		if (story.getId() != null) {
+			info.put(StoryTable.COLUMN_NAME_STORY_ID, story.getId().toString());
+		}
+		if (story.getPhoneId() != null) {
+			info.put(StoryTable.COLUMN_NAME_PHONE_ID, phoneId);
+		}
+		return info;
+	}
+	
+	/**
+	 * Splits up the string for the title into keywords so a search
+	 * to find stories with titles containing the keywords will
+	 * be possible.
+	 * 
+	 * @param info
+	 */
+	private void splitKeywords(HashMap<String, String> info, String keywords) {
+		List<String> words;
+		
+		// No title specified in search criteria
+		if (keywords == null) {
+			return;
+		}
+		
+		words = Arrays.asList(keywords.split("\\s+"));
+		
+		for (String keyword : words) {
+			info.put(StoryTable.COLUMN_NAME_TITLE, "%" + keyword + "%");
+		}
 	}
 
 	/**
