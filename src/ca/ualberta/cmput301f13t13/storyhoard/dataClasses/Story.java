@@ -241,10 +241,10 @@ public class Story {
 	 * 
 	 * Story myStory = ("title", "author", "desc", "123");</br>
 	 * UUID id = UUID.randomUUID();</br>
-	 * meStory.setId(id);</br>
+	 * myStory.setId(id);</br>
 	 * 
 	 * @param id
-	 * 		New Story id. Must be a UUID or null.
+	 * 			New Story id. Must be a UUID or null.
 	 */
 	public void setId(UUID id) {
 		this.id = id;
@@ -257,55 +257,90 @@ public class Story {
 	 * 
 	 * Story myStory = ("title", "author", "desc", "123");</br>
 	 * UUID id = UUID.randomUUID();</br>
-	 * meStory.setId(id);</br>
+	 * myStory.setId(id);</br>
 	 * 
 	 * @param title
-	 * 		The new story title. Must be a string or null.
+	 * 			The new story title. Must be a string or null.
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	/**
-	 * Set the author of the story.
+	 * Set the author of the story. It must be a string.
 	 * 
-	 * @param author
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * myStory.setAuthor("new author");</br>
+	 * 
+	 * @param Author
+	 * 			The new story author. Must be a string or null.
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
 	}
 
 	/**
-	 * Set the description of the story.
+	 * Set the description of the story. It must be a string.
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * myStory.setDescription("new descr");</br>
 	 * 
 	 * @param description
+	 * 			New description. Must be a string or null.
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	/**
-	 * Sets the first chapter of the story.
+	 * Set the id of the first chapter of the story (the chapter that will be 
+	 * always be displayed when a user begins to read a story in the view
+	 * story activity). The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * myStory.setFirstChapter(id);</br>
 	 * 
 	 * @param chapterId
+	 * 			New id of the story's first chapter. Must be a UUID or null.
 	 */
 	public void setFirstChapterId(UUID chapterId) {
 		firstChapterId = chapterId;
 	}
 
 	/**
-	 * Set the chapters of the story.
+	 * Set the chapters of the story. It must be an arrayList and should
+	 * never be null. </br></br>
+	 * 
+	 * Example call: </br>
+	 * ArrayList<Chapter> chaps = new ArrayList<Chapter>();</br>
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * myStory.setChapters(chaps);
 	 * 
 	 * @param chapters
+	 * 			Must be an array list of chapters and cannot be null. It can 
+	 * 			however be an empty array list.
 	 */
 	public void setChapters(ArrayList<Chapter> chapters) {
 		this.chapters = chapters;
 	}
 
 	/**
-	 * Sets the string of the phone id
+	 * Set the phoneId of the story. It must be a string.
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Story myStory = ("title", "author", "desc", "123");</br>
+	 * myStory.setPhoneId("785xx4");</br>
 	 * 
 	 * @param phoneId
+	 * 			New phoneId. Must be a string or null.
 	 */
 	public void setPhoneId(String phoneId) {
 		this.phoneId = phoneId;
