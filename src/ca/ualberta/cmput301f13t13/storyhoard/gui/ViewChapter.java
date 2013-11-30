@@ -43,8 +43,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
- * Views the chapter provided through the intent. Does not allow going backwards
- * through the activity stack.
+ * This activity displays a specified chapter, based on what is in the
+ * lifecycle data. It takes the chapter contents and displays the text,
+ * and the choices. It allows a user to navigate to another instance of 
+ * the view chapter activity, when clicking on a choice.
  * 
  * @author Alexander Wong
  * @author Kim Wu

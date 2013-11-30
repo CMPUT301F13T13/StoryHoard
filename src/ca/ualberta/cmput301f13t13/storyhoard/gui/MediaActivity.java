@@ -41,6 +41,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 
 /**
+ * This activity handles all the media getting and setting code.
+ * Although this activity is never called directly, it is the 
+ * superclass for any activity which handles media.
+ * 
  * @author sgil
  *
  */

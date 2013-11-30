@@ -29,9 +29,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 
 /**
  * Class which handles taking the Chapter object and adapting it to a 
- * displayable view type
+ * displayable view type. It will extend the array adapter for chapters.
  * 
- * @author alexanderwong
+ * This is using the adapter design pattern.
+ * 
+ * @author Alexander Wong
  * 
  */
 public class AdapterChapters extends ArrayAdapter<Chapter> {

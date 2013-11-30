@@ -34,6 +34,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 
 /**
  * Activity class for adding and editing a choice.
+ * Will display an array of chapters that the choice may connect to.
  * 
  * @author Alexander Wong
  * 

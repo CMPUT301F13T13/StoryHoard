@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_default"
         android:text="@string/search_stories"
+        android:textColor="#000"
         android:textSize="20sp" />
 
 </LinearLayout>

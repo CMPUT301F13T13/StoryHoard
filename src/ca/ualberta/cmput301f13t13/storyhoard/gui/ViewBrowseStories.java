@@ -44,7 +44,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
- * Class which displays all stories in a grid, handles different view types.
+ * Class which displays all stories in a grid. The story will be in one of three
+ * types, the 'My Stories', 'Downloaded Stories', and 'Published Stories' types.
+ * My Stories are local stories that the user creates.
+ * Downloaded Stories are stories that the user downloads from the server.
+ * Published Stories are stories that exist on the server.
  * 
  * @author alexanderwong
  * @author Kim Wu

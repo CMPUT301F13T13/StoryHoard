@@ -29,9 +29,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 
 /**
  * Class which handles taking the Choice object and adapting it to a 
- * displayable view type
+ * displayable view type. This extends the array adapter for choice
+ * objects.
  * 
- * @author alexanderwong
+ * This users the adapter design pattern.
+ * 
+ * @author Alexander Wong
  * 
  */
 public class AdapterChoices extends ArrayAdapter<Choice> {

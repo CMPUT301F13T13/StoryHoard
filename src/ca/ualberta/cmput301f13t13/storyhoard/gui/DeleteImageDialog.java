@@ -10,7 +10,10 @@
  */
 package ca.ualberta.cmput301f13t13.storyhoard.gui;
 
-
+/**
+ * This is a class for deleting an image.
+ * This prompts the user to choose to delete an image or not.
+ */
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;

@@ -31,7 +31,10 @@ import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 
 /**
- * Class which handles adapting the Story object to a displayable view type
+ * Class which handles adapting the Story object to a displayable view type.
+ * This extends the array adapter for story objects.
+ * 
+ * This is using the adapter patern.
  * 
  * @author alexanderwong
  * 
