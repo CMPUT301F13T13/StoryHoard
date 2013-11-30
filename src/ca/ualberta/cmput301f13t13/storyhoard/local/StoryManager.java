@@ -236,7 +236,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * 
 	 * @return HashMap
 	 */
-	public HashMap<String, String> getSearchCriteria(Story story) {
+	private HashMap<String, String> getSearchCriteria(Story story) {
 		HashMap<String, String> info = new HashMap<String, String>();
 		if (story.getId() != null) {
 			info.put(StoryTable.COLUMN_NAME_STORY_ID, story.getId().toString());

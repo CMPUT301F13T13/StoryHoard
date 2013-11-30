@@ -65,11 +65,13 @@
         android:layout_width="279dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="2dp"
         android:ems="10"
         android:hint="@string/new_description"
         android:inputType="textMultiLine"
         android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:textColor="#6c3f29"
         android:textSize="@dimen/textSize15" />
 

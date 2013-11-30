@@ -13,7 +13,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:hint="@string/info_hint" />
+        android:hint="@string/info_hint"
+        android:textIsSelectable="true" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"

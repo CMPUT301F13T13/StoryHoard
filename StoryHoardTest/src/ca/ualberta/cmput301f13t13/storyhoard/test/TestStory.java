@@ -17,7 +17,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -68,27 +67,6 @@ public class TestStory extends
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.getChapters().add(chapter);
 		assertEquals(story.getChapters().size(), 1);
-	}
-
-	/**
-	 * Tests retrieving the search information places within the story, i.e. the
-	 * id, title, author, description, and whether or not it was created by the
-	 * author.
-	 */
-	public void testSetSearchCriteria() {
-		// empty everything
-		Story criteria = new Story(null, null, null, null, null);
-		HashMap<String, String> info = criteria.getSearchCriteria();
-
-		assertTrue(info.size() == 0);
-
-		// not empty arguments
-		criteria = new Story(null, "john", "the cow", "went home",
-				Utilities.getPhoneId(this.getActivity()));
-		info = criteria.getSearchCriteria();
-		assertEquals(info.size(), 2);
-		assertTrue(info.get("title").equals("%john%"));
-		assertTrue(info.get("phone_id").equals(criteria.getPhoneId()));
 	}
 
 	/**
