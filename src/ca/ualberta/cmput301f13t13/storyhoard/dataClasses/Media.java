@@ -52,12 +52,13 @@ public class Media {
 	 * @param chapterId
 	 * @param path
 	 * @param type
+	 * @param text TODO
 	 */
-	public Media(UUID chapterId, String path, String type) {
+	public Media(UUID chapterId, String path, String type, String text) {
 		this.id = UUID.randomUUID();
 		this.chapterId = chapterId;
 		this.type = type;
-		this.text = "";
+		this.text = text;
 		bitmapString = "";
 		if (path != null) {
 			this.path = path;

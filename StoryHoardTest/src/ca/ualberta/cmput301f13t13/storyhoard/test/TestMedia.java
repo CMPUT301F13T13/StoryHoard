@@ -57,7 +57,7 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 		// Make photo
 		try {
 			@SuppressWarnings("unused")
-			Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
+			Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO, "");
 			Bitmap bm = BitmapFactory.decodeFile(path);
 			assertTrue(bm != null);
 		} catch (Exception e) {
@@ -71,7 +71,7 @@ public class TestMedia extends ActivityInstrumentationTestCase2<InfoActivity> {
 	@SuppressWarnings("unused")
 	public void testSettersGetters() {
 		path = createPath("img1.jpg");
-		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO);
+		Media photo = new Media(UUID.randomUUID(), path, Media.PHOTO, "");
 
 		UUID id = photo.getId();
 		UUID chapterId = photo.getChapterId();
