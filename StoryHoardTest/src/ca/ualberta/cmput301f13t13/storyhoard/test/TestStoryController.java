@@ -50,6 +50,7 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 	 * the database.
 	 */	
 	public void testAddChapterAndPushChangesToDb() {
+		ChapterManager cm = ChapterManager.getInstance(getActivity());
 		StoryManager sm = StoryManager.getInstance(getActivity());
 		StoryController sc = StoryController.getInstance(getActivity());
 		
@@ -59,10 +60,13 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		sc.pushChangesToDb();
 		assertNotNull(sm.getById(mockStory.getId()));
 		
-		sc.addChapter(new Chapter(mockStory.getId(), "new"));
+		Chapter oldChap = new Chapter(mockStory.getId(), "new");
+		sc.addChapter(oldChap);
 		sc.pushChangesToDb();
 		mockStory = sm.getById(mockStory.getId());
-		assertEquals(mockStory.getChapters().size(), 1);
+		
+		Chapter chap = cm.getById(oldChap.getId());
+		assertNotNull(chap);
 	}		
 	
 	/**
@@ -74,14 +78,15 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 		ChapterManager cm = ChapterManager.getInstance(getActivity());
 		StoryController sc = StoryController.getInstance(getActivity());
 		Story mockStory = new Story("title1", "author1", "desc1",
-				Utilities.getPhoneId(this.getActivity()));;
+				Utilities.getPhoneId(this.getActivity()));
+		mockStory.getChapters().add(new Chapter(mockStory.getId(), "new"));
+		
 		sm.insert(mockStory);
 		cm.insert(new Chapter(mockStory.getId(), "hello"));
 		sc.setCurrStoryIncomplete(mockStory);
 		
-		assertEquals(sc.getCurrStory().getChapters().size(), 1);
+
 		sc.setCurrStoryComplete(null);
-		mockStory.getChapters().add(new Chapter(mockStory.getId(), "new"));
 		sc.setCurrStoryComplete(mockStory);
 		
 		assertEquals(sc.getCurrStory().getChapters().size(), 1);
@@ -93,8 +98,9 @@ public class TestStoryController extends ActivityInstrumentationTestCase2<InfoAc
 	public void testGetCurrStory() {
 		StoryController sc = StoryController.getInstance(getActivity());
 		Story mockStory = new Story("title1", "author1", "desc1",
-				Utilities.getPhoneId(this.getActivity()));;
+				Utilities.getPhoneId(this.getActivity()));
 		sc.setCurrStoryComplete(mockStory);
+		sc.addChapter(new Chapter(mockStory.getId(), "text"));
 		assertNotNull(sc.getCurrStory());
 		
 		assertEquals(sc.getCurrStory().getChapters().size(), 1);

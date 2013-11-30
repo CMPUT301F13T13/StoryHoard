@@ -24,8 +24,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
  * Class meant for the testing of the ChapterManager class in the StoryHoard
@@ -157,11 +155,11 @@ public class TestChapterManager extends
 		cm = ChapterManager.getInstance(getActivity());
 		
 		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
-		cm.update(mockChapter);
+		cm.insert(mockChapter);
 		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
-		cm.update(mockChapter2);
+		cm.insert(mockChapter2);
 		mockChapter3 = new Chapter(UUID.randomUUID(), "Lily drove");
-		cm.update(mockChapter3);
+		cm.insert(mockChapter3);
 
 		mockChapters = cm.getChaptersByStory(mockChapter.getStoryId());
 		assertEquals(mockChapters.size(), 2);

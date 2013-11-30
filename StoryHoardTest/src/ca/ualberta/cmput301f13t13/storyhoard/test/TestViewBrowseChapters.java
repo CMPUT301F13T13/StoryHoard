@@ -16,10 +16,13 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.GridView;
 import android.widget.ListView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
+import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewBrowseChapters;
+import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
  * Tests the view browse chapters class.
@@ -31,7 +34,7 @@ public class TestViewBrowseChapters extends
 		ActivityInstrumentationTestCase2<ViewBrowseChapters> {
 	private ListView storyChapters;
 	private ViewBrowseChapters activity;
-	private GridView gridView;
+	private StoryController storyCon;
 
 	public TestViewBrowseChapters() {
 		super(ViewBrowseChapters.class);
@@ -46,10 +49,15 @@ public class TestViewBrowseChapters extends
 	 * Tests that the ui widgets were correctly initialized.
 	 */
 	public void testPreConditions() {
+		storyCon = StoryController.getInstance(getActivity());
+		Story story = new Story("7 bugs", "Shamalan", "scary story",
+				Utilities.getPhoneId(this.getActivity()));
+		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
+		story.getChapters().add(chapter);
+		storyCon.setCurrStoryComplete(story);
+		
 		activity = getActivity();
-		gridView = (GridView) activity.findViewById(R.id.gridStoriesView); 
 		storyChapters = (ListView) activity.findViewById(R.id.storyChapters);
 		assertTrue(storyChapters != null);
-		assertTrue(gridView != null);
 	}
 }

@@ -19,7 +19,7 @@ public class StoryController {
 	protected StoryController(Context context) {
 		syncher = Syncher.getInstance(context);
 		serverMan = ServerManager.getInstance();
-		story = new Story("", "", "", "");  // blank story
+		story = new Story("", "", "", "");  	// blank story
 	}
 	
 	public static StoryController getInstance(Context context) {

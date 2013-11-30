@@ -111,7 +111,6 @@ public class TestServerManager extends
 		sm.insert(story2);
 		
 		stories = sm.getAll();
-		assertTrue(stories.size() >= 2);
 		assertTrue(stories.contains(story));
 		assertTrue(stories.contains(story2));
 		
