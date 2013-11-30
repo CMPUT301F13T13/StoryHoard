@@ -56,6 +56,7 @@ public class TestServerManager extends
 		Chapter chap2 = new Chapter(story.getId(), "he lughe");
 		Choice c1 = new Choice(chap.getId(), chap2.getId(), "hit me!");
 
+		// adding choices + chapters
 		chap.getChoices().add(c1);
 		story.getChapters().add(chap);
 		story.getChapters().add(chap2);
@@ -92,27 +93,23 @@ public class TestServerManager extends
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		
-		UUID id1 = UUID.fromString("f1bda3a9-4560-4530-befc-2d58db9419b7");
-		UUID id2 = UUID.fromString("e4558e4e-5140-4838-be40-e4d5be0b5299");
-		Story story = new Story(id1, "Harry Potter test", "oprah", 
+		Story story = new Story("Harry Potter test", "oprah", 
 				"the emo boy", "232");
-		Story story2 = new Story(id2, "Ugly Duckling test", "oprah", 
+		Story story2 = new Story("Ugly Duckling test", "oprah", 
 				"the emo boy", "232");
 		
-		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
-		Chapter chap2 = new Chapter(story.getId(), "he lughe");
-		Choice c1 = new Choice(chap.getId(), chap2.getId(), "hit me!");
-
-		chap.getChoices().add(c1);
-		story.getChapters().add(chap);
-		story.getChapters().add(chap2);
-
 		sm.insert(story);
 		sm.insert(story2);
 		
 		stories = sm.getAll();
-		assertTrue(stories.contains(story));
-		assertTrue(stories.contains(story2));
+		try {
+			Thread.sleep(10000);
+			assertTrue(hasStory(stories, story));
+			assertTrue(hasStory(stories, story2));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		sm.remove(story.getId().toString());
 		sm.remove(story2.getId().toString());
@@ -159,11 +156,9 @@ public class TestServerManager extends
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		
-		UUID id1 = UUID.fromString("f1bda3a9-4560-4530-befc-2d58db9419b7");
-		UUID id2 = UUID.fromString("e4558e4e-5140-4838-be40-e4d5be0b5299");
-		Story story = new Story(id1, "Harry Potter test", "oprah", 
+		Story story = new Story("Harry Potter test", "oprah", 
 				"the emo boy", "232");
-		Story story2 = new Story(id2, "Ugly Duckling test", "oprah", 
+		Story story2 = new Story("Ugly Duckling test", "oprah", 
 				"the emo boy", "232");
 		
 		Chapter chap = new Chapter(story.getId(), "on a dark cold night");
@@ -183,14 +178,29 @@ public class TestServerManager extends
 		
 		// By keywords
 		ArrayList<Story> results = sm.searchByKeywords("Ugly duckling test");
-		story = results.get(0);
-		assertTrue(story.getTitle().equals("Ugly duckling test"));
+		assertNotSame(results.size(), 0);
 		
+		story = results.get(0);
+		assertTrue(story.getTitle().equals("Ugly Duckling test"));
+		
+		// testing remove
 		sm.remove(story2.getId().toString());
 		sm.remove(story.getId().toString());
-		story = sm.getById(id2);
-		assertNull(story);
-		story = sm.getById(id1);
-		assertNull(story);
+		Story newStory = sm.getById(story2.getId());
+		assertNull(newStory);
+		newStory = sm.getById(story.getId());
+		assertNull(newStory);
 	}
+	
+    /**
+     * Checks whether a story is contained in a stories ArrayList.
+     */
+    public Boolean hasStory(ArrayList<Story> stories, Story aStory) {
+            for (Story story : stories) {
+                    if (story.getId().equals(aStory.getId())) {
+                            return true;
+                    }
+            }
+            return false;
+    }	
 }

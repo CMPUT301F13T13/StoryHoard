@@ -35,7 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
  * 
  */
 public class TestChapterManager extends
-		ActivityInstrumentationTestCase2<InfoActivity> {
+ActivityInstrumentationTestCase2<InfoActivity> {
 	private ArrayList<Chapter> mockChapters;
 	private Chapter mockChapter;
 	private Chapter mockChapter2;
@@ -55,7 +55,7 @@ public class TestChapterManager extends
 	 */
 	public Chapter newMockChapter(UUID storyId, String text) {
 		cm = ChapterManager.getInstance(getActivity());
-		
+
 		// chapter object
 		Chapter mockChapter = new Chapter(storyId, text);
 		Choice choice = new Choice(storyId, mockChapter.getId(),
@@ -81,7 +81,7 @@ public class TestChapterManager extends
 	/**
 	 * Tests retrieving all the chapters of a story
 	 */
-	public void testGetAllChapters() {
+	public void testGetAllStoryChapters() {
 		cm = ChapterManager.getInstance(getActivity());
 		Chapter mockChapter = newMockChapter(UUID.randomUUID(), "bob went away");
 		cm.insert(mockChapter);
@@ -94,7 +94,8 @@ public class TestChapterManager extends
 		Chapter criteria = new Chapter(null, mockChapter.getStoryId(), null);
 
 		mockChapters = cm.retrieve(criteria);
-		assertEquals(mockChapters.size(), 2);
+		assertTrue(hasChapter(mockChapters, mockChapter));
+		assertTrue(hasChapter(mockChapters, mockChapter2));
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class TestChapterManager extends
 	 */
 	public void testGetChaptersByStory() {
 		cm = ChapterManager.getInstance(getActivity());
-		
+
 		mockChapter = new Chapter(UUID.randomUUID(), "bob went away");
 		cm.insert(mockChapter);
 		mockChapter2 = new Chapter(mockChapter.getStoryId(), "Lily drove");
@@ -164,4 +165,23 @@ public class TestChapterManager extends
 		mockChapters = cm.getChaptersByStory(mockChapter.getStoryId());
 		assertEquals(mockChapters.size(), 2);
 	}
+
+	/**
+	 * Checks whether a chapter is contained in a chapters ArrayList.
+	 * 
+	 * @param objs
+	 *            ArrayList of objects.
+	 * @param chap
+	 *            Object for which we are testing whether or not it is contained
+	 *            in the ArrayList.
+	 * @return Boolean
+	 */
+	public Boolean hasChapter(ArrayList<Chapter> chaps, Chapter chapter) {
+		for (Chapter chap : chaps) {
+			if (chap.getId().equals(chapter.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}	
 }

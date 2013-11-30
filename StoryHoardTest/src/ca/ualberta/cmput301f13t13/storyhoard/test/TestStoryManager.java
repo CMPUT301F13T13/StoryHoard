@@ -77,7 +77,7 @@ public class TestStoryManager extends
 		sm.insert(mockStory);
 
 		mockStories = sm.retrieve(mockStory);
-		assertEquals(mockStories.size(), 1);
+		assertTrue(hasStory(mockStories, mockStory));
 	}
 
 	/**
@@ -122,7 +122,8 @@ public class TestStoryManager extends
 		Story mockCriteria = new Story(null, null, null, null,
 				Utilities.getPhoneId(getActivity()));
 		mockStories = sm.retrieve(mockCriteria);
-		assertEquals(mockStories.size(), 2);
+		assertTrue(hasStory(mockStories, mockStory1));
+		assertTrue(hasStory(mockStories, mockStory2));
 
 	}
 
@@ -131,11 +132,6 @@ public class TestStoryManager extends
 	 */
 	public void testGetAllCachedStories() {
 		sm = StoryManager.getInstance(getActivity());
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 
 		Story mockStory1 = newMockStory("My Cow", "Dr. Poe", "my chubby cow",
 				Utilities.getPhoneId(this.getActivity()));
@@ -151,7 +147,9 @@ public class TestStoryManager extends
 		Story mockCriteria = new Story(null, null, null, null,
 				Story.NOT_AUTHORS);
 		mockStories = sm.retrieve(mockCriteria);
-		assertEquals(mockStories.size(), 2);
+		
+		assertTrue(hasStory(mockStories, mockStory2));
+		assertTrue(hasStory(mockStories, mockStory3));
 	}
 
 	/**
@@ -227,7 +225,8 @@ public class TestStoryManager extends
 
 		stories = sm.getAllCachedStories();
 
-		assertEquals(stories.size(), 2);
+		assertTrue(hasStory(stories, s2));
+		assertTrue(hasStory(stories, s3));
 	}
 	
 	/**
@@ -242,20 +241,33 @@ public class TestStoryManager extends
 		// Insert some stories
 		Story s1 = new Story("Lily the cowy", "me", "D: none",
 				Utilities.getPhoneId(getActivity()));
-		Story s2 = new Story("Bob the hen", "me", "D: none",
+		Story s2 = new Story("please work", "me", "D: none",
 				Utilities.getPhoneId(getActivity()));
-		Story s3 = new Story("Bob the cowy", "me", "D: none", "34532432423");
+		Story s3 = new Story("please work", "me", "D: none", "34532432423");
 
 		sm.insert(s1);
 		sm.insert(s2);
 		sm.insert(s3);
 
 		// title has cowy, cached stories
-		stories = sm.searchCachedStories("cowy");
+		stories = sm.searchCachedStories("work");
 		assertEquals(stories.size(), 1);
 
 		// created, title has bob and hen
-		stories = sm.searchAuthorStories("Bob hen");
+		stories = sm.searchAuthorStories("please");
 		assertEquals(stories.size(), 1);
 	}
+	
+
+    /**
+     * Checks whether a story is contained in a stories ArrayList.
+     */
+    public Boolean hasStory(ArrayList<Story> stories, Story aStory) {
+            for (Story story : stories) {
+                    if (story.getId().equals(aStory.getId())) {
+                            return true;
+                    }
+            }
+            return false;
+    }	
 }

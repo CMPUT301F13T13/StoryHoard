@@ -25,8 +25,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChoiceManager;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 
 /**
@@ -106,13 +104,8 @@ public class TestChoiceManager extends
 	/**
 	 * Tests retrieving all the choices of a chapter
 	 */
-	public void testGetAllChoices() {
+	public void testGetAllChapterChoices() {
 		cm = ChoiceManager.getInstance(getActivity());
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 
 		UUID chapId1 = UUID.randomUUID();
 		UUID chapId2 = UUID.randomUUID();

@@ -31,8 +31,6 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 import ca.ualberta.cmput301f13t13.storyhoard.local.MediaManager;
 
 /**
@@ -76,32 +74,6 @@ public class TestMediaManager extends
 
 		Media check = (Media) objects.get(0);
 		assertTrue(check.getBitmap() != null);
-	}
-
-	/**
-	 * Tests getting all photos, and all illustrations belonging to a chapter.
-	 */
-	public void testGetAllMedia() {
-		mm = MediaManager.getInstance(getActivity());
-		
-		// Clearing database
-		DBHelper helper = DBHelper.getInstance(this.getActivity());
-		helper.close();
-		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
-		
-		UUID chapId = UUID.randomUUID();
-
-		Media m2 = new Media(chapId, createPath(fname1), Media.PHOTO);
-
-		mm.insert(m2);
-
-		// get all media
-		Media criteria = new Media(null, chapId, null, null, "");
-		ArrayList<Media> objects = mm.retrieve(criteria);
-		assertEquals(objects.size(), 1);
-
-		Media newm = (Media) objects.get(0);
-		assertTrue(newm.getBitmap() != null);
 	}
 
 	/**

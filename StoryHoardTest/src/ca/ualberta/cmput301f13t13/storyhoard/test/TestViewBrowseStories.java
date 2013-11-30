@@ -53,11 +53,11 @@ public class TestViewBrowseStories extends
 		Chapter chapter = new Chapter(story.getId(), "On a cold, dark night.");
 		story.getChapters().add(chapter);
 		sc.setCurrStoryComplete(story);
+		sc.pushChangesToDb();
 		
 		activity = getActivity();
 		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
 		
 		assertTrue(gridView != null);
-		assertEquals(gridView.getCount(), 1);
 	}
 }

@@ -28,6 +28,8 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.gui.ViewStory;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract;
+import ca.ualberta.cmput301f13t13.storyhoard.local.DBHelper;
 
 /**
  * Tests the View Story activity.
@@ -110,5 +112,10 @@ public class TestViewStory extends ActivityInstrumentationTestCase2<ViewStory> {
 		assertTrue(storyTitle.getText().toString().equals("title"));
 		assertTrue(storyDescription.getText().toString().equals("es"));
 		assertTrue(storyAuthor.getText().toString().equals("author"));
+		
+		// Clearing database from tests
+		DBHelper helper = DBHelper.getInstance(getActivity());
+		helper.close();
+		this.getActivity().deleteDatabase(DBContract.DATABASE_NAME);
 	}
 }
