@@ -24,6 +24,14 @@ import java.util.UUID;
  * Interface for storing, updating, and retrieving objects locally 
  * (to the database). The classes that implement this interface must be in
  * charge of opening a connection to the database and interacting with it.
+ * The types of objects it assumes to be working with will be Story, Chapter,
+ * Choice, or Media.</br></br>
+ * 
+ * Design Pattern: This class uses the template method design pattern. The 
+ * template methods are existsLocally(), and sync(). They both use some
+ * of the other abstract methods that will have to be defined to accomplish
+ * their tasks.
+ * 
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -35,6 +43,13 @@ import java.util.UUID;
  */
 public abstract class StoringManager<A> {
 
+	/**
+	 * Checks to see whether an object with the given id exists in the 
+	 * database.
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Boolean existsLocally(UUID id) {
 		A object = getById(id);
 		if (object == null) {
@@ -43,6 +58,14 @@ public abstract class StoringManager<A> {
 		return true;
 	}
 	
+	/**
+	 * Takes an object and its id and decides, checks whether or not it exists
+	 * in the database already, and if it does, updates it, or else it inserts
+	 * it.
+	 * 
+	 * @param object
+	 * @param id
+	 */
 	public void sync(A object, UUID id) {
 		if (existsLocally(id)) {
 			update(object);
@@ -55,11 +78,13 @@ public abstract class StoringManager<A> {
 	 * Inserts an object into the database.
 	 * 
 	 * @param object
+	 * 			Expects either a Story, Chapter, Choice, or Media.
 	 */
 	public abstract void insert(A object);
 
 	/**
-	 * Retrieves an object(s) from the database.
+	 * Retrieves an object(s) from the database given an object of the same 
+	 * type holding the desired search criteria.
 	 * 
 	 * @param criteria
 	 * 
@@ -74,9 +99,24 @@ public abstract class StoringManager<A> {
 	 */
 	public abstract void update(A newObject);
 	
+	/**
+	 * Retrieves an object from the database whose id matches the id 
+	 * given. Null is returned if no object exists with that id.
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public abstract A getById(UUID id);
 	
+	/**
+	 * Removes an object from the database given its Id (as a UUID).
+	 * This method is a "hook", so it is optional to implement.
+	 * However, the one class that does need to implement it is the media 
+	 * Manager class since deleting illustrations is part of the 
+	 * functionality of the StoryHoard application.
+	 * 
+	 * @param objId
+	 */
 	public void remove(UUID objId) {
-		// hook, optional implementation for this iteration
 	}
 }

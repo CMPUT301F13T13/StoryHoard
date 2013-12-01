@@ -66,7 +66,20 @@ public class Story {
 	 * Initializes a new story object by specifying an id as the first 
 	 * parameter. Usually used when making a story object that will be 
 	 * holding search criteria since you can specify the id of the story
-	 * that you would like to search for.
+	 * that you would like to search for. When making a story to hold
+	 * search criteria, any field you don't want to include in the search
+	 * has to be set to null.</br></br>
+	 * 
+	 * Example:</br>
+	 * To search for a story whose title is "the boss", construct the
+	 * story criteria holder like this:</br>
+	 * Story criteria = new Story(null, "the boss", null, null, null);</br></br>
+	 * 
+	 * To search for a story whose id is 
+	 * "5231b533-ba17-4787-98a3-f2df37de2aD7", build the story criteria 
+	 * holder like this:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * Story criteria = new Story(id, null, null, null, null);
 	 * 
 	 * @param id
 	 * 			  Story's unique id, must be a UUID.

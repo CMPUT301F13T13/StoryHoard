@@ -31,16 +31,22 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.StoryTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve story
- * objects. It implements the StoringManager interface.
+ * objects. It implements the StoringManager interface.</br></br>
  * 
- * </br>
- * Design Pattern: Singleton
+ * The setup of the database being used is defined in DBContract.java, so for
+ * more information on the actual tables and SQL statements used to make them,
+ * see that class.
+ * 
+ * Design Pattern: This class is a singleton, so there will ever only be one
+ * instance of it. Use the getInstance() static method to retrieve an 
+ * instance of it, not the constructor.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
  * 
  * @see Story
  * @see StoringManager
+ * @see DBContract
  */
 public class StoryManager extends StoringManager<Story> {
 	private static DBHelper helper = null;
@@ -52,7 +58,15 @@ public class StoryManager extends StoringManager<Story> {
 	protected String[] projection;
 
 	/**
-	 * Initializes a new OwnStoryManager story.
+	 * Initializes a new StoryManager class. Must be given context in order to 
+	 * create a new instance of DBHelper and also to get the phoneId of 
+	 * whichever phone is using this application.</br></br>
+	 * 
+	 * Note that this constructor is protected, and it should never be used 
+	 * outside of this class (except for any class that subclass it).
+	 * 
+	 * @param context
+	 * 
 	 */
 	protected StoryManager(Context context) {
 		helper = DBHelper.getInstance(context);
@@ -60,11 +74,15 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Returns an instance of a OwnStoryManager. Used to implement the singleton
+	 * Returns an instance of a StoryManager. Since this class is a singleton, 
+	 * the same instance will always be returned. This is the method any class
+	 * outside of this one and any subclasses should use to get an StoryManager
+	 * object. </br></br>
+	 * 
+	 * Used to implement the singleton
 	 * design pattern.
 	 * 
 	 * @param context
-	 * @return OwnStoryManager
 	 */
 	public static StoryManager getInstance(Context context) {
 		if (self == null) {
@@ -74,14 +92,18 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Saves a new story locally (in the database). You can insert
-	 * a story that has any field empty except for its ID.
+	 * Saves a new story locally (in the database). You can insert a story that 
+	 * has any field empty / null except for its ID. The id is the one field 
+	 * that can never be null.</br></br>
 	 * 
-	 * </br> Example Call.
-	 * </br> Story story = new Story("The boat", "Bob Week", 
-	 * 				"The boat that could", phoneId);
-	 * </br> OwnStoryManager sm = new OwnStoryManager.getInstance();
-	 * </br> sm.insert(story);
+	 * Example Call.</br>
+	 * Story story = new Story("The boat", "Bob Week", 
+	 * 				"The boat that could", "123ab5");</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * storyMan.insert(story);</br>
+	 * 
+	 * @param story
+	 * 			A story object. Any field can be null except its id.
 	 */
 	@Override
 	public void insert(Story story) {
@@ -91,10 +113,21 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Updates a story already in the database.
+	 * Updates a story already in the database. Once again, any of the fields
+	 * of the new story you want to update the old version with can be null
+	 * except for the id.
+	 * 
+	 * Example Call.</br>
+	 * Story story = new Story("The boat", "Bob Week", 
+	 * 				"The boat that could", "123ab5");</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * storyMan.insert(story);</br>
+	 * story.setTitle("new title");</br>
+	 * storyMan.update(story);</br>
 	 * 
 	 * @param newStory
-	 *            Contains the changes to the story.
+	 * 			Story with changes. The old story's information will be 
+	 * 			changed with the new story,s information.
 	 */
 	@Override
 	public void update(Story newStory) {
@@ -108,10 +141,37 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Retrieves a story /stories from the database.
+	 * Retrieves a story /stories from the database. Always returns an array
+	 * list of stories, even if only one story was found or if only one
+	 * story matching the search criteria was expected to be found.</br?<br>
 	 * 
-	 * @param criteria
-	 *            Holds the search criteria.
+	 * The story passed into this method is a story holding search criteria,
+	 * so any field you would like to include in the search, just set the 
+	 * search criteria holding story to it.</br><br>
+	 * 
+	 * Example Call.</br>
+	 * Story story = new Story("The boat", "Bob Week", 
+	 * 				"The boat that could", "123ab5");</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * storyMan.insert(story);</br></br>
+	 * 
+	 * To now search for this story based on its title: </br></br>
+	 * 
+	 * Story criteria = new Story(null, "The boat", null, null, null);</br>
+	 * 
+	 * Notice that the first field was null. That is because when making a
+	 * search criteria object, you have to use the constructor that lets you
+	 * specify the id. This way, you are allowed to manually set any field
+	 * you want to be included in the field.</br></br>
+	 * 
+	 * Let's say you want to change the story's title and update the changes: 
+	 * </br>
+	 * story.setTitle("new title");</br>
+	 * storyMan.update(story);</br>
+	 * 
+	 * @param newStory
+	 * 			Story with changes. The old story's information will be 
+	 * 			changed with the new story,s information.
 	 */
 	@Override
 	public ArrayList<Story> retrieve(Story criteria) {
@@ -148,6 +208,13 @@ public class StoryManager extends StoringManager<Story> {
 		return results;
 	}
 	
+	/**
+	 * A helper function to set up what table columns and rows to be searched
+	 * or retrieved. Basically, building the sql query, but using content
+	 * values to abstract the sql.
+	 * 
+	 * @param criteria
+	 */
 	private void setUpSearch(Story criteria) {
 		sArgs = null;
 		projection = new String[]{ 
@@ -170,8 +237,12 @@ public class StoryManager extends StoringManager<Story> {
 	}	
 	
 	/**
-	 * Sets up the ContentValues for inserting or updating the database.
+	 * Sets up the ContentValues for inserting or updating the database. This
+	 * specifies the columns to be inserted into and what content will be 
+	 * going into those columns.
+	 * 
 	 * @param story
+	 * 			All the story's fields will be put into the database.
 	 */
 	private void setContentValues(Story story) {
 		UUID chapterId = story.getFirstChapterId();
@@ -194,15 +265,8 @@ public class StoryManager extends StoringManager<Story> {
 	/**
 	 * Creates the selection string (a prepared statement) to be used in the
 	 * database query. Also creates an array holding the items to be placed in
-	 * the ? of the selection.
+	 * the ? of the selection, so the selection arguments.
 	 * 
-	 * @param story
-	 *            Holds the data needed to build the selection string and the
-	 *            selection arguments array.
-	 * @param sArgs
-	 *            Holds the arguments to be passed into the selection string.
-	 * @return String The selection string, i.e. the where clause that will be
-	 *         used in the sql query.
 	 */
 	private String buildSelectionString(Story story, ArrayList<String> sArgs) {
 		HashMap<String, String> storyCrit = getSearchCriteria(story);
@@ -230,8 +294,9 @@ public class StoryManager extends StoringManager<Story> {
 	/**
 	 * Returns the information of the story (id, title, author, PhoneId) that
 	 * could be used in searching for a story in the database. This information
-	 * is returned in a HashMap where the keys are the corresponding Story 
-	 * Table column names.
+	 * is returned in a HashMap where the keys are the Story Table column names
+	 * you want to include in the search, and the values are the content of
+	 * those columns.
 	 * 
 	 * @return HashMap
 	 */
@@ -247,9 +312,12 @@ public class StoryManager extends StoringManager<Story> {
 	}
 	
 	/**
-	 * Splits up the string for the title into keywords so a search
-	 * to find stories with titles containing the keywords will
-	 * be possible.
+	 * Helper function for getSearchCriteria(). If searching by keywords in
+	 * the story title, this function splits up the title by its keywords
+	 * and adds the to the hashmap. The column name for each keyword is 
+	 * StoryTable.COLUMN_NAME_TITLE (whatever this macro holds). This macro
+	 * is defined in DBcontract.java, so for more information on the setup of
+	 * the database, see that class.
 	 * 
 	 * @param info
 	 */
@@ -269,14 +337,18 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Gets all the stories that are either cached, created by the author, or
-	 * published.
+	 * Gets all the stories that are cached from the database. The way it we
+	 * determine whether or not it is a cached story or author's own story
+	 * is by its phone Id. If the id matches the phone id currently using
+	 * the app, the story is considered to be the author's own story.</br></br>
 	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
-	 *            CREATED_STORY.
-	 * @param localStoryController TODO
-	 * @return Array list of all the stories the application asked for.
+	 * Note that the stories are returned in an array list of story objects.
+	 * If no cached stories are found, an empty array list will be returned,
+	 * not null.</br></br>
+	 * 
+	 * Example call:</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Story> stories = StoryManager.getAllCachedStories();</br>
 	 */
 	public ArrayList<Story> getAllCachedStories() {
 		Story criteria = new Story(null, null, null, null, Story.NOT_AUTHORS);
@@ -284,14 +356,18 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Gets all the stories that are either cached, created by the author, or
-	 * published.
+	 * Gets all the stories that are the author's own from the database. The 
+	 * way it we determine whether or not it is a cached story or author's own 
+	 * story is by its phone Id. If the id matches the phone id currently using
+	 * the app, the story is considered to be the author's own story.</br></br>
 	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY, or
-	 *            CREATED_STORY.
-	 * @param localStoryController TODO
-	 * @return Array list of all the stories the application asked for.
+	 * Note that the stories are returned in an array list of story objects.
+	 * If no stories are found, an empty array list will be returned, not null.
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Story> stories = StoryManager.getAllAuthorStories();</br>
 	 */
 	public ArrayList<Story> getAllAuthorStories() {
 		Story criteria = new Story(null, null, null, null, phoneId);
@@ -299,39 +375,75 @@ public class StoryManager extends StoringManager<Story> {
 	}
 
 	/**
-	 * Used to search for stories matching the given search criteria. Users can
-	 * either search by specifying the title or author of the story. All stories
-	 * that match will be retrieved.
+	 * Gets all the stories whose title contains all of the keywords provided. 
+	 * I.e. it is a search by keywords in title. It also only searches for
+	 * stories that the author has created, not cached (downloaded). </br></br>
 	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * The  way it we determine whether or not it is a cached story or author's 
+	 * own story is by its phone Id. If the id matches the phone id currently
+	 * using the app, the story is considered to be the author's own story.
+	 * </br></br>
 	 * 
-	 * @param title
-	 *            Title of the story user is looking for.
-	 * @return ArrayList of stories that matched the search criteria.
+	 * Note that the stories are returned in an array list of story objects.
+	 * If no stories are found, an empty array list will be returned, not null.
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Story> stories = StoryManager.searchAuthorStories("The dog");</br>
+	 * 
+	 * @param keywords
+	 * 			The keywords that appear in the title of the stories we are
+	 * 			searching for.
 	 */
-	public ArrayList<Story> searchAuthorStories(String title) {
-		Story criteria = new Story(null, title, null, null, phoneId);
+	public ArrayList<Story> searchAuthorStories(String keywords) {
+		Story criteria = new Story(null, keywords, null, null, phoneId);
 		return retrieve(criteria);
 	}
 
 	/**
-	 * Used to search for stories matching the given search criteria. Users can
-	 * either search by specifying the title or author of the story. All stories
-	 * that match will be retrieved.
+	 * Gets all the stories whose title contains all of the keywords provided. 
+	 * I.e. it is a search by keywords in title. It also only searches for
+	 * stories that the user has cached (downloaded), not the stories the
+	 * user has created. </br></br>
 	 * 
-	 * @param type
-	 *            Will either be PUBLISHED_STORY, CACHED_STORY
+	 * The  way it we determine whether or not it is a cached story or author's 
+	 * own story is by its phone Id. If the id matches the phone id currently
+	 * using the app, the story is considered to be the author's own story.
+	 * </br></br>
 	 * 
-	 * @param title
-	 *            Title of the story user is looking for.
-	 * @return ArrayList of stories that matched the search criteria.
+	 * Note that the stories are returned in an array list of story objects.
+	 * If no stories are found, an empty array list will be returned, not null.
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Story> stories = StoryManager.searchCachedStories("The dog");</br>
+	 * 
+	 * @param keywords
+	 * 			The keywords that appear in the title of the stories we are
+	 * 			searching for.
 	 */
 	public ArrayList<Story> searchCachedStories(String title) {
 		Story criteria = new Story(null, title, null, null, Story.NOT_AUTHORS);
 		return retrieve(criteria);
 	}
 
+	/**
+	 * Retrieves the story whose id matches the id provided. It expects the id
+	 * provided to be a UUID. 
+	 * 
+	 * Note that if no story id matches the provided id, null is returned.
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * StoryManager storyMan = StoryManager.getInstance(someActivity.this);</br>
+	 * Story story = StoryManager.getById(id);</br>
+	 * 
+	 * @param id
+	 * 			Id of the story we are looking for. Must be a UUID.
+	 */	
 	@Override
 	public Story getById(UUID id) {
 		ArrayList<Story> result = retrieve(new Story(id, null, null, null, null));
