@@ -155,7 +155,7 @@ public class ChoiceManager extends StoringManager<Choice> {
 
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
-		selection = setSearchCriteria(criteria, selectionArgs);
+		selection = buildSelectionString(criteria, selectionArgs);
 
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
@@ -177,9 +177,8 @@ public class ChoiceManager extends StoringManager<Choice> {
 	 * @return String
 	 * 			The selection string.
 	 */
-	@Override
-	public String setSearchCriteria(Choice choice, ArrayList<String> sArgs) {
-		HashMap<String,String> choiceCrit = choice.getSearchCriteria();		
+	private String buildSelectionString(Choice choice, ArrayList<String> sArgs) {
+		HashMap<String,String> choiceCrit = getSearchCriteria(choice);		
 
 		// Setting search criteria
 		String selection = "";
@@ -200,6 +199,34 @@ public class ChoiceManager extends StoringManager<Choice> {
 		return selection;
 	}
 
+	/**
+	 * Returns the information of the choice (id, chapterIdFrom, chapterIdTo)
+	 * that could be used in searching for a choice in the database. This
+	 * information is returned in a HashMap where the keys are the 
+	 * corresponding Choice Table column names.
+	 * 
+	 * @return HashMap
+	 */
+	private HashMap<String, String> getSearchCriteria(Choice choice) {
+		HashMap<String, String> info = new HashMap<String, String>();
+
+		if (choice.getId() != null) {
+			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, choice.getId().toString());
+		}
+
+		if (choice.getCurrentChapter() != null) {
+			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
+					choice.getCurrentChapter().toString());
+		}
+		
+		if (choice.getNextChapter() != null) {
+			info.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
+					choice.getNextChapter().toString());
+		}
+
+		return info;
+	}
+	
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();

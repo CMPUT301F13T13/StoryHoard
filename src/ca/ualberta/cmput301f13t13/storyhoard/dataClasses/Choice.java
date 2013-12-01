@@ -16,10 +16,7 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.dataClasses;
 
-import java.util.HashMap;
 import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChoiceTable;
 
 /**
  * Role: A container to hold choice information. This includes id, chapteridto,
@@ -158,33 +155,5 @@ public class Choice {
 	 */
 	public String getText() {
 		return this.text;
-	}
-
-	/**
-	 * Returns the information of the choice (id, chapterIdFrom, chapterIdTo)
-	 * that could be used in searching for a choice in the database. This
-	 * information is returned in a HashMap where the keys are the 
-	 * corresponding Choice Table column names.
-	 * 
-	 * @return HashMap
-	 */
-	public HashMap<String, String> getSearchCriteria() {
-		HashMap<String, String> info = new HashMap<String, String>();
-
-		if (id != null) {
-			info.put(ChoiceTable.COLUMN_NAME_CHOICE_ID, id.toString());
-		}
-
-		if (currentChapter != null) {
-			info.put(ChoiceTable.COLUMN_NAME_CURR_CHAPTER,
-					currentChapter.toString());
-		}
-		
-		if (nextChapter != null) {
-			info.put(ChoiceTable.COLUMN_NAME_NEXT_CHAPTER,
-					nextChapter.toString());
-		}
-
-		return info;
 	}
 }

@@ -133,7 +133,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 				ChapterTable.COLUMN_NAME_RANDOM_CHOICE };
 
 		// Setting search criteria
-		selection = setSearchCriteria(criteria, selectionArgs);
+		selection = buildSelectionString(criteria, selectionArgs);
 
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
@@ -190,9 +190,8 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 *            Holds the arguments to be passed into the selection string.
 	 * @return selection The selection string.
 	 */
-	@Override
-	public String setSearchCriteria(Chapter chapter, ArrayList<String> sArgs) {
-		HashMap<String, String> chapCrit = chapter.getSearchCriteria();
+	private String buildSelectionString(Chapter chapter, ArrayList<String> sArgs) {
+		HashMap<String, String> chapCrit = getSearchCriteria(chapter);
 		String selection = "";
 
 		int maxSize = chapCrit.size();
@@ -210,6 +209,30 @@ public class ChapterManager extends StoringManager<Chapter> {
 		return selection;
 	}
 
+	/**
+	 * Returns the information of the chapter (id, storyId) that could be used
+	 * in searching for a chapter in the database. This information is returned
+	 * in a HashMap where the keys are the corresponding Chapter Table column
+	 * names.
+	 * 
+	 * @return HashMap
+	 */
+	private HashMap<String, String> getSearchCriteria(Chapter chapter) {
+		HashMap<String, String> info = new HashMap<String, String>();
+
+		if (chapter.getId() != null) {
+			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, 
+					chapter.getId().toString());
+		}
+
+		if (chapter.getStoryId() != null) {
+			info.put(ChapterTable.COLUMN_NAME_STORY_ID, 
+					chapter.getStoryId().toString());
+		}
+
+		return info;
+	}
+	
 	/**
 	 * Retrieves all the chapters that are in a given story.
 	 * 

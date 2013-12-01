@@ -17,10 +17,7 @@
 package ca.ualberta.cmput301f13t13.storyhoard.dataClasses;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
-
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChapterTable;
 
 /**
  * Role: A container to hold chapter information. This includes id, story id,
@@ -95,9 +92,7 @@ public class Chapter {
 		this.id = id;
 		this.text = text;
 		this.storyId = storyId;
-		if (randomChoice != null) {
-			this.randomChoice = Boolean.valueOf(randomChoice);
-		}
+		this.randomChoice = randomChoice;
 		illustrations = new ArrayList<Media>();
 		photos = new ArrayList<Media>();
 		choices = new ArrayList<Choice>();
@@ -236,27 +231,5 @@ public class Chapter {
 	 */
 	public void setIllustrations(ArrayList<Media> illustrations) {
 		this.illustrations = illustrations;
-	}
-
-	/**
-	 * Returns the information of the chapter (id, storyId) that could be used
-	 * in searching for a chapter in the database. This information is returned
-	 * in a HashMap where the keys are the corresponding Chapter Table column
-	 * names.
-	 * 
-	 * @return HashMap
-	 */
-	public HashMap<String, String> getSearchCriteria() {
-		HashMap<String, String> info = new HashMap<String, String>();
-
-		if (id != null) {
-			info.put(ChapterTable.COLUMN_NAME_CHAPTER_ID, id.toString());
-		}
-
-		if (storyId != null) {
-			info.put(ChapterTable.COLUMN_NAME_STORY_ID, storyId.toString());
-		}
-
-		return info;
 	}
 }

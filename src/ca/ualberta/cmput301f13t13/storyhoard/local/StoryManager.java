@@ -160,7 +160,7 @@ public class StoryManager extends StoringManager<Story> {
 
 		// Setting search criteria
 		ArrayList<String> selectionArgs = new ArrayList<String>();
-		selection = setSearchCriteria(criteria, selectionArgs);
+		selection = buildSelectionString(criteria, selectionArgs);
 
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
@@ -204,8 +204,7 @@ public class StoryManager extends StoringManager<Story> {
 	 * @return String The selection string, i.e. the where clause that will be
 	 *         used in the sql query.
 	 */
-	@Override
-	public String setSearchCriteria(Story story, ArrayList<String> sArgs) {
+	private String buildSelectionString(Story story, ArrayList<String> sArgs) {
 		HashMap<String, String> storyCrit = getSearchCriteria(story);
 		splitKeywords(storyCrit, story.getTitle());
 

@@ -141,7 +141,7 @@ public class MediaManager extends StoringManager<Media>{
 		};
 
 		// Setting search criteria
-		selection = setSearchCriteria(criteria, selectionArgs);
+		selection = buildSelectionString(criteria, selectionArgs);
 
 		if (selectionArgs.size() > 0) {
 			sArgs = selectionArgs.toArray(new String[selectionArgs.size()]);
@@ -181,9 +181,8 @@ public class MediaManager extends StoringManager<Media>{
 	 * @return String
 	 * 			The selection string.
 	 */	
-	@Override
-	public String setSearchCriteria(Media media, ArrayList<String> sArgs) {
-		HashMap<String,String> medCrit = media.getSearchCriteria();
+	private String buildSelectionString(Media media, ArrayList<String> sArgs) {
+		HashMap<String,String> medCrit = getSearchCriteria(media);
 		String selection = "";
 
 		int maxSize = medCrit.size();
@@ -201,6 +200,32 @@ public class MediaManager extends StoringManager<Media>{
 		return selection;
 	}
 
+	/**
+	 * Returns the information of the media (id, chapterId, type) that could be
+	 * used in searching for a media in the database. This information is
+	 * returned in a HashMap where the keys are the corresponding Media Table
+	 * column names.
+	 * 
+	 * @return HashMap
+	 */
+	private HashMap<String, String> getSearchCriteria(Media media) {
+		HashMap<String, String> info = new HashMap<String, String>();
+
+		if (media.getId() != null) {
+			info.put(MediaTable.COLUMN_NAME_MEDIA_ID, media.getId().toString());
+		}
+
+		if (media.getChapterId() != null) {
+			info.put(MediaTable.COLUMN_NAME_CHAPTER_ID, media.getChapterId().toString());
+		}
+
+		if (media.getType() != null) {
+			info.put(MediaTable.COLUMN_NAME_TYPE, media.getType());
+		}
+
+		return info;
+	}
+	
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();

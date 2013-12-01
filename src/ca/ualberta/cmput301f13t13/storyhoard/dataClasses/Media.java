@@ -17,14 +17,11 @@
 package ca.ualberta.cmput301f13t13.storyhoard.dataClasses;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
 import java.util.UUID;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-
-import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
 
 /**
  * Role: A data class to hold media information. The media can be a photo or
@@ -207,33 +204,6 @@ public class Media {
 	
 	public void setText(String text) {
 		this.text = text;
-	}
-	
-
-	/**
-	 * Returns the information of the media (id, chapterId, type) that could be
-	 * used in searching for a media in the database. This information is
-	 * returned in a HashMap where the keys are the corresponding Media Table
-	 * column names.
-	 * 
-	 * @return HashMap
-	 */
-	public HashMap<String, String> getSearchCriteria() {
-		HashMap<String, String> info = new HashMap<String, String>();
-
-		if (id != null) {
-			info.put(MediaTable.COLUMN_NAME_MEDIA_ID, id.toString());
-		}
-
-		if (chapterId != null) {
-			info.put(MediaTable.COLUMN_NAME_CHAPTER_ID, chapterId.toString());
-		}
-
-		if (type != null) {
-			info.put(MediaTable.COLUMN_NAME_TYPE, type);
-		}
-
-		return info;
 	}
 	
 	/**
