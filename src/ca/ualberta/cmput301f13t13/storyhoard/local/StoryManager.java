@@ -248,7 +248,6 @@ public class StoryManager extends StoringManager<Story> {
 		UUID chapterId = story.getFirstChapterId();
 
 		// Insert story
-		UUID id = story.getId();
 		values = new ContentValues();
 		values.put(StoryTable.COLUMN_NAME_STORY_ID, 
 				story.getId().toString());
