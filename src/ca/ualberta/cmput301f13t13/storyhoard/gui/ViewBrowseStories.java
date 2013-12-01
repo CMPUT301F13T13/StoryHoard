@@ -46,9 +46,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 /**
  * Class which displays all stories in a grid. The story will be in one of three
  * types, the 'My Stories', 'Downloaded Stories', and 'Published Stories' types.
- * My Stories are local stories that the user creates.
- * Downloaded Stories are stories that the user downloads from the server.
- * Published Stories are stories that exist on the server.
+ * My Stories are local stories that the user creates. Downloaded Stories are
+ * stories that the user downloads from the server. Published Stories are
+ * stories that exist on the server.
  * 
  * @author alexanderwong
  * @author Kim Wu
@@ -63,7 +63,11 @@ public class ViewBrowseStories extends Activity {
 	private StoryManager storyMan;
 	private Syncher syncher;
 	private ServerManager serverMan;
-	private enum Type {CREATED, CACHED, PUBLISHED};
+
+	private enum Type {
+		CREATED, CACHED, PUBLISHED
+	};
+
 	private Type viewType;
 	private StoryController storyCon;
 	private ProgressDialog progressDialog;
@@ -78,7 +82,7 @@ public class ViewBrowseStories extends Activity {
 		setContentView(R.layout.activity_view_browse_stories);
 		setGridView();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -89,7 +93,7 @@ public class ViewBrowseStories extends Activity {
 		syncher = Syncher.getInstance(this);
 		setActionBar();
 		refreshStories();
-	}	
+	}
 
 	private void setActionBar() {
 		// Set up the action bar to show a dropdown list.
@@ -126,7 +130,7 @@ public class ViewBrowseStories extends Activity {
 					}
 				});
 	}
-	
+
 	/**
 	 * Handle the creation of the View Browse Stories activity menu
 	 */
@@ -174,7 +178,7 @@ public class ViewBrowseStories extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	/**
 	 * Called whenever the spinner is updated. Will story array based on
 	 * whatever the general controller returns.
@@ -186,7 +190,7 @@ public class ViewBrowseStories extends Activity {
 		}
 		customGridAdapter.notifyDataSetChanged();
 	}
-	
+
 	private void setGridView() {
 		// Setup the grid view for the stories
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
@@ -242,8 +246,6 @@ public class ViewBrowseStories extends Activity {
 		overwriteDialog = alert.create();
 		overwriteDialog.show();
 	}
-
-
 
 	/**
 	 * Caches (and locally mirrors) a story in the phone's database. This
@@ -312,14 +314,15 @@ public class ViewBrowseStories extends Activity {
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "\t- To view downloaded, published, or your stories, "
+		String helpInfo = "Welcome to Story Hoard!\n\n"
+				+ "To view downloaded, published, or your stories, "
 				+ "press the button at top right.\n\n"
-				+ "\t- To begin reading or editing a story, "
+				+ "To begin reading or editing a story, "
 				+ "simply click on one of the story icons.\n\n"
-				+ "\t- To search for a story by title, "
+				+ "To search for a story by title, "
 				+ "press icon with magnifying glass.\n\n"
-				+ "\t- To view a random story, press '?' icon\n\n"
-				+ "\t- To add a new story, press '+' icon\n\n";
+				+ "To view a random story, press '?' icon\n\n"
+				+ "To add a new story, press '+' icon\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
 	}

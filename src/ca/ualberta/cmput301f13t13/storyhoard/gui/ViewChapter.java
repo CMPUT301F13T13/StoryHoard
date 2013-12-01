@@ -246,16 +246,16 @@ public class ViewChapter extends MediaActivity {
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "\t- Illustrations and photo data are contained "+
+		String helpInfo = "Illustrations and photo data are contained "+
 				"in the scrollable view on the top of the screen.\n\n "+
-				"\t- To view illustration/photo text, click on the image.\n\n"+
-				"\t- To annotate the photo to the story, click on the camera icon "+
+				"To view illustration/photo text, click on the image.\n\n"+
+				"To annotate the photo to the story, click on the camera icon "+
 				"located on the top right corner of the screen.\n\n"+
-				"\t- To navigate to another chapter, please select one of "+
+				"To navigate to another chapter, please select one of "+
 				"the available choices as listed below the chapter content.\n\n"+
-				"\t- Should no choices be available, the dialog '<No Choices>' "+
+				"Should no choices be available, the dialog '<No Choices>' "+
 				"will appear. \n\n"+
-				"\t- To return to the story page, press the back button on your "+
+				"To return to the story page, press the back button on your "+
 				"mobile device. \n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
