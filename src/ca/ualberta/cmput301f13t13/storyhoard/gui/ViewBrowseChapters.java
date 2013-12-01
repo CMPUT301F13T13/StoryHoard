@@ -122,7 +122,7 @@ public class ViewBrowseChapters extends Activity {
 				Intent intent = new Intent(getBaseContext(),
 						EditChapterActivity.class);
 				lifedata.setEditing(true);
-				chapCon.setCurrChapter(data.get(arg2).getId());
+				chapCon.setCurrChapterIncomplete(data.get(arg2).getId());
 				startActivity(intent);
 			}
 		});

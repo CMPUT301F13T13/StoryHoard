@@ -30,10 +30,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  * Role: Responsible for manipulating the story model. It keeps a reference to 
  * the current story model as a field and updates that whenever the user 
  * makes changes. Every time the user creates a new story or saves his changes
- * to one, the changes are pushed to the database.</br></br>
+ * to one, the changes are pushed to the database, and whenever the story is
+ * published, changes are saved to the server.</br></br>
  * 
  * Design Pattern: This class is a singleton, so only one instance of it will
- * ever exist. use getInstance() to retrieve that instance.
+ * ever exist. use getInstance() to retrieve that instance, not the 
+ * constructor.
  * 
  * @author Stephanie Gil
  *
@@ -48,8 +50,9 @@ public class StoryController {
 	 * Initializes a new StoryController. Needs context so it is able to 
 	 * initialize its Syncher and ServerManager to be able to push changes to
 	 * the database and server. Also initializes a blank story to avoid
-	 * null pointer exceptions if called on a null story. This constructor
-	 * should never be used outside of this class (except for any subclasses).
+	 * null pointer exceptions if methods are called on a null story. This 
+	 * constructor should never be used outside of this class (except for any 
+	 * subclasses).
 	 * 
 	 * @param context
 	 */
@@ -62,7 +65,11 @@ public class StoryController {
 	/**
 	 * Returns an instance of a StoryConroller. The same instance is always 
 	 * returned since it is a singleton. This is the method every other class
-	 * should be using to access the StoryController.
+	 * should be using to access the StoryController. Note that this method
+	 * must also be called statically. </br></br>
+	 * 
+	 * Example call: </br>
+	 * StoryController control = StoryController.getInstance(someActivity.this);
 	 * 
 	 * @param context	
 	 * 			Could be an activity or application context.
@@ -125,7 +132,11 @@ public class StoryController {
 	}
 	
 	/**
-	 * Returns a reference to the current story model.
+	 * Returns a reference to the current story model. </br></br>
+	 * 
+	 * Example Call: </br>
+	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
+	 * Story myStory = control.getCurrStory();
 	 * 
 	 * @return
 	 */

@@ -226,7 +226,7 @@ public class ViewChapter extends MediaActivity {
 
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {
-			chapCon.setCurrChapter(params[0]);
+			chapCon.setCurrChapterIncomplete(params[0]);
 			return null;
 		}
 

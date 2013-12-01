@@ -65,22 +65,6 @@ public class TestStoryManager extends
 	}
 
 	/**
-	 * Tests caching a story locally on the device database, and then loading it
-	 * again to make sure it was properly saved.
-	 */
-	public void testCacheLoadStory() {
-		sm = StoryManager.getInstance(getActivity());
-		
-		Story mockStory = newMockStory("My Frog", "blueberry", "my cute frog",
-				"32432423");
-
-		sm.insert(mockStory);
-
-		mockStories = sm.retrieve(mockStory);
-		assertTrue(hasStory(mockStories, mockStory));
-	}
-
-	/**
 	 * Tests adding and loading a story from the local storage
 	 */
 	public void testAddLoadStory() {
