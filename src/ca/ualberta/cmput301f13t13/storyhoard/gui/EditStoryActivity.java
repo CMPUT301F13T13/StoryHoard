@@ -185,10 +185,13 @@ public class EditStoryActivity extends Activity {
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
 		String helpInfo = "This activity allows you to edit your story details.\n\n"
-				+ "You can set the title of the story in the first text box, then add an author name in the next one, "
+				+ "You can set the title of the story in the first text box, "
+				+ "then add an author name in the next one, "
 				+ "followed by a brief description of your story in the last text box.\n\n"
-				+ "You may also publish your story for the world to see by pressing 'Publish Story'.\n\n"
-				+ "If you decide to unpublish your story, you may do so by pressing 'Unpublish Story'.\n\n"
+				+ "You may also publish your story for the world to see "
+				+ "by pressing 'Publish Story'.\n\n"
+				+ "If you decide to unpublish your story, you may do so "
+				+ "by pressing 'Unpublish Story'.\n\n"
 				+ "To save your story settings, click 'Save Changes'.\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
