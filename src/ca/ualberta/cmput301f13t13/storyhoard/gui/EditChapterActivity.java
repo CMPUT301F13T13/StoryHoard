@@ -41,6 +41,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 
 /**
  * Add Chapter Activity
@@ -66,7 +67,7 @@ public class EditChapterActivity extends MediaActivity {
 	private StoryController storyCon;
 	private ChapterController chapCon;
 	private ChoiceController choiceCon;
-	
+
 	private AdapterChoices choiceAdapter;
 	private AlertDialog illustDialog;
 	private LinearLayout illustrations;
@@ -105,21 +106,23 @@ public class EditChapterActivity extends MediaActivity {
 		case R.id.Save:
 			saveAction();
 			return true;
+		case R.id.info:
+			getHelp();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-    public void onBackPressed() {
-    	if (lifedata.isFirstStory()) {
-		Toast.makeText(getBaseContext(),
-				"Must first create first chapter", Toast.LENGTH_SHORT)
-				.show();
-    	} else {
-    		finish();
-    	}
-    }   
-    
+
+	public void onBackPressed() {
+		if (lifedata.isFirstStory()) {
+			Toast.makeText(getBaseContext(), "Must first create first chapter",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			finish();
+		}
+	}
+
 	/**
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
@@ -152,13 +155,13 @@ public class EditChapterActivity extends MediaActivity {
 			}
 		});
 	}
-	
+
 	/**
 	 * Updates the view components depending on the chapter data.
 	 */
 	protected void updateICData() {
 		if (lifedata.isEditing()) {
-			
+
 			// Editing an existing chapter
 			chapter = chapCon.getCurrChapter();
 			chapterContent.setText(chapter.getText());
@@ -168,16 +171,16 @@ public class EditChapterActivity extends MediaActivity {
 			chapCon.setCurrChapterComplete(chapter);
 			lifedata.setEditing(true);
 		}
-		
+
 		// set up choices
 		setRandomChoice();
 		choices.clear();
 		choices.addAll(chapter.getChoices());
 		choiceAdapter.notifyDataSetChanged();
-		
+
 		setUpIllustrations();
 	}
-	
+
 	/**
 	 * Retrieves and sets up the illustrations for the chapter.
 	 */
@@ -186,18 +189,19 @@ public class EditChapterActivity extends MediaActivity {
 		illustrations.removeAllViews();
 
 		for (Media img : chapter.getIllustrations()) {
-			View view = insertImage(img, EditChapterActivity.this, illustrations);
+			View view = insertImage(img, EditChapterActivity.this,
+					illustrations);
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					dialBuilder.setDeleteDialog(EditChapterActivity.this,
-							v, illustrations);
+					dialBuilder.setDeleteDialog(EditChapterActivity.this, v,
+							illustrations);
 					return true;
 				}
 			});
 		}
-	}	
-	
+	}
+
 	/**
 	 * Set onClick listener for setting random choice
 	 */
@@ -220,14 +224,13 @@ public class EditChapterActivity extends MediaActivity {
 		});
 	}
 
-
 	private void addIllustration() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		chapCon.editText(chapterContent.getText().toString());
-		
+
 		// Set dialog title
 		alert.setTitle("Choose method:");
-		
+
 		// Options that user may choose to add illustration
 		final String[] methods = { "Take Photo", "Choose from Gallery" };
 		alert.setSingleChoiceItems(methods, -1,
@@ -260,24 +263,24 @@ public class EditChapterActivity extends MediaActivity {
 	private void saveAction() {
 		new SaveChapter().execute();
 	}
-	
+
 	/**
-	 * Async task to get all the chapter information from the database, including media and 
-	 * choices.
-	 *
+	 * Async task to get all the chapter information from the database,
+	 * including media and choices.
+	 * 
 	 */
-	private class SaveChapter extends AsyncTask<Void, Void, Void>{
+	private class SaveChapter extends AsyncTask<Void, Void, Void> {
 		@Override
-		protected synchronized Void doInBackground(Void... params) {	
+		protected synchronized Void doInBackground(Void... params) {
 			chapCon.editText(chapterContent.getText().toString());
 			chapCon.pushChangesToDb();
-			
+
 			if (lifedata.isEditing()) {
 				storyCon.updateChapter(chapter);
 			} else {
 				storyCon.addChapter(chapter);
 			}
-			 
+
 			if (lifedata.isFirstStory()) {
 				storyCon.editFirstChapterId(chapter.getId());
 				storyCon.pushChangesToDb();
@@ -285,11 +288,26 @@ public class EditChapterActivity extends MediaActivity {
 			}
 			return null;
 		}
-		
-		@Override 
+
+		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			finish();
 		}
-	}		
+	}
+
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "Simply enter text to set a chapters content.\n\n"
+				+ "To add an illustration to your chapter, click on image icon in bottom left corner.\n\n"
+				+ "To save your chapter, click on disk icon to the left of the info icon.\n\n"
+				+ "Adding a choice:\n\n"
+				+ "\t- Adding a choice allows you to link the current chapter you are editing to another one in your story.\n\n"
+				+ "\t- You can set the text of your choice in the given text box.\n\n"
+				+ "\t- To add a choice, simply click on one of the given chapters available in the list.\n\n"
+				+ "\t- In addition, you can set a random choice by checking the 'Set random choice' option.\n\n"
+				+ "This feature allows for the option of selecting a chapter at random in reading mode.\n";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
+	}
 }
