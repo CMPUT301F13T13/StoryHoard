@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/info"
-        android:icon="@drawable/info"
-        android:showAsAction="ifRoom"
-        android:title="@string/info"/>
-    <item
         android:id="@+id/addIllus"
         android:icon="@drawable/illust"
         android:showAsAction="ifRoom"
@@ -20,5 +15,10 @@
         android:icon="@drawable/save"
         android:showAsAction="ifRoom"
         android:title="@string/save_changes"/>
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="ifRoom"
+        android:title="@string/info"/>
 
 </menu>

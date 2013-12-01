@@ -1,25 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-		android:id="@+id/searchStories"
-		android:title="@string/searchStories"
+        android:id="@+id/searchStories"
         android:icon="@drawable/search"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/searchStories"/>
     <item
         android:id="@+id/lucky"
-        android:title="@string/lucky"
         android:icon="@drawable/random"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/lucky"/>
     <item
         android:id="@+id/addNewStory"
-        android:title="@string/add_new_story"
         android:icon="@drawable/add"
-        android:showAsAction="ifRoom"/>
-    
-       <item
+        android:showAsAction="ifRoom"
+        android:title="@string/add_new_story"/>
+    <item
         android:id="@+id/info"
-        android:title="@string/info"
         android:icon="@drawable/info"
-        android:showAsAction="ifRoom"/> 
+        android:showAsAction="always"
+        android:title="@string/info"/>
 
 </menu>

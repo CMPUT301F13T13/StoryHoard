@@ -129,12 +129,17 @@ public class EditStoryActivity extends Activity {
 	}
 
 	private void unpublishStory() {
-		new UnPublish().execute(newStory.getId());
-		Toast.makeText(getBaseContext(), "Unpublished story from server",
-				Toast.LENGTH_SHORT).show();
-		
+		if (lifedata.isEditing()) {
+			new UnPublish().execute(newStory.getId());
+			Toast.makeText(getBaseContext(), "Unpublished story from server",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getBaseContext(),
+					"Create a story before unpublishing", Toast.LENGTH_SHORT)
+					.show();
+		}
 	}
-
+    
 	private class Update extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected synchronized Void doInBackground(Void... params) {

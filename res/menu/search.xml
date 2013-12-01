@@ -3,10 +3,16 @@
     <item
         android:id="@+id/browse_stories"
         android:showAsAction="ifRoom"
-        android:title="@string/browse_stories"/>  
-     <item
+        android:title="@string/browse_stories"/>
+    <item
         android:id="@+id/add_story"
         android:icon="@drawable/add"
         android:showAsAction="always"
         android:title="@string/add_new_story"/>
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/info"
+        android:showAsAction="ifRoom"
+        android:title="@string/info"/>
+
 </menu>

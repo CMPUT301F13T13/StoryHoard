@@ -33,6 +33,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
@@ -109,6 +110,16 @@ public class EditChapterActivity extends MediaActivity {
 		}
 	}
 	
+    public void onBackPressed() {
+    	if (lifedata.isFirstStory()) {
+		Toast.makeText(getBaseContext(),
+				"Must first create first chapter", Toast.LENGTH_SHORT)
+				.show();
+    	} else {
+    		finish();
+    	}
+    }   
+    
 	/**
 	 * Sets up the fields, and gets the bundle from the intent.
 	 */
