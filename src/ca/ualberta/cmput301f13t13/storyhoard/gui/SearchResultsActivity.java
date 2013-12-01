@@ -37,6 +37,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 
@@ -141,6 +142,9 @@ public class SearchResultsActivity extends Activity {
 			lifedata.setEditing(false);
 			startActivity(add);
 			return true;
+		case R.id.info:
+			getHelp();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -203,5 +207,19 @@ public class SearchResultsActivity extends Activity {
 			progressDialog.dismiss();
 			finish();
 		}
+	}
+	
+	/**
+	 * Displays help guide for Search Results Acticity
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Search Results shows, "
+				+ "all the stories which matched your query.\n\n"
+				+ "\t- To go back to browse stories select the, "
+				+ "browse stories tab.\n\n"
+				+ "\t- To create a story, select the plus sign, ";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
 	}
 }
