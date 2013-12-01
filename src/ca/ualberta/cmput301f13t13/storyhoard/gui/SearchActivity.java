@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
@@ -97,6 +98,8 @@ public class SearchActivity extends Activity {
 			add.putExtra("isEditing", false);
 			startActivity(add);
 			return true;
+		case R.id.info:
+			getHelp();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -205,5 +208,19 @@ public class SearchActivity extends Activity {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Displays help guide for ViewBrowseStories
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Type a story you want to search, "
+				+ "where it says Story title.\n\n"
+				+ "\t- Select from the dropdown which type of story, "
+				+ "you would like to search for.\n\n"
+				+ "\t- Click the search stories button, ";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
 	}
 }
