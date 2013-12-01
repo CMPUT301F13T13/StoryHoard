@@ -46,8 +46,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
  * Search Results activity
  * 
  * Displays a list of search results with the parameters given by the user
- * This is called after the search activity is finished, and the user
- * passes proper search variables into the search activity
+ * This is called after the search activity is finished. Search Results 
+ * will show all stories that have the string in question in the story
+ * name. 
  * 
  * @author Kim Wu
  * 
