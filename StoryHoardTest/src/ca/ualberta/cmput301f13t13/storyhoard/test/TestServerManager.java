@@ -44,7 +44,7 @@ public class TestServerManager extends
 		super.setUp();
 	}
 	
-	public void testUpdateStory() {
+	public void testUpdateStory() throws InterruptedException {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		
@@ -62,6 +62,7 @@ public class TestServerManager extends
 		story.getChapters().add(chap2);
 
 		sm.insert(story);
+		Thread.sleep(5000);
 		Story newStory = sm.getById(story.getId());
 		assertNotNull(newStory);
 		
@@ -74,6 +75,7 @@ public class TestServerManager extends
 		newStory.getChapters().add(chap);
 		
 		sm.update(newStory);		
+		Thread.sleep(5000);
 		newStory = sm.getById(id1);
 		
 		ArrayList<Chapter> chaps = newStory.getChapters();
@@ -88,8 +90,9 @@ public class TestServerManager extends
 	/**
 	 * Tests loading all created stories, and makes sure the results don't
 	 * include any stories not created by author.
+	 * @throws InterruptedException 
 	 */
-	public synchronized void testAllPublishedStories() {
+	public synchronized void testAllPublishedStories() throws InterruptedException {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		
@@ -99,17 +102,15 @@ public class TestServerManager extends
 				"the emo boy", "232");
 		
 		sm.insert(story);
+
+		Thread.sleep(8000);
 		sm.insert(story2);
+		Thread.sleep(8000);
 		
 		stories = sm.getAll();
-		try {
-			Thread.sleep(10000);
-			assertTrue(hasStory(stories, story));
-			assertTrue(hasStory(stories, story2));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		assertTrue(hasStory(stories, story));
+		assertTrue(hasStory(stories, story2));
 		
 		sm.remove(story.getId().toString());
 		sm.remove(story2.getId().toString());
@@ -151,8 +152,9 @@ public class TestServerManager extends
 	/**
 	 * Tests inserting stories into server, retrieving them by id,
 	 * retrieving them by keywords, and deleting them.
+	 * @throws InterruptedException 
 	 */
-	public void testInsertRetrieveSearchRemove() {
+	public void testInsertRetrieveSearchRemove() throws InterruptedException {
 		sm = ServerManager.getInstance();
 		sm.setTestServer();
 		
@@ -175,6 +177,7 @@ public class TestServerManager extends
 		// By Id
 		story = sm.getById(story.getId());
 		assertNotNull(story);
+		Thread.sleep(2000);
 		
 		// By keywords
 		ArrayList<Story> results = sm.searchByKeywords("Ugly duckling test");
@@ -186,6 +189,7 @@ public class TestServerManager extends
 		// testing remove
 		sm.remove(story2.getId().toString());
 		sm.remove(story.getId().toString());
+		Thread.sleep(8000);
 		Story newStory = sm.getById(story2.getId());
 		assertNull(newStory);
 		newStory = sm.getById(story.getId());

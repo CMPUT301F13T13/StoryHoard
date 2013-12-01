@@ -63,7 +63,7 @@ public class StoryController {
 	}
 	
 	/**
-	 * Returns an instance of a StoryConroller. The same instance is always 
+	 * Returns an instance of a StoryController. The same instance is always 
 	 * returned since it is a singleton. This is the method every other class
 	 * should be using to access the StoryController. Note that this method
 	 * must also be called statically. </br></br>

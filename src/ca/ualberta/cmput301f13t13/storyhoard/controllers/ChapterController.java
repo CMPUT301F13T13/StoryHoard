@@ -31,8 +31,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 /**
  * Role: Responsible for manipulating the current chapter model. It keeps a 
  * reference to the current chapter model as a field and updates that whenever 
- * the user makes changes. Every time the user creates a new story or saves his 
- * changes to one, the changes are pushed to the database.</br></br>
+ * the user makes changes. Every time the user creates a new chapter or updates
+ * a chapter, the changes (including any changes to its media or choices) will 
+ * be saved to the database using the pushChangesToDb() method.</br></br>
  * 
  * Design Pattern: This class is a singleton, so only one instance of it will
  * ever exist. use getInstance() to retrieve that instance, not the 
@@ -67,7 +68,7 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Returns an instance of a ChapterConroller. The same instance is always 
+	 * Returns an instance of a ChapterController. The same instance is always 
 	 * returned since it is a singleton. This is the method every other class
 	 * should be using to access the ChapterController. Note that this method
 	 * must be called statically. </br></br>
