@@ -16,7 +16,6 @@
 
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -61,30 +60,6 @@ public class TestChoice extends
 		} catch (Exception e) {
 			fail("error in creating a choice object");
 		}
-	}
-
-	/**
-	 * Tests retrieving the search information placed within the choice, i.e.
-	 * the choice id and the chapter id to which it belongs.
-	 */
-	public void testSetSearchCriteria() {
-
-		// empty everything
-		Choice criteria = new Choice(null, null, null, null);
-		HashMap<String, String> info = criteria.getSearchCriteria();
-
-		assertEquals(info.size(), 0);
-
-		// not empty arguments
-		UUID choiceId = UUID.randomUUID();
-		UUID chapId = UUID.randomUUID();
-
-		criteria = new Choice(choiceId, chapId, null, null);
-		info = criteria.getSearchCriteria();
-
-		assertEquals(info.size(), 2);
-		assertTrue(info.get("choice_id").equals(choiceId.toString()));
-		assertTrue(info.get("curr_chapter").equals(chapId.toString()));
 	}
 
 	/**

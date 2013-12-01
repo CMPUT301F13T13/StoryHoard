@@ -17,7 +17,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -62,29 +61,6 @@ public class TestChapter extends ActivityInstrumentationTestCase2<InfoActivity> 
 		} catch (Exception e) {
 			fail("error in creating a chapter object");
 		}
-	}
-
-	/**
-	 * Tests retrieving the search information places within the story, i.e. the
-	 * id, title, author, description, and whether or not it was created by the
-	 * author.
-	 */
-	public void testSetSearchCriteria() {
-		// empty everything
-		Chapter criteria = new Chapter(null, null, null, null);
-		HashMap<String, String> info = criteria.getSearchCriteria();
-
-		assertEquals(info.size(), 0);
-
-		// not empty arguments
-		UUID id = UUID.randomUUID();
-		UUID sId = UUID.randomUUID();
-		criteria = new Chapter(id, sId, null, true);
-		info = criteria.getSearchCriteria();
-
-		assertEquals(info.size(), 2);
-		assertTrue(info.get("chapter_id").equals(id.toString()));
-		assertTrue(info.get("story_id").equals(sId.toString()));
 	}
 
 	/**
