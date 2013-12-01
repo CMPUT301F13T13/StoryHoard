@@ -42,14 +42,14 @@
     <string name="title_viewBrowseStories_PublishedStories">Published Stories</string>
     <string name="title_viewBrowseStories_CachedStories">Downloaded Stories</string>
     <string name="title_viewChapter">View Chapter</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Search Activity</string>
     <string name="chapter_content">Dummy Chapter Content</string>
     <string name="title_activity_view_browse_chapters">All Story Chapters</string>
     <string name="add_new_chapter">Add New Chapter</string>
     <string name="no_text">No text</string>
     <string name="choiceText">Choice Text</string>
     <string name="add_photo">Add Photo</string>
-    <string name="title_activity_view_search_results">ViewSearchResults</string>
+    <string name="title_activity_view_search_results">View Search Results</string>
     <string name="browse_stories">Browse stories</string>
     <string name="publish_story">Publish Story</string>
     <string name="save_changes">Save Changes</string>
