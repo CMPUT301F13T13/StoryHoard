@@ -41,11 +41,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 /**
  * Search Activity
  * 
- * Allows user to search for a specific story in a story set. The search will
- * only check the story titles.
+ * Allows user to enter keywords of the title of 
+ * a published, downloaded or personal story they 
+ * wish to find and read. Results of their search 
+ * will be displayed in the search results activity. 
  * 
  * @author Kim Wu
- * 
  */
 
 public class SearchActivity extends Activity {

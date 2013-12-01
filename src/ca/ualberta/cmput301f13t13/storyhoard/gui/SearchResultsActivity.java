@@ -91,12 +91,17 @@ public class SearchResultsActivity extends Activity {
 					"No stories matched your search.", Toast.LENGTH_LONG)
 					.show();	
 		} 
+		
+		/**
+		 * Sets up a grid view and shows all the stories which are similar
+		 * or match to the query which the user inputed in search activity. 
+		 * If no results are found, a toast will appear.
+		 */
+		
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
 				R.layout.browse_story_item, gridArray);
 		gridView.setAdapter(customGridAdapter);
-
-		// Setup the grid view click listener
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -124,6 +129,13 @@ public class SearchResultsActivity extends Activity {
 		customGridAdapter.notifyDataSetChanged();			
 	}
 
+
+	/**
+	 * Displays the options in the Menu Bar.
+	 * Add story: let's users create a story
+	 * Browse stories: let's users browse stories
+	 * Help Guide: show's how to use the activity
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
