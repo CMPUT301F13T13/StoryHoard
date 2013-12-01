@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,12 +35,12 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
- * Activity for editing the story details (title, author, description, and
- * cover image). 
- * Also allows a user to publish the story to the server,
- * or if the user owns the story, to unpublish the story from the server.
+ * Activity for editing the story details (title, author, description, and cover
+ * image). Also allows a user to publish the story to the server, or if the user
+ * owns the story, to unpublish the story from the server.
  * 
  * @author Alexander Wong
+ * @author Kim Wu
  * 
  */
 public class EditStoryActivity extends Activity {
@@ -79,7 +81,6 @@ public class EditStoryActivity extends Activity {
 			return true;
 		case R.id.addfirstChapter:
 			saveChanges();
-			finish();
 			return true;
 		case R.id.unpublishStory:
 			unpublishStory();
@@ -139,7 +140,7 @@ public class EditStoryActivity extends Activity {
 					.show();
 		}
 	}
-    
+
 	private class Update extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected synchronized Void doInBackground(Void... params) {
@@ -149,7 +150,7 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
-	private class UnPublish extends AsyncTask<UUID, Void, Void>{
+	private class UnPublish extends AsyncTask<UUID, Void, Void> {
 		@Override
 		protected synchronized Void doInBackground(UUID... params) {
 			// publish or update story
@@ -160,22 +161,54 @@ public class EditStoryActivity extends Activity {
 
 	private void saveChanges() {
 		String title = newTitle.getText().toString();
-		String author = newAuthor.getText().toString();
-		String description = newDescription.getText().toString();
-		if (lifedata.isEditing()) {
-			storyCon.editAuthor(author);
-			storyCon.editTitle(title);
-			storyCon.editDescription(description);
-			storyCon.pushChangesToDb();
+		if (validTitle(title)) {
+			String author = newAuthor.getText().toString();
+			String description = newDescription.getText().toString();
+			if (lifedata.isEditing()) {
+				storyCon.editAuthor(author);
+				storyCon.editTitle(title);
+				storyCon.editDescription(description);
+				storyCon.pushChangesToDb();
+			} else {
+				newStory = new Story(title, author, description,
+						Utilities.getPhoneId(getBaseContext()));
+				lifedata.setEditing(false);
+				lifedata.setFirstStory(true);
+				storyCon.setCurrStoryComplete(newStory);
+				Intent intent = new Intent(EditStoryActivity.this,
+						EditChapterActivity.class);
+				startActivity(intent);
+			}
+			finish();
 		} else {
-			newStory = new Story(title, author, description,
-					Utilities.getPhoneId(getBaseContext()));
-			lifedata.setEditing(false);
-			lifedata.setFirstStory(true);
-			storyCon.setCurrStoryComplete(newStory);
-			Intent intent = new Intent(EditStoryActivity.this,
-					EditChapterActivity.class);
-			startActivity(intent);
+			alertDialog();
 		}
+	}
+
+	private boolean validTitle(String title) {
+		title = title.trim();
+		int length = title.length();
+		if (length == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private void alertDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				EditStoryActivity.this);
+		alert.setTitle("Whoopsies!").setMessage("Story title is empty/invalid")
+				.setCancelable(false)
+				// cannot dismiss this dialog
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}); // parenthesis mean an anonymous class
+		// Show alert dialog
+		AlertDialog show_alert = alert.create();
+		show_alert.show();
 	}
 }

@@ -210,7 +210,7 @@ public class SearchResultsActivity extends Activity {
 	}
 	
 	/**
-	 * Displays help guide for Search Results Acticity
+	 * Displays help guide for Search Results Activity
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
@@ -218,7 +218,7 @@ public class SearchResultsActivity extends Activity {
 				+ "all the stories which matched your query.\n\n"
 				+ "\t- To go back to browse stories select the, "
 				+ "browse stories tab.\n\n"
-				+ "\t- To create a story, select the plus sign, ";
+				+ "\t- To create a story, select the '+' sign. ";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
 	}
