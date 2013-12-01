@@ -305,7 +305,7 @@ public class EditChapterActivity extends MediaActivity {
 				+ "\t- Adding a choice allows you to link the current chapter you are editing to another one in your story.\n\n"
 				+ "\t- You can set the text of your choice in the given text box.\n\n"
 				+ "\t- To add a choice, simply click on one of the given chapters available in the list.\n\n"
-				+ "\t- In addition, you can set a random choice by checking the 'Set random choice' option.\n\n"
+				+ "\t- In addition, you can set a random choice by checking the 'Set random choice' option. "
 				+ "This feature allows for the option of selecting a chapter at random in reading mode.\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
