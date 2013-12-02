@@ -227,9 +227,9 @@ public class SearchResultsActivity extends Activity {
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "Search Results shows, "
+		String helpInfo = "Search Results shows "
 				+ "all the stories which matched your query.\n\n"
-				+ "To go back to browse stories select the, "
+				+ "To go back to browse stories select the "
 				+ "browse stories tab.\n\n"
 				+ "To create a story, select the '+' sign. ";
 		intent.putExtra("theHelp", helpInfo);
