@@ -86,6 +86,18 @@ public class EditChapterActivity extends MediaActivity {
 		updateICData();
 	}
 
+	/**
+	 * Creates options in the menu bar
+	 * 
+	 * Add Choice: Allows user to add choice to chapter
+	 * 
+	 * Add Illus: Allows user to add an illustration to chapter
+	 * 
+	 * Save: Allows user to save chapter
+	 * 
+	 * Info: Displays help guide to help user navigate this activity
+	 */
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -114,6 +126,9 @@ public class EditChapterActivity extends MediaActivity {
 		}
 	}
 
+	/**
+	 * Ensures that the user creates a first chapter when creating a story
+	 */
 	public void onBackPressed() {
 		if (lifedata.isFirstStory()) {
 			Toast.makeText(getBaseContext(), "Must first create first chapter",
@@ -224,6 +239,11 @@ public class EditChapterActivity extends MediaActivity {
 		});
 	}
 
+	/**
+	 * Displays a dialog that allows user to add an illustration to a chapter.
+	 * 
+	 * User may add an illustration via Image Gallery or by taking a photo
+	 */
 	private void addIllustration() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		chapCon.editText(chapterContent.getText().toString());
@@ -253,6 +273,9 @@ public class EditChapterActivity extends MediaActivity {
 		illustDialog.show();
 	}
 
+	/**
+	 * Starts the EditChoiceActivity to link chapters
+	 */
 	private void addChoice() {
 		chapCon.editText(chapterContent.getText().toString());
 		Intent intent = new Intent(getBaseContext(), EditChoiceActivity.class);
@@ -296,6 +319,9 @@ public class EditChapterActivity extends MediaActivity {
 		}
 	}
 
+	/**
+	 * Displays help guide for EditChapterActivity
+	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
 		String helpInfo = "Simply enter text to set a chapters content.\n\n"
