@@ -293,7 +293,7 @@ public class Media {
 	 * UUID chapId = UUID.randomUUID();</br>
 	 * myMedia.setChapterId(id);</br>
 	 * 
-	 * @param id
+	 * @param chapterId
 	 * 			New chapter id. Must be a UUID or null.
 	 */
 	public void setChapterId(UUID chapterId) {

@@ -105,7 +105,6 @@ public abstract class StoringManager<A> {
 	 * given. Null is returned if no object exists with that id. 
 	 * 
 	 * @param id
-	 * @return
 	 */
 	public abstract A getById(UUID id);
 	

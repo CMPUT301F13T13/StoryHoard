@@ -132,8 +132,8 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 * you want to be included in the field.</br></br>
 	 * 
 	 * 
-	 * @param Chapter
-	 * 			Chapter with the criteria. 
+	 * @param criteria
+	 * 			Chapter with the search criteria. 
 	 */
 	@Override
 	public ArrayList<Chapter> retrieve(Chapter criteria) {

@@ -303,7 +303,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * 
 	 * @param ArrayList<UUID> newMedias
 	 * 		The ArrayList of the media you want in the chapter.
-	 * @param id
+	 * @param chapId
 	 * 		This is the id of the chapter the new media will be in.
 	 */
 	public void syncDeletions(ArrayList<UUID> newMedias, UUID chapId) {
@@ -326,7 +326,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
 	 * ArrayList<Media> photos = mm.getById(id);</br>
 	 * 
-	 * @param id
+	 * @param chapterId
 	 * 			Id of the chapter we are looking in. Must be a UUID. 
 	 */	
 	public ArrayList<Media> getPhotosByChapter(UUID chapterId) {
@@ -343,7 +343,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
 	 * ArrayList<Media> illustrations = mm.getById(id);</br>
 	 * 
-	 * @param id
+	 * @param chapterId
 	 * 			Id of the chapter we are looking in. Must be a UUID. 
 	 */	
 	public ArrayList<Media> getIllustrationsByChapter(UUID chapterId) {

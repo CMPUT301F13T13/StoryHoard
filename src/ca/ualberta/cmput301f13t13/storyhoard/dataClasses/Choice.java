@@ -143,7 +143,8 @@ public class Choice {
 	 * UUID id = UUID.randomUUID();</br>
 	 * mockChoice.setNextChapter(id);</br>
 	 * 
-	 * @param chapterIdTo
+	 * @param uuid
+	 * 			The id of the chapter the choice will link to.
 	 */
 	public void setNextChapter(UUID uuid) {
 		this.nextChapter = uuid;

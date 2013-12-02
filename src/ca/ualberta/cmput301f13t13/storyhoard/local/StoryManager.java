@@ -164,14 +164,13 @@ public class StoryManager extends StoringManager<Story> {
 	 * specify the id. This way, you are allowed to manually set any field 
 	 * you want to be included in the field.</br></br>
 	 * 
-	 * Let's say you want to change the story's title and update the changes:  
-	 * </br>
-	 * story.setTitle("new title");</br>
-	 * storyMan.update(story);</br>
+	 * Now to actually retrieve all stories whose title contained 
+	 * "the" and "boat".</br>
+	 * ArrayList<Story> stories = storyMan.retrieve(criteria);
 	 * 
-	 * @param newStory
-	 * 			Story with changes. The old story's information will be 
-	 * 			changed with the new story,s information.
+	 * @param criteria
+	 * 			Story object whose fields hold the search criteria of the story 
+	 * 			or stories you want to find.
 	 */
 	@Override
 	public ArrayList<Story> retrieve(Story criteria) {
@@ -424,8 +423,8 @@ public class StoryManager extends StoringManager<Story> {
 	 * 			The keywords that appear in the title of the stories we are
 	 * 			searching for.
 	 */
-	public ArrayList<Story> searchCachedStories(String title) {
-		Story criteria = new Story(null, title, null, null, Story.NOT_AUTHORS);
+	public ArrayList<Story> searchCachedStories(String keywords) {
+		Story criteria = new Story(null, keywords, null, null, Story.NOT_AUTHORS);
 		return retrieve(criteria);
 	}
 

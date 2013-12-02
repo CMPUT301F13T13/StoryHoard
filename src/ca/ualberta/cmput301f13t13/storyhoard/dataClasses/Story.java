@@ -287,7 +287,7 @@ public class Story {
 	 * Story myStory = ("title", "author", "desc", "123");</br>
 	 * myStory.setAuthor("new author");</br>
 	 * 
-	 * @param Author
+	 * @param author
 	 * 			The new story author. Must be a string or null.
 	 */
 	public void setAuthor(String author) {

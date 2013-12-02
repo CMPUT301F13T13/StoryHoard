@@ -98,8 +98,8 @@ public class ChoiceManager extends StoringManager<Choice> {
 	 * ChoiceManager chm = ChoiceManager.getInstance(someActivity.this);</br>
 	 * chm.insert(c);</br>
 	 * 
-	 * @param Choice
-	 * 			A choice object. 
+	 * @param choice
+	 * 			A choice object to insert.
 	 */
 	@Override
 	public void insert(Choice choice) {
@@ -167,8 +167,8 @@ public class ChoiceManager extends StoringManager<Choice> {
 	 * 
 	 * Choice criteria = new choice(null, null, null, "text");</br>
 	
-	 * @param choice
-	 * 			Choice with the search criteria 
+	 * @param criteria
+	 * 			Choice with the search criteria you want.
 	 */
 	@Override
 	public ArrayList<Choice> retrieve(Choice criteria) {
@@ -290,7 +290,7 @@ public class ChoiceManager extends StoringManager<Choice> {
 	/**
 	 * Removes the choice from the chapter
 	 * 
-	 * @param choiceID
+	 * @param id
 	 *            Id of  the choices that the choice is for.
 	 */
 	@Override
@@ -306,12 +306,10 @@ public class ChoiceManager extends StoringManager<Choice> {
 	}
 
 	/**
-	 * Retrieves a random choice from the choice.
-	 * 
-	 * @param choiceID
-	 *            Id of  the choices that the choice is for.
+	 * Retrieves a random choice from the chapter.
 	 * 
 	 * @param chapterId 
+	 * 			The id of the chapter the choice is in. Must be a UUID.
 	 * @return a choice
 	 */
 	public Choice getRandomChoice(UUID chapterId) {
