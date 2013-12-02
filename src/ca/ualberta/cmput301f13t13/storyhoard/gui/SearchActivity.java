@@ -162,18 +162,20 @@ public class SearchActivity extends Activity {
 		startActivity(intent);
 	}
 
+/**
+ * Alert dialog will appear if there is no valid input (empty input).
+ * This dialog cannot be dismissed. 
+ */
 	private void alertDialog() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(SearchActivity.this);
 		alert.setTitle("Whoopsies!").setMessage("Story title is empty/invalid")
 				.setCancelable(false)
-				// cannot dismiss this dialog
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
 					}
-				}); // parenthesis mean an anonymous class
-		// Show alert dialog
+				}); 
 		AlertDialog show_alert = alert.create();
 		show_alert.show();
 	}
