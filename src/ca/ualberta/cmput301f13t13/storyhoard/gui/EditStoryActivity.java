@@ -64,6 +64,18 @@ public class EditStoryActivity extends Activity {
 		setupFields();
 	}
 
+	/**
+	 * Displays the action bar menu for EditStoryActivity
+	 * 
+	 * Publish Story: Allows user to publish story to server
+	 * 
+	 * Add First Chapter: Saves story then starts EditChapterActivity
+	 * 
+	 * Unpublish Story: Allows user to remove story from server
+	 * 
+	 * Info: Displays help guide to help user navigate EditStoryActivity
+	 */
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_edit_story, menu);
@@ -94,6 +106,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Sets up necessary fields for EditStoryActivity
+	 */
 	private void setupFields() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(this);
@@ -118,6 +133,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to push story to server
+	 */
 	private void publishStory() {
 		if (lifedata.isEditing()) {
 			// publish new story somehow
@@ -130,6 +148,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to remove story from server
+	 */
 	private void unpublishStory() {
 		if (lifedata.isEditing()) {
 			new UnPublish().execute(newStory.getId());
@@ -173,6 +194,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to save story
+	 */
 	private void saveChanges() {
 		String title = newTitle.getText().toString();
 		if (validTitle(title)) {
@@ -199,6 +223,12 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Ensures that user enters a valid title
+	 * 
+	 * @param title
+	 * @return boolean
+	 */
 	private boolean validTitle(String title) {
 		title = title.trim();
 		int length = title.length();
@@ -208,7 +238,10 @@ public class EditStoryActivity extends Activity {
 			return true;
 		}
 	}
-
+	
+	/**
+	 * Displays an alert dialog when user doesn't enter a story title
+	 */
 	private void alertDialog() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(
 				EditStoryActivity.this);
@@ -226,7 +259,10 @@ public class EditStoryActivity extends Activity {
 		show_alert.show();
 	}
 	
-		private void getHelp() {
+	/**
+	 * Displays the help guide for EditStoryActivity
+	 */
+	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
 		String helpInfo = "This activity allows you to edit your story details.\n\n"
 				+ "You can set the title of the story in the first text box, "
