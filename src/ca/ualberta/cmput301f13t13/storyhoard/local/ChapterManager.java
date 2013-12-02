@@ -132,9 +132,8 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 * you want to be included in the field.</br></br>
 	 * 
 	 * 
-	 * @param newChapter
-	 * 			Chapter with changes. The old chapter's information will be 
-	 * 			changed with the new chapter,s information.
+	 * @param Chapter
+	 * 			Chapter with the criteria. 
 	 */
 	@Override
 	public ArrayList<Chapter> retrieve(Chapter criteria) {

@@ -25,22 +25,27 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChoiceTable;
 
 /**
  * Role: Interacts with the database to store, update, and retrieve choice
  * objects. It implements the StoringManager interface.
- * 
- * </br>
+ * </br></br>
+ * The setup of the database being used is defined in DBContract.java, so for 
+ * more information on the actual tables and SQL statements used to make them, 
+ * see that class.
+ * </br></br>
+ * Design Pattern: This class is a singleton, so there will ever only be one 
+ * instance of it. Use the getInstance() static method to retrieve an  
+ * instance of it, not the constructor.
  * Design Pattern: Singleton
- * 
+ * </br></br>
  * @author Ashley Brown 
  * 
  * @see Choice
  * @see StoringManager
- *
+ * @see DBContract
  */
 
 public class ChoiceManager extends StoringManager<Choice> {
@@ -52,18 +57,30 @@ public class ChoiceManager extends StoringManager<Choice> {
 	protected String[] projection;	
 
 	/**
-	 * Initializes a new ChoiceManager choice.
+	 * Initializes a new ChoiceManager class. Must be given context in order to  
+	 * create a new instance of DBHelper and also to get the phoneId of 
+	 * whichever phone is using this application.</br></br>
+	 * 
+	 * Note that this constructor is protected, and it should never be used  
+	 * outside of this class (except for any class that subclass it). 
+	 * 
+	 * @param context
+	 * 
 	 */
 	protected ChoiceManager(Context context) {
 		helper = DBHelper.getInstance(context);
 	}
 
 	/**
-	 * Returns an instance of itself(ChoiceManager). Used to accomplish the
-	 * singleton design pattern. 
-	 *  
+	 * Returns an instance of a ChoiceManager. Since this class is a singleton,  
+	 * the same instance will always be returned. This is the method any class 
+	 * outside of this one and any subclasses should use to get an choiceManager 
+	 * object. </br></br>
+	 * 
+	 * Used to implement the singleton
+	 * design pattern.
+	 * 
 	 * @param context
-	 * @return ChoiceManager
 	 */
 	public static ChoiceManager getInstance(Context context) {
 		if (self == null) {
@@ -73,14 +90,31 @@ public class ChoiceManager extends StoringManager<Choice> {
 	}
 
 	/**
-	 * Saves a new choice locally (in the database).
-	 */	
+	 * Saves a new choice to the database.</br></br>
+	 * 
+	 * Example Call.</br>
+	 * Choice c = new choice("123ad4", "123de", 
+	 * 				"d342a", "text");</br>
+	 * ChoiceManager chm = ChoiceManager.getInstance(someActivity.this);</br>
+	 * chm.insert(c);</br>
+	 * 
+	 * @param Choice
+	 * 			A choice object. 
+	 */
 	@Override
 	public void insert(Choice choice) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		setContentValues(choice);
 		db.insert(ChoiceTable.TABLE_NAME, null, values);		
 	}
+	/**
+	 * Sets up the ContentValues for inserting or updating the database. This 
+	 * specifies the columns to be inserted into and what content will be  
+	 * going into those columns. 
+	 * 
+	 * @param choice
+	 * 			All the choice's fields will be put into the database.
+	 */
 
 	private void setContentValues(Choice choice) {
 		values = new ContentValues();
@@ -91,11 +125,18 @@ public class ChoiceManager extends StoringManager<Choice> {
 	}
 	
 	/**
-	 * Updates a choice already in the database.
+	 * Updates a choice already in the database. 
 	 * 
+	 * Example Call.</br>
+	 * Choice c = new choice("123ad4", "123de", 
+	 * 				"d342a", "text");</br>
+	 * ChoiceManager chm = ChoiceManager.getInstance(someActivity.this);</br>
+	 * chm.insert(c);</br>
+	 * c.setTitle("new");</br>
+	 * chm.update(c);</br>
 	 * 
 	 * @param newChoice
-	 * 			Contains the changes to the choice.
+	 * 			choice with changes.
 	 */
 	@Override
 	public void update(Choice newChoice) {
@@ -110,10 +151,24 @@ public class ChoiceManager extends StoringManager<Choice> {
 	}
 
 	/**
-	 * Retrieves a choice from the database.
+	 * Retrieves a choice from the database.</br><br> 
 	 * 
-	 * @param criteria 
-	 * 			Holds the search criteria.
+	 * The choice passed into this method is a story holding search criteria, 
+	 * so any field you would like to include in the search, just set the  
+	 * search criteria holding choice to it.</br><br>
+	 * 
+	 *  * Example Call.</br>
+	 * Choice c = new choice("123ad4", "123de", 
+	 * 				"d342a", "text");</br>
+	 * ChoiceManager chm = ChoiceManager.getInstance(someActivity.this);</br>
+	 * chm.insert(c);</br>
+	 * 
+	 * To now search for this choice based on its tect: </br></br>
+	 * 
+	 * Choice criteria = new choice(null, null, null, "text");</br>
+	
+	 * @param choice
+	 * 			Choice with the search criteria 
 	 */
 	@Override
 	public ArrayList<Choice> retrieve(Choice criteria) {
@@ -143,7 +198,13 @@ public class ChoiceManager extends StoringManager<Choice> {
 		cursor.close();		
 		return results;
 	}
-
+	/**
+	 * A helper function to set up what table columns and rows to be searched 
+	 * or retrieved. Basically, building the sql query, but using content 
+	 * values to abstract the sql.
+	 * 
+	 * @param criteria
+	 */
 	private void setupSearch(Choice criteria) {
 		sArgs = null;
 		projection = new String[]{
@@ -226,7 +287,12 @@ public class ChoiceManager extends StoringManager<Choice> {
 
 		return info;
 	}
-	
+	/**
+	 * Removes the choice from the chapter
+	 * 
+	 * @param choiceID
+	 *            Id of  the choices that the choice is for.
+	 */
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
@@ -245,7 +311,7 @@ public class ChoiceManager extends StoringManager<Choice> {
 	 * @param choiceID
 	 *            Id of  the choices that the choice is for.
 	 * 
-	 * @param chapterId TODO
+	 * @param chapterId 
 	 * @return a choice
 	 */
 	public Choice getRandomChoice(UUID chapterId) {
@@ -261,7 +327,18 @@ public class ChoiceManager extends StoringManager<Choice> {
 	
 		return choice;
 	}
-
+	/**
+	 * Retrieves the choice whose id matches the id provided. It expects the id 
+	 * provided to be a UUID. 
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * ChoiceManager chm = ChoiceManager.getInstance(someActivity.this);</br>
+	 * Choice ch = ChoiceManager.getById(id);</br>
+	 * 
+	 * @param id
+	 * 			Id of the choice we are looking for. Must be a UUID. 
+	 */	
 	@Override
 	public Choice getById(UUID id) {
 		ArrayList<Choice> result = retrieve(new Choice(id, null, null, null));
