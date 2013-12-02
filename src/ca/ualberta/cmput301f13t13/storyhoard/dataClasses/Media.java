@@ -260,62 +260,123 @@ public class Media {
 	// SETTERS
 
 	/**
-	 * Sets the media's id.
+	 * Sets the Id of the media. The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Media myMedia = (chapId, "sd://resources/img1.jpg", "photo", "hi");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * myMedia.setId(id);</br>
 	 * 
 	 * @param id
+	 * 			New Media id. Must be a UUID or null.
 	 */
 	public void setId(UUID id) {
 		this.id = id;
 	}
 
 	/**
-	 * Sets the chapter id the media belongs to.
+	 * Sets the Id of the chapter the media belongs to. The new Id provided must 
+	 * be a UUID.</br></br>
 	 * 
-	 * @param chapterId
+	 * Example call:</br>
+	 * 
+	 * Media myMedia = (chapId, "sd://resources/img1.jpg", "photo", "hi");</br>
+	 * UUID chapId = UUID.randomUUID();</br>
+	 * myMedia.setChapterId(id);</br>
+	 * 
+	 * @param id
+	 * 			New chapter id. Must be a UUID or null.
 	 */
 	public void setChapterId(UUID chapterId) {
 		this.chapterId = chapterId;
 	}
 
 	/**
-	 * Sets the path of the media. Also updates the bitmap.
+	 * Sets the path to the image file of the Media object. The path will 
+	 * should be a valid path to some file in the phone's SD card. </br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Media myMedia = (chapId, "", "photo", "hi");</br>
+	 * myMedia.setPath("sd://resources/img1.jpg");</br>
 	 * 
 	 * @param path
+	 * 			String containing valid path to image file.
 	 */
 	public void setPath(String path) {
 		this.path = path;
 	}
 
 	/**
-	 * Sets the media's bitmapString from a bitmap.
+	 * Sets the bitmapString of the media. What this is, is the bitmap  
+	 * associated with the Media object, but converted into a base 64 string.  
+	 * If a Chapter has a media, either a photo or illustration, this field is  
+	 * needed filled out when a story is sent to the server since the path  
+	 * becomes useless for stories on the server.</br></br>
+	 * 
+	 * This method actually takes a bitmap and does the conversion itself 
+	 * using the getStringFromBitmap() method, so no need to do the conversion 
+	 * yourself. </br></br>
+	 * 
+	 * Example call:</br>
+	 * Media myMedia = (chapId, "sd://resources/img1.jpg", "photo", "hi");</br>
+	 * myMedia.setBitmapString(myMedia.getBitmap());</br>
 	 * 
 	 * @param bitmap
+	 * 			Valid bitmap, should never be null.
 	 */
 	public void setBitmapString(Bitmap bitmap) {
 		this.bitmapString = getStringFromBitmap(bitmap);
 	}
 	
 	/**
-	 * Sets the media's type.
-	 */
+	 * Sets the type of media the object is. Will either be "photo" or 
+	 * "illustration". </br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Media myMedia = (chapId, "sd://resources/img1.jpg", "", "hi");</br>
+	 * myMedia.setType("illustration);</br>
+	 * 
+	 * @param type
+	 * 			String saying whether the media is an illustration or photo.  
+	 * 			You can also use the constant defined within the Media class,  
+	 * 			example Media.PHOTO and Media.ILLUSTRATION. 
+	 */ 	
 	public void setType(String type) {
 		this.type = type;
 	}
 	
+	/**
+	 * Sets the text that goes along with the media. This should only ever be 
+	 * set for a media of type "photo", since only photos contain text 
+	 * comments. </br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Media myMedia = (chapId, "sd://resources/img1.jpg", Media.Photo, "");</br>
+	 * myMedia.setText("this is text");</br>
+	 * 
+	 * @param text
+	 * 			String containing the text that the user inputed along with 
+	 * 			his photo.
+	 */ 	
 	public void setText(String text) {
 		this.text = text;
 	}
 	
 	/**
-	 * This functions converts Bitmap picture to a string which can be
-	 * JSONified.
+	 * This functions converts Bitmap picture to a string so that the media 
+	 * object can be converted to a JSON string and placed in the server. 
+	 * Should only be used by the Media object itself.
+	 * </br></br>
 	 * 
-	 * CODE REUSE:
-	 * This code is taken straight from:
-	 * 
-	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
-	 * Date: Nov. 4th, 2013
-	 * Author: Manav
+	 * CODE REUSE: </br>
+	 * This code is taken straight from: </br>
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/ </br>
+	 * Date: Nov. 4th, 2013 </br>
+	 * Author: Manav </br>
 	 */
 	private String getStringFromBitmap(Bitmap bitmapPicture) {
 		final int COMPRESSION_QUALITY = 100;
@@ -327,14 +388,17 @@ public class Media {
 	}	
 
 	/**
-	 * This functions converts a string to a Bitmap picture.
+	 * This functions converts a base 64 string to a Bitmap. This is used 
+	 * whenever story is retrieved from the server since all of its 
+	 * media objects must have the bitmaps they are associated with 
+	 * saved onto the SD card and have a path saved into the atcual media
+	 * object. </br></br>
 	 * 
-	 * CODE REUSE:
-	 * This code is taken straight from:
-	 * 
-	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
-	 * Date: Nov. 4th, 2013
-	 * Author: Manav
+	 * CODE REUSE: </br>
+	 * This code is taken straight from: </br>
+	 * URL: http://mobile.cs.fsu.edu/converting-images-to-json-objects/ </br>
+	 * Date: Nov. 4th, 2013 </br>
+	 * Author: Manav </br>
 	 */
 	private Bitmap getBitmapFromString(String string) {
 		byte[] decodedString = Base64.decode(string, Base64.DEFAULT);
