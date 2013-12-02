@@ -16,22 +16,19 @@
 package ca.ualberta.cmput301f13t13.storyhoard.helpGuides;
 
 import android.app.Activity;
-//import ca.ualberta.cmput301f13t13.storyhoard.R.layout;
-//import ca.ualberta.cmput301f13t13.storyhoard.R.menu;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
+
 /**
- * Handles displaying the help messages for each activity which 
- * passes an intent to this activity and starts it.
- * Takes the string from the activity passed bundle and displays a message
- * from it. 
+ * Handles displaying the help messages for each activity which passes an intent
+ * to this activity and starts it. Takes the string from the activity passed
+ * bundle and displays a message from it.
  * 
- * @author alexanderwong
- *
+ * @author Joshua Tate
+ * 
  */
 public class InfoActivity extends Activity {
 
@@ -84,13 +81,6 @@ public class InfoActivity extends Activity {
 
 			}
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.info, menu);
-		return true;
 	}
 
 }

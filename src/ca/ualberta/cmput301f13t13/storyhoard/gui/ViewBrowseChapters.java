@@ -133,13 +133,13 @@ public class ViewBrowseChapters extends Activity {
 	 */
 	private void getHelp(){
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "\t- All chapters composing the specific "+
+		String helpInfo = "All chapters composing the specific "+
 				"story are contained in this screen.\n\n"+
-				"\t- To add a new chapter, click on the 'New Chapter' "+
+				"To add a new chapter, click on the 'New Chapter' "+
 				"icon on the top right corner of the screen.\n\n"+
-				"\t- To edit an existing chapter, click on the chapter "+
+				"To edit an existing chapter, click on the chapter "+
 				"specified in the shown list of chapters.\n\n"+
-				"\t- To return to the story screen, press the back button "+
+				"To return to the story screen, press the back button "+
 				"on your mobile device.\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);

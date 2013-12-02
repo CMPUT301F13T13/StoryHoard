@@ -37,6 +37,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 
@@ -45,8 +46,9 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
  * Search Results activity
  * 
  * Displays a list of search results with the parameters given by the user
- * This is called after the search activity is finished, and the user
- * passes proper search variables into the search activity
+ * This is called after the search activity is finished. Search Results 
+ * will show all stories that have the string in question in the story
+ * name. 
  * 
  * @author Kim Wu
  * 
@@ -89,12 +91,17 @@ public class SearchResultsActivity extends Activity {
 					"No stories matched your search.", Toast.LENGTH_LONG)
 					.show();	
 		} 
+		
+		/**
+		 * Sets up a grid view and shows all the stories which are similar
+		 * or match to the query which the user inputed in search activity. 
+		 * If no results are found, a toast will appear.
+		 */
+		
 		gridView = (GridView) findViewById(R.id.gridStoriesView);
 		customGridAdapter = new AdapterStories(this,
 				R.layout.browse_story_item, gridArray);
 		gridView.setAdapter(customGridAdapter);
-
-		// Setup the grid view click listener
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -122,6 +129,13 @@ public class SearchResultsActivity extends Activity {
 		customGridAdapter.notifyDataSetChanged();			
 	}
 
+
+	/**
+	 * Displays the options in the Menu Bar.
+	 * Add story: let's users create a story
+	 * Browse stories: let's users browse stories
+	 * Help Guide: show's how to use the activity
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -140,6 +154,9 @@ public class SearchResultsActivity extends Activity {
 			Intent add = new Intent(this, EditStoryActivity.class);
 			lifedata.setEditing(false);
 			startActivity(add);
+			return true;
+		case R.id.info:
+			getHelp();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -203,5 +220,19 @@ public class SearchResultsActivity extends Activity {
 			progressDialog.dismiss();
 			finish();
 		}
+	}
+	
+	/**
+	 * Displays help guide for Search Results Activity
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Search Results shows, "
+				+ "all the stories which matched your query.\n\n"
+				+ "\t- To go back to browse stories select the, "
+				+ "browse stories tab.\n\n"
+				+ "\t- To create a story, select the '+' sign. ";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
 	}
 }

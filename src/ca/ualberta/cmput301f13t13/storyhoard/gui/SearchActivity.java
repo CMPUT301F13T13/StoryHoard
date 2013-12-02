@@ -34,18 +34,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import ca.ualberta.cmput301f13t13.storyhoard.R;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
+import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 
 /**
  * Search Activity
  * 
- * Allows user to search for a specific story in a story set.
- * The search will only check titles, and the cases will only select
- * the full work of the title.
+ * Allows user to enter keywords of the title of 
+ * a published, downloaded or personal story they 
+ * wish to find and read. Results of their search 
+ * will be displayed in the search results activity. 
  * 
  * @author Kim Wu
- * 
  */
 
 public class SearchActivity extends Activity {
@@ -55,7 +56,11 @@ public class SearchActivity extends Activity {
 	private StoryManager storyMan;
 	private ServerManager serverMan;
 	private LifecycleData lifedata;
-	private enum Type {AUTHOR, CACHED, PUBLISHED};
+
+	private enum Type {
+		AUTHOR, CACHED, PUBLISHED
+	};
+
 	private Type viewType = Type.AUTHOR;
 
 	@Override
@@ -97,11 +102,13 @@ public class SearchActivity extends Activity {
 			add.putExtra("isEditing", false);
 			startActivity(add);
 			return true;
+		case R.id.info:
+			getHelp();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void setSearchListener() {
 		searchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -113,34 +120,34 @@ public class SearchActivity extends Activity {
 					// Correct Input: will save data to database and refresh
 					// activity.
 					new SearchKeywords().execute(title);
-				} else {   
+				} else {
 					// Invalid Input types
 					alertDialog();
 				}
 			}
-		});		
+		});
 	}
-	
-	private class SearchKeywords extends AsyncTask<String, Void, Void>{
+
+	private class SearchKeywords extends AsyncTask<String, Void, Void> {
 		@Override
 		protected synchronized Void doInBackground(String... params) {
 			// search for a story
-			search((String)params[0]);
+			search((String) params[0]);
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);	
+			super.onPostExecute(result);
 			finish();
 		}
 	}
-	
+
 	private void search(String title) {
 		ArrayList<Story> stories = new ArrayList<Story>();
 		Intent intent = new Intent(getBaseContext(),
 				SearchResultsActivity.class);
-		
+
 		if (viewType == Type.AUTHOR) {
 			stories = storyMan.searchAuthorStories(title);
 			intent.putExtra("isPublished", false);
@@ -152,30 +159,25 @@ public class SearchActivity extends Activity {
 			intent.putExtra("isPublished", true);
 		}
 		lifedata.setSearchResults(stories);
-		startActivity(intent);	
+		startActivity(intent);
 	}
-	
+
 	private void alertDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				SearchActivity.this);
-		alert.setTitle("Whoopsies!")
-				.setMessage("Story title is empty/invalid")
+		AlertDialog.Builder alert = new AlertDialog.Builder(SearchActivity.this);
+		alert.setTitle("Whoopsies!").setMessage("Story title is empty/invalid")
 				.setCancelable(false)
 				// cannot dismiss this dialog
-				.setPositiveButton("Ok",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(
-									DialogInterface dialog,
-									int which) {
-								dialog.cancel();
-							}
-						}); // parenthesis mean an anonymous class
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}); // parenthesis mean an anonymous class
 		// Show alert dialog
 		AlertDialog show_alert = alert.create();
-		show_alert.show();		
+		show_alert.show();
 	}
-	
+
 	// When the spinner is clicked
 	private void onSpinnerClick() {
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -205,5 +207,19 @@ public class SearchActivity extends Activity {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Displays help guide for ViewBrowseStories
+	 */
+	private void getHelp() {
+		Intent intent = new Intent(this, InfoActivity.class);
+		String helpInfo = "\t- Type a story you want to search, "
+				+ "where it says Story title.\n\n"
+				+ "\t- Select from the dropdown which type of story, "
+				+ "you would like to search for.\n\n"
+				+ "\t- Click the search stories button, ";
+		intent.putExtra("theHelp", helpInfo);
+		startActivity(intent);
 	}
 }
