@@ -55,7 +55,14 @@ public class ViewBrowseChapters extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_chapters);
 	}
-
+	
+	/**
+	 * Displays action bar menu for ViewBrowseChapters
+	 * 
+	 * Add new chapter: allows user to add a new chapter to existing story
+	 * 
+	 * Info: displays help guide for ViewBrowseChapters
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_browse_chapters, menu);
