@@ -282,30 +282,41 @@ public class ViewBrowseStories extends Activity {
 	 * thread does not have to interact with database and skip too many frames.
 	 * 
 	 */
-	private class GetAllStories extends AsyncTask<Void, Void, Void> {
+	private class GetAllStories extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected void onPreExecute() {
 			setContentView(R.layout.activity_intro_screen);
 		}
 
 		@Override
-		protected synchronized Void doInBackground(Void... params) {
-			if (viewType == Type.CACHED) {
-				currentStories = storyMan.getAllCachedStories();
-			} else if (viewType == Type.CREATED) {
-				currentStories = storyMan.getAllAuthorStories();
-			} else {
-				currentStories = serverMan.getAll();
+		protected synchronized Boolean doInBackground(Void... params) {
+			try {
+				if (viewType == Type.CACHED) {
+					currentStories = storyMan.getAllCachedStories();
+				} else if (viewType == Type.CREATED) {
+					currentStories = storyMan.getAllAuthorStories();
+				} else {
+					currentStories = serverMan.getAll();
+				}
+				return true;
+			} catch (Exception e) {
+				return false;
 			}
-			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			refreshStories();
 			setContentView(R.layout.activity_view_browse_stories);
-			setGridView();
+			setGridView();		
+			
+			if (!result) {
+				Toast.makeText(getBaseContext(), "Problems with server. Please"
+						+ " try again.",
+						Toast.LENGTH_SHORT).show();
+			}
+
 		}
 	}
 

@@ -325,7 +325,9 @@ public class StoryController {
 	
 	/**
 	 * Any changes to the story model will now be pushed to the server. This is
-	 * called any time the user publishes or republishes a story. </br></br>
+	 * called any time the user publishes or republishes a story. If the update
+	 * was successful, the method returns true. Else, if there were problems, 
+	 * the method returns false.</br></br>
 	 * 
 	 * Example Call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br>
@@ -335,9 +337,9 @@ public class StoryController {
 	 * control.pushChangesToServer(); </br>
 	 * 
 	 */
-	public void pushChangesToServer() {
+	public Boolean pushChangesToServer() {
 		prepareChaptersForServer();
-		serverMan.update(story);
+		return serverMan.update(story);
 	}
 
 	/**

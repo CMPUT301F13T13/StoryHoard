@@ -240,7 +240,9 @@ public class ServerManager {
 	/**
 	 * This method first checks whether or not the story to be updated exists
 	 * on the server. If it doesn't, then the insert method is called. If it
-	 * does, then it updates the story currently on the server. </br></br>
+	 * does, then it updates the story currently on the server. If the 
+	 * operation is succesful, it returns true, and if it fails, it returns
+	 * false. </br></br>
 	 *  
 	 * Updating is done by first removing the story on the server with the 
 	 * deleteStory() method in ESUpdates, and then by re-inserting it using
@@ -260,20 +262,25 @@ public class ServerManager {
 	 * @param story
 	 * 			Story with updates/new data that you want to change.
 	 */
-	public void update(Story story) { 
+	public boolean update(Story story) { 
 		String id = story.getId().toString();
 
-		// story already on server
-		if (esRetrieval.searchById(id, server) != null) {
-			try {
-				esUpdates.deleteStory(id, server);
-				esUpdates.insertStory(story, server);
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			// story already on server
+			if (esRetrieval.searchById(id, server) != null) {
+				try {
+					esUpdates.deleteStory(id, server);
+					esUpdates.insertStory(story, server);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} 
+			} else {
+				insert(story);
 			}
-		} else {
-			insert(story);
+		} catch (Exception e) {
+			return false;
 		}
+		return true;
 	}	
 
 	/**

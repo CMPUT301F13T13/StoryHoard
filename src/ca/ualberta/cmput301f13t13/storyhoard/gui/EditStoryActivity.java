@@ -123,9 +123,6 @@ public class EditStoryActivity extends Activity {
 			// publish new story somehow
 			saveChanges();
 			new Update().execute();
-			Toast.makeText(getBaseContext(), "Story published to server",
-					Toast.LENGTH_SHORT).show();
-			finish();
 		} else {
 			Toast.makeText(getBaseContext(),
 					"Create a story before publishing", Toast.LENGTH_SHORT)
@@ -145,13 +142,26 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
-	private class Update extends AsyncTask<Void, Void, Void> {
+	private class Update extends AsyncTask<Void, Void, Boolean> {
 		@Override
-		protected synchronized Void doInBackground(Void... params) {
+		protected synchronized Boolean doInBackground(Void... params) {
 			// publish or update story
-			storyCon.pushChangesToServer();
-			return null;
+			return storyCon.pushChangesToServer();
 		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				Toast.makeText(getBaseContext(), "Story published to server",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				Toast.makeText(getBaseContext(), "Problems with server. Please"
+						+ " try again.",
+						Toast.LENGTH_SHORT).show();
+			}
+		}		
 	}
 
 	private class UnPublish extends AsyncTask<UUID, Void, Void> {

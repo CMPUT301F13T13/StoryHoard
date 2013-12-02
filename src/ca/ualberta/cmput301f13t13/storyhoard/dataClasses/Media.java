@@ -133,7 +133,7 @@ public class Media {
 	 */
 	public Bitmap getBitmap() {
 		Bitmap bitmap = BitmapFactory.decodeFile(path);
-		Bitmap resizedbmp = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+		Bitmap resizedbmp = Bitmap.createScaledBitmap(bitmap, 125, 125, false);
 		return resizedbmp;
 	}
 	
