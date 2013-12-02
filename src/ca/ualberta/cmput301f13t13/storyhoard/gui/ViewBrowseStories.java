@@ -80,12 +80,12 @@ public class ViewBrowseStories extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_browse_stories);
-		setGridView();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		setGridView();
 		storyCon = StoryController.getInstance(this);
 		lifedata = LifecycleData.getInstance();
 		serverMan = ServerManager.getInstance();
