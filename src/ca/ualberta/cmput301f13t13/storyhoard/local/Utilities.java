@@ -89,7 +89,11 @@ public class Utilities {
 	        
 	        return imageFilePath;
 	}	
-	
+	/**
+	 * Returns if the publish story is the users. </br></br>
+	 * 
+	 * It does this by checking the phoneId of the story with the phone Id of the user
+	 */
 	public static Boolean isPublishedStoryMyStory(Story story, Context context) {
 		if (story == null) {
 			return true;
