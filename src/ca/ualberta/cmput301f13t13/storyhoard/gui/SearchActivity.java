@@ -214,11 +214,11 @@ public class SearchActivity extends Activity {
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "\t- Type a story you want to search, "
+		String helpInfo = "Type a story you want to search, "
 				+ "where it says Story title.\n\n"
-				+ "\t- Select from the dropdown which type of story, "
+				+ "Select from the dropdown which type of story, "
 				+ "you would like to search for.\n\n"
-				+ "\t- Click the search stories button, ";
+				+ "Click the search stories button, ";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);
 	}
