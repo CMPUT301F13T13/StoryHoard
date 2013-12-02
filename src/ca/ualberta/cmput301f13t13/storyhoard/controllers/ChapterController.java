@@ -160,7 +160,6 @@ public class ChapterController {
 	 * ChapterController control = ChapterController.getInstance(someActivity.this); </br>
 	 * Chapter mChap = control.getCurrChapter(); </br>
 	 * 
-	 * @return
 	 */
 	public Chapter getCurrChapter() {
 		return chapter;
@@ -213,7 +212,8 @@ public class ChapterController {
 	 * control.setCurrChapterComplete(myChapter);</br></br>
 	 * control.removeIllustration(media); </br>
 	 * 
-	 * @param bool
+	 * @param ill
+	 * 			Illustration (type media) to be removed.
 	 */
 	public void removeIllustration(Media ill) {
 		chapter.getIllustrations().remove(ill);
@@ -246,9 +246,6 @@ public class ChapterController {
 	 * ChapterController control = ChapterController.getInstance(someActivity.this); </br>
 	 * control.setCurrChapterComplete(myChapter);</br></br>
 	 * control.addRandomChoice(); </br>
-	 * 
-	 * @param choice
-	 * 			Choice object to be added.
 	 */
 	public void addRandomChoice() {
 		chapter.getChoices().add(choiceMan.getRandomChoice(chapter.getId()));
@@ -268,9 +265,9 @@ public class ChapterController {
 	 * choice.setText("nennwweww"); </br>
 	 * control.updateChoice(choice); </br>
 	 * 
-	 * @param chapter
-	 * 			Chapter containing the new data you want to replace the old 
-	 * 			chapter with.
+	 * @param newChoice
+	 * 			Choice containing the new data you want to replace the old 
+	 * 			choice with.
 	 */
 	public void updateChoice(Choice newChoice) {
 		for (Choice oldChoice : chapter.getChoices()) {
@@ -293,8 +290,8 @@ public class ChapterController {
 	 * control.setCurrChapterComplete(myChapter);</br></br>
 	 * control.addMedia(media); </br>
 	 * 
-	 * @param choice
-	 * 			Choice object to be added.
+	 * @param photo
+	 * 			Media object (photo) to be added.
 	 */
 	public void addMedia(Media photo) {
 		if (photo.getType() == Media.PHOTO) {

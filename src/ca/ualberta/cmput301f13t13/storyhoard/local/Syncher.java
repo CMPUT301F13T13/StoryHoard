@@ -35,7 +35,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
  * Design Pattern: This class is a singleton, so only one instance of it  
  * will ever exist during the application's lifecycle.
  * 
- * @author sgil
+ * @author Stephanie Gil
  *
  */
 public class Syncher {
@@ -85,6 +85,7 @@ public class Syncher {
 	 * syncher.syncStoryFromMemory(myStory);
 	 * 
 	 * @param story
+	 * 			Story object that is gotten locally you want to sync.
 	 */	
 	public void syncStoryFromMemory(Story story) {
 		storyMan.sync(story, story.getId());
@@ -108,6 +109,7 @@ public class Syncher {
 	 * syncher.syncChapterParts(chap); </br>
 	 * 
 	 * @param chap
+	 * 			Chapter object you want to sync.
 	 */
 	public void syncChapterParts(Chapter chap) {
 		ArrayList<UUID> medias = new ArrayList<UUID>();
@@ -144,6 +146,7 @@ public class Syncher {
 	 * media, and choices.
 	 * 
 	 * @param story
+	 * 			Story object that came from the server you want to save locally.
 	 */
 	public void syncStoryFromServer(Story story) {
 		ArrayList<UUID> medias = new ArrayList<UUID>();

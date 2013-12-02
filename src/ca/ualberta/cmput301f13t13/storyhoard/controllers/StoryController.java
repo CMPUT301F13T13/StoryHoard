@@ -138,7 +138,6 @@ public class StoryController {
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
 	 * Story myStory = control.getCurrStory(); </br>
 	 * 
-	 * @return
 	 */
 	public Story getCurrStory() {
 		return story;
@@ -212,7 +211,7 @@ public class StoryController {
 	 * has stopped laughing. I think the guy trying to finish 304 really 
 	 * appreciates that.");
 	 * 
-	 * @param description
+	 * @param desc
 	 * 			Description (a string) you want to set as the story's 
 	 * 			description.
 	 */

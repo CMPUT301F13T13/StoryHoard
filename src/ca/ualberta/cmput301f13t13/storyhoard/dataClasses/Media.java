@@ -211,7 +211,7 @@ public class Media {
 	 */
 	public Bitmap getBitmap() {
 		Bitmap bitmap = BitmapFactory.decodeFile(path);
-		Bitmap resizedbmp = Bitmap.createScaledBitmap(bitmap, 125, 125, false);
+		Bitmap resizedbmp = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
 		return resizedbmp;
 	}
 	

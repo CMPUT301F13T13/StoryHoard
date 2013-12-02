@@ -82,7 +82,8 @@ public abstract class MediaActivity extends Activity {
 	 * Campbell License: Unlicense </br>
 	 * Date: Nov. 7, 2013 </br>
 	 * 
-	 * @param imageFileUri
+	 * @param imageType
+	 * 			A string indicating whether the image taken is a "photo" or "illustration".
 	 */
 	public void takePhoto(String imageType) {
 		this.imageType = imageType;

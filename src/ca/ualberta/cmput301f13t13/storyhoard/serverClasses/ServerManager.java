@@ -58,7 +58,6 @@ public class ServerManager {
 
 	/**
 	 * Returns an instance of a ServerManager (singleton).
-	 * @return
 	 */
 	public static ServerManager getInstance() {
 		if (self == null) {
@@ -148,7 +147,6 @@ public class ServerManager {
 	 * Example call: </br>
 	 * ArrayList<Story> stories = getAll(); 
 	 * 
-	 * @return
 	 */
 	public ArrayList<Story> getAll() {
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -175,7 +173,6 @@ public class ServerManager {
 	 * main UI thread of the android application, which is why the 
 	 * ThreadPolicy code is needed.
 	 *  
-	 * @return
 	 */
 	public Story getRandom() {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()

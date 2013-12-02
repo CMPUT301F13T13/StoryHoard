@@ -1,1 +1,7 @@
-ca.ualberta.cs.c301f13t13.backend
+ca.ualberta.cmput301f13t13.storyhoard
+ca.ualberta.cmput301f13t13.storyhoard.controllers
+ca.ualberta.cmput301f13t13.storyhoard.dataClasses
+ca.ualberta.cmput301f13t13.storyhoard.gui
+ca.ualberta.cmput301f13t13.storyhoard.helpGuides
+ca.ualberta.cmput301f13t13.storyhoard.local
+ca.ualberta.cmput301f13t13.storyhoard.serverClasses

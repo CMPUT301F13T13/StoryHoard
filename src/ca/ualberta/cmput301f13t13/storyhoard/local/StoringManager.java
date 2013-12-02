@@ -50,7 +50,6 @@ public abstract class StoringManager<A> {
 	 * database.
 	 * 
 	 * @param id
-	 * @return
 	 */
 	public Boolean existsLocally(UUID id) {
 		A object = getById(id);

@@ -68,7 +68,6 @@ public class ESUpdates {
 	/**
 	 * Returns an instance of itself.
 	 * 
-	 * @return
 	 */
 	public static ESUpdates getInstance() {
 		if (self == null) {

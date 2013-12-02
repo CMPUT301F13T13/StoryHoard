@@ -93,8 +93,6 @@ public class Choice {
 	 * 			The Id of the choice
 	 * @param chapterIdFrom
 	 *            The id of the current chapter being read
-	 * @param chapterIdTo
-	 *            The id of the chapter the choice links to
 	 */
 	public Choice(UUID id, UUID chapterIdFrom) {
 		this.id = id;
@@ -145,7 +143,7 @@ public class Choice {
 	 * UUID id = UUID.randomUUID();</br>
 	 * mockChoice.setNextChapter(id);</br>
 	 * 
-	 * @param chapterIdFrom
+	 * @param chapterIdTo
 	 */
 	public void setNextChapter(UUID uuid) {
 		this.nextChapter = uuid;
@@ -160,7 +158,8 @@ public class Choice {
 	 * String text = "working";</br>
 	 * mockChoice.setText(text);</br>
 	 * 
-	 * @param setText
+	 * @param text
+	 * 			The text you want the choice to display. Must be a string.
 	 */
 	public void setText(String text) {
 		this.text = text;

@@ -214,7 +214,7 @@ public class MediaManager extends StoringManager<Media>{
 	 * media.setText("bah humbug");</br>
 	 * mm.update(media);</br>
 	 * 
-	 * @param newmedia
+	 * @param newMedia
 	 * 			Media with changes.
 	 */
 	@Override
