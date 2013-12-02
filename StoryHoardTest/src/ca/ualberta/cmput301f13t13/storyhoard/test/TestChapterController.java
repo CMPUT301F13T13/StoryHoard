@@ -84,7 +84,10 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<Info
 		
 		
 	}
-	
+	/**
+	 * Tests placing a chapter in the database
+	 * 
+	 */
 	public void testPushChangesToDb() {
 		StoryManager sm = StoryManager.getInstance(getActivity());
 		ChapterManager cm = ChapterManager.getInstance(getActivity());
