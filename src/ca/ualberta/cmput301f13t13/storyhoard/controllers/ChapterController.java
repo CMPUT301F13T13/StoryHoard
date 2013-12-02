@@ -31,11 +31,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.Syncher;
 /**
  * Role: Responsible for manipulating the current chapter model. It keeps a 
  * reference to the current chapter model as a field and updates that whenever 
- * the user makes changes. Every time the user creates a new chapter or updates
+ * the user makes changes. Every time the user creates a new chapter or updates 
  * a chapter, the changes (including any changes to its media or choices) will 
  * be saved to the database using the pushChangesToDb() method.</br></br>
  * 
- * Design Pattern: This class is a singleton, so only one instance of it will
+ * Design Pattern: This class is a singleton, so only one instance of it will 
  * ever exist. use getInstance() to retrieve that instance, not the 
  * constructor.
  * 
@@ -52,9 +52,9 @@ public class ChapterController {
 	
 	/**
 	 * Initializes a new ChapterController. Needs context so it is able to 
-	 * initialize its manager objects to be able to push changes to
+	 * initialize its manager objects to be able to push changes to 
 	 * the database. Also initializes a blank chapter to avoid null pointer 
-	 * exceptions if methods are called on a null chapter. This constructor
+	 * exceptions if methods are called on a null chapter. This constructor 
 	 * should never be used outside of this class (except for any subclasses).
 	 * 
 	 * @param context
@@ -69,8 +69,8 @@ public class ChapterController {
 	
 	/**
 	 * Returns an instance of a ChapterController. The same instance is always 
-	 * returned since it is a singleton. This is the method every other class
-	 * should be using to access the ChapterController. Note that this method
+	 * returned since it is a singleton. This is the method every other class 
+	 * should be using to access the ChapterController. Note that this method 
 	 * must be called statically. </br></br>
 	 * 
 	 * Example call: </br>
@@ -87,17 +87,17 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Sets its chapter to whatever chapter in the database matches the id
-	 * passed in. Evidently, you only have the id of the chapter you want, not
+	 * Sets its chapter to whatever chapter in the database matches the id 
+	 * passed in. Evidently, you only have the id of the chapter you want, not 
 	 * the chapter itself, so it is "incomplete".Therefore, this method will 
 	 * retrieve the chapter whose id matches the id you passed in, as well 
-	 * as all the choices and media belonging to that chapter and will set
+	 * as all the choices and media belonging to that chapter and will set 
 	 * the corresponding fields in the chapter to them. Then you will have a 
 	 * "complete" chapter. </br></br>
 	 * 
 	 * Example call: </br>
-	 * UUID chapId = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");
-	 * Assume that there is a chapter in the database with the same id as chapId,
+	 * UUID chapId = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7"); </br>
+	 * Assume that there is a chapter in the database with the same id as chapId, 
 	 * and that it also has media and choices belonging to it in stored in the 
 	 * database. </br></br>
 	 * 
@@ -113,10 +113,10 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Using this method means that you first have a "complete" chapter object,
+	 * Using this method means that you first have a "complete" chapter object, 
 	 * including all its media and choices. This method will set the chapter 
-	 * field of the ChapterController to be the chapter you are passing in
-	 * so that it can be edited via methods defined in here.
+	 * field of the ChapterController to be the chapter you are passing in 
+	 * so that it can be edited via methods defined in here. 
 	 * 
 	 * Example call: </br>
 	 * Chapter chap = new Chapter(UUID.randomUUID(), "chap text"); </br>
@@ -167,7 +167,7 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Edits the chapter model's text. No view is allowed to do this
+	 * Edits the chapter model's text. No view is allowed to do this 
 	 * directly, so they use this method.</br></br>
 	 * 
 	 * Example Call: </br>
@@ -185,7 +185,7 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Edits the chapter model's random choice boolean (determines whether or
+	 * Edits the chapter model's random choice boolean (determines whether or 
 	 * not that chapter contains should contain a random choice). No view is 
 	 * allowed to do this directly, so they use this method.</br></br>
 	 * 
@@ -237,8 +237,8 @@ public class ChapterController {
 	}
 
 	/**
-	 * Adds an actual random choice object (which is just one of the chapter's
-	 * current choices but with the text "I'm feeling lucky") to the chapter's
+	 * Adds an actual random choice object (which is just one of the chapter's 
+	 * current choices but with the text "I'm feeling lucky") to the chapter's 
 	 * choice array list. </br></br>
 	 * 
 	 * Example Call: </br>
@@ -255,7 +255,7 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Updates a choice of the chapter. Does so by finding the choice in the
+	 * Updates a choice of the chapter. Does so by finding the choice in the 
 	 * chapter's choices array list, deleting it, and inserting the new version 
 	 * of it. </br></br>
 	 * 
@@ -269,7 +269,7 @@ public class ChapterController {
 	 * control.updateChoice(choice); </br>
 	 * 
 	 * @param chapter
-	 * 			Chapter containing the new data you want to replace the old
+	 * 			Chapter containing the new data you want to replace the old 
 	 * 			chapter with.
 	 */
 	public void updateChoice(Choice newChoice) {
@@ -283,7 +283,7 @@ public class ChapterController {
 	}	
 
 	/**
-	 * Adds a media to the chapter. Can be a photo or an illustration, the
+	 * Adds a media to the chapter. Can be a photo or an illustration, the 
 	 * method will decide for itself and add it to the correct array list. </br></br>
 	 * 
 	 * Example Call: </br>
@@ -306,7 +306,7 @@ public class ChapterController {
 	}
 	
 	/**
-	 * Any changes to the story model will now be pushed to the database so the
+	 * Any changes to the story model will now be pushed to the database so the 
 	 * database information is consistent. </br></br>
 	 * 
 	 * Example Call: </br>

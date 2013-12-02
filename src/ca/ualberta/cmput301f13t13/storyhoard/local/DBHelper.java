@@ -21,12 +21,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Purpose: Creates and sets up the database to be used using the information
- * about the database provided in the contract class (DbHelper). Also keeps the
+ * Purpose: Creates and sets up the database to be used using the information 
+ * about the database provided in the contract class (DbHelper). Also keeps the 
  * tables updated.
  * 
  * </br>
- * Design Pattern: Singleton
+ * Design Pattern: Singleton, so there is ever only one instance of this class.
  * 
  * @author Ashley Brown
  * @author Stephanie Gil
@@ -37,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/**
 	 * 
-	 * Gets a new instance of DbHelper. If one already exists, returns that one.
+	 * Gets a new instance of DbHelper. If one already exists, returns that one. 
 	 * I.e. DbHelper is a singleton. </br></br>
 	 * 
 	 * CODE REUSE: </br>

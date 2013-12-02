@@ -10,7 +10,7 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
- * This class is not really part of the StoryHoard application. It is only used
+ * This class is not really part of the StoryHoard application. It is only used 
  * for generating bitmaps in the StoryHoard unit tests. </br></br>
  * 
  * CODE RE-USE </br>
@@ -91,7 +91,7 @@ public class BogoPicGen {
 	}
 	
 	/**
-	 * Creates a new bitmap, save sit on to SD card and sets path to it.
+	 * Creates a new bitmap, save sit on to SD card and sets path to it. 
 	 * Once again, this code is only for use in the JUnit tests.
 	 * 
 	 * CODE REUSE: </br>

@@ -29,11 +29,11 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
 /**
  * Role: Responsible for manipulating the story model. It keeps a reference to 
  * the current story model as a field and updates that whenever the user 
- * makes changes. Every time the user creates a new story or saves his changes
- * to one, the changes are pushed to the database, and whenever the story is
+ * makes changes. Every time the user creates a new story or saves his changes 
+ * to one, the changes are pushed to the database, and whenever the story is 
  * published, changes are saved to the server.</br></br>
  * 
- * Design Pattern: This class is a singleton, so only one instance of it will
+ * Design Pattern: This class is a singleton, so only one instance of it will 
  * ever exist. use getInstance() to retrieve that instance, not the 
  * constructor.
  * 
@@ -48,9 +48,9 @@ public class StoryController {
 
 	/**
 	 * Initializes a new StoryController. Needs context so it is able to 
-	 * initialize its Syncher and ServerManager to be able to push changes to
-	 * the database and server. Also initializes a blank story to avoid
-	 * null pointer exceptions if methods are called on a null story. This 
+	 * initialize its Syncher and ServerManager to be able to push changes to 
+	 * the database and server. Also initializes a blank story to avoid 
+	 * null pointer exceptions if methods are called on a null story. This  
 	 * constructor should never be used outside of this class (except for any 
 	 * subclasses).
 	 * 
@@ -64,8 +64,8 @@ public class StoryController {
 	
 	/**
 	 * Returns an instance of a StoryController. The same instance is always 
-	 * returned since it is a singleton. This is the method every other class
-	 * should be using to access the StoryController. Note that this method
+	 * returned since it is a singleton. This is the method every other class 
+	 * should be using to access the StoryController. Note that this method 
 	 * must also be called statically. </br></br>
 	 * 
 	 * Example call: </br>
@@ -83,11 +83,11 @@ public class StoryController {
 	
 	/**
 	 * Sets its story to whatever story is passed in. Using this method also 
-	 * means that the story you are passing in is not "complete". This means
-	 * that its chapters are empty, only the actual story data like title and
+	 * means that the story you are passing in is not "complete". This means 
+	 * that its chapters are empty, only the actual story data like title and 
 	 * author is contained. Therefore, this method will retrieve all the 
-	 * chapters (as well as any choices and media belonging to those chapters)
-	 * and will set these chapters as the story's chapters so it is now a
+	 * chapters (as well as any choices and media belonging to those chapters) 
+	 * and will set these chapters as the story's chapters so it is now a 
 	 * "complete" story. </br></br>
 	 * 
 	 * Example call: </br>
@@ -98,7 +98,7 @@ public class StoryController {
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
 	 * control.setCurrStoryIncomplete(myStory);</br></br>
 	 * 
-	 * The story field in StoryController is now has any chapters it had stored
+	 * The story field in StoryController is now has any chapters it had stored 
 	 * in the database.
 	 * 
 	 * @param aStory
@@ -111,15 +111,15 @@ public class StoryController {
 	
 	/**
 	 * Sets its story to whatever story is passed in. Using this method also 
-	 * means that the story you are passing in is "complete". This means
+	 * means that the story you are passing in is "complete". This means 
 	 * that it has all of its chapters within in, including any choices and 
-	 * media belonging to those chapters. There is no need to retrieve them
+	 * media belonging to those chapters. There is no need to retrieve them 
 	 * from the database </br></br>
 	 * 
 	 * Example call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br></br>
-	 * Chapter chap = new Chapter(myStory.getId(), "The guy on second floor of
-	 * comp sci has a really scary and annoying laughter while I try to finish
+	 * Chapter chap = new Chapter(myStory.getId(), "The guy on second floor of 
+	 * comp sci has a really scary and annoying laughter while I try to finish 
 	 * documenting this never ending project");</br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
 	 * control.setCurrStoryComplete(myStory);</br></br>
@@ -136,7 +136,7 @@ public class StoryController {
 	 * 
 	 * Example Call: </br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
-	 * Story myStory = control.getCurrStory();
+	 * Story myStory = control.getCurrStory(); </br>
 	 * 
 	 * @return
 	 */
@@ -145,18 +145,18 @@ public class StoryController {
 	}
 
 	/**
-	 * Edits the story model's first chapter id. No view is allowed to do this
+	 * Edits the story model's first chapter id. No view is allowed to do this 
 	 * directly, so they use this method.</br></br>
 	 * 
 	 * Example Call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
 	 * control.setCurrStoryComplete(myStory);</br></br>
-	 * UUID newChapId = UUID.randomUUID();
+	 * UUID newChapId = UUID.randomUUID(); </br>
 	 * control.editFirstChapter(newChapId);
 	 * 
 	 * @param id
-	 * 			Id of the chapter you want to set as the story's first chapter.
+	 * 			Id of the chapter you want to set as the story's first chapter. 
 	 * 			Note that it must be a UUID.
 	 */
 	public void editFirstChapterId(UUID id) {
@@ -164,15 +164,15 @@ public class StoryController {
 	}
 	
 	/**
-	 * Edits the story model's first chapter id. No view is allowed to do this
+	 * Edits the story model's first chapter id. No view is allowed to do this 
 	 * directly, so they use this method.</br></br>
 	 * 
 	 * Example Call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
 	 * control.setCurrStoryComplete(myStory);</br></br>
-	 * UUID newChapId = UUID.randomUUID();
-	 * control.editTitle("I have the best titles");
+	 * UUID newChapId = UUID.randomUUID(); </br>
+	 * control.editTitle("I have the best titles"); </br>
 	 * 
 	 * @param title
 	 * 			Title (a string) you want to set as the story's title.
@@ -188,8 +188,8 @@ public class StoryController {
 	 * Example Call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
-	 * control.setCurrStoryComplete(myStory);</br></br>
-	 * UUID newChapId = UUID.randomUUID();
+	 * control.setCurrStoryComplete(myStory);</br>
+	 * UUID newChapId = UUID.randomUUID(); </br>
 	 * control.editAuthor("Voldemort");
 	 * 
 	 * @param author
@@ -200,15 +200,15 @@ public class StoryController {
 	}
 	
 	/**
-	 * Edits the story model's description. No view is allowed to do this
+	 * Edits the story model's description. No view is allowed to do this 
 	 * directly, so they use this method.</br></br>
 	 * 
 	 * Example Call: </br>
 	 * Story myStory = new Story("Title", "author", "desc", "123bfdg6"); </br>
 	 * StoryController control = StoryController.getInstance(someActivity.this); </br>
-	 * control.setCurrStoryComplete(myStory);</br></br>
-	 * UUID newChapId = UUID.randomUUID();
-	 * control.editDescription("yay annoying laugh guy in second floor comp sci
+	 * control.setCurrStoryComplete(myStory);</br>
+	 * UUID newChapId = UUID.randomUUID(); </br>
+	 * control.editDescription("yay annoying laugh guy in second floor comp sci 
 	 * has stopped laughing. I think the guy trying to finish 304 really 
 	 * appreciates that.");
 	 * 
@@ -246,7 +246,7 @@ public class StoryController {
 	}	
 
 	/**
-	 * Updates a chapter of the story model. Does so by finding the chapter,
+	 * Updates a chapter of the story model. Does so by finding the chapter, 
 	 * deleting it, and inserting the new version of it. </br></br>
 	 * 
 	 * Example call:</br>
@@ -260,7 +260,7 @@ public class StoryController {
 	 * control.updateChapter(chap); </br>
 	 * 
 	 * @param chapter
-	 * 			Chapter containing the new data you want to replace the old
+	 * 			Chapter containing the new data you want to replace the old 
 	 * 			chapter with.
 	 */
 	public void updateChapter(Chapter chapter) {
@@ -274,17 +274,17 @@ public class StoryController {
 	}
 	
 	/**
-	 * Due to performance issues, Media objects don't actually hold Bitmaps.
+	 * Due to performance issues, Media objects don't actually hold Bitmaps. 
 	 * A path to the location of the file is instead saved and used to 
-	 * retrieve bitmaps whenever needed. Media objects can also hold the
+	 * retrieve bitmaps whenever needed. Media objects can also hold the 
 	 * bitmaps after the have been converted to a string (Base64). </br></br>
 	 * 
-	 * Before a Story can be inserted into the server, all the images 
-	 * belonging to the story's chapters must have their bitmap strings
-	 * set, i.e. all of them must convert the bitmap they are linked with
-	 * to a string. This is only done when the story is published to avoid 
-	 * doing the expensive conversion unnecessarily (local stories only 
-	 * need to know the path to the image).
+	 * Before a Story can be inserted into the server, all the images  
+	 * belonging to the story's chapters must have their bitmap strings 
+	 * set, i.e. all of them must convert the bitmap they are linked with 
+	 * to a string. This is only done when the story is published to avoid  
+	 * doing the expensive conversion unnecessarily (local stories only  
+	 * need to know the path to the image). 
 	 * </br>
 	 * 
 	 * This function takes care of setting all the Medias' bitmap strings.
@@ -300,15 +300,15 @@ public class StoryController {
 	}	
 
 	/** 
-	 * Helper function to prepareChaptersForServer. It sets the bitmap string
+	 * Helper function to prepareChaptersForServer. It sets the bitmap string 
 	 * for a single media object. Reason why: </br></br>
 	 * 
 	 * Before a Story can be inserted into the server, all the images 
-	 * belonging to the story's chapters must have their bitmap strings
-	 * set, i.e. all of them must convert the bitmap they are linked with
-	 * to a string. This is only done when the story is published to avoid 
-	 * doing the expensive conversion unnecessarily (local stories only 
-	 * need to know the path to the image).
+	 * belonging to the story's chapters must have their bitmap strings 
+	 * set, i.e. all of them must convert the bitmap they are linked with 
+	 * to a string. This is only done when the story is published to avoid  
+	 * doing the expensive conversion unnecessarily (local stories only  
+	 * need to know the path to the image). 
 	 * </br>
 	 * 
 	 * @param chap
@@ -324,8 +324,8 @@ public class StoryController {
 	}	
 	
 	/**
-	 * Any changes to the story model will now be pushed to the server. This is
-	 * called any time the user publishes or republishes a story. If the update
+	 * Any changes to the story model will now be pushed to the server. This is 
+	 * called any time the user publishes or republishes a story. If the update 
 	 * was successful, the method returns true. Else, if there were problems, 
 	 * the method returns false.</br></br>
 	 * 
@@ -343,7 +343,7 @@ public class StoryController {
 	}
 
 	/**
-	 * Any changes to the story model will now be pushed to the database so the
+	 * Any changes to the story model will now be pushed to the database so the 
 	 * database information is consistent. </br></br>
 	 * 
 	 * Example Call: </br>

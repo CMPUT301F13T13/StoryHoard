@@ -27,10 +27,10 @@ import android.provider.BaseColumns;
  * application.
  * 
  * </br>
- * Design Rationale: To have a class devoted to the actual structure of the
- * database and its tables. Makes working with the Database more organized and
- * cleaner, and if we need to change a column or something, we only need to
- * change it here and not in the other parts of the code.
+ * Design Rationale: To have a class devoted to the actual structure of the 
+ * database and its tables. Makes working with the Database more organized and 
+ * cleaner, and if we need to change a column or something, we only need to 
+ * change it here and not in the other parts of the code. 
  * 
  * @author Ashley Brown
  * @author Stephanie Gil
@@ -45,8 +45,8 @@ public final class DBContract {
 	}
 
 	/**
-	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing stories.
+	 * Sets up column names and then create and delete SQL statements for the 
+	 * table containing stories. 
 	 */
 	public static abstract class StoryTable implements BaseColumns {
 
@@ -76,8 +76,8 @@ public final class DBContract {
 	}
 
 	/**
-	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing the chapters
+	 * Sets up column names and then create and delete SQL statements for the 
+	 * table containing the chapters 
 	 */
 	public static abstract class ChapterTable implements BaseColumns {
 
@@ -103,8 +103,8 @@ public final class DBContract {
 	}
 
 	/**
-	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing the choices
+	 * Sets up column names and then create and delete SQL statements for the 
+	 * table containing the choices 
 	 */
 	public static abstract class ChoiceTable implements BaseColumns {
 
@@ -129,8 +129,8 @@ public final class DBContract {
 	}
 
 	/**
-	 * Sets up column names and then create and delete SQL statements for the
-	 * table containing media (photos/illustrations/audio/video)
+	 * Sets up column names and then create and delete SQL statements for the 
+	 * table containing media (photos/illustrations/audio/video) 
 	 */
 	public static abstract class MediaTable implements BaseColumns {
 
