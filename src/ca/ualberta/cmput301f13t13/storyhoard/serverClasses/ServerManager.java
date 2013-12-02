@@ -115,7 +115,7 @@ public class ServerManager {
 	 * 
 	 * An example call:
 	 * </br></br>
-	 * 	 * 			String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/" </br>
+	 * 	String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/" </br>
 	 *  UUID id = 5231b533-ba17-4787-98a3-f2df37de2aD7; </br> 
 	 *  Story myStory = getById(id); </br></br> 
 	 *  

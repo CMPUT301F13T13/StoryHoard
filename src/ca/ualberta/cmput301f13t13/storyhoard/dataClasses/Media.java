@@ -132,7 +132,9 @@ public class Media {
 	 * @return bitmap
 	 */
 	public Bitmap getBitmap() {
-		return BitmapFactory.decodeFile(path);
+		Bitmap bitmap = BitmapFactory.decodeFile(path);
+		Bitmap resizedbmp = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+		return resizedbmp;
 	}
 	
 	/**
