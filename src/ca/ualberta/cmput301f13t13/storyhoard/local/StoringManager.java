@@ -30,8 +30,10 @@ import java.util.UUID;
  * Design Pattern: This class uses the template method design pattern. The  
  * template methods are existsLocally(), and sync(). They both use some 
  * of the other abstract methods that will have to be defined to accomplish 
- * their tasks.
+ * their tasks. </br></br>
  * 
+ * For examples of how each method can be called, see the classes listed 
+ * below. </br>
  * 
  * @author Stephanie Gil
  * @author Ashley Brown

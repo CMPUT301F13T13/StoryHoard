@@ -29,7 +29,10 @@ import android.util.Base64;
  * holds the path to the bitmap on external memory, and also has a field for 
  * the compressed string version of the bitmap (bitmapString) that is the base 
  * 64 string version of the bitmap. This is done so we have a way of storing 
- * the bitmap information onto the server.
+ * the bitmap information onto the server. </br></br>
+ * 
+ * Also, a media object will always belong to a specific chapter, and no media
+ * can belong to more than one chapter.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -46,9 +49,11 @@ public class Media {
 	public static final String ILLUSTRATION = "illustration";
 
 	/**
-	 * Initializes a new Media object without an id. This is what should be 
-	 * used to create a new Media object that is NOT holding search criteria 
-	 * and is NOT being created from data just retrieved from the database. 
+	 * Initializes a new Media object without needing to specify an id since a
+	 * random one will be generated on the media's creation. This is what 
+	 * should be used to create a new Media object that is NOT holding search 
+	 * criteria and is NOT being created from data just retrieved from the 
+	 * database. 
 	 * 
 	 * @param chapterId
 	 * 			Must be a UUID. An example of a UUID's format as a string is:
@@ -84,6 +89,9 @@ public class Media {
 	 * that you would like to search for. When making a media to hold 
 	 * search criteria, any field you don't want to include in the search 
 	 * has to be set to null.</br></br>
+	 * 
+	 * This constructor is also used to create a new chapter object from
+	 * data which has been retrieved from the database. </br></br>
 	 * 
 	 * Example: </br>
 	 * If you want to search for the Media that has the id of 
