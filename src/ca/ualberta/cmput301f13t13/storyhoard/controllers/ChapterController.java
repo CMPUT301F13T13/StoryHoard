@@ -246,9 +246,10 @@ public class ChapterController {
 	 * ChapterController control = ChapterController.getInstance(someActivity.this); </br>
 	 * control.setCurrChapterComplete(myChapter);</br></br>
 	 * control.addRandomChoice(); </br>
+	 * @return TODO
 	 */
-	public void addRandomChoice() {
-		chapter.getChoices().add(choiceMan.getRandomChoice(chapter.getId()));
+	public Choice getRandomChoice() {
+		return choiceMan.getRandomChoice(chapter.getId());
 	}
 	
 	/**

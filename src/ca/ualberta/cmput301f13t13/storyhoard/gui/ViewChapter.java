@@ -141,6 +141,7 @@ public class ViewChapter extends MediaActivity {
 	}
 
 	public void insertChoices() {
+		choices.clear();
 		choices.addAll(chapter.getChoices());
 
 		// Check for no choices
@@ -149,12 +150,9 @@ public class ViewChapter extends MediaActivity {
 					+ "\n\n<No Choices>");
 		} else {
 			if (chapter.hasRandomChoice() && choices.size() > 1) {
-				chapCon.addRandomChoice();
-				chapter = chapCon.getCurrChapter();
+				choices.add(chapCon.getRandomChoice());
 			}
 		}
-		choices.clear();
-		choices.addAll(chapter.getChoices());
 		choiceAdapter.notifyDataSetChanged();
 	}
 

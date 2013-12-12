@@ -1,17 +1,11 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.StoryController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
-import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Story;
 import ca.ualberta.cmput301f13t13.storyhoard.helpGuides.InfoActivity;
-import ca.ualberta.cmput301f13t13.storyhoard.local.BogoPicGen;
 import ca.ualberta.cmput301f13t13.storyhoard.local.ChapterManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.StoryManager;
 import ca.ualberta.cmput301f13t13.storyhoard.local.Utilities;
@@ -77,7 +71,7 @@ public class TestChapterController extends ActivityInstrumentationTestCase2<Info
 		assertFalse(cc.getCurrChapter().hasRandomChoice());
 		cc.addChoice(mockChoice);
 		assertEquals(cc.getCurrChapter().getChoices().size(),2);
-		cc.addRandomChoice();
+		cc.getRandomChoice();
 		assertEquals(cc.getCurrChapter().getChoices().size(),3);
 		cc.updateChoice(mockChoice2);
 		

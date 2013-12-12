@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301f13t13.storyhoard.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChapterController;
 import ca.ualberta.cmput301f13t13.storyhoard.controllers.ChoiceController;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Chapter;
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Choice;
@@ -25,7 +24,6 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<InfoA
 	public void testSetGetChoice() {
 		StoryManager sm = StoryManager.getInstance(getActivity());
 		ChapterManager cm = ChapterManager.getInstance(getActivity());
-		ChapterController cc = ChapterController.getInstance(getActivity());
 		ChoiceController chc = ChoiceController.getInstance(getActivity());
 		Story mockStory = new Story("title1", "author1", "desc1",
 				Utilities.getPhoneId(this.getActivity()));
@@ -51,7 +49,6 @@ public class TestChoiceController extends ActivityInstrumentationTestCase2<InfoA
 public void testEditChoice() {
 		StoryManager sm = StoryManager.getInstance(getActivity());
 		ChapterManager cm = ChapterManager.getInstance(getActivity());
-		ChapterController cc = ChapterController.getInstance(getActivity());
 		ChoiceController chc = ChoiceController.getInstance(getActivity());
 		Story mockStory = new Story("title1", "author1", "desc1",
 				Utilities.getPhoneId(this.getActivity()));
