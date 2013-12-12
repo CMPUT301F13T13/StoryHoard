@@ -57,12 +57,6 @@ public class TestViewBrowseStories extends
 		
 		activity = getActivity();
 		gridView = (GridView) activity.findViewById(R.id.gridStoriesView);
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		assertTrue(gridView != null);
 	}
 }

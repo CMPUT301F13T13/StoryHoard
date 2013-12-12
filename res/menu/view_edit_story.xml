@@ -18,5 +18,4 @@
         android:icon="@drawable/info"
         android:showAsAction="ifRoom"
         android:title="@string/info"/>
-
 </menu>

@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import ca.ualberta.cmput301f13t13.storyhoard.serverClasses.ServerManager;
  * owns the story, to unpublish the story from the server.
  * 
  * @author Alexander Wong
+ * @author Kim Wu
  * 
  */
 public class EditStoryActivity extends Activity {
@@ -61,6 +64,18 @@ public class EditStoryActivity extends Activity {
 		setupFields();
 	}
 
+	/**
+	 * Displays the action bar menu for EditStoryActivity
+	 * 
+	 * Publish Story: Allows user to publish story to server
+	 * 
+	 * Add First Chapter: Saves story then starts EditChapterActivity
+	 * 
+	 * Unpublish Story: Allows user to remove story from server
+	 * 
+	 * Info: Displays help guide to help user navigate EditStoryActivity
+	 */
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.view_edit_story, menu);
@@ -79,7 +94,6 @@ public class EditStoryActivity extends Activity {
 			return true;
 		case R.id.addfirstChapter:
 			saveChanges();
-			finish();
 			return true;
 		case R.id.unpublishStory:
 			unpublishStory();
@@ -92,6 +106,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Sets up necessary fields for EditStoryActivity
+	 */
 	private void setupFields() {
 		lifedata = LifecycleData.getInstance();
 		storyCon = StoryController.getInstance(this);
@@ -116,14 +133,14 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to push story to server
+	 */
 	private void publishStory() {
 		if (lifedata.isEditing()) {
 			// publish new story somehow
 			saveChanges();
 			new Update().execute();
-			Toast.makeText(getBaseContext(), "Story published to server",
-					Toast.LENGTH_SHORT).show();
-			finish();
 		} else {
 			Toast.makeText(getBaseContext(),
 					"Create a story before publishing", Toast.LENGTH_SHORT)
@@ -131,6 +148,9 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to remove story from server
+	 */
 	private void unpublishStory() {
 		if (lifedata.isEditing()) {
 			new UnPublish().execute(newStory.getId());
@@ -143,13 +163,26 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
-	private class Update extends AsyncTask<Void, Void, Void> {
+	private class Update extends AsyncTask<Void, Void, Boolean> {
 		@Override
-		protected synchronized Void doInBackground(Void... params) {
+		protected synchronized Boolean doInBackground(Void... params) {
 			// publish or update story
-			storyCon.pushChangesToServer();
-			return null;
+			return storyCon.pushChangesToServer();
 		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				Toast.makeText(getBaseContext(), "Story published to server",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				Toast.makeText(getBaseContext(), "Problems with server. Please"
+						+ " try again.",
+						Toast.LENGTH_SHORT).show();
+			}
+		}		
 	}
 
 	private class UnPublish extends AsyncTask<UUID, Void, Void> {
@@ -161,34 +194,84 @@ public class EditStoryActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Used to save story
+	 */
 	private void saveChanges() {
 		String title = newTitle.getText().toString();
-		String author = newAuthor.getText().toString();
-		String description = newDescription.getText().toString();
-		if (lifedata.isEditing()) {
-			storyCon.editAuthor(author);
-			storyCon.editTitle(title);
-			storyCon.editDescription(description);
-			storyCon.pushChangesToDb();
+		if (validTitle(title)) {
+			String author = newAuthor.getText().toString();
+			String description = newDescription.getText().toString();
+			if (lifedata.isEditing()) {
+				storyCon.editAuthor(author);
+				storyCon.editTitle(title);
+				storyCon.editDescription(description);
+				storyCon.pushChangesToDb();
+			} else {
+				newStory = new Story(title, author, description,
+						Utilities.getPhoneId(getBaseContext()));
+				lifedata.setEditing(false);
+				lifedata.setFirstStory(true);
+				storyCon.setCurrStoryComplete(newStory);
+				Intent intent = new Intent(EditStoryActivity.this,
+						EditChapterActivity.class);
+				startActivity(intent);
+			}
+			finish();
 		} else {
-			newStory = new Story(title, author, description,
-					Utilities.getPhoneId(getBaseContext()));
-			lifedata.setEditing(false);
-			lifedata.setFirstStory(true);
-			storyCon.setCurrStoryComplete(newStory);
-			Intent intent = new Intent(EditStoryActivity.this,
-					EditChapterActivity.class);
-			startActivity(intent);
+			alertDialog();
 		}
 	}
 
+	/**
+	 * Ensures that user enters a valid title
+	 * 
+	 * @param title
+	 * @return boolean
+	 */
+	private boolean validTitle(String title) {
+		title = title.trim();
+		int length = title.length();
+		if (length == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Displays an alert dialog when user doesn't enter a story title
+	 */
+	private void alertDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+				EditStoryActivity.this);
+		alert.setTitle("Whoopsies!").setMessage("Story title is empty/invalid")
+				.setCancelable(false)
+				// cannot dismiss this dialog
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}); // parenthesis mean an anonymous class
+		// Show alert dialog
+		AlertDialog show_alert = alert.create();
+		show_alert.show();
+	}
+	
+	/**
+	 * Displays the help guide for EditStoryActivity
+	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
 		String helpInfo = "This activity allows you to edit your story details.\n\n"
-				+ "You can set the title of the story in the first text box, then add an author name in the next one, "
+				+ "You can set the title of the story in the first text box, "
+				+ "then add an author name in the next one, "
 				+ "followed by a brief description of your story in the last text box.\n\n"
-				+ "You may also publish your story for the world to see by pressing 'Publish Story'.\n\n"
-				+ "If you decide to unpublish your story, you may do so by pressing 'Unpublish Story'.\n\n"
+				+ "You may also publish your story for the world to see "
+				+ "by pressing 'Publish Story'.\n\n"
+				+ "If you decide to unpublish your story, you may do so "
+				+ "by pressing 'Unpublish Story'.\n\n"
 				+ "To save your story settings, click 'Save Changes'.\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);

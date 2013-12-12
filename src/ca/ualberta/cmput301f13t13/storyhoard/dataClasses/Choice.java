@@ -34,12 +34,27 @@ public class Choice {
 
 	/**
 	 * Initializes a new choice object with no id.
+	 * Example:</br>
+	 * To search for a choice whose text is "turn left" and has the chapters "5231b533-ba17-4787-98a3-f2df37de2aD7"
+	 * and "5231b533-ba17-4787-98a3-f2df37de2aD8", construct the 
+	 * Choice criteria holder like this:</br>
+	 * Choice criteria = new Choice( "the boss", "5231b533-ba17-4787-98a3-f2df37de2aD7", "5231b533-ba17-4787-98a3-f2df37de2aD8");</br></br>
+	 * 
+	 * To search for a choice whose id is 
+	 * "5231b533-ba17-4787-98a3-f2df37de2aA7",nd has the chapters "5231b533-ba17-4787-98a3-f2df37de2aD7"
+	 * and "5231b533-ba17-4787-98a3-f2df37de2aD8" build the choice criteria 
+	 * holder like this:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aA7");</br>
+	 * 
+	 * Choice criteria = new Choice(id, "5231b533-ba17-4787-98a3-f2df37de2aA7", "5231b533-ba17-4787-98a3-f2df37de2aA8");
 	 * 
 	 * @param chapterIdFrom
 	 *            The id of the current chapter being read
 	 * @param chapterIdTo
 	 *            The id of the chapter the choice links to
 	 * @param text
+	 * 				The text of the choice
+	 * 
 	 */
 	public Choice(UUID chapterIdFrom, UUID chapterIdTo, String text) {
 		this.id = UUID.randomUUID();
@@ -53,9 +68,13 @@ public class Choice {
 	 * choice after retrieving data from the database).
 	 * 
 	 * @param id
+	 * 			The Id of the choice
 	 * @param chapterIdFrom
+	 *            The id of the current chapter being read
 	 * @param chapterIdTo
+	 *            The id of the chapter the choice links to
 	 * @param text
+	 * 				The text of the choice
 	 */
 
 	public Choice(UUID id, UUID chapterIdFrom, UUID chapterIdTo, String text) {
@@ -70,9 +89,10 @@ public class Choice {
 	 * reason, only the id, story id, and the id of the chapter the choice
 	 * belongs to are needed.
 	 * 
-	 * @param id
+	  * @param id
+	 * 			The Id of the choice
 	 * @param chapterIdFrom
-	 * @param chapterIdTo 
+	 *            The id of the current chapter being read
 	 */
 	public Choice(UUID id, UUID chapterIdFrom) {
 		this.id = id;
@@ -84,16 +104,29 @@ public class Choice {
 	// SETTERS
 	
 	/**
-	 * Set the Id of the choice.
+	 * Set the Id of the choice. The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * mockChoice.setId(id);</br>
 	 * 
 	 * @param id
+	 * 			New choice id. Must be a UUID or null.
 	 */
 	public void setId(UUID id) {
 		this.id = id;
 	}
 
 	/**
-	 * Sets the chapterIdFrom of the choice.
+	 * Set the Id of the chapter the choice is in. The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * mockChoice.setCurrentChapter(id);</br>
 	 * 
 	 * @param chapterIdFrom
 	 */
@@ -102,18 +135,32 @@ public class Choice {
 	}
 
 	/**
-	 * Sets the chapterIdTo of the choice.
+	 * Set the Id of the chapter the choice is going to. The new Id provided must be a UUID.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = UUID.randomUUID();</br>
+	 * mockChoice.setNextChapter(id);</br>
 	 * 
 	 * @param uuid
+	 * 			The id of the chapter the choice will link to.
 	 */
 	public void setNextChapter(UUID uuid) {
 		this.nextChapter = uuid;
 	}
 
 	/**
-	 * Sets the text of the choice.
+	 * Set the text of the choice.</br></br>
+	 * 
+	 * Example call:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * String text = "working";</br>
+	 * mockChoice.setText(text);</br>
 	 * 
 	 * @param text
+	 * 			The text you want the choice to display. Must be a string.
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -122,16 +169,33 @@ public class Choice {
 	// GETTERS
 	
 	/**
-	 * Returns the Id of the choice.
+	 * Returns the Id of the choice as a UUID. </br></br>
 	 * 
-	 * @return id
+	 * Example:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = mockChoice.getId();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be something like: "5231b533-ba17-4787-98a3-f2df37de2aD7"
+	 * 
+	 *  @return Id
+	 * 
 	 */
 	public UUID getId() {
 		return this.id;
 	}
 
 	/**
-	 * Returns the chapterIdFrom of the choice.
+	 * Returns the Id of the chapter the choice  is in as a UUID. </br></br>
+	 * 
+	 * Example:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = mockChoice.CurrentChapter();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be something like: "5231b533-ba17-4787-98a3-f2df37de2aD7"
 	 * 
 	 * @return currentChapterId
 	 */
@@ -140,7 +204,15 @@ public class Choice {
 	}
 
 	/**
-	 * Returns the chapterIdTo of the choice.
+	 * Returns the Id of the chapter the choice  is going to as a UUID. </br></br>
+	 * 
+	 * Example:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * UUID id = mockChoice.getNextChapter();</br>
+	 * System.out.println(id);</br></br>
+	 * 
+	 * Output would be something like: "5231b533-ba17-4787-98a3-f2df37de2aD7"
 	 * 
 	 * @return nextChapterId
 	 */
@@ -149,7 +221,15 @@ public class Choice {
 	}
 
 	/**
-	 * Returns the text of the choice.
+	 *Returns the text of the choice. </br></br>
+	 * 
+	 * Example:</br>
+	 * 
+	 * Choice mockChoice= (chapter1.getId(), chapter2.getId(), "turn around");</br>
+	 * String text = mockChoice.getText();</br>
+	 * System.out.println(text);</br></br>
+	 * 
+	 * Output would be: "turn around"
 	 * 
 	 * @return text
 	 */

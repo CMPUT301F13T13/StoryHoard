@@ -23,7 +23,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import ca.ualberta.cmput301f13t13.storyhoard.dataClasses.Media;
 import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
 
@@ -31,14 +30,20 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.MediaTable;
  * Role: Interacts with the database to store, update, and retrieve media
  * objects. It implements the StoringManager interface.
  * 
- * </br>
- * Design Pattern: Singleton
+ * The setup of the database being used is defined in DBContract.java, so for 
+ * more information on the actual tables and SQL statements used to make them, 
+ * see that class.
+ * 
+ * Design Pattern: This class is a singleton, so there will ever only be one 
+ * instance of it. Use the getInstance() static method to retrieve an  
+ * instance of it, not the constructor.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
  * 
  * @see Media
  * @see StoringManager
+ * @see DBContract
  */
 public class MediaManager extends StoringManager<Media>{
 	private static DBHelper helper = null;
@@ -49,19 +54,30 @@ public class MediaManager extends StoringManager<Media>{
 	protected String[] projection;
 	
 	/**
-	 * Initializes a new MediaManager media.
+	 * Initializes a new MediaManager class. Must be given context in order to  
+	 * create a new instance of DBHelper and also to get the phoneId of 
+	 * whichever phone is using this application.</br></br>
+	 * 
+	 * Note that this constructor is protected, and it should never be used  
+	 * outside of this class (except for any class that subclass it). 
+	 * 
+	 * @param context
+	 * 
 	 */
 	protected MediaManager(Context context) {
 		helper = DBHelper.getInstance(context);
 	}
 	
 	/**
-	 * Returns an instance of a OwnStoryManager. Used to implement
-	 * the singleton design pattern.
+	 * Returns an instance of a MediaManager. Since this class is a singleton,  
+	 * the same instance will always be returned. This is the method any class 
+	 * outside of this one and any subclasses should use to get an mediaManager 
+	 * object. </br></br>
+	 * 
+	 * Used to implement the singleton
+	 * design pattern.
 	 * 
 	 * @param context
-	 * 
-	 * @return MediaManager
 	 */
 	public static MediaManager getInstance(Context context) {
 		if (self == null) {
@@ -71,10 +87,16 @@ public class MediaManager extends StoringManager<Media>{
 	}
 	
 	/**
-	 * Inserts a new media media into the database.
+	 * Saves a new media into the database.</br></br>
+	 * 
+	 * Example Call.</br>
+	 * Media media = new Media("3242a21d", "/path/", 
+	 * 				"photo", "hello world");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * mm.insert(media);</br>
 	 * 
 	 * @param media
-	 * 			Media media to be inserted.
+	 * 			A media object.
 	 */
 	@Override
 	public void insert(Media media) {
@@ -82,7 +104,14 @@ public class MediaManager extends StoringManager<Media>{
 		setContentValues(media);
 		db.insert(MediaTable.TABLE_NAME, null, values);	
 	}
-
+	/**
+	 * Sets up the ContentValues for inserting or updating the database. This 
+	 * specifies the columns to be inserted into and what content will be  
+	 * going into those columns. 
+	 * 
+	 * @param media
+	 * 			All the media's fields will be put into the database.
+	 */
 	private void setContentValues(Media media) {
 		// Insert Media
 		values = new ContentValues();
@@ -94,11 +123,27 @@ public class MediaManager extends StoringManager<Media>{
 	}
 	
 	/**
-	 * Retrieves a media media from the database.
+	 * Retrieves a media from the database.</br><br> 
+	 * 
+	 * The media passed into this method is a media holding search criteria, 
+	 * so any field you would like to include in the search, just set the  
+	 * search criteria holding story to it.</br><br>
+	 * 
+	 * Example Call.</br>
+	 * Media media = new Media("3242a21d", "/path/", 
+	 * 				"photo", "hello world");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * mm.insert(media);</br>
+	 * 
+	 * 
+	 * To now search for this media based on its text: </br></br>
+	 * 
+	 * Media criteria = new Media(null, null, null, null, "hello world");</br>
+	 * 
 	 * 
 	 * @param criteria 
-	 * 			Holds the search criteria.
-	 */	
+	 * 			A media with the criteria in it.
+	 */
 	@Override
 	public ArrayList<Media> retrieve(Media criteria) {
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -127,7 +172,13 @@ public class MediaManager extends StoringManager<Media>{
 		cursor.close();		
 		return results;		
 	}
-	
+	/**
+	 * A helper function to set up what table columns and rows to be searched 
+	 * or retrieved. Basically, building the sql query, but using content 
+	 * values to abstract the sql.
+	 * 
+	 * @param criteria
+	 */
 
 	private void setUpSearch(Media criteria) {
 		sArgs = null;
@@ -152,12 +203,20 @@ public class MediaManager extends StoringManager<Media>{
 		
 	}
 	/**
-	 * Updates a media media already in the database.
+	 * Updates a media already in the database.
 	 * 
+	 * Example Call.</br>
+	* Example Call.</br>
+	 * Media media = new Media("3242a21d", "/path/", 
+	 * 				"photo", "hello world");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * mm.insert(media);</br>
+	 * media.setText("bah humbug");</br>
+	 * mm.update(media);</br>
 	 * 
 	 * @param newMedia
-	 * 			Contains the changes to the media.
-	 */	
+	 * 			Media with changes.
+	 */
 	@Override
 	public void update(Media newMedia) {
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -225,7 +284,12 @@ public class MediaManager extends StoringManager<Media>{
 
 		return info;
 	}
-	
+	/**
+	 * Removes the media from the database
+	 * 
+	 * @param id
+	 * 		This is the id of the media you want to be removed.
+	 */
 	@Override
 	public void remove(UUID id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
@@ -234,7 +298,14 @@ public class MediaManager extends StoringManager<Media>{
 		sArgs = new String[]{ String.valueOf(id)};
 		db.delete(MediaTable.TABLE_NAME, selection, sArgs);
 	}
-
+	/**
+	 * Removes the media no longer in a chapter
+	 * 
+	 * @param ArrayList<UUID> newMedias
+	 * 		The ArrayList of the media you want in the chapter.
+	 * @param chapId
+	 * 		This is the id of the chapter the new media will be in.
+	 */
 	public void syncDeletions(ArrayList<UUID> newMedias, UUID chapId) {
 		ArrayList<Media> oldMedias = retrieve(new Media(null, chapId, null, null, ""));
 		
@@ -244,15 +315,55 @@ public class MediaManager extends StoringManager<Media>{
 			}
 		}
 	}
-
+	/**
+	 * Retrieves the photos whose chapter id matches the id provided. It expects the id 
+	 * provided to be a UUID. 
+	 *  
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Media> photos = mm.getById(id);</br>
+	 * 
+	 * @param chapterId
+	 * 			Id of the chapter we are looking in. Must be a UUID. 
+	 */	
 	public ArrayList<Media> getPhotosByChapter(UUID chapterId) {
 		return retrieve(new Media(null, chapterId, null, Media.PHOTO, ""));		
 	}
-
+	/**
+	 * Retrieves the illustrations whose chapter id matches the id provided. It expects the id 
+	 * provided to be a UUID. 
+	 *  
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * ArrayList<Media> illustrations = mm.getById(id);</br>
+	 * 
+	 * @param chapterId
+	 * 			Id of the chapter we are looking in. Must be a UUID. 
+	 */	
 	public ArrayList<Media> getIllustrationsByChapter(UUID chapterId) {
 		return retrieve(new Media(null, chapterId, null, Media.ILLUSTRATION, ""));		
 	}
 
+	/**
+	 * Retrieves the media whose id matches the id provided. It expects the id 
+	 * provided to be a UUID. 
+	 *  
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * MediaManager mm = MediaManager.getInstance(someActivity.this);</br>
+	 * Media  m = mm.getById(id);</br>
+	 * 
+	 * @param id
+	 * 			Id of the media we are looking for. Must be a UUID. 
+	 */	
 	@Override
 	public Media getById(UUID id) {
 		ArrayList<Media> result = retrieve(new Media(id, null, null, null, null));

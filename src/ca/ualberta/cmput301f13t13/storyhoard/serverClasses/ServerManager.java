@@ -58,7 +58,6 @@ public class ServerManager {
 
 	/**
 	 * Returns an instance of a ServerManager (singleton).
-	 * @return
 	 */
 	public static ServerManager getInstance() {
 		if (self == null) {
@@ -115,7 +114,7 @@ public class ServerManager {
 	 * 
 	 * An example call:
 	 * </br></br>
-	 * 	 * 			String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/" </br>
+	 * 	String server = "http://cmput301.softwareprocess.es:8080/cmput301f13t13/stories/" </br>
 	 *  UUID id = 5231b533-ba17-4787-98a3-f2df37de2aD7; </br> 
 	 *  Story myStory = getById(id); </br></br> 
 	 *  
@@ -148,7 +147,6 @@ public class ServerManager {
 	 * Example call: </br>
 	 * ArrayList<Story> stories = getAll(); 
 	 * 
-	 * @return
 	 */
 	public ArrayList<Story> getAll() {
 		ArrayList<Story> stories = new ArrayList<Story>();
@@ -175,7 +173,6 @@ public class ServerManager {
 	 * main UI thread of the android application, which is why the 
 	 * ThreadPolicy code is needed.
 	 *  
-	 * @return
 	 */
 	public Story getRandom() {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -240,7 +237,9 @@ public class ServerManager {
 	/**
 	 * This method first checks whether or not the story to be updated exists
 	 * on the server. If it doesn't, then the insert method is called. If it
-	 * does, then it updates the story currently on the server. </br></br>
+	 * does, then it updates the story currently on the server. If the 
+	 * operation is succesful, it returns true, and if it fails, it returns
+	 * false. </br></br>
 	 *  
 	 * Updating is done by first removing the story on the server with the 
 	 * deleteStory() method in ESUpdates, and then by re-inserting it using
@@ -260,20 +259,25 @@ public class ServerManager {
 	 * @param story
 	 * 			Story with updates/new data that you want to change.
 	 */
-	public void update(Story story) { 
+	public boolean update(Story story) { 
 		String id = story.getId().toString();
 
-		// story already on server
-		if (esRetrieval.searchById(id, server) != null) {
-			try {
-				esUpdates.deleteStory(id, server);
-				esUpdates.insertStory(story, server);
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			// story already on server
+			if (esRetrieval.searchById(id, server) != null) {
+				try {
+					esUpdates.deleteStory(id, server);
+					esUpdates.insertStory(story, server);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} 
+			} else {
+				insert(story);
 			}
-		} else {
-			insert(story);
+		} catch (Exception e) {
+			return false;
 		}
+		return true;
 	}	
 
 	/**

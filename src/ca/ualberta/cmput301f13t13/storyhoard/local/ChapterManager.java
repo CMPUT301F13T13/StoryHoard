@@ -32,13 +32,20 @@ import ca.ualberta.cmput301f13t13.storyhoard.local.DBContract.ChapterTable;
  * chapters. It implements the StoringManager interface.
  * 
  * </br>
- * Design Pattern: Singleton
+ * The setup of the database being used is defined in DBContract.java, so for 
+ * more information on the actual tables and SQL statements used to make them, 
+ * see that class.
+ * 
+ * Design Pattern: This class is a singleton, so there will ever only be one 
+ * instance of it. Use the getInstance() static method to retrieve an  
+ * instance of it, not the constructor.
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
  * 
  * @see Chapter
  * @see StoringManager
+ * @see DBContract
  */
 public class ChapterManager extends StoringManager<Chapter> {
 	private static DBHelper helper = null;
@@ -49,20 +56,30 @@ public class ChapterManager extends StoringManager<Chapter> {
 	protected String[] projection;
 
 	/**
-	 * Initializes a new ChapterManager chapter.
+	 * Initializes a new ChapterManager class. Must be given context in order to  
+	 * create a new instance of DBHelper and also to get the phoneId of 
+	 * whichever phone is using this application.</br></br>
+	 * 
+	 * Note that this constructor is protected, and it should never be used  
+	 * outside of this class (except for any class that subclass it). 
 	 * 
 	 * @param context
+	 * 
 	 */
 	protected ChapterManager(Context context) {
 		helper = DBHelper.getInstance(context);
 	}
 
 	/**
-	 * Returns an instance of itself. Used to accomplish the singleton design
-	 * pattern.
+	 * Returns an instance of a ChapterManager. Since this class is a singleton,  
+	 * the same instance will always be returned. This is the method any class 
+	 * outside of this one and any subclasses should use to get an ChapterManager 
+	 * object. </br></br>
+	 * 
+	 * Used to implement the singleton
+	 * design pattern.
 	 * 
 	 * @param context
-	 * @return ChapterManager
 	 */
 	public static ChapterManager getInstance(Context context) {
 		if (self == null) {
@@ -72,11 +89,17 @@ public class ChapterManager extends StoringManager<Chapter> {
 	}
 
 	/**
-	 * Inserts a new chapter into the database.
+	 * Saves a new chapter in the database. You can insert a chapter that  
+	 * has any field empty except for its ID and story ID.</br></br>
+	 * 
+	 * Example Call.</br>
+	 * Chapter mockChapter = new chapter("12312", "1233", 
+	 * 				"Working");</br>
+	 * ChapterManager cm = ChapterManager.getInstance(someActivity.this);</br>
+	 * cm.insert(mockChapter);</br>
 	 * 
 	 * @param chapter
-	 *            Chapter to be stored in the database. In this case, it will be
-	 *            a chapter chapter.
+	 * 			A Chapter object. Any field can be null except its id and story id.
 	 */
 	@Override
 	public void insert(Chapter chapter) {
@@ -86,14 +109,31 @@ public class ChapterManager extends StoringManager<Chapter> {
 	}
 
 	/**
-	 * Takes a chapter chapter that holds the desired search criteria (null
-	 * values for any parameter that you don't want included in the search, for
-	 * example, chapter text). It then retrieves a chapter or chapters from the
-	 * database that matched the criteria and returns them in an ArrayList.
+	 * Retrieves a chapter from the database. Always returns an array 
+	 * list of chapter.</br><br> 
+	 * 
+	 * The chapter passed into this method is a chapter holding search criteria, 
+	 * so any field you would like to include in the search, just set the  
+	 * search criteria holding story to it.</br><br>
+	 * 
+	 * Example Call.</br>
+	 * Chapter mockChapter = new chapter("12312", "1233", 
+	 * 				"Working");</br>
+	 * ChapterManager cm = ChapterManager.getInstance(someActivity.this);</br>
+	 * cm.insert(mockChapter);</br>
+	 * 
+	 * To now search for this chapter based on its text: </br></br>
+	 * 
+	 * Chapter criteria = new Chapter(null, null,"Working");</br>
+	 * 
+	 * Notice that the first field was null. That is because when making a 
+	 * search criteria object, you have to use the constructor that lets you 
+	 * specify the id. This way, you are allowed to manually set any field 
+	 * you want to be included in the field.</br></br>
+	 * 
 	 * 
 	 * @param criteria
-	 *            Criteria for the chapter(s) to be retrieved from the database.
-	 * @return chapters Contains the chapters that matched the search criteria.
+	 * 			Chapter with the search criteria. 
 	 */
 	@Override
 	public ArrayList<Chapter> retrieve(Chapter criteria) {
@@ -122,7 +162,11 @@ public class ChapterManager extends StoringManager<Chapter> {
 		cursor.close();
 		return results;
 	}
-
+	/**
+	 * A helper to set up what to be searched 
+	 * or retrieved for the database tables.
+	 * @param criteria
+	 */
 	private void setupSearch(Chapter criteria) {
 		sArgs = null;
 		ArrayList<String> selectionArgs = new ArrayList<String>();
@@ -163,6 +207,7 @@ public class ChapterManager extends StoringManager<Chapter> {
 	 * Sets the content values to be used in the sql query.
 	 * 
 	 * @param chapter
+	 * 		All the chapter's fields will be put into the database.
 	 */
 	private void setContentValues(Chapter chapter) {
 		// Insert chapter
@@ -244,6 +289,20 @@ public class ChapterManager extends StoringManager<Chapter> {
 		Chapter criteria = new Chapter(null, storyId, null, null);	
 		return retrieve(criteria);
 	}
+	/**
+	 * Retrieves the chapter whose id matches the id provided. It expects the id 
+	 * provided to be a UUID. 
+	 * 
+	 * </br></br>
+	 * 
+	 * Example call:</br>
+	 * UUID id = UUID.fromString("5231b533-ba17-4787-98a3-f2df37de2aD7");</br>
+	 * ChapterManager cm = ChapterManager.getInstance(someActivity.this);</br>
+	 * Chapter mockChapter = cm.getById(id);</br>
+	 * 
+	 * @param id
+	 * 			Id of the chapter we are looking for. Must be a UUID. 
+	 */	
 
 	@Override
 	public Chapter getById(UUID id) {

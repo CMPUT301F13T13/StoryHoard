@@ -194,13 +194,13 @@ public class ViewStory extends Activity {
 	 */
 	private void getHelp() {
 		Intent intent = new Intent(this, InfoActivity.class);
-		String helpInfo = "\t- Story data is displayed on this screen, "+
+		String helpInfo = "Story data is displayed on this screen, "+
 				"arranged from top to bottom by 'Title', 'Author', and "+
 				"'Description'.\n\n "+
-				"\t- To read the story, press the 'Begin Reading' button.\n\n"+
-				"\t- To edit the story content, press the 'Edit Story' button.\n\n"+
-				"\t- To edit the story settings, press the 'Settings' button.\n\n"+
-				"\t- To navigate back to the main screen, press the back button on "+
+				"To read the story, press the 'Begin Reading' button.\n\n"+
+				"To edit the story content, press the 'Edit Story' button.\n\n"+
+				"To edit the story settings, press the 'Settings' button.\n\n"+
+				"To navigate back to the main screen, press the back button on "+
 				"your mobile device.\n";
 		intent.putExtra("theHelp", helpInfo);
 		startActivity(intent);

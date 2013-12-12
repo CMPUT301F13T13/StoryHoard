@@ -20,9 +20,9 @@ import java.util.UUID;
 
 /**
  * Role: A container to hold story information. This includes id, author, 
- * title, description, the id of the first chapter, a collection of
+ * title, description, the id of the first chapter, a collection of 
  * chapters belonging to it, the id of the phone it was created on. Note 
- * that all id's are stored as UUID's.
+ * that all id's are stored as UUID's. 
  * 
  * @author Stephanie Gil
  * @author Ashley Brown
@@ -40,7 +40,7 @@ public class Story {
 	/**
 	 * Initializes a new story object without needing to specify an id as an 
 	 * argument. A random unique id will be automatically generated when this 
-	 * constructor is used, and it will be a UUID.
+	 * constructor is used, and it will be a UUID. 
 	 * 
 	 * @param title
 	 *            Story title
@@ -65,13 +65,13 @@ public class Story {
 	/**
 	 * Initializes a new story object by specifying an id as the first 
 	 * parameter. Usually used when making a story object that will be 
-	 * holding search criteria since you can specify the id of the story
-	 * that you would like to search for. When making a story to hold
-	 * search criteria, any field you don't want to include in the search
+	 * holding search criteria since you can specify the id of the story 
+	 * that you would like to search for. When making a story to hold 
+	 * search criteria, any field you don't want to include in the search 
 	 * has to be set to null.</br></br>
 	 * 
 	 * Example:</br>
-	 * To search for a story whose title is "the boss", construct the
+	 * To search for a story whose title is "the boss", construct the 
 	 * story criteria holder like this:</br>
 	 * Story criteria = new Story(null, "the boss", null, null, null);</br></br>
 	 * 
@@ -104,9 +104,9 @@ public class Story {
 	}
 
 	/**
-	 * Initializes a new story object from data taken from the database.
-	 * Should only be used by the StoryManager class when making a new story
-	 * from the data just retrieved from the database.
+	 * Initializes a new story object from data taken from the database. 
+	 * Should only be used by the StoryManager class when making a new story 
+	 * from the data just retrieved from the database. 
 	 * 
 	 * @param id
 	 * 			  Story's unique id, must be a UUID.
@@ -168,7 +168,7 @@ public class Story {
 	}
 
 	/**
-	 * Returns the author of the story as a String (or null is the story author
+	 * Returns the author of the story as a String (or null is the story author 
 	 * was null).</br></br>
 	 * 
 	 * Example:</br>
@@ -199,8 +199,8 @@ public class Story {
 	}
 
 	/**
-	 * Returns the chapters of the story as an array list of chapters.
-	 * If the story had no chapters, because of the way stories get
+	 * Returns the chapters of the story as an array list of chapters. 
+	 * If the story had no chapters, because of the way stories get 
 	 * initialized, an empty array list will be returned not null. </br></br>
 	 * 
 	 * Example call: </br>
@@ -287,7 +287,7 @@ public class Story {
 	 * Story myStory = ("title", "author", "desc", "123");</br>
 	 * myStory.setAuthor("new author");</br>
 	 * 
-	 * @param Author
+	 * @param author
 	 * 			The new story author. Must be a string or null.
 	 */
 	public void setAuthor(String author) {
@@ -311,7 +311,7 @@ public class Story {
 
 	/**
 	 * Set the id of the first chapter of the story (the chapter that will be 
-	 * always be displayed when a user begins to read a story in the view
+	 * always be displayed when a user begins to read a story in the view 
 	 * story activity). The new Id provided must be a UUID.</br></br>
 	 * 
 	 * Example call:</br>
@@ -328,7 +328,7 @@ public class Story {
 	}
 
 	/**
-	 * Set the chapters of the story. It must be an arrayList and should
+	 * Set the chapters of the story. It must be an arrayList and should 
 	 * never be null. </br></br>
 	 * 
 	 * Example call: </br>
